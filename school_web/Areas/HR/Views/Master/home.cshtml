@@ -1,0 +1,249 @@
+﻿@{
+   // ViewBag.deparments= "2";
+    //ViewBag.applications= 400;
+    //ViewBag.jobs= 3;
+    //ViewBag.interviews= 5;
+    //ViewBag.employee= 57;
+}
+<div>
+
+    @*<div class="d-flex align-items-center justify-content-center" style="height:80vh">
+            <img src="~/Content/Images/logo.png" class="img-fluid" style="max-width:500px" />
+        </div>*@
+
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <div class="card radius-10">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h6 class="mb-2">Daily HRMS Attendance</h6>
+                        </div>
+
+                    </div>
+                    <div class="chart-container-0">
+                        <canvas id="chart7"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-4">
+
+            <div class="card radius-10">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h6 class="mb-2">Job Overview</h6>
+                        </div>
+                    </div>
+                    <div class="chart-container-0"> 
+                        <div id="chart11"  ></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div><!--end row-->
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-5">
+        <div class="col">
+            <div class="card radius-10 overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <p class="mb-0 text-secondary font-14">Total Employee</p>
+                            <h5 class="my-0">@ViewBag.employee</h5>
+                        </div>
+                        <div class="text-danger ms-auto font-30">
+                            <i class='bx bx-user-check'></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-1" id="chart1"></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card radius-10 overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <p class="mb-0 text-secondary font-14">Departments</p>
+                            <h5 class="my-0">@ViewBag.deparments</h5>
+                        </div>
+                        <div class="text-warning ms-auto font-30">
+                            <i class='bx bx-beer'></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-1" id="chart4"></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card radius-10 overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <p class="mb-0 text-secondary font-14">Total Job</p>
+                            <h5 class="my-0">@ViewBag.jobs</h5>
+                        </div>
+                        <div class="text-primary ms-auto font-30">
+                            <i class='bx bx-user-circle'></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-1" id="chart2"></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card radius-10 overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <p class="mb-0 text-secondary font-14">Job Application</p>
+                            <h5 class="my-0">@ViewBag.applications</h5>
+                        </div>
+                        <div class="text-success ms-auto font-30">
+                            <i class='bx bx-group'></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-1" id="chart3"></div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card radius-10 overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <p class="mb-0 text-secondary font-14">Today's Interview</p>
+                            <h5 class="my-0">@ViewBag.interviews</h5>
+                        </div>
+                        <div class="text-info ms-auto font-30">
+                            <i class='bx bx-camera-movie'></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-1" id="chart5"></div>
+            </div>
+        </div>
+    </div><!--end row-->
+    <script src="~/Payroll/assets/plugins/chartjs/js/Chart.min.js"></script>
+    <script src="~/Payroll/assets/plugins/chartjs/js/Chart.extension.js"></script>
+    <script src="~/Payroll/assets/plugins/sparkline-charts/jquery.sparkline.min.js"></script>
+    <script src="~/Payroll/assets/plugins/raphael/raphael-min.js"></script>
+    <script src="~/Payroll/assets/plugins/morris/js/morris.js"></script>
+    <script>
+        var lst = [5, 8, 7, 10, 5, 8, 7, 10, 9, 10, 8, 6, 4, 6, 8, 7, 6, 8, 2, 5, 8, 7, 10, 9, 10, 8, 6, 4, 6, 8, 7, 6, 8, 2, 10, 8, 6, 4, 5, 8, 7, 10, 9, 5, 8, 7, 6, 8, 2, 8, 7, 9, 5, 4, 8, 7, 10, 9, 5, 8, 7, 9, 5, 4, 10, 8, 6, 4, 5, 8, 7, 10, 5, 8, 7, 10, 9, 10, 8, 6, 4, 6, 8, 7, 6, 8, 2, 10, 8, 6, 4, 5, 8, 7, 10, 9, 5, 8, 7, 6, 8, 2, 8, 7, 9, 5, 4, 8, 7, 10, 9, 5, 8, 7, 9, 5, 4, 9, 5, 8, 7, 6, 8, 2, 8, 7, 9, 5, 4, 8, 7, 10, 9, 5, 8, 7, 9, 5, 4, 9, 10, 8, 6, 4, 6, 8, 7, 6, 8, 2, 10, 8, 6, 4, 5, 8, 7, 10, 9, 5, 8, 7, 6, 8, 2, 8, 7, 9, 5, 4, 8, 7, 10, 9, 5, 8, 7, 9, 5, 4]
+        var chartids = ['#chart1', '#chart2', '#chart3', '#chart4', '#chart5', '#chart6']
+        var clrs = ['#fd3550', '#008cff', '#15ca20', '#ff9700', '#0dceec', '#223035']
+        $.each(chartids, function (index, chrt) {
+            $(chrt).sparkline(shuffle(lst), {
+                type: 'bar',
+                height: '25',
+                barWidth: '3',
+                barSpacing: '2',
+                resize: true,
+                barColor: clrs[index],
+            });
+        })
+        Morris.Donut({
+            element: 'chart11',
+            data: [{
+                label: "Job Created",
+                value: @ViewBag.jobs,
+
+            }, {
+                label: "Job Application",
+                value: @ViewBag.applications
+            }, {
+                label: "Selected",
+                value: @ViewBag.selected
+            }],
+            resize: true,
+            colors: ['#008cff', '#15ca20', '#fd3550']
+        });
+        var ctx = document.getElementById('chart7').getContext('2d');
+
+
+
+        var gradientStroke1 = ctx.createLinearGradient(0, 0, 0, 300);
+        gradientStroke1.addColorStop(0, 'rgba(255, 255, 0, 0.5)');
+        gradientStroke1.addColorStop(1, 'rgba(233, 30, 99, 0.0)');
+
+        var gradientStroke2 = ctx.createLinearGradient(0, 0, 0, 300);
+        gradientStroke2.addColorStop(0, '#ffff00');
+        gradientStroke2.addColorStop(1, '#e91e63');
+
+
+        var gradientStroke3 = ctx.createLinearGradient(0, 0, 0, 300);
+        gradientStroke3.addColorStop(0, 'rgba(0, 114, 255, 0.5)');
+        gradientStroke3.addColorStop(1, 'rgba(0, 200, 255, 0.0)');
+
+        var gradientStroke4 = ctx.createLinearGradient(0, 0, 0, 300);
+        gradientStroke4.addColorStop(0, '#0072ff');
+        gradientStroke4.addColorStop(1, '#00c8ff');
+
+
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Persent',
+                    data: [0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: gradientStroke1,
+                    borderColor: gradientStroke2,
+                    pointRadius: "0",
+                    pointHoverRadius: "0",
+                    borderWidth: 3
+                }, {
+                    label: 'Absent',
+                    data: [0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: gradientStroke3,
+                    borderColor: gradientStroke4,
+                    pointRadius: "0",
+                    pointHoverRadius: "0",
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: true,
+                    labels: {
+                        fontColor: '#585757',
+                        boxWidth: 40
+                    }
+                },
+                tooltips: {
+                    enabled: true
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontColor: '#585757'
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(0, 0, 0, 0.07)"
+                        },
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontColor: '#585757'
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(0, 0, 0, 0.07)"
+                        },
+                    }]
+                }
+            }
+        });
+
+    </script>
+
+</div>

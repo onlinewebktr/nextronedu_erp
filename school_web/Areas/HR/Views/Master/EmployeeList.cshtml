@@ -1,0 +1,246 @@
+﻿
+@{
+    ViewBag.Title = "Employee List";
+    var isDPMH = My.data("select IdValue from HR_AutoId where IdName='IsDPMH'")!=""?"true":"false";
+}
+
+
+<style>
+    .row {
+        --bs-gutter-x: 0.5rem;
+        --bs-gutter-y: 0;
+    }
+
+    .table.dataTable {
+        margin-top: 0px !important;
+    }
+
+    #mytable {
+        min-height: 300px;
+    }
+
+    .dataTables_scroll {
+        border: 1px solid #ddd !important;
+        margin-top: 0.25rem !important;
+    }
+
+    .filter-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+</style>
+
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header pb-0">
+        <div class="d-flex mb-2 w-auto">
+            <div class="form-group me-2">
+                @Html.Label("Firm", new { @class = "form-group-text" })
+                @Html.DropDownList("Firm", "All", new { @class = "form-select", style = "max-width : 220px;" })
+            </div>
+            <div class="form-group me-2">
+                @Html.Label("Department", new { @class = "form-group-text" })
+                @Html.DropDownList("Department", "All", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="form-group me-2">
+                @Html.Label("Designation", new { @class = "form-group-text" })
+                @Html.DropDownList("Designation", "All", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="form-group me-2">
+                @Html.Label("Grade", new { @class = "form-group-text",  })
+                @Html.DropDownList("Grade", "All", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="filter-btn">
+                <button class="btn btn-primary" type="button" onclick="apply_filter(this)" style="width: auto; ">Find</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body px-2 py-1">
+        <table class="table table-bordered table-striped" id="mytable">
+            <thead class="fixed-header">
+                <tr>
+                    <th class="no-export" >Action</th>
+                    <th>Firm</th> 
+                    <th>Employee Code</th> 
+                    <th>Designation</th>
+                    <th>Employee Name</th>
+                    <th>Gender</th>
+                    <th>D.O.B</th>
+                    <th>Mobile No.</th>
+                    <th>Email Id</th>
+                    <th>Grade</th>
+                    <th>Department</th>
+                    <th>Joining Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div id="grid_prog" style="margin : 0px auto; width:200px">
+            <span class="spinner-border spinner-border-sm me-2"> </span>
+            Please wait....
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var isDPMH = @isDPMH;
+    var id = '';
+    var tr = '';
+    $(function () {
+        var data = { type: 'loading' };
+        gowithData("../../hr/data/employeeList", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data)
+                var ddl = $('#Department');
+                $("#Department option:not(:first)").remove();
+                $.each(resp.department, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.department_id));
+                });
+                ddl = $('#Grade');
+                $("#Grade option:not(:first)").remove();
+                $.each(resp.grade, function (i, item) {
+                    ddl.append($("<option>").text(item.grade_name).val(item.grade_id));
+                });
+                ddl = $('#Designation');
+                $("#Designation option:not(:first)").remove();
+                $.each(resp.designation, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.Designation_id));
+                });
+                ddl = $('#Firm');
+                $("#Firm").empty();
+                $.each(resp.firms, function (i, item) {
+                    ddl.append($("<option>").text(item.firm_name).val(item.firm_id));
+                });
+            }
+        })
+    })
+
+
+    function apply_filter() {
+        var data = { type: 'filter' };
+        data["Department"] = $('#Department').val()
+        data["Grade"] = $('#Grade').val()
+        data["Designation"] = $('#Designation').val()
+        data["Firm"] = $('#Firm').val()
+        $('#grid_prog').show();
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        gowithData("../../hr/data/employeeList", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data);
+            }
+        })
+    }
+    function bind_table(data) {
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var div = $('<div>').addClass("d-flex align-items-center")
+            var div_ddl = $('<div>').addClass("dropdown ms-1")
+            div_ddl.append(`<div class="dropdown-toggle dropdown-toggle-nocaret cursor-pointer badge bg-info text-dark" data-bs-toggle="dropdown">	<i class='bx bx-dots-horizontal-rounded font-22'></i></div>`)
+            var ul = $('<ul>').addClass("dropdown-menu")
+            div_ddl.append(ul)
+            ul.append(
+                //editEmployee/EMP026
+                //<a class="dropdown-item text-bold" href="print/Employee_Form_Apply.aspx?regiDs=EMP202304200645102" target="_blank"><span>View Details</span> </a>
+                $('<li>').append($('<a class="dropdown-item text-bold" href="../../Payroll/Employee_Form_Apply.aspx?empcode=' + d.Emp_Code + '" target="_blank"><span> <i class="bx bx-detail me-2"></i>View Employee Details</span> </a>')),
+                $('<li>').append($('<a class="dropdown-item text-bold" href="../../hr/offer-letter/' + d.Employee_id + '" target="_blank"><span> <i class="bx bx-file me-2"></i>View Offer Letter</span> </a>')),
+                $('<li>').append($('<a class="dropdown-item text-bold" href="../../hr/joiningletter/' + d.Employee_id + '" target="_blank"><span> <i class="bx bx-file me-2"></i>Joining Letter</span> </a>')),
+                $('<li>').append($('<a class="dropdown-item text-bold" href="../../hr/salaryctc/' + d.Employee_id + '" target="_blank"><span> <i class="bx bx-file me-2"></i>View Salary Structure</span> </a>')),
+                $('<li>').append($('<a class="dropdown-item text-bold" href="../../hr/idcard/' + d.Employee_id + '" target="_blank"><span> <i class="bx bx-file me-2"></i>Id Card</span> </a>')),
+                $('<li>').append($('<a class="dropdown-item text-bold" href="../../hr/editEmployee/' + d.Employee_id + '" target="_blank"><span> <i class="bx bxs-edit-alt me-2"></i>Edit Employee Details</span> </a>')),
+
+
+
+
+                $('<li>').append($('<a class="dropdown-item text-bold" href="../../hr/experiance-letter/' + d.Employee_id + '" target="_blank"><span> <i class="bx bx-file me-2"></i>Experience Certificate</span> </a>')),
+
+            );
+            if (isDPMH) {
+                ul.append($('<li>').append($('<a class="dropdown-item text-bold" href="../../hr/associationletter/' + d.Employee_id + '" target="_blank"><span> <i class="bx bx-file me-2"></i>Letter of Association</span> </a>')))
+            }
+            div.append(div_ddl)
+            var td = $('<td>').append(div).width("55px");
+            var status_td = $('<td>').append($(`<span onclick=changeStatus(this) data-id='${d.Employee_id}' data-empcode='${d.Emp_Code}' data-status='${d.Status}' class="rounded bg-light-success text-success px-3 py-1"  >${d.Status}  </span>`));
+            if (d.Status == 'InActive') {
+                status_td = $('<td>').append($(`<span onclick=changeStatus(this) data-id='${d.Employee_id}' data-empcode='${d.Emp_Code}'  data-status='${d.Status}' class="rounded bg-light-danger text-danger px-3 py-1"  >${d.Status}  </span>`));
+            }
+            var row = $('<tr>').append(td,
+                $('<td>').text(d.Firm),
+                $('<td>').text(d.Emp_Code),
+                $('<td>').text(d.Designation),
+                $('<td>').text(d.Employee_Name),
+                $('<td>').text(d.Gender),
+                $('<td>').text(d.Date_of_birth),
+                $('<td>').text(d.Mobile),
+                $('<td>').text(d.Email),
+                $('<td>').text(d.grade_name),
+                $('<td>').text(d.Department),
+                $('<td>').text(d.Date_of_Joining),
+                status_td,
+            );
+            tableBody.append(row);
+        });
+        refreshtable('#mytable');
+    }
+    function changeStatus(elm) {
+        var id = $(elm).data('id');
+        var empcode = $(elm).data('empcode');
+
+
+        var status = $(elm).data('status');
+
+        Swal.fire({
+            title: 'Confirmation',
+            html: 'Are you sure want to change the status of this employee?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Change It!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                gowithData("../../hr/data/change-employee-status", "POST", JSON.stringify({ data: { Employee_id: id, empcode: empcode } }),  function (resp) {
+                    if (!resp.error) {
+                        if (status == 'Active') {
+                            $(elm).removeClass('bg-light-success');
+                            $(elm).removeClass('text-success');
+                            $(elm).addClass('bg-light-danger');
+                            $(elm).addClass('text-danger');
+                            $(elm).data('status', 'InActive');
+                            $(elm).html('InActive');
+                        }
+                        else {
+
+                            $(elm).removeClass('bg-light-danger');
+                            $(elm).removeClass('text-danger');
+                            $(elm).addClass('bg-light-success');
+                            $(elm).addClass('text-success');
+                            $(elm).data('status', 'Active');
+                            $(elm).html('Active');
+                        }
+                    }
+                })
+            }
+        })
+    }
+</script>

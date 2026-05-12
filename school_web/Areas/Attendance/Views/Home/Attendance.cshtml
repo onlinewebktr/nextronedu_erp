@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Form</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+    <script src="~/Content/theme/js/bootstrap.bundle.min.js"></script>
+
+
+    <link rel="icon" href="~/Content/theme/images/favicon.png" type="image/png" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="~/Content/theme/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/app.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/icons.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+    <script src="~/Content/js/jquery.unobtrusive-ajax.js"></script>
+
+    <script src="~/Content/theme/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/theme/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/Content/js/my.js"></script>
+    <script src="~/Content/js/jquery-ui.min.js"></script>
+    <script src="~/Content/theme/plugins/bootstrap-material-datetimepicker/js/moment.min.js"></script>
+    <script src="~/Content/theme/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js"></script>
+    <link href="~/Content/theme/plugins/notifications/css/lobibox.min.css" rel="stylesheet" />
+
+    <link href="~/Content/theme/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/select2/js/select2.min.js"></script>
+    <script src="~/Content/theme/plugins/metismenu/js/metisMenu.min.js"></script>
+    <style>
+        .status-btn-group .btn {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        /* Adjusting the table for mobile screens */
+        @@media (max-width: 768px) {
+            .table td, .table th {
+                font-size: 14px;
+                white-space: normal; /* Ensure content wraps instead of forcing scroll */
+            }
+
+            .status-btn-group .btn {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .table td, .table th {
+                font-size: 12px;
+                padding: 5px; /* Reduce padding for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid bg-white">
+        <div class="row">
+            <div class="col-12" style="margin: 25px 0px 0px 0px;">
+                <div class="form-group">
+                    <input type="date" class="form-control" id="date" name="date" required disabled>
+                </div>
+            </div>
+        </div>
+
+        <!-- Make the table responsive -->
+        <div class="table-responsive">
+            <table id="mytable" class="table table-bordered" style="width:100%; margin:10px 0px 0px 0px;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>User ID</th>
+                        <th>Status</th>
+                        <th>In Time</th>
+                        <th>Out Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <script>
+        $(function () {
+            const now = new Date();
+            const formattedDate = now.toISOString().split('T')[0];
+            const currentHours = now.getHours().toString().padStart(2, '0');
+            const currentMinutes = now.getMinutes().toString().padStart(2, '0');
+
+            // Set the date in the input field
+            $('#date').val(formattedDate);
+
+            $('input[type="time"]').each(function () {
+                $(this).val(`${currentHours}:${currentMinutes}`); // Set current time
+                $(this).prop('disabled', false); // Enable the time input field for changes
+            });
+
+            getUserList();
+        });
+
+        function getUserList() {
+            var data = { type: 'forattandance' };
+
+            gowithData("../../hr/data/employeeList", "POST", JSON.stringify({ data: data }), function (resp) {
+                if (!resp.error) {
+                    bind_table(resp.data);
+                }
+            });
+        }
+
+        function bind_table(data) {
+            var tableBody = $('#mytable tbody');
+            $('#mytable').DataTable().destroy();
+
+            tableBody.empty();
+            $('#grid_prog').hide();
+            var currentTime = new Date().toISOString().slice(11, 16); // Get current time in HH:MM format
+
+            $.each(data, function (index, d) {
+                var status = $('<td>').html(
+                    '<div class="btn-group btn-group-toggle status-btn-group" data-toggle="buttons">' +
+                    '<label class="btn btn-outline-success">' +
+                    '<input type="radio" name="status-' + d.user_id + '" value="P" required> P</label>' +
+                    '<label class="btn btn-outline-danger">' +
+                    '<input type="radio" name="status-' + d.user_id + '" value="A" required> A</label>' +
+                    '<label class="btn btn-outline-warning">' +
+                    '<input type="radio" name="status-' + d.user_id + '" value="L" required> L</label>' +
+                    '</div>'
+                );
+
+
+                var intime = $('<td>').html('<input type="time" class="form-control" name="in-time-' + d.user_id + '" value="' + currentTime + '" disabled required>');
+                var outime = $('<td>').html('<input type="time" class="form-control" name="out-time-' + d.user_id + '" value="' + currentTime + '" disabled required>');
+
+                var toggleButton = $('<button class="btn btn-primary btn-toggle">Show Out Time</button>').on('click', function () {
+                    
+                    $(this).text($(this).text() === 'Show Out Time' ? 'Save In Time' : 'Save Out Time');
+                });
+
+                var buttonTd = $('<td>').append(toggleButton);
+
+                var row = $('<tr>').append(
+                    $('<td>').text(d.name),
+                    $('<td>').text(d.user_id),
+                    status,
+                    intime,
+                    outime,
+                    $('<td>').append(buttonTd),
+                );
+                tableBody.append(row);
+            });
+            //refreshtable('#mytable');
+        }
+
+    </script>
+
+
+
+</body>
+</html>

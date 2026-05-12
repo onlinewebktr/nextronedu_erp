@@ -1,0 +1,58 @@
+﻿@media screen and (max-width:900px) {
+    .box-bodym {
+        margin: 0px 0px 15px 0px;
+    }
+
+    .lebelheadpp {
+        margin: 10px 0px 2px 0px;
+    }
+
+    .totalstuddd {
+        font-size: 12px;
+    }
+
+    .chatbigg {
+        width: 100%;
+        overflow-x: scroll;
+        margin: 15px 0px 15px 0px;
+        padding: 5px; 
+    }
+
+    .home-grph-wpr-smll {
+        margin: 0px 0px 15px 0px;
+    }
+     
+     
+
+    .boxmargmm {
+        margin: 0px 0px 10px 0px;
+    }
+
+    .calmainn {
+        height: 65px;
+    }
+
+    /*****17*******/
+    .clndr-icon {
+        top: 10px;
+    }
+
+    .boxtabcomm {
+        padding: 15px 0px 15px 0px !important;
+    }
+
+    .radiogridpp {
+        padding: 0px 5px 7px 5px!important;
+    }
+
+    .chat-send-msg-ddl-wpr {
+        width: 35%!important;
+    }
+
+    .chat-send-msg-txtbx-wpr {
+        width: 50%!important;
+    }
+
+    /*****18*******/
+
+}

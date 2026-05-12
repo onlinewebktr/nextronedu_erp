@@ -1,0 +1,1800 @@
+﻿
+@{
+    ViewBag.Title = "Master Page Config";
+}
+<script src="~/Content/js/prism.js"></script>
+<link href="~/Content/css/prism.css" rel="stylesheet" /> 
+<style>
+    #mytable td {
+        padding: 0 5px;
+    }
+
+    .nav-link {
+        padding: 0 .5rem;
+    }
+</style>
+<style>
+
+    .table-container {
+        max-height: calc(100vh - 270px); /* Adjust the maximum height as needed */
+        overflow-y: scroll;
+    }
+
+    .fixed-header {
+        position: sticky;
+        top: 0;
+        background-color: #f0f0f0;
+        z-index: 1;
+    }
+    .select2-container {
+        min-width: 100%;
+    }
+    .pcd {
+        padding-top: 0.15em !important;
+        padding-bottom: 0.15em !important;
+        margin-bottom: 2px;
+        padding-left: 0.5em !important;
+    }
+</style>
+<div>
+    <div class="row">
+        <div class="col-xxl-12">
+            <div class="card m-0">
+                <div class="card-body p-2">
+                    <div class="row">
+
+                        <div class="col-lg-3">
+                            
+                                <span  >Page  </span>
+                                @Html.DropDownList("ddl_pages", (IEnumerable<SelectListItem>)ViewBag.Pages, new { @class = "form-select select" })
+                             
+                        </div>
+                        <div class="col-lg-3">
+                             
+                                <span  >Table  </span>
+                                @Html.DropDownList("ddl_table", new SelectList(ViewBag.Tables), "Select Table", new { @class = "form-select select" })
+                             
+                        </div>
+
+                        <div class="col-lg-3">
+                            
+                                <span  >Title  </span>
+                                @Html.TextBox("pageTitle", "", new { @class = "form-control" })
+                             
+                        </div>
+                        <div class="col-lg-3 mb-2">
+                            <span  >URL  </span>
+                            <div class="input-group">
+                                @Html.TextBox("pageUrl", "", new { @class = "form-control" })
+                                <button id="go-to-url" class="btn btn-warning" type="button">View</button>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+
+
+                            <ul class="nav nav-tabs nav-success mt-2" role="tablist">
+
+                                <li class="nav-item ms-2" role="presentation">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#field-customised" role="tab" aria-selected="true">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-icon">
+                                                <i class='bx bx-user-pin font-18 me-1'></i>
+                                            </div>
+                                            <div class="tab-title">Field Customization</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#grid-customised" role="tab" aria-selected="false">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-icon">
+                                                <i class='bx bx-microphone font-18 me-1'></i>
+                                            </div>
+                                            <div class="tab-title">Gridview Customization</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tabfilters" role="tab" aria-selected="false">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-icon">
+                                                <i class='bx bx-filter font-18 me-1'></i>
+                                            </div>
+                                            <div class="tab-title">Filters</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab-event" role="tab" aria-selected="false">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-icon">
+                                                <i class='bx bx-filter font-18 me-1'></i>
+                                            </div>
+                                            <div class="tab-title">Events</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tabaction" role="tab" aria-selected="false">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-icon">
+                                                <i class='bx bx-star font-18 me-1'></i>
+                                            </div>
+                                            <div class="tab-title">Action List</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab-other" role="tab" aria-selected="false">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-icon">
+                                                <i class='bx bx-star font-18 me-1'></i>
+                                            </div>
+                                            <div class="tab-title">Other Settings</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tabHelp" role="tab" aria-selected="false">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-icon">
+                                                <i class='bx bx-help-circle font-18 me-1'></i>
+                                            </div>
+                                            <div class="tab-title">Help</div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" style=" min-height: calc(100vh - 270px); padding-top:3px">
+
+                                <div class="tab-pane fade show active" id="field-customised" role="tabpanel">
+                                    <div class="table-container">
+                                        <table class="table m-0" id="mytable">
+                                            <thead class="fixed-header">
+                                                <tr>
+                                                    <th>Column Name</th>
+                                                    <th>Field Type</th>
+                                                    <th>Event</th>
+                                                    <th>Default Value</th>
+                                                    <th>Required Field Data</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="grid-customised" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-lg-4" style=" height: calc(100vh - 370px);">
+                                            @Html.Label("Data Query (Id Column must be in query)")
+                                            <textarea class="form-control" cols="20" style=" height: calc(55% - 21px);" id="DataQuery" name="DataQuery" rows="2"></textarea>
+                                            @Html.Label("Sample Query")
+                                            <textarea class="form-control" cols="20" style=" height: calc(45% - 21px);" id="simpleQuery" name="simpleQuery" rows="2"></textarea>
+                                            <button class="btn btn-info" style="width:170px; margin-top:.5rem;" id="btn-load">Load Display Grid</button>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <div class="table-container">
+                                                <table class="table table-striped" id="grdtable">
+                                                    <thead class="fixed-header">
+                                                        <tr>
+                                                            <th>Column Name</th>
+                                                            <th>Show</th>
+                                                            <th>Data Type</th>
+                                                            <th>Required Data</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="tabfilters" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button type="button" onclick="openFilterModel()" class="btn btn-primary px-3 radius-30"><i class="bx bx-plus-circle me-3"></i> Add New Filter</button>
+                                        </div>
+                                        <div class="col-lg-12 mt-2">
+                                            <div class="table-container">
+                                                <table class="table" id="allfiltertable">
+                                                    <thead class="fixed-header">
+                                                        <tr>
+                                                            <th style="width:30%;">Filter Name</th>
+                                                            <th style="width:70%;">Data Query</th>
+                                                            <th style="width:100px;">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane fade" id="tab-event" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-lg-7">
+                                            <div class="form-group me-2">
+                                                <label class="form-group-text" for="ddl_field">Field Name</label>
+                                                <select class="form-select" id="ddl_field" name="ddl_field"></select>
+                                            </div>
+                                            <div class="form-group me-2">
+                                                <label class="form-group-text" for="ddl_eventtype">Event Type</label>
+                                                <select class="form-select" id="ddl_eventtype" name="ddl_eventtype">
+                                                    <option value="">select</option>
+                                                    <option>onclick</option>
+                                                    <option>onchange</option>
+                                                    <option>rbt-onchange</option>
+                                                    <option>script</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group me-2">
+                                                <label class="txt_event_data" for="txt_event_data">Event Data</label>
+                                                <textarea class="form-control language-javascript" id="txt_event_data" style="height:200px" name="txt_event_data"></textarea>
+                                                <script>
+                                                    $(document).ready(function () {
+                                                        Prism.highlightAll();
+
+                                                        $('#txt_event_data').on('input', function () {
+                                                            Prism.highlightAll();
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <button id="btn-add-event" class="btn btn-primary btn-sm" type="button">Add</button>
+                                                <button id="btn-cencel-event" class="btn btn-dark btn-sm d-none" type="button">Cancel</button>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-5 mt-2">
+                                            <div class="table-container">
+                                                <table class="table" id="table-event">
+                                                    <thead class="fixed-header">
+                                                        <tr>
+                                                            <th style="width:20%;">Filed Name</th>
+                                                            <th style="width: 20%;">Event Type</th>
+                                                            <th style="width:60%;">Event Data</th>
+                                                            <th style="width:100px;">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="tab-pane fade" id="tabaction" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button type="button" onclick="openActionModel()" class="btn btn-primary px-3 radius-30"><i class="bx bx-plus-circle me-3"></i> Add New Action</button>
+                                        </div>
+                                        <div class="col-lg-12 mt-2">
+                                            <div class="table-container">
+                                                <table class="table" id="table-action">
+                                                    <thead class="fixed-header">
+                                                        <tr>
+                                                            <th>Action Name</th>
+                                                            <th>Action Type</th> 
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="tab-pane fade" id="tab-other" role="tabpanel">
+
+                                    <div class="row">
+                                        <div class="col-xl-12 mt-3">
+                                            <div class="row">
+                                                <div class="col-lg-3 mb-2">
+                                                    <div class="input-group">
+                                                        <span class="btn btn-dark">Type  </span>
+                                                        @Html.DropDownList("pageType", new SelectList(new String[] { "Form", "Report","Single Data Form Only" }), new { @class = "form-select" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 mb-2">
+                                                    <div class="input-group">
+                                                        <span class="btn btn-dark">Form Type  </span>
+                                                        @Html.DropDownList("ddl_formtype", new SelectList(new String[] { "LeftRight", "TopDown","PopUp" }), new { @class = "form-select" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 mb-2">
+                                                    <div class="input-group">
+                                                        <span class="btn btn-dark">Action  </span>
+                                                        <div class="form-control ps-1 pe-1">
+
+
+                                                            <span class="btn btn-info p-0 ps-1">
+                                                                @Html.CheckBox("chk_add", true)
+                                                                <label for="chk_add"> <i class='bx bx-plus'></i></label>
+                                                            </span>
+                                                            <span class="btn btn-warning p-0 ps-1">
+                                                                @Html.CheckBox("chk_edit", true)
+                                                                <label for="chk_edit"> <i class='bx bx-edit-alt'></i></label>
+                                                            </span>
+                                                            <span class="btn btn-danger p-0 ps-1">
+                                                                @Html.CheckBox("chk_delete", true)
+                                                                <label for="chk_delete"> <i class='bx bx-trash'></i></label>
+                                                            </span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-lg-3 mb-2">
+                                                    <div class="input-group">
+                                                        <span class="btn btn-dark">Method Id </span>
+                                                        @Html.TextBox("methodId", "", new { @class = "form-control" })
+                                                    </div>
+                                                </div>
+
+                                                @Html.LabelEditor("duplicate_filter", "text", "Duplicate Column Filters (Comma Seperated)",divCssClass: "col-lg-6")
+                                                @Html.LabelEditor("Page_Layout_Path", "text", "Page Layout Path", divCssClass: "col-lg-3")
+                                                @Html.LabelEditor("Custom_View", "text", "Custom View Name", divCssClass: "col-lg-3")
+                                                <div class="col-lg-12 my-2">
+                                                    <button type="button" class="btn btn-primary" id="btn-export">Export</button>
+                                                    <script>
+                                                        $('#btn-export').click(function () {
+                                                            var pageId = $('#ddl_pages').val();
+                                                            window.open("../../hr/export/" + pageId,"_blank")
+                                                           
+                                                            //var data = { data: { pageId: pageId } }
+                                                            //gowithData("../../hr/data/export", 'POST', JSON.stringify(data), function (resp) {
+                                                            //    console.log(resp);
+                                                            //});
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-xl-8">
+                    <div class="table-container">
+                        <table class="table table-striped" id="actiontable">
+                            <thead class="fixed-header">
+                                <tr>
+                                    <th>Column Name</th>
+                                    <th>Display</th>
+                                    <th>Data Type</th>
+                                    <th>Required Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>*@
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane fade  " id="tabHelp" role="tabpanel">
+                                    <ul>
+                                        <li>
+                                            To User Filter Veriable Name in query <strong>{[Veriable Name].PropertyName}</strong>
+                                            <ul>
+                                                <li>
+                                                    Ex 1 . select * from tablename where name='{[User Name].Text}'
+                                                </li>
+                                                <li>   Ex 2. select * from tablename where idate='{[Event Date].Idate}'</li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            List Of Properties
+                                            <ul>
+                                                <li>1 . DatePicker : Idate,Format("")</li>
+                                                <li>2 . DDL : Text,Value</li>
+                                                <li>3 . AutoCompleteBox : Text</li>
+                                                <li>4 . TextBox : Text</li>
+                                            </ul>
+
+                                        </li>
+                                        <li>
+                                            List Of Predefind variable
+                                            <ul>
+                                                <li>1 . CurrentIdate : {Idate}         </li>
+                                                <li>1 . CurrentDate : {Date.Format("")}</li>
+                                                <li>1 . CurrentUserId : {UserId}       </li>
+                                                <li>1 . AnySessionValye : {Session[""]}</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-lg-4">
+
+                        </div>
+                        <div class="col-lg-8" style="text-align:right">
+                            <button class="btn btn-primary" style="width:120px;" onclick="save_data()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="model-filter" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Filter</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+
+                            <div class="input-group mb-1">
+                                <span class="btn-light btn" style="width: 110px; border-color: #d0d0d0; ">Name  </span>
+                                <input id="filter-name" class="form-control" />
+                            </div>
+                            <div class="input-group mb-1">
+                                <span class="btn-light btn  " style="width: 110px; border-color: #d0d0d0; ">Type  </span>
+                                @Html.DropDownList("filter-type", "DDL,Auto CompleteBox,DatePicker,DateRage,TextBox", "Select", new { @class = "form-select" })
+                            </div>
+                            <div class="input-group mb-1 d-none" id="div-data-type">
+                                <span class="btn-light btn  " style="width: 110px; border-color: #d0d0d0; ">Data Type  </span>
+                                @Html.DropDownList("filter-datatype", "Static,Static Key Value,Months,Year,SQL,On Change", "Select", new { @class = "form-select" })
+                            </div>
+                            <div class="input-group mb-1 d-none" id="div-onchange">
+                                <span class="btn-light btn  " style="width: 110px; border-color: #d0d0d0; ">On Change  </span>
+                                @Html.DropDownList("filter-onchange", "N/A", "Select", new { @class = "form-select" })
+                            </div>
+                            <div class="d-none" id="div-data-query">
+                                @Html.Label("Data Query")
+                                <textarea class="form-control" cols="20" style=" height: 50px;" id="filter-dataquery" rows="2"></textarea>
+                            </div>
+                            <button class="btn btn-info  me-2" id="btn-filter" style="margin-top:.25rem;">Add</button>
+                            <button class="btn btn-dark d-none" id="btn-filter-cancel" style="margin-top:.25rem;">Cancel</button>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="table-container">
+                                <table class="table table-striped" id="filtertable">
+                                    <thead class="fixed-header">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Data Type</th>
+                                            <th>On Change</th>
+                                            <th>Data - Query</th>
+                                            <th style="width:100px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer p-0 d-block">
+                    <div class="row pb-2">
+                        <div class="col-lg-3">
+                            <span>Filter Name  </span>
+                            <input id="filter-serial-name" type="text" class="form-control" />
+                            <span>Filter Button Name </span>
+                            <input id="filter-btn-name" type="text" value="Find" class="form-control" />
+                        </div>
+                        <div class="col-lg-6">
+                            <span>Filter Data Query </span>
+                            <textarea id="filter-grid-dataquery" class="form-control"></textarea>
+                        </div>
+                        <div class="col-lg-3 pt-5">
+                            <button type="button" id="btn-model-filter" class="btn btn-primary me-2 btn-lg" style="width:100px">Submit </button>
+                            <button type="button" class="btn btn-secondary  btn-lg" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="model-action" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Action</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="input-group mb-1">
+                                        <span class="btn-light btn" style="width: 130px; border-color: #d0d0d0; ">Action Name  </span>
+                                        <input id="act-name" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="input-group mb-1">
+                                        <span class="btn-light btn  " style="width: 130px; border-color: #d0d0d0; ">Action Type  </span>
+                                        @Html.DropDownList("act-type", "Url,Form,CustomForm", "Select", new { @class = "form-select" })
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="input-group mb-1">
+                                        <span class="btn-light btn" style="width: 130px; border-color: #d0d0d0; ">Icon  </span>
+                                        <input id="act-icon" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-4 act-urlpnl">
+                                    <div class="input-group mb-1">
+                                        <span class="btn-light btn" style="width: 130px; border-color: #d0d0d0; ">Page Url  </span>
+                                        <input id="act-pageurl" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-4 act-urlpnl">
+                                    <div class="input-group mb-1  " id="div-data-type">
+                                        <span class="btn-light btn  " style="width: 130px; border-color: #d0d0d0; ">Page Type  </span>
+                                        @Html.DropDownList("act-pagetype", "Same Page,New Tab,PopUp", "Select", new { @class = "form-select" })
+                                    </div>
+                                </div>
+                                <div class="col-4   act-formpnl act-cust-form">
+                                    <div class="input-group mb-1">
+                                        <span class="btn-light btn" style="width: 130px; border-color: #d0d0d0; ">Button Text  </span>
+                                        <input id="act-btn-text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-4 act-formpnl act-cust-form">
+                                    <div class="input-group mb-1   "  >
+                                        <span class="btn-light btn  " style="width: 130px; border-color: #d0d0d0; ">Method Id </span>
+                                        <input id="act-action-id" class="form-control" />
+                                    </div>
+                                </div> 
+                                <div class="col-4">
+                                    <div class="input-group mb-1"  >
+                                        <span class="btn-light btn  " style="width: 150px; border-color: #d0d0d0; ">Responce Type </span>
+                                        <select id="act_resp_type" class="form-select" >
+                                            <option value="status">Status</option>
+                                            <option value="remove">Remove Row</option>
+                                            <option value="reload">Reload Data</option>
+                                        </select>
+                                    </div>
+                                </div> 
+                            </div>
+                             
+
+                        </div>
+
+                        <div class="col-lg-12 table-container d-none  act-formpnl">
+                            <table class="table table-striped" id="act-table">
+                                <thead class="fixed-header">
+                                    <tr>
+                                        <th>Column Name</th>
+                                        <th>Show</th> 
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="col-lg-12 table-container d-none  act-cust-form">
+                            <table class="table table-striped" id="act-cust-table">
+                                <thead class="fixed-header">
+                                    <tr>
+                                        <th>Field Name</th>
+                                        <th>Field Type</th>
+                                        <th>On Changed</th>
+                                        <th>Default</th>
+                                        <th>Field Config Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <button type="button" id="btn-act-remove" class="btn btn-danger btn-sm me-2 " onclick="act_remove_pcd()" style="width: 140px; float: right"><i class="bx bx-trash"></i> Remove Last</button>
+                            <button type="button" id="btn-act-new" class="btn btn-primary btn-sm me-2  " onclick="new_act_pcd()" style="width:100px; float: right"><i class="bx bx-plus-circle"></i> New</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer p-0 d-block">
+                    <div class="row pb-2"> 
+                        <div class="col-lg-6">
+                            <button type="button" id="btn-act-add" class="btn btn-primary me-2 " style="width:100px">Add</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <input class="d-none" id="frm-is-customised-grid" type="checkbox" />
+</div>
+
+<script>
+    var filteritems = [];
+    function openFilterModel() {
+        filteritems = [];
+        filterindex = -1;
+        $('#filtertable tbody').empty();
+        $('#model-filter').modal("show");
+        $('#filter-serial-name').val('');
+        $('#filter-grid-dataquery').val('');
+        $('#filter-btn-name').val('Find');
+        $('#filter-type').val('');
+        $('#filter-name').val('');
+        $('#div-data-type').addClass('d-none');
+        $('#div-data-query').addClass('d-none');
+        $('#div-onchange').addClass('d-none');
+        var ddl = $('#filter-onchange');
+        $('#filter-datatype').val('');
+        ddl.empty();
+        ddl.append('<option value="">Select</option>');
+        $.each(filteritems, function (index, f) {
+            if (f.type == 'DDL') {
+                ddl.append('<option>' + f.name + '</option>');
+            }
+        });
+    }
+    function deleteFilter(btn) {
+        var id = $(btn).attr('data-id');
+        Swal.fire({
+            title: 'Are you sure want to delete this?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var indx = -1;
+                $.each(filters, function (index, f) {
+                    if (f.uniqueId == id) {
+                        indx = index;
+                    }
+                });
+                if (indx > -1) {
+                    filters.splice(indx, 1)
+                    Swal.fire(
+                        'Deleted!',
+                        'Your data has been deleted.',
+                        'success'
+                    )
+                    var table = $('#allfiltertable tbody');
+                    table.empty();
+                    $.each(filters, function (index, f) {
+                        table.append(filter_row(f));
+                    });
+                }
+            }
+        })
+    };
+    function editFilter(btn) {
+        var id = $(btn).attr('data-id');
+        filteritems = [];
+        var foundFilter = false;
+        $.each(filters, function (index, f) {
+            if (f.uniqueId == id) {
+                filteritems = f.filteritems;
+                filterindex = index;
+                $('#filter-serial-name').val(f.filterName);
+                $('#filter-grid-dataquery').val(f.filterquery);
+                $('#filter-btn-name').val(f.btnName);
+                foundFilter = true; // Set the flag to true
+                return false; // Exit the loop
+            }
+        });
+
+        if (foundFilter) {
+            var filtertable = $('#filtertable tbody');
+            filtertable.empty();
+            $.each(filteritems, function (index, filter) {
+                filtertable.append(filteritem_row(filter));
+            });
+            $('#filter-type').val('');
+            $('#filter-name').val('');
+            $('#filter-datatype').val('');
+            $('#div-data-type').addClass('d-none');
+            $('#div-data-query').addClass('d-none');
+            $('#div-onchange').addClass('d-none');
+            $('#model-filter').modal("show");
+            var ddl = $('#filter-onchange');
+            ddl.empty();
+            ddl.append('<option value="">Select</option>');
+            $.each(filteritems, function (index, f) {
+                if (f.type == 'DDL') {
+                    ddl.append('<option>' + f.name + '</option>');
+                }
+            });
+        }
+    };
+
+
+    $('.delete-filter').on("click", function () {
+        var id = $(this).attr('data-id');
+    });
+    $('#btn-model-filter').on("click", function () {
+        var filterName = $('#filter-serial-name').val();
+        var filterquery = $('#filter-grid-dataquery').val();
+        var btnName = $('#filter-btn-name').val();
+        var uniqueId = 'FLTR' + $.now();
+        if (!filterName) {
+            alertError("Enter Filter Name");
+            return;
+        }
+        if (!filterquery) {
+            alertError("Enter Filter Query");
+            return;
+        }
+        if (!btnName) {
+            alertError("Enter Filter Button Name");
+            return;
+        }
+        var filter = { filterName: filterName, filterquery: filterquery, btnName: btnName, filteritems: filteritems, uniqueId: uniqueId };
+        if (filterindex == -1) {
+            filters.push(filter)
+            var table = $('#allfiltertable tbody');
+            table.append(filter_row(filter));
+        }
+        else {
+            filters[filterindex] = filter;
+
+            var table = $('#allfiltertable tbody');
+            table.empty();
+            $.each(filters, function (index, f) {
+                table.append(filter_row(f));
+            });
+        }
+
+        $('#model-filter').modal("hide");
+    });
+    $('#filter-type').on("change", function () {
+        var v = $(this).val();
+        if (v == "DDL" || v == "Auto CompleteBox") {
+            $('#div-data-type').removeClass('d-none');
+        }
+        else {
+            $('#div-data-type').addClass('d-none');
+            $('#div-data-query').addClass('d-none');
+            $('#div-onchange').addClass('d-none');
+        }
+    });
+    $('#filter-datatype').on("change", function () {
+        var v = $(this).val();
+        if (!v) {
+            $('#div-onchange').addClass('d-none');
+            $('#div-data-query').addClass('d-none');
+        }
+        else if (v == "Static") {
+            $('#div-data-query').removeClass('d-none');
+            $('#div-onchange').addClass('d-none');
+        }
+        else if (v == "SQL") {
+            $('#div-data-query').removeClass('d-none');
+            $('#div-onchange').addClass('d-none');
+        }
+        else if (v == "On Change") {
+            $('#div-onchange').removeClass('d-none');
+            $('#div-data-query').removeClass('d-none');
+        }
+        else {
+            $('#div-onchange').addClass('d-none');
+            $('#div-data-query').removeClass('d-none');
+        }
+    });
+    function load_events() {
+
+        var table = $('#table-event tbody');
+        table.empty();
+        $.each(events, function (index, fi) {
+            table.append(event_row(fi));
+        });
+    }
+    $('#btn-add-event').on("click", function () {
+        var fieldName = $('#ddl_field').val();
+        var eventType = $('#ddl_eventtype').val();
+        var eventData = $('#txt_event_data').val();
+        var uniqueId = 'envts-' + $.now();
+        if (!fieldName) {
+            alertError("Select Field Name");
+            return;
+        } if (!eventType) {
+            alertError("Select EventType");
+            return;
+        }
+        if (!eventData) {
+            alertError("Enter Event Data");
+            return;
+        }
+        var event = { fieldName: fieldName, eventType: eventType, eventData: eventData, uniqueId: uniqueId };
+        if (eventindex == -1) {
+            if (!events) {
+                events=[]
+            }
+            events.push(event)
+            var table = $('#table-event tbody');
+            table.append(event_row(event));
+        }
+        else {
+            events[eventindex] = event;
+            var table = $('#table-event tbody');
+            table.empty();
+            $.each(events, function (index, f) {
+                table.append(event_row(f));
+            });
+        }
+        $('#ddl_eventtype').val('');
+        $('#txt_event_data').val('');
+        $('#btn-cencel-event').addClass('d-none');
+        $('#btn-add-event').html('Add');
+        eventindex = -1;
+    })
+    $('#btn-cencel-event').on("click", function () {
+        $('#ddl_eventtype').val('');
+        $('#txt_event_data').val('');
+        $('#btn-cencel-event').addClass('d-none');
+        $('#btn-add-event').html('Add');
+        eventindex = -1;
+    })
+    function event_row(event) {
+        var row = $('<tr>').append(
+            $('<td>').append(event.fieldName),
+            $('<td>').append(event.eventType),
+            $('<td>').append(event.eventData),
+            $('<td style="min-width: 95px;">').append($('<button class="btn badge rounded-pill bg-primary" onclick="editEvent(this)" data-id="' + event.uniqueId + '" ><i class="bx bx-pencil"></i></button>'),
+                $('<button class="btn badge rounded-pill bg-danger delete-filter ms-1"  onclick="deleteEvent(this)"  data-id="' + event.uniqueId + '" ><i class="bx bx-trash"></i></button>')),
+        );
+        return row
+    }
+
+    function deleteEvent(btn) {
+        var id = $(btn).attr('data-id');
+        Swal.fire({
+            title: 'Are you sure want to delete this?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var indx = -1;
+                $.each(events, function (index, f) {
+                    if (f.uniqueId == id) {
+                        indx = index;
+                    }
+                });
+                if (indx > -1) {
+                    events.splice(indx, 1)
+                    Swal.fire(
+                        'Deleted!',
+                        'Your data has been deleted.',
+                        'success'
+                    )
+                    var table = $('#table-event tbody');
+                    table.empty();
+                    $.each(events, function (index, f) {
+                        table.append(event_row(f));
+                    });
+                }
+            }
+        })
+    };
+    function editEvent(btn) {
+        var id = $(btn).attr('data-id');
+        var found = false;
+        $.each(events, function (index, f) {
+            if (f.uniqueId == id) {
+                eventindex = index;
+                $('#ddl_field').val(f.fieldName);
+                $('#ddl_eventtype').val(f.eventType);
+                $('#txt_event_data').val(f.eventData);
+                $('#btn-cencel-event').removeClass('d-none');
+                $('#btn-add-event').html('Update');
+                found = true; // Set the flag to true
+                return false; // Exit the loop
+            }
+        });
+
+    };
+
+</script>
+
+<script>
+    var pcd = [];
+    var gcd = [];
+    var filters = [];
+    var events = [];
+    var filterindex = -1;
+    var eventindex = -1;
+    var filterItemindex = -1;
+    function goup(ac) {
+        console.log(ac);
+        var index = $(ac).attr("data-index");
+        if (index > 0 && index < pcd.length) {
+            const temp = pcd[index - 1];
+            pcd[index - 1] = pcd[index];
+            pcd[index] = temp;
+        }
+        load_pcd();
+    }
+    function removeme(ac) {
+        console.log(ac);  
+        var type = $(ac).attr("data-id");
+        var index = $(ac).attr("data-index");
+        if (type == "pcd") {
+            pcd.splice(index, 1);
+            load_pcd();
+        }
+        else if (type == "act-pcd") {
+           act_pcd.splice(index, 1);
+            load_action_pcd();
+        }
+       
+    }
+    var ispageChange = false;
+    $('#ddl_pages').on('change', function () {
+        var pageId = $(this).val();
+        console.log(pageId);
+        if (pageId == 'new') {
+            $('#ddl_table').val("");
+            $('#pageUrl').val("");
+            $('#pageTitle').val("");
+            $('#methodId').val("0");
+            $('#DataQuery').val("");
+            $('#simpleQuery').val("");
+            pcd = [];
+            events = [];
+            gcd = [];
+            filters = [];
+            actionlist = [];
+            OtherData = {},
+            load_pcd()
+            load_gcd()
+            load_filters()
+            $('#chk_add').prop('checked', true);
+            $('#chk_edit').prop('checked', true);
+            $('#chk_delete').prop('checked', true);
+            $('#frm-is-customised-grid').prop('checked', false);
+            load_events();
+            $('#Page_Layout_Path').val('');
+            $('#Custom_View').val('');
+        }
+        else {
+
+            ispageChange = true;
+            var data = { data: { pageId: pageId } }
+            gowithData("../../hr/data/page", 'POST', JSON.stringify(data), function (resp) {
+
+                $.each(resp.data, function (index, d) {
+                    $('#ddl_table').val(d.tableName);
+                    if (!$('#ddl_table').val()) {
+                        console.log(`tableName : ${d.tableName} is not match`);
+                        $('#ddl_table').val(d.tableName.toUpperCase());
+                    }
+                    $('#ddl_table').change();
+                    $('#pageTitle').val(d.pageTitle);
+                    $('#pageUrl').val(d.pageUrl);
+                    $('#pageType').val(d.pageType);
+                    $('#ddl_formtype').val(d.formType);
+                    $('#methodId').val(d.methodId);
+                    $('#DataQuery').val(d.dataQuery);
+                    $('#simpleQuery').val(d.sampleQuery);
+
+                    $('#frm-is-customised-grid').prop('checked', d.isCustomisedGrid);
+                    pcd = JSON.parse(d.pcd);
+                    gcd = JSON.parse(d.gcd);
+
+                    //add missing new Cols
+                    $.each(resp.cols, function (ind, col) {
+                        if (!pcd.some(item => item.columnName === col)) {
+                            var p = {};
+                            p.columnName = col;
+                            p.isRequired = false;
+                            p.onChanged = false;
+                            p.displayText = displayText(col);
+                            p.requiredData = '';
+                            p.fieldType = 'Not a Field';
+                            p.defaultValue = '';
+                            p.cssclass = '';
+                            pcd.push(p);
+                        }
+                        if (!d.isCustomisedGrid) {
+                            if (!gcd.some(item => item.columnName === col)) {
+                                var p = {};
+                                p.columnName = col;
+                                p.isShowOnGrid = false;
+                                p.displayText = displayText(col);
+                                p.requiredData = '';
+                                p.dataType = 'Text';
+                                gcd.push(p);
+                            }
+                        }
+                    });
+                    load_pcd()
+
+                    load_gcd()
+                    filters = JSON.parse(d.filters);
+                    var action = JSON.parse(d.action);
+                    
+                    $('#chk_add').prop('checked', action.isAddNewAllow);
+                    $('#chk_edit').prop('checked', action.isEditAllow);
+                    $('#chk_delete').prop('checked', action.isDeleteAllow); 
+                    load_filters()
+                    events = JSON.parse(d.events);
+                    if (!events) {
+                        events = [];
+                    }
+                    load_events()
+                    actionlist = action.actionList;
+                    var table = $('#table-action tbody');
+                    table.empty();
+                    $.each(actionlist, function (index, act) {
+                        table.append(actionrow(act));
+                    }); 
+                    $('#duplicate_filter').val(action.duplicate_filter);
+                    $('#Page_Layout_Path').val('');
+                    $('#Custom_View').val('');
+                    OtherData = JSON.parse(d.OtherData); 
+                    $('#Page_Layout_Path').val(OtherData.Page_Layout_Path); 
+                    $('#Custom_View').val(OtherData.Custom_View);
+                    ispageChange = false;
+                });
+
+            })
+        }
+
+    });
+    $('#ddl_table').on('change', function () {
+        var table = $(this).val();
+        if (ispageChange) {
+            return false;
+        }
+        if (table ) {
+            console.log(table);
+            $('#simpleQuery').val("select top 1 * from " + table)
+            $('#pageTitle').val(displayText(table))
+            $('#pageUrl').val(displayText(table).toLowerCase().replace(' ', '-'))
+            var data = { data: { table: table } }
+            gowithData("../../hr/data/table", 'POST', JSON.stringify(data), function (data) {
+                console.log(data);
+                load_pcd(data);
+                load_gcd(data);
+
+                $('#frm-is-customised-grid').prop('checked', false);
+                events = [];
+                load_events()
+                actionlist = [];
+                var table = $('#table-action tbody');
+                table.empty(); 
+            })
+        }
+
+    });
+
+    function filteritem_row(filter) {
+        var row = $('<tr>').append(
+            $('<td>').append(filter.name),
+            $('<td>').append(filter.type),
+            $('<td>').append(filter.datatype),
+            $('<td>').append(filter.onchange),
+            $('<td>').append(filter.dataquery),
+            $('<td>').append($('<button class="btn badge rounded-pill bg-primary" onclick="editFilterItem(this)" data-id="' + filter.id + '" ><i class="bx bx-pen"></i></button>'),
+                $('<button class="btn badge rounded-pill bg-danger delete-filter ms-1" onclick="deleteFilterItem(this)"  data-id="' + filter.id + '" ><i class="bx bx-trash"></i></button>')),
+        );
+        return row
+    }
+    function filter_row(filter) {
+        var row = $('<tr>').append(
+            $('<td>').append(filter.filterName),
+            $('<td>').append(filter.filterquery),
+            $('<td style="min-width: 95px;">').append($('<button class="btn badge rounded-pill bg-primary" onclick="editFilter(this)" data-id="' + filter.uniqueId + '" ><i class="bx bx-pencil"></i></button>'),
+                $('<button class="btn badge rounded-pill bg-danger delete-filter ms-1"  onclick="deleteFilter(this)"  data-id="' + filter.uniqueId + '" ><i class="bx bx-trash"></i></button>')),
+        );
+        return row
+    }
+    $('#btn-filter-cancel').on('click', function () {
+        $('#filter-type').val('');
+        $('#filter-name').val('');
+        $('#div-data-type').addClass('d-none');
+        $('#div-data-query').addClass('d-none');
+        $('#div-onchange').addClass('d-none');
+        $('#btn-filter-cancel').addClass('d-none');
+        $('#btn-filter').html('Add');
+        filterItemindex = -1;
+    });
+    $('#btn-filter').on('click', function () {
+        var filter = {};
+        filter.id = 'FLT' + $.now();
+        filter.name = $('#filter-name').val();
+        filter.type = $('#filter-type').val();
+        if (filter.type == "DDL" || filter.type == "Auto CompleteBox") {
+            filter.datatype = $('#filter-datatype').val();
+            filter.dataquery = $('#filter-dataquery').val();
+            if (filter.datatype == "On Change") {
+                filter.onchange = $('#filter-onchange').val();
+            }
+            else {
+                filter.onchange = '';
+            }
+        }
+        else {
+            filter.datatype = '';
+            filter.dataquery = '';
+            filter.onchange = '';
+        }
+        filter.onchange = $('#filter-onchange').val();
+        var filtertable = $('#filtertable tbody');
+        if (filterItemindex == -1) {
+            filteritems.push(filter);
+            filtertable.append(filteritem_row(filter));
+        }
+        else {
+            filteritems[filterItemindex] = filter;
+            filtertable.empty();
+            $.each(filteritems, function (index, filter) {
+                filtertable.append(filteritem_row(filter));
+            });
+        }
+
+        var ddl = $('#filter-onchange');
+        ddl.empty();
+        ddl.append('<option value="">Select</option>');
+        $.each(filteritems, function (index, f) {
+            if (f.type == 'DDL') {
+                ddl.append('<option>' + f.name + '</option>');
+            }
+        });
+
+
+        $('#filter-type').val('');
+        $('#filter-name').val('');
+        $('#filter-datatype').val('');
+        $('#div-data-type').addClass('d-none');
+        $('#div-data-query').addClass('d-none');
+        $('#div-onchange').addClass('d-none');
+        $('#btn-filter-cancel').addClass('d-none');
+        $('#btn-filter').html('Add');
+        filterItemindex = -1;
+    });
+    function editFilterItem(btn) {
+        var id = $(btn).attr('data-id');
+        $.each(filteritems, function (index, filter) {
+            if (filter.id == id) {
+                $('#filter-name').val(filter.name);
+                $('#filter-type').val(filter.type);
+                $('#filter-datatype').val(filter.datatype);
+                $('#filter-dataquery').val(filter.dataquery);
+                $('#filter-onchange').val(filter.onchange);
+                if (filter.type == "DDL" || filter.type == "Auto CompleteBox") {
+                    $('#div-data-query').removeClass('d-none');
+                    $('#div-data-type').removeClass('d-none');
+                    if (filter.datatype == "On Change") {
+                        $('#div-onchange').removeClass('d-none');
+                    }
+                    else {
+                        $('#div-onchange').addClass('d-none');
+                    }
+                }
+                else {
+                    $('#div-data-type').addClass('d-none');
+                    $('#div-data-query').addClass('d-none');
+                    $('#div-onchange').addClass('d-none');
+                }
+                filterItemindex = index;
+                $('#btn-filter-cancel').removeClass('d-none');
+                $('#btn-filter').html('Update');
+                return false; // Exit the loop
+            }
+        });
+    };
+    function deleteFilterItem(btn) {
+        var id = $(btn).attr('data-id');
+        Swal.fire({
+            title: 'Are you sure want to delete this?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var indx = -1;
+                $.each(filteritems, function (index, f) {
+                    if (f.id == id) {
+                        indx = index;
+                        return false;
+                    }
+                });
+                if (indx > -1) {
+                    filteritems.splice(indx, 1)
+                    Swal.fire(
+                        'Deleted!',
+                        'Your data has been deleted.',
+                        'success'
+                    )
+                    var table = $('#filtertable tbody');
+                    table.empty();
+                    $.each(filteritems, function (index, filter) {
+                        table.append(filteritem_row(filter));
+                    });
+                }
+            }
+        })
+    };
+    $('#btn-load').on('click', function () {
+        var qry = $('#simpleQuery').val();
+        if (qry) {
+            var data = { qry: qry };
+            gowithData('../../hr/save/gcd', 'POST', JSON.stringify({ data: data }), function (data) {
+                load_gcd(data);
+                $('#frm-is-customised-grid').prop('checked', true);
+            })
+        }
+
+    });
+    var OtherData = {};
+    function save_data() {
+        console.log(pcd);
+        $.each(pcd, function (index, p) {
+            p.displayText = $('#txt_disp_' + p.columnName).val();
+            p.fieldType = $('#ddl_disp_' + p.columnName).val();
+            p.requiredData = $('#txt_data_' + p.columnName).val();
+            p.isRequired = $('#is_required_' + p.columnName).prop('checked');
+            p.onChanged = $('#onchange_' + p.columnName).prop('checked');
+            p.onChangedField = $('#ddl_event_' + p.columnName).val();
+            p.defaultValue = $('#txt_deafult_' + p.columnName).val();
+            p.cssclass = $('#txt_css_' + p.columnName).val();
+        });
+        $.each(gcd, function (index, p) {
+            p.displayText = $('#gcd_disp_' + p.columnName).val();
+            p.dataType = $('#gcd_ddl_' + p.columnName).val();
+            p.requiredData = $('#gcd_data_' + p.columnName).val();
+            p.isShowOnGrid = $('#gcd_showingrid_' + p.columnName).prop('checked');
+        });
+        console.log(pcd);
+        if (OtherData == null)
+            OtherData = {}
+        OtherData.Page_Layout_Path = $('#Page_Layout_Path').val();
+        OtherData.Custom_View = $('#Custom_View').val();
+        var action = {};
+        action.isEditAllow = $('#chk_edit').prop('checked');
+        action.isDeleteAllow = $('#chk_delete').prop('checked');
+        action.isAddNewAllow = $('#chk_add').prop('checked');
+        action.duplicate_filter = $('#duplicate_filter').val(); 
+        action.actionList = actionlist;
+        var data = {
+            pageId: $('#ddl_pages').val(),
+            tableName: $('#ddl_table').val(),
+            pageTitle: $('#pageTitle').val(),
+            pageUrl: $('#pageUrl').val(),
+            pageType: $('#pageType').val(),
+            formType: $('#ddl_formtype').val(),
+            methodId: $('#methodId').val(),
+            dataQuery: $('#DataQuery').val(),
+            OtherData: JSON.stringify(OtherData), 
+            sampleQuery: $('#simpleQuery').val(),
+            isCustomisedGrid: $('#frm-is-customised-grid').prop('checked'),
+            action: JSON.stringify(action),
+            events: JSON.stringify(events),
+            pcd: JSON.stringify(pcd), gcd: JSON.stringify(gcd), filters: JSON.stringify(filters)
+        };
+        submitdata('../../hr/save/mpc', JSON.stringify({ data: data }), function (data) {
+            console.log(data);
+            // bindtable(data);
+        })
+    }
+    function displayText(string) {
+        let separatedString = "";
+        let currentWord = "";
+
+        for (let i = 0; i < string.length; i++) {
+            const char = string[i];
+            if (char.toUpperCase() === char || char === "_") {
+                if (currentWord) {
+                    separatedString += currentWord + " ";
+                    currentWord = "";
+                } else if (char === "_") {
+                    separatedString += " ";
+                }
+            }
+            if (char !== "_") {
+                currentWord += char;
+            }
+        }
+
+        if (currentWord) {
+            separatedString += currentWord;
+        }
+
+        const capitalizedString = separatedString.replace(/_/g, "").replace(/\b\w/g, function (match) {
+            return match.toUpperCase();
+        });
+
+        return capitalizedString;
+    }
+
+    function load_filters() {
+
+        var table = $('#allfiltertable tbody');
+        table.empty();
+        $.each(filters, function (index, fi) {
+            table.append(filter_row(fi));
+        });
+    }
+    function load_gcd(data) {
+
+        var grdtable = $('#grdtable tbody');
+        grdtable.empty();
+        var lst2 = ["Text", "Image", "Other File", "Status", "Action"];
+        if (!data) {
+            $.each(gcd, function (index, g) {
+                var ddl2 = $('<select>').addClass("form-select").attr("id", "gcd_ddl_" + g.columnName);
+                $.each(lst2, function (index, value) {
+                    ddl2.append('<option>' + value + '</option>');
+                });
+                //[{"columnName":"PageType","displayText":"Page Type","dataType":"Test","requiredData":"","isShowOnGrid":false
+                ddl2.val(g.dataType);
+                var row1 = $('<tr>').append(
+                    $('<td>').prop('style', 'width:30%;').append('<input type="text" class="form-control" value="' + g.displayText + '" id="gcd_disp_' + g.columnName + '" />'),
+                    $('<td>').prop('style', 'width:10%;').append('<div class="form-check form-switch"  ><input type="checkbox"  ' + (g.isShowOnGrid ? 'checked' : '') + ' class="form-check-input" style="height: 2em; width : 4em;" value="Yes" id="gcd_showingrid_' + g.columnName + '" /></div>'),
+                    $('<td>').prop('style', 'width:20%;').append(ddl2),
+                    $('<td>').prop('style', 'width:40%;').append('<textarea id="gcd_data_' + g.columnName + '" style="width:100%; height: 36px;" >' + g.requiredData + '</textarea>')
+                );
+                grdtable.append(row1);
+            });
+        }
+        else {
+            gcd = [];
+            $.each(data, function (index, d) {
+                var g = {};
+                g.columnName = d.COLUMN_NAME;
+                gcd.push(g);
+                var ddl2 = $('<select>').addClass("form-select").attr("id", "gcd_ddl_" + d.COLUMN_NAME);
+                $.each(lst2, function (index, value) {
+                    ddl2.append('<option>' + value + '</option>');
+                });
+                var row1 = $('<tr>').append(
+                    $('<td>').prop('style', 'width:30%;').append('<input type="text" class="form-control" value="' + displayText(d.COLUMN_NAME) + '" id="gcd_disp_' + d.COLUMN_NAME + '" />'),
+                    $('<td>').prop('style', 'width:10%;').append('<div class="form-check form-switch"  ><input type="checkbox" checked=true class="form-check-input" style="height: 2em; width : 4em;" value="Yes" id="gcd_showingrid_' + d.COLUMN_NAME + '" /></div>'),
+                    $('<td>').prop('style', 'width:20%;').append(ddl2),
+                    $('<td>').prop('style', 'width:40%;').append('<textarea id="gcd_data_' + d.COLUMN_NAME + '" style="width:100%; height: 36px;" />')
+                );
+                grdtable.append(row1);
+            });
+        }
+
+
+
+
+    }
+    function load_pcd(data) {
+        var tableBody = $('#mytable tbody');
+        tableBody.empty();
+        var i = 1;
+        var lst = ["TextBox", "Not a Field", "DDL", "DatePicker", "DatePickerIdate", "DateTimePicker", "TimePicker", "TimePicker-Itime", "MultiLine","Color Picker", "CurrentDate", "CurrentIdate", "UserId", "AutoId", "File", "File-Image", "File-Pdf"
+            , "AutoHindiText", "CheckBox", "CheckBox-List", "RadioButtons", "AutoHindiText"
+        ];
+        if (data) {
+            pcd = [];
+            var op_options = '<option value="" >Select</option>';
+            $.each(data, function (index, d) {
+                op_options += '<option>' + d.COLUMN_NAME + '</option>';
+            });
+            $('#ddl_field').empty();
+            $('#ddl_field').append(op_options);
+            $.each(data, function (index, d) {
+                var p = {};
+                p.columnName = d.COLUMN_NAME;
+                p.isRequired = false;
+                p.onChanged = false;
+                p.displayText = displayText(d.COLUMN_NAME);
+                p.requiredData = '';
+                p.fieldType = 'TextBox';
+                p.defaultValue = '';
+                p.cssclass = '';
+                pcd.push(p);
+                var row = pcd_row(p, op_options, lst ,index)
+                tableBody.append(row);
+            });
+        }
+        else {
+            var op_options = '<option value="" >Select</option>';
+
+            $.each(pcd, function (index, p) {
+                op_options += '<option>' + p.columnName + '</option>';
+            });
+            $('#ddl_field').empty();
+            $('#ddl_field').append(op_options);
+            $.each(pcd, function (index, p) {
+                var row = pcd_row(p, op_options, lst, index)
+                tableBody.append(row);
+            });
+
+        }
+
+    }
+    function pcd_row(p, op_options, lst, index) {
+
+        var ddl = $('<select>').addClass("form-select pcd").attr("id", "ddl_disp_" + p.columnName);
+        var ddl_event = $('<select>');
+        ddl_event.addClass("form-select pcd").attr("id", "ddl_event_" + p.columnName).prop('disabled', !p.onChanged);
+        var req = '<label for="is_required_' + p.columnName + '">Is Required</label><input  ' + (p.isRequired ? 'checked' : '') + ' class="ms-2 me-2" id="is_required_' + p.columnName + '"   type="checkbox"  >'
+        $.each(lst, function (index, value) {
+            ddl.append('<option>' + value + '</option>');
+        });
+        ddl_event.append(op_options);
+        var div = $('<div>').append(req).append(ddl);
+        var event = $('<div>').append('<label for="onchange_' + p.columnName + '">Data On change</label><input  ' + (p.onChanged ? 'checked' : '') + ' data-id="ddl_event_' + p.columnName + '" onchange="event_changed(this)"  class="event-chk ms-2 me-2 " id="onchange_' + p.columnName + '"    type="checkbox"  >', ddl_event);
+        ddl.val(p.fieldType)
+
+        //[{"columnName":"PageType","displayText":"Page Type","fieldType":"TextBox","requiredData":"","isRequired":false}
+        //<i class='bx bxs-x-square' style='color:#d01644'  ></i>
+           // < i class='bx bxs-up-arrow-square' style = 'color:#3e64e6' ></i >
+        var row = $('<tr>').append(
+            
+            $('<td>').prop('style', 'width:22%;').append('<span style="display: inline-flex; margin-top: -5px;"> <i onclick="goup(this)"  data-id="pcd" data-index="' + index + '" class="bx bxs-up-arrow-square m-0" style="font-size:20px; color:#3e64e6;"></i> <i  onclick="removeme(this)"  data-id="pcd" data-index="' + index + '" class="bx bxs-x-square m-0" style="font-size:20px; color:#d01644"></i> <span style="margin-top: 5px;">' + p.columnName+'</span></span>').append('<input type="text" class="form-control pcd" style="margin-top: -4px;" value="' + p.displayText + '" id="txt_disp_' + p.columnName + '" />'),
+            $('<td>').prop('style', 'width:18%;').append(div),
+            $('<td>').prop('style', 'width:18%;').append(event),
+            $('<td>').prop('style', 'width:12%;').append('<input  type="text" class="form-control px-1 py-0" style="margin-top: 0px; font-size: 14px;"  placeholder="default value"  value="' + p.defaultValue + '" id="txt_deafult_' + p.columnName + '" />', '<input  type="text" class="form-control px-1 py-0" style="margin-top: 4px; font-size: 14px;" value="' + p.cssclass + '" placeholder="col-lg-6" id="txt_css_' + p.columnName + '" />'),
+            $('<td>').prop('style', 'width:30%;').append('<textarea id="txt_data_' + p.columnName + '"  class="form-control pcd"  style="width:100%; height: 51px;" >' + p.requiredData + '</textarea>')
+        );
+        if (p.onChanged) {
+            ddl_event.val(p.onChangedField);
+        }
+        return row
+    };
+    function event_changed(chk) {
+
+        if ($(chk).is(':checked')) {
+            // Checkbox is checked
+            $('#' + $(chk).attr("data-id")).prop('disabled', false);
+            // Perform some actions
+        } else {
+            $('#' + $(chk).attr("data-id")).prop('disabled', true);
+            $('#' + $(chk).attr("data-id")).val('');
+        }
+    };
+    $('#go-to-url').click(function () {
+        var url = '../hr/'+$('#pageUrl').val();
+        window.open(url, '_blank');
+    })
+</script>
+
+@*for action*@
+<script>
+    var actionlist = [];
+    var actionindex = -1;
+    function openActionModel() { 
+        actionindex = -1; 
+        $('#model-action').modal("show");
+        $('#act-name').val('');
+        $('#act-type').val('');
+        $('#act-icon').val('');  
+        $('#act-pageurl').val('');  
+        $('#act-pagetype').val('');  
+        $('#act-action-id').val('');
+        $('#act-action-id').val('');  
+        $('#act-btn-text').val('');
+        $('#act_resp_type').val('');
+        act_pcd = []; 
+        $('.act-urlpnl').addClass("d-none");
+        $('.act-cust-form').addClass("d-none");
+        $('.act-formpnl').addClass("d-none");
+        load_action_pcd();
+       
+    }
+   
+    var act_pcd = [];
+    $('#act-type').change(function () {
+        act_pcd = [];
+        var type = $(this).val();
+        $('.act-urlpnl').addClass("d-none");
+        $('.act-cust-form').addClass("d-none");
+        $('.act-formpnl').addClass("d-none");
+        load_action_pcd();
+        if (type == 'Url') {
+            $('.act-urlpnl').removeClass("d-none");
+        }
+        else if (type == 'Form') {  
+            $('.act-formpnl').removeClass("d-none");
+            var table = $('#act-table tbody');
+            table.empty();
+            var list = [];
+            $.each(pcd, function (index, p) {
+                var row1 = $('<tr>').append(
+                    $('<td>').prop('style', 'width:30%;').append('<input type="text" class="form-control" value="' + p.displayText + '" id="act_disp_' + p.columnName + '" />'),
+                    $('<td>').prop('style', 'width:10%;').append('<div class="form-check form-switch"  ><input type="checkbox"  ' + (list.includes(p.columnName) ? 'checked' : '') + ' class="form-check-input" style="height: 2em; width : 4em;" value="Yes" id="act_showingrid_' + p.columnName + '" /></div>')
+                );
+                table.append(row1);
+            });
+        }
+        else if (type == 'CustomForm') {
+           
+            var p = {};
+            p.columnName = 'col_0';
+            p.isRequired = true;
+            p.onChanged = false;
+            p.onChangedField = '';
+            p.displayText = '';
+            p.requiredData = '';
+            p.fieldType = 'TextBox';
+            p.defaultValue = '';
+            p.cssclass = 'col-lg-6';
+            act_pcd.push(p);
+            load_action_pcd();
+            
+            $('.act-cust-form').removeClass("d-none");
+        }
+      
+    })
+    function act_remove_pcd() {
+        var index = act_pcd.length - 1;
+        if (index > 0) {
+            act_pcd.splice(index, 1);
+            $('#act-cust-table tbody tr').last().remove();
+        }
+    }
+    function new_act_pcd() {
+        var p = {};
+        var ln = act_pcd.length;
+        p.columnName = 'col_' + ln;
+        p.isRequired = true;
+        p.onChanged = false;
+        p.onChangedField = '';
+        p.displayText = '';
+        p.requiredData = '';
+        p.fieldType = 'TextBox';
+        p.defaultValue = '';
+        p.cssclass = 'col-lg-6';
+        act_pcd.push(p);
+        var lst = ["TextBox", "DDL", "DatePicker", "DateTimePicker", "TimePicker", "MultiLine", "File", "File-Image", "File-Pdf"
+            , "CheckBox", "CheckBox-List", "RadioButtons", "AutoHindiText"
+        ];
+        var tableBody = $('#act-cust-table tbody');
+        var op_options = '<option value="" >Select</option>';
+        $.each(act_pcd, function (index, p) {
+            if (index + 1 < act_pcd.length) {
+                op_options += '<option>' + p.columnName + '</option>';
+            }
+        });
+        var row = act_pcd_row(p, op_options, lst, act_pcd.length-1)
+        tableBody.append(row);
+    }
+    function load_action_pcd() {
+        var lst = ["TextBox", "DDL", "DatePicker", "DateTimePicker", "TimePicker", "MultiLine", "File", "File-Image", "File-Pdf"
+            , "CheckBox", "CheckBox-List", "RadioButtons", "AutoHindiText"
+        ];
+        var tableBody = $('#act-cust-table tbody');
+        tableBody.empty();
+        var op_options = '<option value="" >Select</option>';
+        $.each(act_pcd, function (index, p) {
+            if (index + 1 < act_pcd.length) {
+                op_options += '<option>' + p.columnName + '</option>';
+            }
+        });
+        $.each(act_pcd, function (index, p) {
+            var row = act_pcd_row(p, op_options, lst, index)
+            tableBody.append(row);
+        });
+    }
+     function act_name_change(fld) {
+        // var index = $(fld).attr("data-index");
+        //console.log(index)
+        // var col = $(fld).val();
+        //console.log(col)
+        //act_pcd[index].columnName = col;
+        // act_pcd[index].displayText = col;
+         $.each(act_pcd, function (index, p) {
+             p.displayText = $('#txt_act_disp_' + p.columnName).val(); 
+             p.fieldType = $('#ddl_act_disp_' + p.columnName).val();
+             p.requiredData = $('#txt_act_data_' + p.columnName).val();
+             p.isRequired = $('#is_act_required_' + p.columnName).prop('checked');
+             p.onChanged = $('#onchange_' + p.columnName).prop('checked');
+             p.onChangedField = $('#ddl_act_event_' + p.columnName).val();
+             p.defaultValue = $('#txt_act_deafult_' + p.columnName).val();
+             p.cssclass = $('#txt_act_css_' + p.columnName).val();
+         });
+         load_action_pcd();
+    } 
+    function act_pcd_row(p, op_options, lst, index) {
+
+        var ddl = $('<select>').addClass("form-select pcd").attr("id", "ddl_act_disp_" + p.columnName);
+        var ddl_event = $('<select>');
+        ddl_event.addClass("form-select pcd").attr("id", "ddl_act_event_" + p.columnName).prop('disabled', !p.onChanged);
+        var req = '<label for="is_act_required_' + p.columnName + '">Is Required</label><input  ' + (p.isRequired ? 'checked' : '') + ' class="ms-2 me-2" id="is_act_required_' + p.columnName + '"   type="checkbox"  >'
+        $.each(lst, function (index, value) {
+            ddl.append('<option>' + value + '</option>');
+        });
+        ddl_event.append(op_options);
+        var div = $('<div>').append(req).append(ddl);
+        var event = $('<div>').append('<label for="onchange_' + p.columnName + '">Data On change</label><input  ' + (p.onChanged ? 'checked' : '') + ' data-id="ddl_act_event_' + p.columnName + '" onchange="event_changed(this)"  class="event-chk ms-2 me-2 " id="onchange_' + p.columnName + '"    type="checkbox"  >', ddl_event);
+        ddl.val(p.fieldType)
+         
+        var row = $('<tr>').append(
+
+            $('<td>').prop('style', 'width:22%;').append('<span style="display: inline-flex; margin-top: -5px;">  <span style="margin-top: 5px;">' + p.columnName + '</span></span>').append('<input type="text"  class="form-control pcd"     data-index="' + index + '" style="margin-top: -4px;" value="' + p.displayText + '" id="txt_act_disp_' + p.columnName + '" />'),
+            $('<td>').prop('style', 'width:18%;').append(div),
+            $('<td>').prop('style', 'width:18%;').append(event),
+            $('<td>').prop('style', 'width:12%;').append('<input  type="text" class="form-control px-1 py-0" style="margin-top: 0px; font-size: 14px;"  placeholder="default value"  value="' + p.defaultValue + '" id="txt_act_deafult_' + p.columnName + '" />', '<input  type="text" class="form-control px-1 py-0" style="margin-top: 4px; font-size: 14px;" value="' + p.cssclass + '" placeholder="col-lg-6" id="txt_act_css_' + p.columnName + '" />'),
+            $('<td>').prop('style', 'width:30%;').append('<textarea id="txt_act_data_' + p.columnName + '"  class="form-control pcd"  style="width:100%; height: 51px;" >' + p.requiredData + '</textarea>')
+        );
+        if (p.onChanged) {
+            ddl_event.val(p.onChangedField);
+        }
+        return row
+    };
+    $('#btn-act-add').click(function () {
+        if (!actionlist) {
+            actionlist = []
+        }
+        var actns = {
+            uniqueId: 'act' + $.now(),
+            name: $('#act-name').val(),
+            icon: $('#act-icon').val(),
+            type: $('#act-type').val(),
+            pageurl: $('#act-pageurl').val(),
+            pagetype: $('#act-pagetype').val(),
+            action_id: $('#act-action-id').val(),
+            action_method_id: $('#act-action-id').val(),
+            btn_text: $('#act-btn-text').val(),
+            act_resp_type: $('#act_resp_type').val(),
+        }
+        var type= $('#act-type').val();
+        var list = [];
+        if (type == "Form") {
+            $.each(pcd, function (index, p) {
+                var ss = $("#act_showingrid_" + p.columnName).prop('checked');
+                if (ss) {
+                    list.push(p.columnName);
+                }
+            })
+            act_pcd = [];
+        }
+        if (type == "Url") {
+            
+            act_pcd = [];
+        }
+        actns["col_list"] = list;
+        if (type == "CustomForm") {
+            $.each(act_pcd, function (index, p) {
+                p.displayText = $('#txt_act_disp_' + p.columnName).val(); 
+                p.fieldType = $('#ddl_act_disp_' + p.columnName).val();
+                p.requiredData = $('#txt_act_data_' + p.columnName).val();
+                p.isRequired = $('#is_act_required_' + p.columnName).prop('checked');
+                p.onChanged = $('#onchange_' + p.columnName).prop('checked');
+                p.onChangedField = $('#ddl_act_event_' + p.columnName).val();
+                p.defaultValue = $('#txt_act_deafult_' + p.columnName).val();
+                p.cssclass = $('#txt_act_css_' + p.columnName).val();
+            }); 
+        } 
+        actns["act_pcd"] = act_pcd;
+        if (actionindex == -1) {
+            actionlist.push(actns);
+        }
+        else
+        {
+            actionlist[actionindex]=actns;
+        }
+        
+        $('#model-action').modal("hide");
+         
+        var table = $('#table-action tbody');
+        table.empty(); 
+        $.each(actionlist, function (index, act) {  
+            table.append(actionrow(act));
+        });
+    })
+    function actionrow(act) {
+        var row1 = $('<tr>').append(
+            $('<td>').text(act.name),
+            $('<td>').text(act.type),
+            $('<td style="min-width: 95px;">').append($('<button class="btn badge rounded-pill bg-primary" onclick="editAction(this)" data-id="' + act.uniqueId + '" ><i class="bx bx-pencil"></i></button>'),
+                $('<button class="btn badge rounded-pill bg-danger delete-filter ms-1"  onclick="deleteAction(this)"  data-id="' + act.uniqueId + '" ><i class="bx bx-trash"></i></button>')),
+        );
+        return row1;
+    }
+    function deleteAction(btn) {
+        var id = $(btn).attr('data-id');
+        Swal.fire({
+            title: 'Are you sure want to delete this?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var indx = -1;
+                $.each(actionlist, function (index, f) {
+                    if (f.uniqueId == id) {
+                        indx = index;
+                    }
+                });
+                if (indx > -1) {
+                    actionlist.splice(indx, 1)
+                    Swal.fire(
+                        'Deleted!',
+                        'Your data has been deleted.',
+                        'success'
+                    )
+                    var table = $('#table-action tbody');
+                    table.empty();
+                    $.each(actionlist, function (index, act) { 
+                        table.append(actionrow(act));
+                    });
+                }
+            }
+        })
+    };
+    function editAction(btn) {
+        var id = $(btn).attr('data-id'); 
+        $.each(actionlist, function (index, f) {
+            if (f.uniqueId == id) {
+                actionindex = index; 
+                $('#model-action').modal("show");
+                $('#act-name').val(f.name);
+                $('#act-type').val(f.type);
+                $('#act-type').change();
+                $('#act-icon').val(f.icon);
+                $('#act-pageurl').val(f.pageurl);
+                $('#act-pagetype').val(f.pagetype);
+                $('#act-action-id').val(f.action_id);
+                $('#act-action-id').val(f.action_id);
+                $('#act-btn-text').val(f.btn_text); 
+                $('#act_resp_type').val(f.act_resp_type);
+                if (f.type == 'Url') {
+                    $('.act-urlpnl').removeClass("d-none");
+                    $('.act-formpnl').addClass("d-none");
+                    $('#act-table').prop('disabled', true);
+                }
+                else if (f.type == 'Form') {
+
+                    $('.act-urlpnl').addClass("d-none");
+                    $('.act-formpnl').removeClass("d-none");
+                    $('#act-table').prop('disabled', false);
+                }
+                var table = $('#act-table tbody');
+                table.empty();
+                var list = f["col_list"]; 
+                $.each(pcd, function (index, p) { 
+                    var row1 = $('<tr>').append(
+                        $('<td>').prop('style', 'width:30%;').append('<input type="text" class="form-control" value="' + p.displayText + '" id="act_disp_' + p.columnName + '" />'),
+                        $('<td>').prop('style', 'width:10%;').append('<div class="form-check form-switch"  ><input type="checkbox"  ' + (list.includes(p.columnName) ? 'checked' : '') + ' class="form-check-input" style="height: 2em; width : 4em;" value="Yes" id="act_showingrid_' + p.columnName + '" /></div>')
+                    );
+                    table.append(row1);
+                });
+                act_pcd = f.act_pcd;
+                load_action_pcd();
+                
+                return false; // Exit the loop
+            }
+        });
+
+    };
+
+
+</script>

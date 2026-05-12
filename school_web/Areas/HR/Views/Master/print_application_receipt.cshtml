@@ -1,0 +1,449 @@
+﻿
+@{
+    Layout = null;
+    Employee_Apply emp = ViewBag.emp as Employee_Apply;
+}
+
+<!DOCTYPE html> 
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head >
+    <title>Print Data</title>
+    <style>
+        body, #form1 {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 100%;
+            position: absolute;
+            font-family: sans-serif;
+            font-size: 13px;
+        }
+
+        .main {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 100%;
+            float: left;
+        }
+
+        .mainautot {
+            margin: 0px auto;
+            padding: 0px;
+            height: auto;
+            width: 760px;
+        }
+
+        .mainwith {
+            margin: 0px;
+            padding: 5px;
+            height: auto;
+            width: 760px;
+            float: left;
+            border: 1px solid #000;
+        }
+
+        .top {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 100%;
+            float: left;
+        }
+
+        .topcell_left {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 50%;
+            float: left;
+            text-align: left;
+        }
+
+        .topcell_right {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 50%;
+            float: left;
+            text-align: right;
+        }
+
+        .heading {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 100%;
+            float: left;
+        }
+
+        .leftlogoheading {
+            margin: 0px;
+            padding: 0px;
+            height: 110px;
+            width: 20%;
+            float: left;
+        }
+
+        .righttextheading {
+            margin: 0px;
+            padding: 0px;
+            height: 110px;
+            width: 80%;
+            float: left;
+        }
+
+        .slipno {
+            margin: 0px;
+            padding: 0px 0px 4px 0px;
+            height: auto;
+            width: 100%;
+            float: left;
+            border-bottom: 2px solid #000;
+        }
+
+        .slipno_left {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 33%;
+            float: left;
+            text-align: left;
+        }
+
+        .slipno_middle {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 42%;
+            float: left;
+            text-align: center;
+        }
+
+        .slipno_right {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 25%;
+            float: left;
+            text-align: right;
+        }
+
+        .studentdetails {
+            margin: 4px 0px 0px 0px;
+            padding: 0px;
+            height: auto;
+            width: 100%;
+            float: left;
+        }
+
+
+        .student_left {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 40%;
+            float: left;
+            text-align: left;
+        }
+
+        .student_middle {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 30%;
+            float: left;
+            text-align: center;
+        }
+
+        .student_right {
+            margin: 0px;
+            padding: 0px;
+            height: auto;
+            width: 30%;
+            float: left;
+            text-align: right;
+        }
+
+        .pay_particular {
+            margin: 5px 0px 0px 0px;
+            padding: 0px;
+            height: auto;
+            width: 100%;
+            float: left;
+        }
+
+        .td2 {
+            text-align: right;
+            padding: 0px 3px 0px 0px;
+        }
+
+        .td3 {
+            text-align: left;
+            padding: 0px 0px 0px 5px;
+        }
+
+        .footer {
+            margin: 10px 0px 0px 0px;
+            border-top: 2px solid #000;
+            padding: 0px;
+            height: auto;
+            width: 100%;
+            float: left;
+        }
+
+        .footer_left {
+            margin: 5px 0px 0px 0px;
+            padding: 0px;
+            height: auto;
+            width: 63%;
+            float: left;
+            text-align: left;
+        }
+
+        .footer_middle {
+            margin: 5px 0px 0px 0px;
+            padding: 0px;
+            height: auto;
+            width: 0;
+            float: left;
+            text-align: right;
+        }
+
+        .footer_right {
+            margin: 5px 0px 0px 0px;
+            padding: 0px;
+            height: auto;
+            width: 30%;
+            float: left;
+            text-align: right;
+        }
+
+        .footer_auth_sig {
+            margin: 150px 0px 0px 0px;
+            padding: 0px;
+            height: auto;
+            width: 100%;
+            float: left;
+            text-align: left;
+        }
+
+        @@media print {
+            .noPrint {
+                display: none;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        function printit() {
+            if (window.print) {
+                window.print();
+            }
+        }
+    </script>
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        function PrintWindow() {
+            window.print();
+            // CheckWindowState();
+        }
+
+        function CheckWindowState() {
+            if (document.readyState == "complete") {
+                window.close();
+            }
+            else {
+                setTimeout("CheckWindowState()", 2000)
+            }
+        }
+        history.pushState(null, null, window.location.href);
+        history.back();
+       window.onpopstate = () => history.forward();
+     //   window.onpopstate = () => window.location.href="../../home";
+       
+      //  PrintWindow();
+    </script>
+</head>
+<body>
+    <form id="form1" >
+        <div class="main">
+
+            <div class="mainautot">
+
+
+                <div style="padding: 10px 0px 0px 0px; margin: 0px; height: 50px; width: 870px; float: left;">
+                    
+                    <button id="btn_print" type="button" class="noPrint" onclick="printit()"
+                            Style="float: right; padding:10px ; background-color:rebeccapurple; color:white; font-size:18px">
+                        Print
+                    </button>
+                </div>
+            </div>
+            <div class="mainautot">
+
+
+                <div class="mainwith">
+                    @*<div class="top" style="display: none">
+                        <div class="topcell_left">
+                            Affiliation No :
+                            <span id="lbl_affiliation_no"  style="font-weight:bold"></span>
+                        </div>
+                        <div class="topcell_right">
+                            College No. :
+                            <span id="lbl_schoolno"  style="font-weight:bold"></span>
+                        </div>
+                    </div>*@
+                    <div class="heading">
+                        <div class="leftlogoheading"> 
+                            <img  id="imglogo" alt="logo" src="@ViewBag.firmLogo"  Style="height: 100px; width: 100px"  />
+                        </div>
+                        <div class="righttextheading">
+                            <h1 style="margin: 0px 0px 0px 0px; width: 100%; padding: 0px; font-weight: bold; float: left; height: auto; text-align: center; vertical-align: middle; font-size: 20px; text-decoration: underline;">
+                                <span id="lbl_heading" >@ViewBag.firmName</span>
+
+
+                            </h1>
+
+                            <div style="margin: 7px 0px 0px 0px; padding: 0px; float: left; height: auto; text-align: center; vertical-align: middle; font-size: 13px; width: 100%;">
+                                <span id="lbl_address" >@ViewBag.firmAddress</span>
+
+
+                            </div>
+                            <div style="margin: 7px 0px 0px 0px; padding: 0px; float: left; height: auto; text-align: center; vertical-align: middle; font-size: 13px; width: 100%;">
+                                Email Id. :<span id="lbl_emaiid" >@ViewBag.firmEmail</span>
+
+                                &nbsp;&nbsp;
+
+                                website :
+                                <span id="lbl_website" >@ViewBag.firmWebsite</span>
+                            </div>
+                            <div style="margin: 7px 0px 0px 0px; padding: 0px; float: left; height: auto; text-align: center; vertical-align: middle; font-size: 13px; width: 100%;">
+                                Contact Details :<span id="lbl_contact_details">@ViewBag.firmContact</span> 
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slipno">
+                        <div class="slipno_left">
+                            Apply Id :
+                            <span id="lbl_slipno"  style="font-weight:bold">@emp.Apply_id</span>
+                        </div>
+                        <div class="slipno_middle">
+                            STAFF RECRUITMENT-
+                            <span id="lbl_session" style="font-weight:bold">@ViewBag.Session</span>
+
+                        </div>
+                        <div class="slipno_right">
+                            Receipt Date :
+                            <span id="lbl_paymentdate"  style="font-weight:bold">@My.Now.ToString("dd-MMM-yyyy")</span>
+                        </div>
+                    </div>
+                    <div class="studentdetails">
+                        <div class="student_left">
+                            Name :
+                            <span id="lbl_studentname" style="font-weight:bold">@emp.First_Name @emp.Middle_Name @emp.Last_Name</span>
+                        </div>
+                        <div class="student_middle" style="width: 55%">
+                            Father Name :
+                            <span id="lbl_fathername"  style="font-weight:bold">@emp.fathername</span>
+                        </div>
+                        <div class="student_right" style="width: 5%">
+                        </div>
+                    </div>
+
+                    <div class="studentdetails">
+                        <div class="student_left">
+                            Mobile No. :
+                            <span id="lbl_mobileno"  style="font-weight:bold">@emp.mobile_no_CA</span>
+                        </div>
+                        <div class="student_middle">
+                        </div>
+                        <div class="student_right">
+                        </div>
+                    </div>
+
+
+                    <div class="studentdetails">
+                        <div class="student_left" style="width: 100%">
+                            Address :
+                            <span id="lbl_adress"  style="font-weight:bold">@emp.Address_CA</span>
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="pay_particular">
+                        <table class="table table-bordered table-striped"  Style="text-align: center; width:100%"> 
+                            <thead>
+                                <tr>
+                                    <th>Sl. No.</th>
+                                    <th>Apply For</th>
+                                    <th>Receipt mode</th>
+                                    <th>Payment Id</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td> 
+                                    <td>@emp.Apply_for</td> 
+                                    <td>Online</td> 
+                                    <td>@emp.razorpay_payment_id</td> 
+                                    <td>@emp.Payable_amount</td> 
+                                </tr>
+                            </tbody>
+                        </table>
+                       
+
+                    </div>
+
+                    <div class="footer">
+                        <div class="footer_left">
+                            Amount In Word :
+                            <span id="lbl_amountinword" style="font-weight:bold">@ViewBag.amount</span>
+                        </div>
+                        <div class="footer_middle">
+                        </div>
+                        <div class="footer_right">
+                            <span id="lbl_paid_amount" style="font-weight:bold">@emp.Payable_amount</span>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <span id="lbl_msg"  style="font-weight:bold"></span>
+                    </div>
+                    <div class="footer_left">
+                    </div>
+                    <div class="footer" style="border-top: 2px solid #fff;">
+                        This is system generated receipt doesn't required signature
+                    </div>
+
+
+                    @*<div class="footer_auth_sig" style="display: none">
+                        <div style="margin: 0px 0px 0px 0px; padding: 0px; height: auto; width: 25%; float: left; text-align: left;">
+                            <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Accountant Signature</b>
+                        </div>
+                        <div style="margin: 0px 0px 0px 0px; padding: 0px; height: auto; width: 25%; float: left; text-align: center;">
+                            <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Seal</b>
+                        </div>
+                        <div style="margin: 0px 0px 0px 0px; padding: 0px; height: auto; width: 50%; float: left; text-align: right;">
+
+                            <b>
+                                Login User (
+                                <span id="lbl_user_id"  style="font-weight:bold"></span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </b>
+                        </div>
+                    </div>*@
+
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </form>
+</body>
+</html>
+

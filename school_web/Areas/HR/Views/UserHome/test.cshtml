@@ -1,0 +1,35 @@
+﻿
+@{
+
+}
+<div>
+    <input type="text" id="name" />
+    <input type="text" id="mobile" />
+    <input type="text" id="address" />
+    <button type="button" id="btn-add">Add</button>
+    <script>
+        $('#btn-add').on("click", function () {
+            var name = $('#name').val();
+            if (!name) {
+                alertError("Name is Required");
+                return false;
+
+            }
+            var data = { name: name, mobile: $('#mobile').val(), address: $('#address').val() };
+            //gowithData("../../hr/data/myapp3", "POST", JSON.stringify({ data: data  }), function (server_responce) {
+                
+            //    if (server_responce.error) {
+            //         alertError(server_responce.message); 
+            //    }
+            //    else {
+            //        alertSuccess(server_responce.message);
+            //    }
+            //})
+            submitdata("../../hr/data/myapp3", JSON.stringify({ data: data }), function (server_responce) { 
+                if (!server_responce.error) { 
+                   // alertSuccess(server_responce.message);
+                }
+            })
+        });
+    </script>
+</div>

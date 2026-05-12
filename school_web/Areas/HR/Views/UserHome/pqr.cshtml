@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "pqr";
+    Layout = "~/Area/HR/Views/Shared/_Layout.cshtml";
+}
+@{
+     
+    <input id="txt_name" name="txt_name" />
+    <div class="row">
+        <div class="col-lg-3">
+            <h2 class="online_frm-grp-h">Any Other Language Know<sup></sup></h2>
+            <input name="txt_any_other_language" type="text" id="txt_any_other_language" class="form_control">
+        </div>
+        <div class="col-lg-6">
+            <h2 class="online_frm-grp-h">Any Other Language Know<sup></sup></h2>
+            <input name="txt_any_other_language" type="text" id="txt_any_other_language" class="form_control" placeholder="Enter your name">
+        </div>
+
+
+        @Html.LabelEditor("Name", "ddl", "Name", "Bihar", ddl_comma_seperated: "Male,Female", divCssClass: "col-12", editorHtmlAttributes: new { @class = "asb", placeholder = "Enter your name" })
+
+        @Html.LabelEditor("Gender", "ddl", "Gender", "Bihar", ddl_comma_seperated: "Male,Female", divCssClass: "col-12", editorHtmlAttributes: new { @class = "asb", placeholder = "Enter your name" })
+
+        @Html.LabelEditor("Address", "ddl", "Address", "Bihar", ddl_comma_seperated: "Male,Female", divCssClass: "col-12", editorHtmlAttributes: new { @class = "asb", placeholder = "Enter your name" })
+
+        @*<button type="submit">Add</button>
+        <input type="submit" value="Add" />*@
+
+        <button type="button" id="btn-add" >Add</button>
+        <input type="button" value="Cancel" id="btn-cancel"  />
+         
+        <script>
+
+            //method 1
+            function add_click() {
+
+                // do some thing
+            }
+            // document.ready
+            $(function () {
+
+                //method 2 
+                $('#btn-add').click(function () {
+                    var dd = $(this);
+
+                    // do some thing
+                });
+
+                //method 3 
+                $('#btn-add').on("click", function () {
+                    // do some thing
+                })
+                $('#btn-add').on("change", function () {
+                    // do some thing
+                })
+
+            })
+             
+            const { error } = require("jquery"); 
+            var name = 'Rajesh: "Katiher"';
+             
+            var full_details = `H${name1}i ${name}`;
+            function submit_data() { 
+                var name = $("#Name").val();
+                var address = $("#Address").val(); 
+                if (!name) {
+                    //Name required
+                    return false;
+                }
+                if (!address) {
+                    //address required
+                    return false;
+                }
+                var data = { name: name, address: "Katihar" };
+                var d1 = JSON.stringify({ name: "rajesh", address: "Katihar" });
+                data = { data: d1 }
+                var d2 = JSON.parse(d1);
+                gowithData("../../hr/pqr_submit", "POST", JSON.stringify(), function (d) {
+                     
+                    if (d.error) {
+                        alertError(d.message)
+                    }
+                    else {
+                        alertSuccess(d.message)
+                    } 
+                    //alertErrorNotification("sdfasd")
+                    //alertError("sdfasdfs")
+                });
+            }
+
+            function submit_data_1(name, address, data) {
+
+                data.calback("Submited successfully");
+            }
+        </script>
+
+
+    </div>
+}
+<h2>pqr</h2>
+

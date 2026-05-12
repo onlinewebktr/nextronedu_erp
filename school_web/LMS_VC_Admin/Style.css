@@ -1,0 +1,82 @@
+﻿  .logo1,.profile_details {
+            background: #a94442;
+        }
+
+        .sidebar-icon {
+            border: 1px solid #a94442;
+            color: #a94442;
+        }
+
+        #menu li a {
+            background-color: #000000 !important;
+        }
+
+        .grid-form1 h2, .grid-form1 h3 {
+            color: #960300;
+            font-size: 1.2em;    font-weight: 600;
+        }
+        .btn-primary {
+    color: #fff;
+    background-color: #a94442;
+}
+        .dark {
+            background: #fafafa;
+            border-right: 15px solid #fff;
+        }
+
+        .btn-danger {
+            color: #ffffff !important;
+            background-color: #dc3545;
+            border-color: #dc3545;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+            display: block;
+            width: 100%;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: 0rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.25rem;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+            .btn-danger:hover {
+                color: #ffffff;
+                background-color: #bd2130;
+                border-color: #b21f2d;
+            }
+
+        .btn:hover {
+            background-image: none;
+            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        }
+
+        .btn-warning {
+            color: #1F2D3D !important;
+            background-color: #ffc107;
+            border-color: #ffc107;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+            display: block;
+            width: 100%;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: 0rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.25rem;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+            .btn-warning:hover {
+                color: #1F2D3D;
+                background-color: #d39e00;
+                border-color: #c69500;
+            }

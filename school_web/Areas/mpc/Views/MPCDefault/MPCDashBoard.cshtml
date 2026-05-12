@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "MPCDashBoard";
+    Layout = "~/Areas/mpc/Views/Shared/_Layoutmain.cshtml";
+    var dt = ViewBag.dt as System.Data.DataTable;
+}
+<style>
+    .card {
+        transition: transform 0.2s;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+</style>
+<div class="m-3">
+    <div class="row">
+
+
+        @foreach (var dr in dt.getRows())
+        {
+            <div class="col-md-3 col-6">
+                <a href='javascript:goto_page("/@ViewBag.sector/c2/@dr["pageUrl"]")' >
+                    <div class="card" style="border-bottom: solid 15px @My.GetRandomDarkColor()">
+                        <div style="width: 100%; padding: 8px 8px 0px 8px; text-align: center ">
+                            <i class='bx bx-cog' style="font-size:64px"></i>
+                        </div>
+                        <div style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: 45px;">
+                            <h6 class="card-title" style="text-align:center; margin: 0;">@dr["pageTitle"]</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+
+
+    </div>
+ 
+</div>
+

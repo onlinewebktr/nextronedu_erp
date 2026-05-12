@@ -1,0 +1,167 @@
+﻿using school_web.AppCode;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace school_web.Inventory_management.Slip
+{
+    public partial class Print_purchase_history : System.Web.UI.Page
+    {
+        My mycode = new My();
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+
+            try
+            {
+                //if (My.Is_show_print_datetime == "Yes")
+                //{ pnl_datetime.Visible = true; pnl_datetime0.Visible = true; }
+                //else { pnl_datetime.Visible = false; pnl_datetime0.Visible = true; }
+
+
+
+                string PO_no = Request.QueryString["PO_no"];
+                string session = Request.QueryString["session"];
+                string firm = Request.QueryString["firm"];
+                string unique_entry_id = Request.QueryString["unique_entry_id"];
+                string party_id = Request.QueryString["partyid"];
+                if (!string.IsNullOrEmpty(PO_no))
+                {
+                    ViewState["PO_no"] = PO_no;
+                    ViewState["session"] = session;
+                    ViewState["firm"] = firm;
+                    lbl_po_no.Text = "Invoice No:-" + PO_no;
+                    ViewState["unique_entry_id"] = unique_entry_id;
+                    ViewState["party_id"] = party_id;
+                    bind_gridview();
+
+                }
+
+                Dictionary<string, object> dc1 = Sale_Purchase.Firm_details_sale_purchase();
+                lbl_hospital_name.Text = (String)dc1["firm_name"];
+                lbl_address1.Text = (String)dc1["address"];
+                lbl_address2.Text = "";
+                img_logo.ImageUrl = (String)dc1["logo"];
+
+                lbl_email_mobile.Text = "Email:" + (String)dc1["email"].ToString() + ", Tel No.:" + (String)dc1["contact_no"].ToString();
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                My.submitexception(ex.ToString());
+            }
+
+        }
+
+
+        private void bind_gridview()
+        {
+
+
+
+
+
+
+
+            SqlCommand cmd = new SqlCommand("sp_HMS_inventory_purchase_entry_billwise");
+            cmd.Parameters.AddWithValue("@sp_status", "FetchItems");
+            cmd.Parameters.AddWithValue("@invoice_no", ViewState["PO_no"].ToString());
+            cmd.Parameters.AddWithValue("@firm ", ViewState["firm"].ToString());
+            cmd.Parameters.AddWithValue("@session ", ViewState["session"].ToString());
+            cmd.Parameters.AddWithValue("@unique_entry_id ", ViewState["unique_entry_id"].ToString());
+            cmd.Parameters.AddWithValue("@party_id ", ViewState["party_id"].ToString());
+            DataSet ds = Store_procedure_code.executeReaderDataSet(cmd);
+            DataTable dt = ds.Tables[0];
+            GrdView_Generate_PO.DataSource = dt;
+            GrdView_Generate_PO.DataBind();
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                lbl_date.Text = "Date:-" + ds.Tables[0].Rows[0]["Purchase_date"].ToString();
+                lbl_Total_rate.Text = dt.Compute("Sum(Total)", "").ToString();
+                lbl_discount.Text = dt.Compute("Sum(discount_amount)", "").ToString();
+
+                lbl_partyname.Text = ds.Tables[0].Rows[0]["party_name"].ToString();
+                lbl_mobile_no.Text = "Mobile No.:-" + ds.Tables[0].Rows[0]["mobile"].ToString();
+                lbl_address.Text = "Add.:-" + ds.Tables[0].Rows[0]["address"].ToString();
+
+            }
+            if (ds.Tables[1].Rows.Count > 0)
+            {
+                dt = ds.Tables[1];
+                lbl_GST.Text = ds.Tables[1].Rows[0]["Total_Gst_value"].ToString();
+                lbl_sgst.Text = ds.Tables[1].Rows[0]["Total_SGST"].ToString();
+                lbl_cgst.Text = ds.Tables[1].Rows[0]["Total_CGST"].ToString();
+
+                lbl_expense.Text = ds.Tables[1].Rows[0]["txt_freight"].ToString();
+                lbl_grandtotal.Text = ds.Tables[1].Rows[0]["Grand_total"].ToString();
+                lbl_remarks.Text = ds.Tables[1].Rows[0]["Remarks"].ToString();
+
+
+            }
+        }
+
+
+
+        My my = new My();
+        private string find_amount_words(string p)
+        {
+            if (p == "")
+            {
+                p = "0";
+                string amount_in_words = "Zero";
+                return amount_in_words;
+
+            }
+            else
+            {
+                Double number = Double.Parse(p);
+                number = Math.Round(number, 0);
+
+                string amount_in_words = my.AmountInWords(number.ToString());
+                return amount_in_words;
+            }
+        }
+
+
+        protected void btn_back_Click(object sender, ImageClickEventArgs e)
+        {
+            if (ViewState["flag"].ToString() == "1")
+            {
+                string path = "../General_billing.aspx";
+                Response.Redirect(path, false);
+            }
+            if (ViewState["flag"].ToString() == "2")
+            {
+                string path = "../General_othersvr_patient_revenue_report.aspx";
+                Response.Redirect(path, false);
+            }
+            else
+            {
+                string path = "../General_Patient_List.aspx";
+                Response.Redirect(path, false);
+            }
+        }
+
+        protected string Getamount_comma_seperated(string amount)
+        {
+            try
+            {
+                string amt = String.Format("{0:n}", Convert.ToDouble(amount));
+                return amt;
+            }
+            catch (Exception ex)
+            {
+                return "0";
+            }
+        }
+    }
+}

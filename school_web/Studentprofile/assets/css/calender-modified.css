@@ -1,0 +1,66 @@
+﻿.clndr-dv-wpr {
+    margin: 0px;
+    padding: 0px;
+    float: left;
+    width: 100%;
+    position: relative;
+}
+
+.ui-datepicker .ui-datepicker-title select {
+    font-size: 1em;
+    margin: 1px 0;
+    COLOR: #000;
+    z-index: 99999!important;
+}
+
+.ui-datepicker .ui-datepicker-title select {
+    font-size: 1em;
+    margin: 1px 0;
+    COLOR: #000;
+    z-index: 99999!important;
+}
+
+.gridcss th {
+    font-size: 14px!important;
+}
+
+.calender-icon {
+    margin: 0px 0px 0px 0px;
+    position: relative;
+    font-weight: normal;
+    width: 100%;
+}
+
+.clndr-icon {
+    font-size: 10px !important;
+    color: #e14eca;
+    position: absolute;
+    top: 9px;
+    right: 6px;
+    left: auto;
+}
+
+.modal.show .modal-dialog {
+    transform: translateY(0%);
+}
+
+.modal {
+    background: rgb(0 0 0 / 48%);
+}
+
+.ui-datepicker td {
+    font-size: 11px;
+}
+
+.ui-datepicker {
+    width: 13em;
+}
+
+    .ui-datepicker th {
+        font-size: 12px;
+        font-weight: 600 !important;
+    }
+
+    .ui-datepicker .ui-datepicker-title select {
+        font-size: 13px;
+    }

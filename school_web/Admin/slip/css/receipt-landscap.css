@@ -1,0 +1,836 @@
+﻿@font-face {
+    font-family: 'K2D';
+    src: url(../../../assets/fonts/k2d-cufonfonts/K2D-Bold.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'K2D';
+    src: url(../../../assets/fonts/k2d-cufonfonts/K2D-Medium.ttf);
+    font-weight: normal;
+}
+
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+
+table td {
+    text-align: left;
+    padding: 4px 5px !important;
+    border: 1px solid #3c3c3c;
+    font-size: 13px;
+    text-transform: uppercase;
+    vertical-align: top;
+}
+
+table th {
+    text-align: left;
+    padding: 4px 5px !important;
+    border: 1px solid #3c3c3c;
+    font-size: 13px;
+    background: #e9e8e8;
+    text-transform: uppercase;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+:after, :before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    float: left;
+    font-family: 'K2D';
+    color: #000;
+}
+
+.prnt-btn-sec {
+    margin: 0 auto;
+    padding: 0;
+    width: 700px;
+    height: auto;
+    position: relative;
+}
+
+.prnt-btn-wpr {
+    margin: 0 0 5px 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    float: left;
+    background: #eafff3;
+}
+
+.print-btn {
+    margin: 0;
+    padding: 0;
+    width: 45px;
+    height: 45px;
+    float: right;
+    background: url(../print.png) no-repeat;
+    background-size: 100%;
+    background-color: #00bb51;
+    border: 5px solid #24b663;
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.back-btn {
+    margin: 0;
+    padding: 0;
+    width: 45px;
+    height: 45px;
+    background: url(../back.png) no-repeat;
+    background-size: 100%;
+    background-color: #00bb51;
+    border: 5px solid #24b663;
+    cursor: pointer;
+}
+
+.main {
+    margin: 0px;
+    padding: 0px 0px 25px 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+.mainautot {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+.printlefts {
+    margin: 0px 15px 0px 0px;
+    padding: 0px;
+    width: 48%;
+    float: left;
+}
+
+.printrghts {
+    margin: 0px 0px 0px 15px;
+    padding: 0px;
+    width: 48%;
+    float: left;
+}
+
+.mainwith {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    height: 718.5px;
+    border: 1px solid #000;
+}
+
+.mainwith2 {
+    margin: 20px 0px 0px 0px;
+}
+
+.sdtcopymrgN {
+    margin: 25px 0px 5px 0px;
+}
+/*=========================================*/
+
+
+.top {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+.topcell_left {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 50%;
+    float: left;
+    text-align: left;
+    font-size: 14px;
+}
+
+.topcell_right {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 50%;
+    float: left;
+    text-align: right;
+    font-size: 14px;
+}
+
+.heading {
+    margin: 0px;
+    padding: 2px 4px 2px 4px;
+    width: 100%;
+    float: left;
+    border-bottom: 1px solid #000;
+}
+
+.firm-name-h {
+    margin: 0px 0px 0px 0px;
+    width: 100%;
+    padding: 0px;
+    font-weight: bold;
+    float: left;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    font-size: 17px;
+    text-transform: uppercase;
+}
+
+    .firm-name-h span {
+        margin: 0px 0px 0px 0px;
+        width: 100%;
+        float: left;
+        text-align: center;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+.addres-firm {
+    margin: 7px 0px 0px 0px;
+    padding: 0px;
+    float: left;
+    height: auto;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+    width: 100%;
+}
+
+.email-firm {
+    margin: 3px 0px 0px 0px;
+    padding: 0px;
+    float: left;
+    height: auto;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+    width: 100%;
+}
+
+.contact-frim {
+    margin: 3px 0px 0px 0px;
+    padding: 0px;
+    float: left;
+    height: auto;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+    width: 100%;
+}
+
+.leftlogoheading {
+    margin: 0px;
+    padding: 0px;
+    width: 19%;
+    float: left;
+}
+
+    .leftlogoheading img {
+        max-height: 75px;
+        width: 80px;
+    }
+
+.righttextheading {
+    margin: 0px;
+    padding: 0px;
+    width: 81%;
+    float: left;
+}
+
+.slipno {
+    margin: 0px;
+    padding: 0px 0px 4px 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+    border-bottom: 2px solid #000;
+}
+
+.slipno_left {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 31%;
+    float: left;
+    text-align: left;
+    font-size: 14px;
+}
+
+.slipno_middle {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 45%;
+    float: left;
+    text-align: center;
+}
+
+.slipno_right {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 24%;
+    float: left;
+    text-align: right;
+    font-size: 14px;
+}
+
+.studentdetails {
+    margin: 2px 0px 0px 0px;
+    padding: 0px 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+
+.student_left {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 40%;
+    float: left;
+    text-align: left;
+}
+
+.student_middle {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 30%;
+    float: left;
+    text-align: center;
+}
+
+.student_right {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 30%;
+    float: left;
+    text-align: right;
+}
+
+.pay_particular {
+    margin: 4px 0px 0px 0px;
+    padding: 0px 4px;
+    width: 100%;
+    float: left;
+}
+
+.td2 {
+    text-align: right;
+    padding: 0px 3px 0px 0px;
+}
+
+.td3 {
+    text-align: left;
+    padding: 0px 0px 0px 5px;
+}
+
+.footer {
+    margin: 10px 0px 0px 0px;
+    border-top: 2px solid #000;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+.footer_left {
+    margin: 5px 0px 0px 0px;
+    padding: 0px;
+    height: auto;
+    width: 50%;
+    float: left;
+    text-align: left;
+}
+
+.footer_middle {
+    margin: 5px 0px 0px 0px;
+    padding: 0px;
+    height: auto;
+    width: 20%;
+    float: left;
+    text-align: right;
+}
+
+.footer_right {
+    margin: 5px 0px 0px 0px;
+    padding: 0px;
+    height: auto;
+    width: 30%;
+    float: left;
+    text-align: right;
+}
+
+.footer_auth_sig {
+    margin: 3px 0px 0px 0px;
+    padding: 10px 0px 0px 0px;
+    width: 100%;
+    float: left;
+    border-top: 1px solid #000;
+}
+
+    .footer_auth_sig p {
+        margin: 0px 0px 0px 0px;
+        padding: 0px 5px 0px 0px;
+        width: 50%;
+        float: right;
+        font-size: 13px;
+        position: relative;
+    }
+
+        .footer_auth_sig p span {
+            margin: 0px 0px 0px 0px;
+            width: 71%;
+            float: right;
+            border-bottom: 2px dotted #000;
+            position: absolute;
+            bottom: 3px;
+        }
+
+.student-info-row {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 4px;
+    float: left;
+    width: 100%;
+}
+
+.student_left-p-info {
+    margin: 2px 0px 2px 0px;
+    padding: 0px;
+    height: auto;
+    width: 60%;
+    float: left;
+    font-size: 13px;
+}
+
+    .student_left-p-info p {
+        margin: 0px 0px 0px 0px;
+        padding: 0px;
+        height: auto;
+        width: 35%;
+        float: left;
+        font-weight: 600;
+    }
+
+    .student_left-p-info i {
+        width: 8px;
+        float: left;
+        font-weight: 600;
+        font-style: inherit;
+    }
+
+    .student_left-p-info span {
+        margin: 0px 0px 0px 0px;
+        padding: 0px;
+        height: auto;
+        width: 62%;
+        float: left;
+        font-weight: 500 !important;
+        text-transform: uppercase;
+    }
+
+/*==================================*/
+.student-rght-p-info {
+    margin: 2px 0px 2px 0px;
+    padding: 0px;
+    height: auto;
+    width: 40%;
+    float: left;
+    font-size: 13px;
+}
+
+    .student-rght-p-info p {
+        margin: 0px 0px 0px 0px;
+        padding: 0px;
+        height: auto;
+        width: 32%;
+        float: left;
+        font-weight: 600;
+    }
+
+    .student-rght-p-info i {
+        width: 8px;
+        float: left;
+        font-weight: 600;
+        font-style: inherit;
+    }
+
+    .student-rght-p-info span {
+        margin: 0px 0px 0px 0px;
+        padding: 0px;
+        height: auto;
+        width: 63%;
+        float: left;
+        font-weight: 500 !important;
+        text-transform: uppercase;
+    }
+
+.footer-ttl-div {
+    margin: 2px 0px 0px 0px;
+    padding: 5px 0px 0px 0px;
+    width: 100%;
+    float: left;
+    border-top: 1px solid #4c4c4c;
+}
+
+.footer-ttl-lft-div {
+    margin: 0px;
+    padding: 0px;
+    width: 75%;
+    float: left;
+}
+
+
+.footer-ttl-lft-p-dv {
+    margin: 0px;
+    padding: 4px 0px 4px 0px;
+    width: 100%;
+    float: left;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+    .footer-ttl-lft-p-dv p {
+        margin: 0px;
+        padding: 0px;
+        width: 18%;
+        float: left;
+    }
+
+    .footer-ttl-lft-p-dv i {
+        width: 10px;
+        float: left;
+        font-weight: 600;
+        font-style: inherit;
+    }
+
+    .footer-ttl-lft-p-dv span {
+        margin: 0px;
+        padding: 0px;
+        width: 70%;
+        float: left;
+    }
+
+
+
+/*====================*/
+.footer-ttl-rght-div {
+    margin: 0px;
+    padding: 0px;
+    width: 25%;
+    float: left;
+}
+
+
+.footer-ttl-rght-p-dv {
+    margin: 3px 0px 3px 0px;
+    padding: 0px;
+    width: 80%;
+    float: right;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+    .footer-ttl-rght-p-dv p {
+        margin: 0px;
+        padding: 0px;
+        width: 35px;
+        float: left;
+    }
+
+    .footer-ttl-rght-p-dv i {
+        margin: 0px;
+        padding: 0px 7px 0px 0px;
+        width: 12px;
+        float: left;
+        font-weight: 700;
+        font-style: inherit;
+    }
+
+    .footer-ttl-rght-p-dv span {
+        margin: 0px;
+        padding: 0px;
+        width: 68%;
+        float: left;
+    }
+/*===================================*/
+.hidden {
+    display: none;
+}
+
+.extrClass {
+    margin: 0px 0px 0px 0px;
+}
+
+.chckbx-sec {
+    margin: 0px auto;
+    padding: 0px;
+    width: 80%;
+    text-align: center;
+}
+
+.chckbx-sec-inr {
+    margin: 12px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+.chckbx--span {
+    margin: 0px 15px;
+    width: auto;
+    display: inline;
+}
+
+    .chckbx--span label {
+        margin: 0px 0px 0px 5px;
+    }
+
+.chckbx-sec-inr input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: var(--form-background);
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 50%;
+    transform: translateY(-0.075em);
+    display: inline-grid;
+    place-content: center;
+}
+
+    .chckbx-sec-inr input[type="radio"]::before {
+        content: "";
+        width: 0.65em;
+        height: 0.65em;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em var(--form-control-color);
+        /* Windows High Contrast Mode */
+        background-color: CanvasText;
+    }
+
+    .chckbx-sec-inr input[type="radio"]:checked::before {
+        transform: scale(1);
+    }
+
+    .chckbx-sec-inr input[type="radio"]:focus {
+        outline: max(2px, 0.15em) solid currentColor;
+        outline-offset: max(2px, 0.15em);
+    }
+
+.watermarklogos {
+    width: 40%;
+    position: absolute;
+    left: 30%;
+    right: 30%;
+}
+
+.certificate-wpr1 {
+    margin: 0;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    position: relative;
+    align-items: center;
+    display: flex;
+}
+
+.certificate-wpr2 {
+    margin: 0;
+    padding: 0px 0px;
+    width: 100%;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    background: rgb(255 255 255 / 90%);
+}
+
+.notediv {
+    margin: 6px 0px 5px 0px;
+    padding: 0px 5px;
+    width: 100%;
+    float: left;
+}
+
+    .notediv p {
+        margin: 0;
+        padding: 0px 0px;
+        width: 100%;
+        float: left;
+        font-size: 14px;
+        line-height: 21px;
+    }
+
+.slipnodv {
+    width: 100%;
+}
+
+.slipnonam {
+    width: 68.47px !important;
+}
+
+.lowercase {
+    text-transform: capitalize !important;
+}
+
+.txttrfrmingert {
+    text-transform: inherit !important;
+}
+
+.txtcnter {
+    text-align: center;
+}
+
+.txtrght {
+    text-align: right;
+}
+
+.fntbold {
+    font-weight: bold;
+}
+
+.printpagewprs {
+    margin: 0px auto;
+    padding: 0px;
+    height: auto;
+    width: 1200px;
+}
+
+.heading-template {
+    margin: 5px 0px 5px 0px;
+    padding: 0px 5px;
+    width: 100%;
+    float: left;
+    text-align: center;
+}
+
+    .heading-template img {
+        max-width: 100%;
+    }
+
+.remarksp {
+    margin: 3px 0px 0px 0px;
+    padding: 0px 0px;
+    width: 100%;
+    float: left;
+    font-size: 13px;
+}
+
+    .remarksp span {
+        margin: 0px 0px 0px 0px;
+        padding: 0px 0px;
+    }
+
+.whichcopypp {
+    margin: 0;
+    padding: 0px 0px 5px 6px;
+    width: 100%;
+    float: left;
+    font-size: 14px;
+    line-height: 21px;
+    color: #f00;
+}
+
+.wdth55 {
+    width: 55%;
+}
+
+.wdth45 {
+    width: 45%;
+}
+
+.txtcntr {
+    text-align: center;
+}
+
+.txtsizetd {
+    font-size: 12px;
+}
+
+.slipHeaddv {
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    width: 100%;
+    float: left;
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+}
+
+    .slipHeaddv h2 {
+        margin: 0;
+        padding: 0px 0px 2px 0px;
+        width: 100%;
+        float: left;
+        font-size: 19px;
+        text-align: center;
+        letter-spacing: 3px;
+    }
+
+.incomeLeft {
+    width: 100%;
+    display: inline-block;
+    padding: 5px 0px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.txtcntr {
+    text-align: center;
+}
+
+.officecopytxt {
+    position: absolute;
+    right: 2px;
+    top: 45px;
+    margin: 0px;
+    font-size: 13px;
+    color: #000;
+}
+
+.signbtms {
+    margin: 0;
+    right: 25px;
+    position: absolute;
+    bottom: 15px;
+    font-size: 14px;
+}

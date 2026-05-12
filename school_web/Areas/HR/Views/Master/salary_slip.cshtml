@@ -1,0 +1,383 @@
+﻿
+@{
+    Layout = null;
+    Firm_Details firm = ViewBag.firm as Firm_Details;
+    HR_Salary_Calculation_Table sl = ViewBag.sl as HR_Salary_Calculation_Table;
+    HR_Employee_Master emp = ViewBag.emp as HR_Employee_Master;
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Salary Slip</title>
+    <link href="~/Payroll/css/reg.css" rel="stylesheet" /> 
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        function PrintPanel() {
+
+            //var panel = document.getElementById("tblPrintIQ");
+            //var printWindow = window.open('', '', 'height=400,width=800');
+            //printWindow.document.write('<html><head>');
+            //printWindow.document.write('</head><body>');
+            //printWindow.document.write('<link href="css/reg.css" rel="stylesheet" type="text/css" /><link href="https://fonts.googleapis.com/css?family=Open+Sans:100,200,300,400,500,600,700" rel="stylesheet" />');
+            //printWindow.document.write(panel.innerHTML);
+            //printWindow.document.write('</body ></html>');
+            //printWindow.document.close();
+            //setTimeout(function () {
+            //    printWindow.print();
+            //}, 500);
+            //return false;
+            if (window.print) {
+                window.print();
+            }
+        }
+    </script>
+
+    <style>
+        span {
+            color: maroon !important;
+            font-weight: bold;
+        }
+
+        span {
+            color: #040404 !important;
+            font-weight: bold;
+        }
+
+        .auto-style1 {
+            height: 33px;
+        }
+
+        table tr td {
+            padding: 7px 10px;
+            border: 1px solid #988989;
+            font-size: 13px;
+        }
+        @@page {
+            margin: 10mm;
+        }
+
+        @@media print {
+            /*  thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }*/
+
+            button {
+                display: none;
+            }
+
+            .noPrint {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            .page-header-space {
+                height: 100px;
+            }
+
+            .page-header, .page-footer img {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form id="form1">
+        <section class="section">
+            <div class="print_form">
+                <div class="prnt-btn-sec">
+                    <div class="prnt-btn-sec-cntr">
+                        <div class="print-btn-sec">
+                             
+                            <div class="noPrint" style="float: right">
+                                <button type="button" id="print1" onclick="PrintPanel()" ToolTip="Print" class="print-btn"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="print-pg-sec" id="tblPrintIQ">
+                    <div class="print_form-inr">
+                        <div class="t-crtifcate-hdr-sec">
+                            <div class="t-crtifcate-logo-sec">
+                                <img src="@firm.logo" alt="" />
+                            </div>
+                            <div class="t-crtifcate-hdr-contnt-sec">
+                                <span id="lbl_school_name" style=" margin: 10px 0px 0px 0px;" class="t-certificate-comp-name-h">@firm.firm_name</span>
+                                <span id="lbl_address" class="t-certificate-comp-add-p">@firm.address1 <br/> @firm.address2</span>
+                                <span id="lbl_contact_no" class="t-certificate-comp-add-p">Contact No : @firm.contact_no</span>
+                                <p class="t-certificate-comp-mail-p">
+                                    Email :
+                                    <span id="lbl_email_school">@firm.Email</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="certificate-type-name-t-sec" style="margin:0">
+                            <h1 class="t-certificate-type-name-h" style="display: block; font-size: 18px; text-transform: none; font-weight: 600; padding: 6px; background-color: #ededed;">Salary Slip for Month @sl.Month @sl.Year<span id="lbl_session1" Text=""></span></h1>
+                        </div>
+
+
+                        <div class="print_form-dtls">
+
+                            <table class="print_table">
+                                <tr>
+                                    <td colspan="5" style="font-weight: 600; font-size: 17px;">Employee Information </td>
+                                </tr>
+                                <tr>
+                                    <td>Name :</td>
+                                    <td>
+                                        <span> @emp.Employee_Name </span>
+                                    </td>
+                                    <td>Employee Code :</td>
+                                    <td>
+                                        <span>@emp.Emp_Code</span>
+                                    </td> 
+                                    <td rowspan="5" style="width: 130px; padding: 1px 1px;">
+                                        <img id="img_s_image" src="@emp.Employee_image" alt="" onerror="this.src='../../../../Content/Images/user-icon.png'" class="studnt-img" Style="height: 120px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="auto-style1">Designation:</td>
+                                    <td class="auto-style1">
+                                        <span>@sl.Designation</span>
+                                    </td>
+                                    <td class="auto-style1">Department :</td>
+                                    <td class="auto-style1">
+                                        <span>@sl.Department</span>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td class="auto-style1">Date of Joining :</td>
+                                    <td class="auto-style1">
+                                        <span>@emp.Date_of_Joining</span>
+                                    </td>
+                                    <td>PAN :</td>
+                                    <td>
+                                        <span>@emp.Pan</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Date of Birth</td>
+                                    <td>
+
+                                        <span>@emp.Date_of_birth</span>
+                                    </td>
+                                    <td class="auto-style1">Days in Month :</td>
+                                    <td class="auto-style1">
+                                        <span>@sl.Days_in_Month</span>
+                                    </td>
+                                </tr>
+
+
+
+
+
+                                <tr>
+                                    <td>PF Number:</td>
+                                    <td>
+
+                                        <span>@emp.EPF_no</span>
+                                    </td>
+                                    <td>Working Days in Month :</td>
+                                    <td>
+                                        <span>@sl.Working_Days_In_a_Month</span>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>ESIC Number:</td>
+                                    <td>
+                                        <span>@emp.ESIC_no</span>
+                                    </td>
+                                    <td>Worked Days <span>:</span> <span style="padding-left: 1rem;">@sl.Worked_Days</span> </td>
+                                    <td colspan="2">Paid Days  <span>:</span> <span style="padding-left: 1rem;">@sl.Net_Wroked_Days</span></td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td colspan="5" style="font-weight: 600; font-size: 17px;">
+                                        Salary Breakup
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="padding:0">
+                                        <table style="width: calc(100% + 4px); margin: -1px 0 -1px -1px; ">
+                                            <tr style="display:flex">
+                                                <td style="width: calc(50% - 1px); padding: 0; border: none; margin-right: -1px ">
+
+                                                    <table style="width: 100%" id="tbl-earning">
+                                                        <thead>
+                                                            <tr>
+                                                                <td style=" background-color: #ededed; font-size: 16px; font-weight: 600;">Earning</td>
+                                                                <td style=" background-color: #ededed; font-size: 16px; font-weight: 600;text-align:right">#</td>
+                                                                <td style=" background-color: #ededed; font-size: 16px; font-weight: 600; text-align: right">Amount</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td style="width: 50%; padding: 0; border: none">
+
+                                                    <table style="width:100%" id="tbl-deduction">
+                                                        <thead>
+                                                            <tr>
+                                                                <td style=" background-color: #ededed; font-size: 16px; font-weight: 600;">Deduction</td>
+                                                                <td style=" background-color: #ededed; font-size: 16px; font-weight: 600; text-align: right">Amount</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            
+
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="5" style="padding:0">
+                                        <table style="width: calc(100% + 2px); margin: -2px 0px -1px -1px;">
+                                            <tr  >
+                                                <td style="text-align: right; font-weight: bold ; font-size: 17px; width:50%">
+                                                    <span>(A) Total Earnings : </span> <span style="margin-left:70px">@ViewBag.total_earning</span>
+                                                </td> 
+                                                <td style="text-align: right; font-weight: bold; font-size: 17px; width: 50%">
+                                                    <span>(B) Total Deduction  : </span> <span style="margin-left:70px" >@ViewBag.total_deduction</span>
+                                                </td> 
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                </tr>
+
+                                 
+                                <tr>
+                                    <td colspan="3" style="text-align: right; font-weight: bold ; font-size: 17px;">
+                                        <span>Net Salary=(A)-(B)</span>
+                                    </td>
+                                    <td colspan="2" style="text-align: right; font-weight: bold; font-size: 17px;">
+                                        <span>@ViewBag.total_salary</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <span>
+                                            @My.NumberToWords(Convert.ToInt32(ViewBag.total_salary))
+                                      Only /-  </span>
+                                    </td>
+                                </tr> 
+                                <tr>
+                                    <td colspan="5" style="font-weight: 600; font-size: 17px;">Bank Detail</td>
+                                </tr>
+                                <tr>
+                                    <td>Bank : </td>
+
+                                    <td colspan="4">
+                                        <span>@emp.Bank_Name</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Branch : </td>
+
+                                    <td colspan="4">
+                                        <span>@emp.Branch</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>A/C Holder :</td>
+                                    <td>
+
+                                        <span>@emp.Employee_Name</span>
+                                    </td>
+                                    <td>IFSC :</td>
+                                    <td colspan="2">
+                                        <span>@emp.Ifsc</span>
+                                    </td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>A/C No : </td>
+                                    <td><span>@emp.Account_no</span></td>
+                                    <td>MICR : </td>
+                                    <td colspan="2"><span>@emp.Micr</span></td>
+                                </tr>
+
+
+
+
+
+
+
+                                <tr>
+                                    <td colspan="5" style="font-weight: 600;">
+                                        <p>
+                                            This is computer generated Salary slip is not valid unless authorized.
+                                            <br />
+                                            <br />
+                                            <br />
+                                            <br />
+                                            <br />
+                                            <br />
+                                            <br />
+                                            <span>Authorization</span>
+                                        </p>
+
+                                    </td>
+                                </tr>
+                            </table>
+                            <script src="~/Content/js/my.js"></script>
+                            <script>
+                                $(function () {
+                                    var data = { type: "salary-breakup", calc_id: "@sl.Calculation_Id", Employee_Id: "@emp.Employee_id" };
+                                gowithData("../../../../../hr/data/salary", "POST", JSON.stringify({ data: data }), function (resp) {
+                                    var tbody = $("#tbl-earning tbody");
+                                    tbody.empty();
+                                    $.each(resp.incomes, function (indx, d) {
+                                        var tr = $('<tr>');
+                                        tr.append($('<td>').text(d.IncomeHead), $('<td>').text(d.DefaultValue).css("font-size","14px").css("font-weight","bold").css("text-align","right"), $('<td>').text(d.NetValue).css("font-size","14px").css("font-weight","bold").css("text-align","right"))
+                                        tbody.append(tr)
+                                    })
+                                    tbody = $("#tbl-deduction tbody");
+                                    tbody.empty();
+                                    $.each(resp.deductions, function (indx, d) {
+                                        var tr = $('<tr>');
+                                        tr.append($('<td>').text(d.Deduction_Head), $('<td>').text(d.Employee_Deduction).css("font-size", "14px").css("font-weight", "bold").css("text-align", "right"))
+                                        tbody.append(tr)
+                                    })
+                                });
+                                })
+
+                            </script>
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+</body>
+</html>
+

@@ -1,0 +1,666 @@
+﻿@{ ViewBag.Title = "Hiring Application List"; }
+<style>
+    .row {
+        --bs-gutter-x: 0.5rem;
+        --bs-gutter-y: 0;
+    }
+
+    .table.dataTable {
+        margin-top: 0px !important;
+    }
+
+    #mytable {
+        min-height: 300px;
+    }
+
+    .dataTables_scroll {
+        border: 1px solid #ddd !important;
+        margin-top: 0.25rem !important;
+    }
+
+    .filter-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+</style>
+<script src="~/Content/js/papaparse5.3.0.min.js"></script>
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+
+        <button type="button" onclick="openUploadCSVModel()" class="btn btn-outline-warning btn-sm"><i class="bx bx-upload"></i>Upload CSV</button>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header pb-0">
+        <div class="d-flex mb-2 w-auto">
+            <div class="form-group me-2">
+                @Html.Label("Firm", new { @class = "form-group-text" })
+                @Html.DropDownList("Firm", "All", new { @class = "form-select", style = "max-width : 280px;" })
+            </div>
+            <div class="form-group me-2">
+                @Html.Label("Session", new { @class = "form-group-text" })
+                @Html.DropDownList("Session", "Select", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="form-group me-2">
+                @Html.Label("Hiring", new { @class = "form-group-text" })
+                @Html.DropDownList("Hiring", "Select", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="form-group me-2">
+                @Html.Label("Post Applied", new { @class = "form-group-text", @for = "Post_Applied" })
+                @Html.DropDownList("Post_Applied", "Select", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="filter-btn">
+                <button class="btn btn-primary" type="button" onclick="apply_filter(this)" style="width: auto; ">Find</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body px-2 py-1">
+        <table class="table table-bordered table-striped" id="mytable">
+            <thead class="fixed-header">
+                <tr>
+                    <th>Action</th>
+                     
+                    <th>Firm</th>
+                    <th>Application Id</th>
+                    <th>Date</th>
+                    <th>Post Applied</th>
+                    <th>Applicant Name</th>
+                    <th>Email id</th>
+                    <th>Mobile No</th>
+                    <th>Payment Id</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div id="grid_prog" style="margin : 0px auto; width:200px">
+            <span class="spinner-border spinner-border-sm me-2"> </span>
+            Please wait....
+        </div>
+    </div>
+</div>
+<div>
+    @Html.BeginModal("model-action", "Schedule for Interview", "modal-lg").Content(@<div class="row">
+        <div class="col-lg-4">
+            @Html.Label("Interview Date")
+            @Html.TextBox("interview-date", "", new { @class = "form-control", type = "date" })
+        </div>
+        <div class="col-lg-4">
+            @Html.Label("Interview Time")
+            @Html.TextBox("interview-time", "", new { @class = "form-control", type = "time" })
+        </div>
+        <div class="col-lg-4">
+            @Html.Label("Reporting Time")
+            @Html.TextBox("reporting-time", "", new { @class = "form-control", type = "time" })
+        </div>
+        <div class="col-lg-12">
+            @Html.Label("Interview Venue")
+            @Html.TextArea("interview-venue", "", 3, 0, new { @class = "form-control" })
+        </div>
+
+
+
+        <div class="col-lg-4">
+            @Html.Label("Interview Type")
+        </div>
+        <div class="col-lg-8">
+            @Html.Label("Interview Taken By")
+        </div>
+        <div class="col-lg-4">
+            @Html.DropDownList("interview-type", "Select", new { @class = "form-select" })
+        </div>
+        <div class="col-lg-4">
+            @Html.DropDownList("ddl-designation", "Select", new { @class = "form-select" })
+        </div>
+        <div class="col-lg-4">
+            @Html.DropDownList("interview-takenby", "Select", new { @class = "form-select" })
+        </div>
+
+    </div>).Footer(@<button class="btn btn-primary" id="btn-hiring">Submit</button>).Create()
+    @Html.BeginModal("model-reject", "Reject Application", "modal-md").Content(@<div class="row">
+        @Html.Label("Remarks")
+        @Html.TextArea("Remarks", "", 5, 0, new { @class = "form-control" })
+    </div>).Footer(@<button class="btn btn-danger" id="btn-reject">Reject</button>).Create()
+
+
+    @Html.BeginModal("model-hiring", "Hire Now", "modal-md").Content(@<div class="row">
+            
+    @Html.LabelEditor("Name", "text", "Name", divCssClass: "col-8")
+    @Html.LabelEditor("Mobile", "text", "Name", divCssClass: "col-4")
+    @Html.LabelEditor("user_type", "ddl", "User Type", divCssClass: "col-4")
+    @Html.LabelEditor("user_id", "text", "User Id", divCssClass: "col-4")
+    @Html.LabelEditor("password", "text", "Password", divCssClass: "col-4")
+    @Html.LabelEditor("Hiring-Remarks", "multiline", "Selection Remarks",value:"hms")
+</div>).Footer(@<div>
+    <button class="btn btn-primary" id="btn-selected">Submit</button>
+    <label style="color:red; font-weight : 600; font-size:18px">Note :  If you submite this ,It mean you are selected this Candidates.</label>
+</div>).Create()
+</div>
+
+
+@Html.BeginModal("mdl-upxl", "Upload using CSV file").Content(@<div>
+    @Html.LabelEditor("csv_file", "file-csv", "Browse CSV File", isRequired: true)
+    <div class="row mt-2" id="div2" style="max-height: calc(100vh - 300px); overflow: auto;">
+        <table class="table table-bordered table-striped m-0 " style="width:100%" id="csv_data">
+            <thead style="position: sticky; top: -1px; background-color:whitesmoke; ">
+
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>).Footer(@<div>
+    <button type="button" id="btn_upload_csv" class="btn btn-success btn-sm d-none"><i class="bx bx-upload"></i>Upload</button>
+    <button type="button" id="btn_sample" class="btn btn-outline-info btn-sm"><i class="bx bx-cloud-download"></i>Download Sample</button>
+
+</div>).Create()
+<script>
+            $(function () {
+                $('#file_csv_file').removeAttr("onchange");
+                var ddl = $('#user_type');
+                $("#user_type option:not(:first)").remove();
+                ddl.append($("<option>").text('Employee').val('0'));
+            })
+
+            $(`#btn_sample`).on("click", function () {
+                window.open("../../hr/hiring-sample","_blanck");
+            })
+            function openUploadCSVModel() {
+                $('#file_csv_file').val(null);
+                var thead = $("#csv_data thead");
+                thead.empty();
+                var tbody = $("#csv_data tbody");
+                tbody.empty();
+                $('#btn_sample').removeClass("d-none");
+                $('#btn_upload_csv').addClass("d-none");
+                $("#mdl-upxl").modal("show")
+            }
+
+            $('#file_csv_file').on('change', function () {
+                console.log("file select")
+                var csvFile = $(this)[0].files[0];
+                if (csvFile) {
+                    //empty_form();
+
+                    var fileExtension = csvFile.name.split('.').pop().toLowerCase();
+                    if (fileExtension != "csv") {
+                        alertError("Please Select Valid CSV File Only")
+                        $('#csv_file').val('');
+                        return false;
+                    }
+                    //fileupload($('#file_csv_file')[0])
+                    console.log("file select2")
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        console.log("file loaded")
+                        var csvContent = e.target.result;
+                        csvToJson(csvContent);
+                        $('#btn_sample').addClass("d-none");
+                        $('#btn_upload_csv').removeClass("d-none");
+                    };
+                    reader.readAsText(csvFile);
+
+                }
+            });
+            var datalist = [];
+            var file_loaded = false;
+            function csvToJson(csvContent) {
+                Papa.parse(csvContent, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function (results) {
+                        file_loaded = true;
+                        datalist = results.data;
+                        load_csv_datatable();
+                    }
+                });
+            }
+            function load_csv_datatable() {
+                var thead = $("#csv_data thead");
+                thead.empty();
+                var tbody = $("#csv_data tbody");
+                tbody.empty();
+                if (datalist.length > 0) {
+                    var d1 = datalist[0];
+                    var keys = Object.keys(d1);
+                    var tr = $('<tr>')
+                    $.each(keys, function (ind, k) {
+                        tr.append($('<th>').text(k));
+                    })
+                    thead.append(tr);
+                    $.each(datalist, function (indx, d) {
+                        tr = $('<tr>')
+                        $.each(keys, function (ind, k) {
+                            tr.append($('<td>').text(d[k]));
+                        })
+                        tbody.append(tr);
+                    })
+                }
+
+            }
+
+            $("#btn_upload_csv").click(function () {
+                var data = { pageId: 'mpc.pageId' };
+                data.datalist = JSON.stringify(datalist)
+                skip_invalid_data = $('#skip_invalid_data').prop("checked");
+                submitdata("../../hr/data/uploadcsvhiring", JSON.stringify({data:data}), function (resp) {
+                    if (resp.error) {
+                        if (resp.needVerify) {
+                            load_verified_datatable(resp.skiped_data)
+                        }
+                    }
+                    else if (resp.skip) {
+                        console.log(resp.skiped_data);
+                        load_verified_datatable(resp.skiped_data)
+                        bind_table(resp.data)
+                    }
+                    else {
+                        bind_table(resp.data)
+                        $("#mdl-upxl").modal("hide")
+                    }
+
+                });
+            });
+            function load_verified_datatable(data) {
+                var thead = $("#csv_data thead");
+                thead.empty();
+                var tbody = $("#csv_data tbody");
+                tbody.empty();
+                if (data.length > 0) {
+                    var d1 = data[0];
+                    var keys = Object.keys(d1);
+                    var tr = $('<tr>')
+                    $.each(keys, function (ind, k) {
+                        if (k == "error" || k == "message") {
+
+                        }
+                        else {
+
+                            tr.append($('<th>').text(k));
+                        }
+
+                    })
+                    tr.append($('<th>').text("Message"));
+                    thead.append(tr);
+                    $.each(data, function (indx, d) {
+
+                        if (d.error) {
+                            tr = $('<tr>')
+
+                            $.each(keys, function (ind, k) {
+                                if (k == "error" || k == "message") {
+
+                                }
+                                else {
+
+                                    tr.append($('<td>').text(d[k]));
+                                }
+                            })
+                            tr.append($('<td>').text(d.message));
+                            tr.addClass("bg-danger");
+                            tbody.append(tr);
+                        }
+                    })
+
+                    $.each(data, function (indx, d) {
+
+                        if (!d.error) {
+                            tr = $('<tr>')
+
+                            $.each(keys, function (ind, k) {
+                                if (k == "error" || k == "message") {
+
+                                }
+                                else {
+
+                                    tr.append($('<td>').text(d[k]));
+                                }
+                            })
+                            tr.append($('<td>').text(""));
+                            tbody.append(tr);
+                        }
+
+                    })
+                }
+
+            }
+
+</script>
+
+
+<script>
+    var id = '';
+    var tr = '';
+    $(function () {
+        var data = { type: 'pageLoad' };
+
+        gowithData("../../hr/data/employeePendingList", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data)
+                var ddl = $('#Session');
+                $("#Session option:not(:first)").remove();
+                $.each(resp.session, function (i, item) {
+                    ddl.append($("<option>").text(item.SessionName).val(item.SessionId));
+                });
+                ddl = $('#Firm');
+                ddl.empty();
+                $.each(resp.firms, function (i, item) {
+                    ddl.append($("<option>").text(item.firm_name).val(item.firm_id));
+                });
+            }
+        })
+    })
+    $("#Session").change(function () {
+        var data = { type: 'session' };
+        data["session"] = $(this).val()
+        gowithData("../../hr/data/employeePendingList", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Hiring');
+                $("#Hiring option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.HiringName).val(item.Hiring_id));
+                });
+            }
+        })
+    });
+    $("#Hiring").change(function () {
+        var data = { type: 'hiring' };
+        data["hiring"] = $(this).val()
+        gowithData("../../hr/data/employeePendingList", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Post_Applied');
+                $("#Post_Applied option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.Designation_id));
+                });
+            }
+        })
+    });
+    function apply_filter() {
+        var data = { type: 'filter' };
+        data["Hiring"] = $('#Hiring').val()
+        data["Session"] = $('#Session').val()
+        data["Firm"] = $('#Firm').val()
+        data["Post_Applied"] = $('#Post_Applied').val()
+        $('#grid_prog').show();
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        gowithData("../../hr/data/employeePendingList", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data);
+            }
+        })
+    }
+    function bind_table(data) {
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var div = $('<div>').addClass("d-flex align-items-center")
+            var div_ddl = $('<div>').addClass("dropdown ms-1")
+            div_ddl.append(`<div class="dropdown-toggle dropdown-toggle-nocaret cursor-pointer badge bg-info text-dark" data-bs-toggle="dropdown">	<i class='bx bx-dots-horizontal-rounded font-22'></i></div>`)
+            var ul = $('<ul>').addClass("dropdown-menu")
+            div_ddl.append(ul)
+            ul.append(
+
+                //<a class="dropdown-item text-bold" href="print/Employee_Form_Apply.aspx?regiDs=EMP202304200645102" target="_blank"><span>View Details</span> </a>
+                $('<li>').append($('<a class="dropdown-item text-bold" href="../../Payroll/Employee_Form_Apply.aspx?regiDs=' + d.Apply_id + '" target="_blank"><span> <i class="bx bx-detail me-2"></i>View Details</span> </a>')),
+                // $('<li>').append($('<span>').attr("data-id", d.Apply_id).attr("data-action", 'View').addClass("dropdown-item action-table").append("<i class='bx bx-detail me-2'></i>").append("View Details")),
+                $('<li>').append($('<span>').attr("data-id", d.Apply_id).attr("data-action", 'Select').addClass("dropdown-item action-table").append("<i class='bx bx-badge-check me-2'></i>").append("Schedule For Interview")),
+                $('<li>').append($('<span>').attr("data-id", d.Apply_id).attr("data-mobile", d.mobile_no_CA).attr("data-name", d.fullName).attr("data-action", 'Hiring').addClass("dropdown-item action-table").append("<i class='bx bx-badge-check me-2'></i>").append("Hire Now")),
+                $('<li>').append($('<span>').attr("data-id", d.Apply_id).attr("data-action", 'Reject').addClass("dropdown-item action-table text-danger").append("<i class='bx bx-x-circle me-2'></i>").append("Reject Application")),
+            )
+            div.append(div_ddl)
+            var td = $('<td>').append(div).width("55px");
+            var row = $('<tr>').append(td,
+                //$('<td>').text(d.SessionName),
+                $('<td>').text(d.Firm),
+                $('<td>').text(d.Apply_id),
+                $('<td>').text(d.Date),
+                $('<td>').text(d.Apply_for),
+                $('<td>').text(d.fullName),
+                $('<td>').text(d.Emailid),
+                $('<td>').text(d.mobile_no_CA),
+                $('<td>').text(d.razorpay_payment_id),
+            );
+            tableBody.append(row);
+        });
+
+        $('#mytable').DataTable({
+            lengthChange: false,
+            scrollX: true, scrollCollapse: true,
+            buttons: ['excel', 'pdf', 'print']
+        });
+    }
+    var ishospital = false;
+    $('#mytable').on('click', '.action-table', function () {
+        id = $(this).data('id');
+        tr = $(this).closest('tr');
+        var action = $(this).data('action');
+        console.log(action);
+        if (action == 'View') {
+
+        }
+        else if (action == 'Hiring') {
+
+            var mobile = $(this).data('mobile');
+            var name = $(this).data('name');
+            $('#Hiring-Remarks').val('');
+            $('#password').val('');
+            $('#user_id').val('');
+            $('#Mobile').val(mobile);
+            $('#Name').val(name);
+            $('#password').parent().hide();
+            $('#user_id').parent().hide(); 
+            $('#user_type').parent().hide();
+            var data = { type: 'hms-userdetails', mobile: $('#Mobile').val() };
+            gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+                if (!resp.error) {
+                    ishospital = resp.ishospital; 
+                    if (resp.ishospital) {
+                        var utype = ""
+                        var utype_id = ""
+                        $.each(resp.data, function (i, item) {
+                            $('#password').val(item.password);
+                            $('#user_id').val(item.user_id);
+                            utype = item.user_type;
+                        });
+                        $('#password').parent().show();
+                        $('#user_id').parent().show();
+                        $('#user_type').parent().show();
+                        var ddl = $('#user_type');
+                        $("#user_type option:not(:first)").remove();
+
+                        $.each(resp.utypes, function (i, item) {
+                            if (item.User_Type == utype) {
+                                utype_id = item.User_Type_id;
+                            }
+                            ddl.append($("<option>").text(item.User_Type).val(item.User_Type_id));
+                        });
+                        ddl.val(utype_id);
+                    }
+                    
+                }
+            })
+            $('#model-hiring').modal("show");
+        }
+        else if (action == 'Select') {
+            var data = { type: 'interview-type' };
+            data["designation"] = $(this).val()
+            gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+                if (!resp.error) {
+                    var ddl = $('#interview-type');
+                    $("#interview-type option:not(:first)").remove();
+                    $.each(resp.data, function (i, item) {
+                        ddl.append($("<option>").text(item.InterviewType).val(item.InterViewTypeId));
+                    });
+                }
+            })
+            $('#interview-date').val('');
+            $('#interview-time').val('');
+            $('#reporting-time').val('');
+            $('#interview-venue').val('');
+            $('#interview-type').val('');
+            $('#ddl-designation').val('');
+            $('#interview-takenby').val('');
+            $('#model-action').modal("show");
+        } else if (action == 'Reject') {
+            $('#Remarks').val('');
+            $('#model-reject').modal("show");
+        }
+
+
+    });
+</script>
+
+<script>
+    $("#interview-type").change(function () {
+        var v = $(this).val();
+        var data = { type: 'interview-type-designation' };
+        data["interview-type"] = v
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#ddl-designation');
+                $("#ddl-designation option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.Designation_id));
+                });
+            }
+        })
+    });
+    $("#ddl-designation").change(function () {
+
+        var v = $(this).val();
+        var data = { type: 'takenby' };
+        data["designation"] = v
+        gowithData("../../hr/data/employeePendingList", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#interview-takenby');
+                $("#interview-takenby option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.Name).val(item.UserId));
+                });
+            }
+        })
+    });
+
+    $('#btn-hiring').click(function () {
+
+
+        var date = $('#interview-date').val();
+        if (!date) {
+            alertError("Please Select Interview Date");
+            return false;
+        }
+        var interview_time = $('#interview-time').val();
+        if (!interview_time) {
+            alertError("Please Select Interview Time");
+            return false;
+        }
+        var reporting_time = $('#reporting-time').val();
+        if (!reporting_time) {
+            alertError("Please Select Reporting Time");
+            return false;
+        }
+        var venue = $('#interview-venue').val();
+        if (!venue) {
+            alertError("Please Specify Interview Venue");
+            return false;
+        }
+
+        var Interview_type = $('#interview-type').val();
+        if (!Interview_type) {
+            alertError("Please Select Type of Interview");
+            return false;
+        }
+        var interview_takenby = $('#interview-takenby').val();
+        if (!interview_takenby) {
+            alertError("Please Specify who will take interview");
+            return false;
+        }
+        var data = { type: 'select-for-hiring', id: id, date: date, interview_time: interview_time, reporting_time: reporting_time, venue: venue, Interview_type: Interview_type, interview_takenby: interview_takenby }
+
+        submitdata("../../hr/data/employeePendingList", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                $('#model-action').modal("hide");
+                tr.addClass("bg-success");
+            }
+        })
+    });
+    $('#btn-reject').click(function () {
+
+        var remark = $('#Remarks').val();
+        if (!remark) {
+            alertError("Please Enter Rejection Remarks");
+            return false;
+        }
+        var data = { type: 'reject', id: id, remark: remark }
+
+        submitdata("../../hr/data/employeePendingList", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                $('#model-reject').modal("hide");
+                tr.addClass("bg-danger");
+            }
+        })
+    });
+
+    $('#btn-selected').click(function () {
+
+        var remark = $('#Hiring-Remarks').val();
+        var user_id = $('#user_id').val();
+        var mobile = $('#Mobile').val();
+        var password = $('#password').val();
+        if (!mobile) {
+            alertError("Please Enter Mobile No");
+            return false;
+        }
+        if (ishospital) {
+            if (!user_id) {
+                alertError("Please Enter User Id");
+                return false;
+            } if (!password) {
+                alertError("Please Enter Password");
+                return false;
+            }
+        }
+        if (!remark) {
+            alertError("Please Enter Remarks");
+            return false;
+        }
+        var data = { type: 'hirenow', id: id, remark: remark, mobile: mobile, user_id: user_id, password: password }
+        data.user_type_id = $('#user_type').val();
+        data.user_type = $('#user_type option:selected').text();
+        submitdata("../../hr/data/employeePendingList", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                $('#model-hiring').modal("hide");
+                tr.addClass("bg-info");
+            }
+            else {
+                if (resp.message.indexOf("change")) {
+                    alertConfirm(resp.message, function () {
+                        data.changeIt = "1";
+                        submitdata("../../hr/data/employeePendingList", JSON.stringify({ data: data }), function (resp) {
+                            if (!resp.error) {
+                                $('#model-hiring').modal("hide");
+                                tr.addClass("bg-info");
+                            } 
+                        })
+                    })
+                }
+            }
+        })
+    });
+</script>

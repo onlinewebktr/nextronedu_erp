@@ -1,0 +1,942 @@
+﻿table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 0;
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+    .table td, .table th {
+        background-color: #fff;
+    }
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+:after, :before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body, #form1 {
+    padding: 0px;
+    margin: 0px 0px 0px 0px;
+    height: auto;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+}
+
+h2, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', sans-serif;
+}
+
+.section {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+
+.print_form {
+    margin: 0px auto;
+    padding: 0px;
+    width: 800px;
+    height: auto;
+}
+
+.print_form-inr {
+    margin: 0px 0px 30px 0px;
+    padding: 10px 10px;
+    width: 100%;
+    height: auto;
+    float: left;
+    border: 1px solid #ddd;
+}
+
+.print_form-img {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+    text-align: center;
+}
+
+    .print_form-img img {
+        margin: 0px auto;
+        float: left;
+        padding: 0px 10px 0px 0px;
+        border-right: 1px solid #ffa400;
+    }
+
+.print_form-dtls {
+    margin: 7px 0px 0px 0px;
+    padding: 10px 0px 0px 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+    border-top: 1px solid #ffc600;
+}
+
+.dtls_grp {
+    margin: 0px 0px 0px 0px;
+    padding: 5px 0px 0px 0px;
+    width: 50%;
+    height: auto;
+    float: left;
+}
+
+.dtls_grp-inr {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+.dtls_grp-h {
+    height: auto;
+    width: 50%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    color: #c54262;
+    font-size: 17px;
+    line-height: 29px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.dtls_grp-lbl {
+    height: auto;
+    width: 50%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    color: #000;
+    font-size: 17px;
+    line-height: 29px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.print_table {
+    margin: 0px 0px 0px 0px;
+    padding: 10px 40px 10px 10px;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+table tr td {
+    padding: 7px 10px;
+    border: 1px solid #ddd;
+    font-size: 15px;
+}
+/*.print_table tr {
+        margin: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 0px;
+        width: 100%;
+        height: auto;
+        float: left;
+        border: none;
+    }
+
+        .print_table tr td {
+            height: auto;
+            width: 25%;
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+            float: left;
+            color: #c54262;
+            font-size: 16px;
+            line-height: 29px;
+            font-weight: 400;
+            text-align: left;
+            border: none;
+        }*/
+
+
+.prnt-btn-sec {
+    margin: 20px 0px 1px 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+.prnt-btn-sec-cntr {
+    margin: 0px auto;
+    padding: 0px;
+    width: 750px;
+    height: auto;
+}
+
+.print-pg-sec {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+.print-btn-sec {
+    margin: 0px;
+    padding: 3px;
+    width: 99%;
+    height: auto;
+    float: left;
+}
+
+.print-btn {
+    margin: 0px;
+    padding: 0px;
+    width: 55px;
+    height: 55px;
+    background: url(../images/print.png) no-repeat;
+    background-size: 100%;
+    background-color: #780a23;
+    border: 5px solid #770821;
+    cursor: pointer;
+    float: right;
+}
+
+.back-btn {
+    margin: 0px;
+    padding: 0px;
+    width: 55px;
+    height: 55px;
+    background: url(../images/back.png) no-repeat;
+    background-size: 100%;
+    background-color: #780a23;
+    border: 5px solid #770821;
+    cursor: pointer;
+}
+
+.dtls_grp-p {
+    height: auto;
+    width: 100%;
+    margin: 8px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    color: #770821;
+    font-size: 17px;
+    line-height: 29px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.success-htitle-h {
+    height: auto;
+    width: 100%;
+    margin: 6px 0px 0px 0px;
+    padding: 0px 0px 0px 10px;
+    float: left;
+    color: #040404;
+    font-size: 27px;
+    line-height: 29px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.print_form-dtls-ps {
+    margin: 0px 0px 20px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    font-size: 15px;
+    line-height: 25px;
+    text-align: justify;
+}
+
+    .print_form-dtls-ps span {
+        font-weight: 500;
+    }
+
+.pass-wpr {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    position: relative;
+}
+
+    .pass-wpr img {
+        margin: 0px 0px 0px 0px;
+        padding: 0px;
+        width: 100%;
+        float: left;
+    }
+
+.pass-wpr-lbl-1 {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    position: absolute;
+    right: 25px;
+    top: 99px;
+    font-weight: 700;
+    color: #006c00;
+    font-size: 15px;
+}
+
+.pass-wpr-lbl-2 {
+    margin: 0px 0px 20px 0px;
+    padding: 0px;
+    position: absolute;
+    right: 25px;
+    top: 128px;
+    font-weight: 700;
+    color: #006c00;
+    font-size: 15px;
+}
+
+.print-pg-pass-sec {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+.print_form-inr-pass1 {
+    margin: 0px auto;
+    padding: 0px;
+    width: 800px;
+    height: auto;
+}
+
+.print_form-inr-pass {
+    margin: 0px 0px 30px 0px;
+    padding: 10px 10px;
+    width: 800px;
+    height: auto;
+    float: left;
+    background: #fff;
+    border: 1px solid #ddd;
+}
+
+.messbox-sec-h2 {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.prnt-dv-wpr {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+    .prnt-dv-wpr table {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        float: left;
+    }
+
+        .prnt-dv-wpr table tr td {
+            padding: 7px 10px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .prnt-dv-wpr table tr th {
+            font-weight: 500;
+        }
+
+
+
+.prnt-dv-p-info1 {
+    margin: 0px 0px 8px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    font-size: 14px;
+}
+
+    .prnt-dv-p-info1 i {
+        margin: 0px;
+        padding: 0px;
+        font-style: inherit;
+        font-weight: 500;
+        width: 150px;
+        float: left;
+    }
+
+    .prnt-dv-p-info1 span {
+        margin: 0px;
+        padding: 0px 0px 0px 5px;
+        color: #ef0000;
+    }
+
+.prnt-dv-p-info2 {
+    margin: 0px 0px 8px 0px;
+    padding: 0px;
+    width: 33%;
+    float: left;
+    font-size: 14px;
+}
+
+    .prnt-dv-p-info2 i {
+        margin: 0px;
+        padding: 0px;
+        font-style: inherit;
+        font-weight: 500;
+        width: 150px;
+        float: left;
+    }
+
+    .prnt-dv-p-info2 span {
+        margin: 0px;
+        padding: 0px 0px 0px 5px;
+        color: #ef0000;
+    }
+
+.prnt-dv-p-info3 {
+    margin: 0px 0px 8px 0px;
+    padding: 0px;
+    width: 33%;
+    float: left;
+    font-size: 14px;
+}
+
+    .prnt-dv-p-info3 i {
+        margin: 0px;
+        padding: 0px;
+        font-style: inherit;
+        font-weight: 500;
+        width: 150px;
+        float: left;
+    }
+
+    .prnt-dv-p-info3 span {
+        margin: 0px;
+        padding: 0px 0px 0px 5px;
+        color: #ef0000;
+    }
+
+.prnt-dv-p-info4 {
+    margin: 0px 0px 8px 0px;
+    padding: 0px;
+    width: 33%;
+    float: left;
+    font-size: 14px;
+}
+
+    .prnt-dv-p-info4 i {
+        margin: 0px;
+        padding: 0px;
+        font-style: inherit;
+        font-weight: 500;
+        width: 150px;
+        float: left;
+    }
+
+    .prnt-dv-p-info4 span {
+        margin: 0px;
+        padding: 0px 0px 0px 5px;
+        color: #ef0000;
+    }
+
+.prnt-dv-p-info5 {
+    margin: 0px 0px 8px 0px;
+    padding: 0px;
+    width: 66%;
+    float: left;
+    font-size: 14px;
+}
+
+    .prnt-dv-p-info5 i {
+        margin: 0px;
+        padding: 0px;
+        font-style: inherit;
+        font-weight: 500;
+        width: 150px;
+        float: left;
+    }
+
+    .prnt-dv-p-info5 span {
+        margin: 0px;
+        padding: 0px 0px 0px 5px;
+        color: #ef0000;
+    }
+
+.prnt-dv-p-info6 {
+    margin: 0px 0px 8px 0px;
+    padding: 0px;
+    width: 20%;
+    float: left;
+    font-size: 14px;
+}
+
+    .prnt-dv-p-info6 i {
+        margin: 0px;
+        padding: 0px;
+        font-style: inherit;
+        font-weight: 500;
+        width: 50px;
+        float: left;
+    }
+
+    .prnt-dv-p-info6 span {
+        margin: 0px;
+        padding: 0px 0px 0px 5px;
+        color: #ef0000;
+    }
+
+.prnt-dv-wpr-mth {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+    .prnt-dv-wpr-mth table {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        float: left;
+    }
+
+        .prnt-dv-wpr-mth table tr td {
+            padding: 5px 5px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+        }
+
+        .prnt-dv-wpr-mth table tr th {
+            font-weight: 400;
+            padding: 5px 2px;
+            font-size: 12px;
+        }
+
+.prnt-dv-head {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+.prnt-firm-name {
+    margin: 2px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 30px;
+}
+
+.prnt-date-p {
+    margin: 0px 0px 1px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 31px;
+}
+
+.rp-tbl-1 {
+    margin: 0px;
+    padding: 0px 5px 5px 0px;
+    width: 280px;
+    float: right;
+}
+
+    .rp-tbl-1 table {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        float: left;
+    }
+
+        .rp-tbl-1 table tr td {
+            padding: 5px 5px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+        }
+
+.rp-tbl-2 {
+    margin: 0px;
+    padding: 0px 0px 5px 0px;
+    width: 280px;
+    float: right;
+}
+
+    .rp-tbl-2 table {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        float: left;
+    }
+
+        .rp-tbl-2 table tr td {
+            padding: 5px 5px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+        }
+
+.slry-head-div {
+    margin: 10px 0px 8px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+.slry-head-logo-div {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    width: 20%;
+    float: left;
+}
+
+    .slry-head-logo-div img {
+        margin: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 5px;
+        width: 103px;
+        float: left;
+    }
+
+.slry-head-txt-div {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 10px;
+    width: 80%;
+    float: left;
+}
+
+.slry-head-firm-name-h {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 30px;
+}
+
+.slry-head-firm-loction-h {
+    margin: 4px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 30px;
+}
+
+.slry-head-month-name-p {
+    margin: 1px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 24px;
+}
+
+.slry-emp-dt-tbl-div {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+    .slry-emp-dt-tbl-div table {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        float: left;
+    }
+
+        .slry-emp-dt-tbl-div table tr th {
+            padding: 7px 10px;
+            font-weight: 400;
+            border-bottom: 1px dashed #ddd;
+        }
+
+.fontbld {
+    font-weight: bold;
+}
+
+.slry-emp-dt-cntr-text {
+    text-align: center !important;
+}
+
+.net-slry-pring {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+.net-slry-pring-span1 {
+    margin: 40px 0px 0px 0px;
+    padding: 7px 10px 7px 0px;
+    width: 80%;
+    float: left;
+    font-size: 17px;
+    font-weight: 500;
+    background: #f1f1f1;
+    text-align: right;
+    border: 1px solid #cdcdcd;
+    border-right: 0px;
+}
+
+.net-slry-pring-span2 {
+    margin: 40px 0px 0px 0px;
+    padding: 7px 10px 7px 0px;
+    width: 20%;
+    float: left;
+    font-size: 17px;
+    font-weight: 500;
+    text-align: right;
+    border: 1px solid #cdcdcd;
+    border-left: 0px;
+}
+
+.print-pg-grid1-dv {
+    margin: 0px 0px 0px 0px;
+    padding: 10px 0px 0px 0px;
+    width: 50%;
+    float: left;
+}
+
+.print-pg-grid2-dv {
+    margin: 0px 0px 0px 0px;
+    padding: 10px 0px 0px 0px;
+    width: 50%;
+    float: left;
+    border-left: 2px dashed #c5c5c5;
+}
+
+.pvtand-conf {
+    margin: 5px 0px 4px 0px;
+    padding: 0px 100px 0px 0px;
+    width: 100%;
+    float: left;
+    text-align: right;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.auth-div {
+    margin: 9px 0px 10px 0px;
+    padding: 5px;
+    width: 40%;
+    float: left;
+}
+
+.auth-div-p1 {
+    margin: 0px 0px 4px 0px;
+    padding: 0px 10px 0px 0px;
+    width: 100%;
+    float: left;
+    text-align: right;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.auth-div-p2 {
+    margin: 65px 0px 0px 0px;
+    padding: 0px 100px 0px 0px;
+    width: 100%;
+    float: left;
+    text-align: left;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.auth-div-p1-sig {
+    margin: 85px 0px 0px 0px;
+    padding: 0px 0px 0px 75px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.invoice-inr-sec1 {
+    margin: 0 auto;
+    padding: 0;
+    width: 800px;
+    height: auto;
+}
+
+.slry-head-add-p {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.pgslry-head-div {
+    margin: 10px 0px 10px 0px;
+    padding: 0px 0px 5px 0px;
+    width: 100%;
+    float: left;
+    border-bottom: 2px solid #a9a9a9;
+}
+
+.pgslry-head-firm-name-h {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 30px;
+}
+
+.pgslry-head-add-p {
+    margin: 3px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.pgslry-head-month-name-p {
+    margin: 3px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 24px;
+}
+
+.slry-invoice-wpr {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    border: 1px solid #cfcfcf;
+}
+
+.emp-info-dv {
+    margin: 0px 0px 0px 0px;
+    padding: 5px 5px;
+    width: 100%;
+    float: left;
+    border-top: 1px dashed #c5c5c5;
+}
+
+.emp-info-dv1 {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    width: 38%;
+    float: left;
+}
+
+.emp-info-dv2 {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    width: 31%;
+    float: left;
+}
+
+.emp-info-dv3 {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    width: 31%;
+    float: left;
+}
+
+.emp-info-lbl-p {
+    margin: 0px 0px 0px 0px;
+    padding: 5px 0px 5px 0px;
+    width: 100%;
+    float: left;
+    font-size: 14px;
+}
+
+.rp-head-td {
+    border: 0px solid #ddd;
+    font-size: 14px;
+    text-align: left;
+}
+
+.rp-amt-td {
+    border: 0px solid #ddd;
+    font-size: 14px;
+    text-align: right;
+}
+
+.p-bdrbtm-dhed {
+    border-bottom: 1px dashed #c5c5c5;
+}
+
+.bdr-tp-btmboth {
+    border-top: 1px dashed #c5c5c5;
+    border-bottom: 1px dashed #c5c5c5;
+}
+
+.net-ttl-dv-prnt {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 100%;
+    float: left;
+}
+
+.in-wrd-rupee {
+    margin: 0px 0px 0px 0px;
+    padding: 10px 0px 0px 5px;
+    width: 60%;
+    float: left;
+}
+
+.in-wrd-rupee-p {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 100%;
+    float: left;
+    font-size: 14px;
+}
+
+.print-pg-grid1-net-dv {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 50%;
+    float: left;
+}
+
+.print-pg-grid2-net-dv {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 50%;
+    float: left;
+    border-left: 2px dashed #c5c5c5;
+}
+
+.fnt-bld {
+    font-weight: 500;
+}

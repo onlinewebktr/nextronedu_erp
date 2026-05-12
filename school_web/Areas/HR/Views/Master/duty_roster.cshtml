@@ -1,0 +1,482 @@
+﻿
+@{
+    ViewBag.Title = "Duty Roster";
+}
+<style>
+    .chk_enbled {
+        width: 25px;
+        height: 25px;
+    }
+
+    #tbl-list td {
+        padding: 0;
+    }
+
+        #tbl-list td label {
+            padding: 4px;
+            width: 100%;
+        }
+
+    .nav-link {
+        padding: 0 1rem;
+    }
+</style>
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 m-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="row">
+                            @Html.LabelEditor("Year", "ddl", divCssClass: "col-lg-4")
+                            @Html.LabelEditor("Month", "ddl", divCssClass: "col-lg-4 p-0")
+                            @Html.LabelEditor("Duty_Hour", "ddl", "Duty Hour", divCssClass: "col-lg-4 pe-0")
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="row">
+                            @Html.LabelEditor("duration", "ddl", "Rotation Duration", divCssClass: "col-lg-4")
+                            @Html.LabelEditor("Shift", "ddl", "Shift", divCssClass: "col-lg-2 ps-0")
+                            @Html.LabelEditor("Department", "ddl", "Department", divCssClass: "col-lg-3 ps-0")
+                            @Html.LabelEditor("Designation", "ddl", "Designation", divCssClass: "col-lg-3 ps-0")
+                        </div>
+                    </div>
+                  
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-8 mt-0">
+                        <h4>List of Employee <span id="tot_emp"></span></h4>
+                        <div style="height: calc(100vh - 345px);overflow: auto;">
+                            <table id="tbl-list" class="table table-striped table-bordered my-2" role="grid">
+                                <thead style="background-color: darkturquoise;">
+                                    <tr>
+                                        <th style="width:90px">Emp Code</th>
+                                        <th>Employee Name</th>
+                                        <th style="width:110px">Work Location</th>
+                                        <th style="width:90px">Prev Shift</th>
+                                        <th style="width:50px"><span id="tot_sel">#</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-4 mt-0">
+
+                        <h4>Mapped Employee List</h4>
+
+                        <div>
+                            <ul class="nav nav-tabs nav-primary" id="ul_tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#primaryhome" role="tab" aria-selected="true">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-title">Home</div>
+                                        </div>
+                                    </a>
+                                </li>
+
+                            </ul>
+                            <div class="tab-content py-2" id="tab_data" style="height: calc(100vh - 365px); overflow: auto;">
+                                <div class="tab-pane fade show active" id="primaryhome" role="tabpanel">
+                                    <table id="tbl" class="table table-striped table-bordered my-2" role="grid">
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div class="card-footer d-flex">
+                <label class="p-2">Duty Incharge</label>
+                @Html.LabelEditor("DutyInchargeDepartment", "ddl", divCssClass: "col-lg-2 ps-0 me-3", isNoLabel: true, ddl_optionlabel: "Select Department")
+                @Html.LabelEditor("DutyInchargeDesignation", "ddl", divCssClass: "col-lg-2 ps-0 me-3 d-none", isNoLabel: true, ddl_optionlabel: "Select Designation")
+                @Html.LabelEditor("DutyIncharge", "ddl", divCssClass: "col-lg-2 ps-0 me-3 d-none", isNoLabel: true, ddl_optionlabel: "Select Employee")
+                <button class="btn btn-primary  me-4" id="btn-submit">Submit</button>
+                <h4 id="msg"></h4>
+            </div>
+        </div>
+    </div>
+</div> 
+<script>
+    var count = 0;
+    var rotationHead = "";
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    $("#Year option:not(:first)").remove();
+    for (var year = 2023; year <= currentYear + 1; year++) {
+        $('#Year').append($("<option>").text(year).val(year));
+    }
+    $("#Month option:not(:first)").remove();
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    for (let i = 0; i < monthNames.length; i++) {
+        const monthNumber = (i + 1).toString().padStart(2, '0');
+        $('#Month').append($("<option>").text(monthNames[i]).val(monthNumber));
+    }
+    $(function () {
+        $('#Year').val('@My.Now.Year')
+        $('#Year').change();
+    })
+    $('#Year').on('change', function () {
+        $('#Month').val('@My.Now.ToString("MM")');
+        $('#Month').change();
+        $("#duration").val('');
+        $('#duration').change();
+    })
+    $('#Month').on('change', function () {
+        get_duration();
+    })
+
+    $('#DutyInchargeDepartment').on('change', function () {
+       // get_duration();
+
+        $('#DutyIncharge').val("") 
+        if ($('#DutyInchargeDepartment').val()) {
+            runSQLapi('g4gb', { DepartmentId: $('#DutyInchargeDepartment').val() }, function (resp) {
+                bind_ddl_option('DutyInchargeDesignation', resp.data[0])
+                var ss = $(`#DutyInchargeDesignation`).attr("DutyInchargeDesignation");
+                $(`#DutyInchargeDesignation`).attr("DutyInchargeDesignation","");
+                $('#DutyInchargeDesignation').val(ss);
+                $('#DutyInchargeDesignation').change();
+                $('#DutyInchargeDesignation').parent().removeClass("d-none");
+            })
+        }
+    })
+    $('#DutyInchargeDesignation').on('change', function () {
+      //  get_duration(); 
+        $('#DutyIncharge').val("")
+        if ($('#DutyInchargeDesignation').val()) {
+            runSQLapi('rf8m', { Designation_id: $('#DutyInchargeDesignation').val() }, function (resp) {
+                bind_ddl_option('DutyIncharge', resp.data[0])
+                var ss = $(`#DutyIncharge`).attr("DutyIncharge");
+                $(`#DutyIncharge`).attr("DutyIncharge", "");
+                $('#DutyIncharge').val(ss);
+                $('#DutyIncharge').change(); 
+                $('#DutyIncharge').parent().removeClass("d-none");
+            })
+        }
+    })
+    function get_duration() {
+        $("#duration option:not(:first)").remove();
+        var month = $('#Month').val();
+        var year = $('#Year').val();
+        var dutyhour = $('#Duty_Hour').val();
+        var data = { type: 'rotation-duration', month: month, year: year, dutyhour: dutyhour }
+        if (!month) {
+            return false;
+        }
+        if (!year) {
+            return false;
+        }
+        if (!dutyhour) {
+            return false;
+        }
+        gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#duration');
+                $("#duration option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.Description).val(item.RotationId));
+                    rotationHead = item.RotationHeadId;
+                });
+
+                $("#duration").val('');
+                $('#duration').change();
+            }
+        });
+    }
+    function getemployeeList() {
+        var tab_data = $('#tab_data');
+        tab_data.empty();
+        $('#msg').html('');
+        const designation = $('#Designation').val();
+        const DepartmentId = $('#Department').val();
+        const shift = $('#Shift').val();
+        const RotationId = $('#duration').val();
+        const Duty_Hour = $('#Duty_Hour').val();
+        datalist = [];
+        if (!DepartmentId) {
+            var tableBody = $('#tbl-list tbody');
+            tableBody.empty();
+            return false;
+        }
+        if (!designation) {
+            var tableBody = $('#tbl-list tbody');
+            tableBody.empty();
+            return false;
+        }
+        if (!shift) {
+            var tableBody = $('#tbl-list tbody');
+            tableBody.empty();
+            return false;
+        } if (!RotationId) {
+            var tableBody = $('#tbl-list tbody');
+            tableBody.empty();
+            return false;
+        } if (!Duty_Hour) {
+            var tableBody = $('#tbl-list tbody');
+            tableBody.empty();
+            return false;
+        }
+        var data = { type: 'get-duty-roster-designagion-emoloyees', designation: designation, shift: shift, RotationId: RotationId, Duty_HourId: Duty_Hour, rotationHead: rotationHead, DepartmentId: DepartmentId}
+        gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                count = 0;
+                datalist = resp.data;
+                $.each(datalist, function (index, d) {
+                    if (d.RotationId) {
+                        d.IsSelected = true;
+                        count++;
+                    }
+                    else {
+                        d.IsSelected = false;
+                    }
+                });
+                bind_emp_list()
+                $('#tot_emp').text(resp.data.length)
+                $('#tot_sel').text(count);
+                var tab_data = $('#tab_data');
+                tab_data.empty();
+
+                var ul_tab = $('#ul_tab');
+                ul_tab.empty();
+                $.each(shifts, function (i, item) {
+                    var isactive = '';
+                    if (item.ShiftId == shift) {
+                        isactive = 'active';
+                    }
+                    ul_tab.append(`<li class="nav-item" role="presentation">
+                                    <a class="nav-link ${isactive}" data-bs-toggle="tab" href="#s_${item.ShiftId}" role="tab" aria-selected="true">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-title">${item.ShiftName}</div>
+                                        </div>
+                                    </a>
+                                </li>`);
+
+                    var table = $('<table>').addClass("table table-striped table-bordered my-2").attr("role", "grid");
+                    $.each(resp.shift_data[item.ShiftId], function (index, d) {
+                        var row = $('<tr>').append($('<td>').append($('<label>').text(d.Employee_Name)));
+                        table.append(row);
+                    });
+                    tab_data.append(`<div class="tab-pane fade show ${isactive}" id="s_${item.ShiftId}" role="tabpanel">
+                                    ${table.prop('outerHTML')}
+                                </div>`);
+
+                });
+               
+                var isfound = false;
+                $.each(resp.duty_incharge, function (index, d) {
+                    $('#DutyInchargeDesignation').attr("DutyInchargeDesignation", d.Designation_id);
+                    $('#DutyIncharge').attr("DutyIncharge", d.Employee_id);
+                    $('#DutyInchargeDepartment').val(d.Department_id);
+                    $('#DutyInchargeDepartment').change();
+                    isfound = true;
+                });
+                if (!isfound) {
+                    $('#DutyIncharge').val('');
+                }
+               
+            }
+        },true);
+    }
+    function bind_emp_list() {
+
+        var tableBody = $('#tbl-list tbody');
+        tableBody.empty();
+        var dis = [];
+        $.each(datalist, function (index, d) {
+            if (d.isenable == '1') {
+                 
+                var row = $('<tr>').append($('<td>').text(d.Emp_Code),
+                    $('<td>').append($('<label>').append(d.Employee_Name, $(`<span style="font-size:13px; color: red;">`).text(' (Previously worked in night shift)'))),
+                    $('<td colspan="2" style="text-align: center;">').text(d.PrevShift)
+                );
+                dis.push(row);
+            }
+            else {
+                var ddl_loc = $('<select>').addClass("form-select py-0 ps-1 loc_enbled").attr("data-did", index);
+                ddl_loc.append($("<option>").text("N/A").val(""));
+                $.each(locations, function (i, item) {
+                    ddl_loc.append($("<option>").text(item.WorkLocation).val(item.LocationId));
+                });
+                ddl_loc.val(d.WorkLocation);
+              //  console.log(ddl_loc);
+                var row = $('<tr>').append($('<td>').text(d.Emp_Code),
+                    $('<td>').append($('<label>').text(d.Employee_Name).attr("for", d.Employee_id)), $('<td>').append(ddl_loc), $('<td style="text-align: center;">').text(d.PrevShift),
+                    $('<td style="text-align: center; line-height: 0;">').append($('<input type="checkbox" class="chk_enbled" id="' + d.Employee_id + '"  data-did="' + index + '">').prop('checked', d.IsSelected))
+                ); tableBody.append(row);
+            }
+        });
+        $.each(dis, function (index, d) {
+            tableBody.append(d);
+        });
+    }
+
+</script>
+<script>
+
+    $(function () {
+        var data = { type: 'duty-department' }
+        gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Duty_Hour');
+                $("#Duty_Hour option:not(:first)").remove();
+                $.each(resp.duty, function (i, item) {
+                    ddl.append($("<option>").text(item.Duty_Hour_Name).val(item.Duty_Hour_id));
+                });
+                ddl = $('#Department');
+                $("#Department option:not(:first)").remove();
+                $.each(resp.department, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.department_id));
+                });
+            }
+        });
+        
+        runSQLapi('df3dw', {}, function (resp) { 
+            locations = resp.data[0];
+            bind_ddl_option('DutyInchargeDepartment',resp.data[1])
+        })
+    });
+    var shifts = [];
+    var locations = [];
+
+    $('#Department').on('change', function () { 
+        var data = { type: 'designation' }
+        data.DepartmentId = $('#Department').val(); 
+        gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Designation');
+                $("#Designation option:not(:first)").remove();
+                ddl.append($("<option>").text('All').val('0'));
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.Designation_id));
+                }); 
+            }
+        }); 
+    })
+    $('#Duty_Hour').on('change', function () {
+
+        runSQLapi('AS435', { Duty_Hour_id: $('#Duty_Hour').val() }, function (resp) {
+            //bind_ddl_option('Designation', resp.data[0]);
+            shifts = resp.data[1];
+            bind_ddl_option('Shift', resp.data[1]);
+        })
+        get_duration();
+        //var data = { type: 'duty-hour-designation', Duty_Hour_id: $('#Duty_Hour').val() }
+        //gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+        //    if (!resp.error) {
+        //        var ddl = $('#Designation');
+        //        $("#Designation option:not(:first)").remove();
+        //        $.each(resp.designation, function (i, item) {
+        //            ddl.append($("<option>").text(item.name).val(item.Designation_id));
+        //        });
+        //        ddl = $('#Shift');
+        //        $("#Shift option:not(:first)").remove();
+
+        //        shifts = resp.shift;
+        //        $.each(shifts, function (i, item) {
+        //            ddl.append($("<option>").text(item.ShiftDesc).val(item.ShiftId));
+
+        //        });
+
+        //        var tableBody = $('#tbl-list tbody');
+        //        tableBody.empty();
+        //    }
+        //});
+    })
+    $('#duration').on('change', function () {
+        getemployeeList()
+    })
+    $('#Designation').on('change', function () {
+        getemployeeList()
+    })
+    $('#Shift').on('change', function () {
+        getemployeeList()
+    })
+
+    var datalist = [];
+    function bind_mapped_data(data) {
+        var tableBody = $('#tbl-mapped tbody');
+        tableBody.empty();
+        $.each(data, function (index, d) {
+
+            //var desc = $('<span>').append(d.name);
+            //desc.append('<br/>').append($('<span style="font-size:12px">').append(d.department));
+
+            var row = $('<tr>').append(
+                $('<td>').append(d.Duty_Hour_Name),
+                $('<td>').append(d.department),
+                $('<td>').append(d.name),
+            );
+            tableBody.append(row);
+        });
+    }
+
+    $('#btn-submit').on('click', function () {
+        var duration = $('#duration').val();
+        var Shift = $('#Shift').val();
+        var DutyIncharge = $('#DutyIncharge').val();
+        if (!DutyIncharge) {
+            alertErrorNotification("Select Duty Incharge")
+            return false;
+        }
+        var data = { Shift: Shift, RotationId: duration, DutyIncharge: DutyIncharge, data_list: JSON.stringify(datalist) }
+        $('#msg').html("Please wait...");
+        $('#msg').removeClass("d-none").removeClass("text-danger").removeClass("text-success").addClass("text-primary");
+        gowithData('../../hr/save/duty-roster', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                getemployeeList();
+                alertSuccess(resp.message);
+                $('#msg').html(resp.message);
+                $('#msg').removeClass("d-none").removeClass("text-danger").addClass("text-success").removeClass("text-primary");
+            }
+            else {
+                alertError(resp.message);
+                $('#msg').html(resp.message);
+                $('#msg').removeClass("d-none").addClass("text-danger").removeClass("text-success").removeClass("text-primary");
+            }
+        });
+    })
+    $('#tbl-list').on('change', '.chk_enbled', function () {
+        var ind = parseInt($(this).data('did'));
+        console.log(ind);
+        datalist[ind].IsSelected = $(this).prop("checked");
+        count = 0;
+        $.each(datalist, function (index, d) {
+            if (d.IsSelected) {
+                count++;
+            }
+        });
+        $('#tot_sel').text(count)
+    })
+    $('#tbl-list').on('change', '.loc_enbled', function () {
+        var ind = parseInt($(this).data('did')); 
+        datalist[ind].WorkLocation = $(this).val(); 
+    })
+</script>
+
+

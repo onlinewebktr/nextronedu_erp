@@ -1,0 +1,275 @@
+﻿using school_web.AppCode;
+
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace school_web.Library_Admin
+{
+    public partial class Librar_Master : System.Web.UI.MasterPage
+    {
+        My imp = new My();
+        string scrpt;
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                try
+                {
+                    if (Session["Admin"] == null)
+                    {
+                        Session.Abandon();
+                        Session.Clear();
+                        Response.Write("<script language=javascript>var wnd=window.open('','newWin','height=1,width=1,left=900,top=700,status=no,toolbar=no,menubar=no,scrollbars=no,maximize=false,resizable=1');</script>");
+                        Response.Write("<script language=javascript>wnd.close();</script>");
+                        Response.Write("<script language=javascript>window.open('../Default.aspx','_parent',replace=true);</script>");
+                    }
+                    else
+                    {
+                        ViewState["Admin"] = Session["Admin"].ToString();
+                        imp.bind_all_ddl_with_id_notselect(ddl_session, "Select Session,session_id from session_details order by ID asc");
+                        ddl_session.SelectedValue = My.get_session_id();
+                        lbl_session_name.Text = My.get_session();
+                        get_uesr_type();
+                        BindDetails();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    My.submitException(ex, "Main Master admin");
+                }
+            }
+        }
+        private void get_uesr_type()
+        {
+            string query = "Select  * from user_details where user_id='" + ViewState["Admin"].ToString() + "'";
+            SqlCommand cmd = new SqlCommand(query);
+            DataTable dtTemp = imp.GetData(cmd);
+            if (dtTemp.Rows.Count == 0)
+            {
+                hdfUserType.Value = "";
+            }
+            else
+            {
+                hdfUserType.Value = dtTemp.Rows[0]["User_Type"].ToString();
+
+                if (dtTemp.Rows[0]["User_Type"].ToString() == "Admin")
+                {
+                    lbl_Name.Text = "Admin";
+                }
+                else
+                {
+                    lbl_Name.Text = dtTemp.Rows[0]["name"].ToString();
+                }
+
+            }
+        }
+        private void BindDetails()
+        {
+            try
+            {
+
+                hdfUserID.Value = Session["Admin"].ToString();
+
+                Get_name();
+                BindMenu();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                My.submitException(ex, "Main Master admin");
+
+            }
+        }
+        private void Get_name()
+        {
+            string query = "Select  * from Firm_Details";
+            SqlCommand cmd = new SqlCommand(query);
+            DataTable dtTemp = imp.GetData(cmd);
+            if (dtTemp.Rows.Count != 0)
+            {
+                lbl_name13.Text = dtTemp.Rows[0]["firm_name"].ToString() + "{ Library  Admin }";
+                imglogo.ImageUrl = dtTemp.Rows[0]["logo"].ToString();
+                img_avatar.ImageUrl = dtTemp.Rows[0]["logo"].ToString();
+
+
+                homeLnK.HRef = "Lib_Home.aspx";
+
+                lbl_footer.Text = dtTemp.Rows[0]["Footer_Copy_Right"].ToString();
+            }
+        }
+        private void BindMenu()
+        {
+            string sql = "";
+            string sql1 = "";
+            if (hdfUserType.Value == "Admin")
+            {
+
+                //sql = "select   Group_name,Group_icon,Group_id from Library_Menu_Group_List_web where Type=1  order by Position ";
+                //sql1 = "select * from dbo.[Library_MenuMaster_web] where Type=1  order by  Memnuposition";
+
+                sql = "select   distinct Group_name,Group_icon,Group_id,Position from Library_Menu_Group_List_web where Type=1 order by Position ";
+                sql1 = "select distinct Menu_name,Menu_page,Menu_icon,Group_id,Type,MenuID,Memnuposition from dbo.[Library_MenuMaster_web] where Type=1  order by  Memnuposition";
+
+
+            }
+            else
+            {
+                sql = "select   distinct Group_name,Group_icon,Group_id,Position from Library_Menu_Group_List_web where Type=1 order by Position ";
+                sql1 = "select distinct Menu_name,Menu_page,Menu_icon,Group_id,Type,MenuID,Memnuposition from dbo.[Library_MenuMaster_web] where Type=1  order by  Memnuposition";
+
+
+                //sql = "select   Group_name,Group_icon,Group_id from Library_Menu_Group_List_web where Group_id in (select MainMenuId from Library_MenuPermissionForUser_web where UserID='" + hdfUserID.Value + "'  order by Position ";
+                //sql1 = "select *,(Select top 1 Menu_name from Library_MenuMaster_web where MenuID=Library_MenuPermissionForUser_web.MenuID and Type=1) as Menu_name ,(Select top 1 Memnuposition from MenuMaster_web where MenuID=Library_MenuPermissionForUser_web.MenuID and Type=1) as Memnuposition" +
+                //"  from dbo.[Library_MenuPermissionForUser_web] where UserID ='" + hdfUserID.Value + "' order by  Memnuposition";
+
+
+                //sql = "select   distinct Group_name,Group_icon,Group_id,Position from Library_Menu_Group_List_web where Group_id in (select MainMenuId from Library_MenuPermissionForUser_web where UserID='" + hdfUserID.Value + "'     ) order by Position ";
+                //sql1 = "select *,(Select top 1 Menu_name from Library_MenuMaster_web where MenuID=Library_MenuPermissionForUser_web.MenuID and Type=1) as Menu_name ,(Select top 1 Memnuposition from Library_MenuMaster_web where MenuID=Library_MenuPermissionForUser_web.MenuID and Type=1) as Memnuposition" +
+                //"  from dbo.[Library_MenuPermissionForUser_web] where UserID ='" + hdfUserID.Value + "' order by  Memnuposition";
+
+            }
+
+            SqlCommand cmd = new SqlCommand(sql);
+            DataTable dtTemp = imp.GetData(cmd);
+            if (dtTemp.Rows.Count != 0)
+            {
+                RpMainMenu.DataSource = dtTemp; RpMainMenu.DataBind();
+                SqlCommand cmd1 = new SqlCommand(sql1);
+                DataTable dtAllowedMenu = imp.GetData(cmd1);
+                BindSubmenu(dtAllowedMenu);
+            }
+            else
+            {
+                RpMainMenu.DataSource = null;
+                RpMainMenu.DataBind();
+            }
+        }
+        private void BindSubmenu(DataTable dtc)
+        {
+            try
+            {
+                SqlCommand cmd;
+                foreach (RepeaterItem item in RpMainMenu.Items)
+                {
+                    HiddenField hdID = (HiddenField)item.FindControl("hdMainMenu");
+                    Repeater childRepeater = (Repeater)item.FindControl("RpMenu");
+
+                    cmd = new SqlCommand("select * from Library_MenuMaster_web where Group_id='" + hdID.Value + "' and Type='1' order by Memnuposition");
+
+                    DataTable dt = imp.GetData(cmd);
+                    DataTable dtAllowedmenu = new DataTable();
+                    dtAllowedmenu.Clear();
+                    dtAllowedmenu.Columns.Add("Menu_page");
+                    dtAllowedmenu.Columns.Add("MenuID");
+                    dtAllowedmenu.Columns.Add("Menu_name");
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        string memnu = row["MenuID"].ToString();
+                        DataRow[] result = dtc.Select("MenuID='" + memnu + "' ");
+                        if (result.Length == 1)
+                        {
+                            DataTable ddd = result.CopyToDataTable();
+                            DataRow al_menu = dtAllowedmenu.NewRow();
+                            al_menu["Menu_page"] = row["Menu_page"].ToString();
+                            al_menu["MenuID"] = row["MenuID"].ToString();
+                            al_menu["Menu_name"] = row["Menu_name"].ToString();
+
+                            dtAllowedmenu.Rows.Add(al_menu);
+                        }
+                    }
+
+                    if (dtAllowedmenu.Rows.Count > 0)
+                    {
+                        childRepeater.DataSource = dtAllowedmenu;
+                        childRepeater.DataBind();
+                    }
+
+                }
+            }
+            catch { }
+        }
+
+        protected void btn_Logout_Click(object sender, EventArgs e)
+        {
+            Session.Abandon();
+            Session.Clear();
+            Response.Write("<script language=javascript>var wnd=window.open('','newWin','height=1,width=1,left=900,top=700,status=no,toolbar=no,menubar=no,scrollbars=no,maximize=false,resizable=1');</script>");
+            Response.Write("<script language=javascript>wnd.close();</script>");
+            Response.Write("<script language=javascript>window.open('../Default.aspx','_parent',replace=true);</script>");
+        }
+
+        protected void ddl_session_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+
+
+            SqlDataAdapter ad = new SqlDataAdapter("Select  * from session_details where session_id='" + ddl_session.SelectedValue + "'", My.con);
+            DataSet ds = new DataSet();
+            ad.Fill(ds, "Salesman_Master");
+            DataTable dt = ds.Tables[0];
+            if (dt.Rows.Count == 0)
+            {
+
+            }
+            else
+            {
+                //string Use_mode = dt.Rows[0]["Use_mode"].ToString();
+                foreach (DataRow dr in dt.Rows)
+                {
+
+                    dr["Use_mode"] = 1;
+
+                }
+                SqlCommandBuilder cb = new SqlCommandBuilder(ad);
+                ad.Update(dt);
+
+                My.exeSql("update session_details set Use_mode='0' where session_id!=" + ddl_session.SelectedValue + "");
+            }
+
+
+            Response.Redirect("home.aspx", false);
+
+        }
+
+        protected void lnkbacktoteacher_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (hdfUserType.Value == "Principal")
+                {
+                    Session["teacher"] = Session["Admin"].ToString();
+                    Session["userType"] = "Principal";
+                    Response.Redirect("~/InstructorProfile/Home.aspx", false);
+                }
+                else if (hdfUserType.Value == "Coordinator")
+                {
+                    Session["teacher"] = Session["Admin"].ToString();
+                    Session["userType"] = "Coordinator";
+                    Response.Redirect("~/InstructorProfile/Home.aspx", false);
+                }
+                else if (hdfUserType.Value == "Teacher")
+                {
+                    Session["teacher"] = Session["Admin"].ToString();
+                    Session["userType"] = "Teacher";
+                    Response.Redirect("~/InstructorProfile/Home.aspx", false);
+                }
+                else
+                {
+                    Response.Redirect("~/Admin/home.aspx", false);
+                }
+            }
+            catch
+            {
+            }
+        }
+    }
+}

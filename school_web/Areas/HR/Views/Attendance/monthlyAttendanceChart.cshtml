@@ -1,0 +1,320 @@
+﻿
+@{
+    // ViewBag.Title = "attendanceReport";
+}
+<style>
+    td {
+        padding: 2px !important;
+    }
+
+    th {
+        padding: 2px!important;
+    }
+
+    .img-employee {
+        height: 30px;
+        width: 30px;
+        margin-right: 5px;
+        float: left;
+    }
+    .tbl-data {
+        padding: 0px;
+        font-size: 11px;
+        margin-left: -1px;
+        width: calc(100% + 2px);
+    }
+
+        .tbl-data th, td {
+            padding: 2px !important;
+            font-size: 11px;
+            border: #bdbdbd solid 1px;
+            text-align: center;
+        }
+    .header-fixed {
+        top: -1px;
+        position: sticky;
+        background-color: whitesmoke;
+    }
+
+    @@media print {
+    body * {
+        visibility: hidden;
+    }
+        #mytable, #mytable * {
+            visibility: visible;
+        } 
+        #mytable {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .page-wrapper {
+            margin-top: 0px;
+            margin-left: 0px;
+        }
+        .noprint {
+            max-height: 0;
+            visibility: hidden;
+            display: none;
+        }
+}
+</style>
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe noprint">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+        <div class="btn-group">
+            <button id="btn-print" type="button" class="btn btn-info">Print</button>
+        </div>
+    </div>
+</div> 
+<div class="row">
+    <div class="col-lg-12 noprint">
+        <div class="card">
+            <div class="card-body p-2">
+                <div class="row">
+                    @Html.LabelEditor("Year", "ddl", divCssClass: "col-lg-2")
+                    @Html.LabelEditor("Month", "ddl", divCssClass: "col-lg-2 col-md-3")
+                    @Html.LabelEditor("Grade", "ddl", divCssClass: "col-lg-2 col-md-3")
+                    @Html.LabelEditor("Department", "ddl", divCssClass: "col-lg-2 col-md-3")
+                    @Html.LabelEditor("ReportType", "ddl", divCssClass: "col-lg-2 col-md-3")
+
+                    <div class="col-md-2 mt-4 pt-1">
+                        <button id="btn-find" type="button" class="btn btn-primary">Find</button>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#btn-print').on("click", function () {
+            window.print();
+        });
+    </script>
+    <div class="col-lg-12">
+        <div class="card m-0 d-none" id="crd">
+            <div class="card-body p-2">
+                <div id="grid_prog" style="margin : 0px auto; width:200px; display:none">
+                    <span class="spinner-border spinner-border-sm me-2"> </span>
+                    Please wait....
+                </div>
+                <table id="mytable1">
+                    <tbody>
+                    </tbody>
+                </table>
+                <div style="overflow: auto; height: calc(100vh - 265px); ">
+                    <table class="tbl-data " id="mytable">
+
+                        <thead class="header-fixed">
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () { 
+            $("#ReportType option:not(:first)").remove();
+        $('#ReportType').append($("<option>").text('Present-Absent').val('PresentAbsent'));
+        $('#ReportType').append($("<option>").text('In-Out').val('IN_OUT'));
+        $('#ReportType').val('IN_OUT');
+        bindGrade();
+    });
+
+    function bindGrade()
+    {
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        $("#Year option:not(:first)").remove();
+        for (var year = 2020; year <= currentYear+1; year++) {
+            $('#Year').append($("<option>").text(year).val(year));
+        }
+        $("#Month option:not(:first)").remove();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        for (let i = 0; i < monthNames.length; i++) {
+            const monthNumber = (i + 1).toString().padStart(2, '0');
+            $('#Month').append($("<option>").text(monthNames[i]).val(monthNumber));
+        }
+        var data = { type: 'Grade' };
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Grade');
+                $("#Grade").empty();
+                ddl.append($("<option>").text('All').val('0'));
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.grade_name).val(item.grade_id));
+                });
+                bind_department();
+            }
+        })
+
+
+    }
+    function bind_department()
+    {
+        var data = { type: 'department' };
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) { 
+                var ddl = $('#Department');
+                ddl.append($("<option>").text('All').val('0'));
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.department_id));
+                }); 
+            }
+        })
+    }
+    $('#btn-find').on("click", function () {
+
+        if (!$('#Year').val()) {
+            alertErrorNotification('Please select Year')
+            return false;
+        }
+        if (!$('#Month').val()) {
+            alertErrorNotification('Please select Month')
+            return false;
+        }
+        var data = { type: 'monthly-attendance-overall' };
+        $('#crd').removeClass('d-none');
+        data["Year"] = $('#Year').val()
+        data["Month"] = $('#Month').val() 
+        data["ReportType"] = $('#ReportType').val()
+        data["Grade"] = $('#Grade').val()
+        data["Department"] = $('#Department').val()
+        $('#grid_prog').show();
+        $('#mytable1 tbody').empty();
+        var tableBody = $('#mytable tbody');
+        tableBody.empty();
+        gowithData("../../hr/data/attendance", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data);
+            }
+        })
+    })
+    function get_day_name(day) {
+        var dateString = `${day} ${$('#Year').val()}`;
+
+        // Create a Date object from the string
+        var date = new Date(dateString);
+
+        // Define options to get the day name
+        var options = { weekday: 'short' };
+
+        // Get the day name
+        var dayName = date.toLocaleDateString('en-US', options);
+        return dayName;
+        //console.log(dayName);
+    }
+    function bind_table(data) {
+        var tableBody = $('#mytable tbody');
+        tableBody.empty();
+        var tableHead = $('#mytable thead');
+        tableHead.empty();
+        $('#grid_prog').hide();
+        //bind header 
+        var isStart = false;
+        var trh = $('<tr>');
+        trh.append($('<th style="min-width: 130px;">').text('Employee Details') )
+        for (var key in data[0]) {
+            if (key == 'd_weekoff' || key == 'c_weekoff' || key == 'Employee_id' || key == 'report_type') {
+
+            }
+            else if (isStart) {
+                var day = get_day_name(key);
+               
+                if (day == "Sun") {
+                    trh.append($('<th>').text(key + ' ' + day).css('color','red'));
+                } 
+                else {
+                    trh.append($('<th>').text(key + ' ' + day));
+                }
+               
+            }
+            else {
+                if (key=='Employee_Image') {
+                    isStart = true;
+                }
+            }
+        }
+        tableHead.append(trh);
+        $.each(data, function (index, d) {
+            var img = $('<img>').attr('src', d.Employee_Image).addClass('img-employee rounded').attr('onerror', "this.src='../../Content/Images/user-icon.png'");
+            var tr = $('<tr>');
+            tr.append(
+                $('<td style="text-align: left; font-size : 10px; width: 130px;" >').append(img, $('<span>').append(d.Employee_Name, '</br>', d.Emp_Code)),
+            )
+            var isStart = false;
+            for (var key in data[0]) {
+                if (key == 'd_weekoff' || key == 'c_weekoff' || key == 'Employee_id' || key == 'report_type') {
+
+                }
+                else if (isStart) {
+                    if (d[key] == null || d[key] == '') {
+
+                        var day = get_day_name(key);
+                        console.log(day);
+                        console.log(d.c_weekoff);
+                        console.log(day);
+                        if (d.c_weekoff == '0' && d.d_weekoff == day) {
+                            tr.append($('<td>').text('W-Off'));
+                        }
+                        else {
+
+                            if (d.report_type == 'IN_OUT') {
+                                tr.append($('<td>').append('<i class="bx bx-x-circle text-danger" style="font-size : 18px;"></i>'));
+                            }
+                            else {
+                                tr.append($('<td>').append('<span class="text-danger"  >AB</span>'));
+                            }
+                            //
+                            
+                        }
+                        
+                    }
+                    else {
+                         
+                        if (d.report_type == 'IN_OUT') {
+                            tr.append($('<td>').text(d[key]));
+                        }
+                        else if (d[key] == 'Present' || d[key] == 'Persent') {
+                            tr.append($('<td>').append('<span class="text-success"  >PR</span>'));
+                        }
+                        else if (d[key] == 'In Office' || d[key] == 'Persent') {
+                            tr.append($('<td>').append('<span class="text-danger"  >AB</span>'));
+                        }
+                        else {
+                            tr.append($('<td>').text(d[key]));
+                        }
+                    } 
+                }
+                else {
+                    if (key == 'Employee_Image') {
+                        isStart = true;
+                    }
+                }
+            }
+            tableBody.append(tr);
+           
+        });
+    }
+    
+</script>

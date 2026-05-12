@@ -1,0 +1,230 @@
+﻿
+@{
+    Layout = null; 
+    Employee_Apply emp = ViewBag.emp;
+}
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Joining Letter</title>
+    <link href="~/Payroll/print/certificate.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+    
+    <style>
+        p{
+            margin:5px 0px;
+        }
+        table,td {
+           border:1px solid #929292;
+        }
+        td {
+            padding-left: 8px;
+        }
+        .page-header, .page-footer img {
+            display: none;
+        }
+
+        .page-header-space {
+            height: 100px;
+        }
+
+        .page-footer, .page-footer-space {
+            margin-top: 80px;
+            /*height: 100px;*/
+        }
+
+        .page-footer {
+            position: fixed;
+            bottom: 0px;
+            width: 800px;
+            margin: 10px 0px 0px 0px;
+        }
+
+        .page-header {
+            position: fixed;
+            top: 0mm;
+            /*width: 100%;*/
+            width: 800px;
+        }
+
+        .page {
+            page-break-after: always;
+            counter-increment: page;
+        }
+
+        /*.page:before {
+                display: block;
+                text-align: right;
+                content: counter(page);
+            }*/
+
+        @@page {
+            margin: 10mm;
+        }
+
+        @@media print {
+            /*  thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }*/
+
+            button {
+                display: none;
+            }
+
+            .noPrint {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            .page-header-space {
+                height: 100px;
+            }
+
+            .page-header, .page-footer img {
+                display: block;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        function printit() {
+            if (window.print) {
+                window.print();
+            }
+        }
+    </script>
+    <script>
+        history.pushState(null, null, window.location.href);
+        history.back();
+        window.onpopstate = () => history.forward();
+    </script>
+</head>
+<body>
+    <form id="form1">
+        <div class="invoice-sec">
+
+            <div class="prnt-btn-sec noPrint">
+                <div class="prnt-btn-wpr">
+                    <div class="print-btn-sec">
+                        <div class="noPrint" style="float: left; ">
+                            <a href="../../hr/home" class="back-btn">
+                            </a>
+                        </div>
+                        <div class="noPrint" style="float: right">
+                            <button ID="print1" onclick="printit()" class="print-btn"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tblPrintIQ">
+                <div class="invoice-inr-sec">
+                    <div class="invoice-wpr">
+                        <div class="certificate-wpr"> 
+
+                                    <div  style="font-family:'Times New Roman'">
+                                        <p><strong>@ViewBag.reff                                                                                                Date:  @ViewBag.date</strong></p>
+                                        <p><strong></strong></p>
+                                        <p><strong></strong></p>
+                                        <p ><strong><em>@ViewBag.name </em></strong></p>
+                                        <p><strong>Add: @ViewBag.address </strong></p>
+                                        <p><strong>Contact No: @ViewBag.mobile</strong></p>
+                                        <p><strong>Email I’d: @ViewBag.email</strong></p>
+                                        <p><strong> </strong></p>
+                                        <p style=" text-align: center; margin: 28px;"><strong><u>Offer Letter</u></strong></p>
+                                        <p><strong>Dear <em>@ViewBag.name</em>,</strong></p>
+                                        <p><strong>Congratulation! </strong>With reference to your application and subsequent interview with us,we are pleased to offer you a position at<strong> Dr. Prabhat Memorial Hiramati Hospital</strong> (A unit of Caring Hands Healthcare Pvt. Ltd.) – <strong>Patna</strong> on the following terms:</p>
+                                        <table width="100%" style=" border-collapse:collapse">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="59">
+                                                        <p>1.</p>
+                                                    </td>
+                                                    <td width="194">
+                                                        <p>Designation</p>
+                                                    </td>
+                                                    <td width="377">
+                                                        <p>@ViewBag.post </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="59">
+                                                        <p>2.</p>
+                                                    </td>
+                                                    <td width="194">
+                                                        <p>Department</p>
+                                                    </td>
+                                                    <td width="377">
+                                                        <p>@ViewBag.department </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="59">
+                                                        <p>3.</p>
+                                                    </td>
+                                                    <td width="194">
+                                                        <p>CTC (Yearly)</p>
+                                                    </td>
+                                                    <td width="377">
+                                                        <p> @ViewBag.salary </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="59">
+                                                        <p>4.</p>
+                                                    </td>
+                                                    <td width="194">
+                                                        <p>Date of Joining</p>
+                                                    </td>
+                                                    <td width="377">
+                                                        <p>@ViewBag.joiningDate </p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <p>Please note this offer is subject to you being found medically fit. You will be governed by the general terms and conditions of the organization as published in the letter of Minimum Guarantee which shall be given to you post joining.                           </p>
+                                        <p>                                                <strong><u>LIST OF DOCUMENTS REQUIRED FOR JOINING</u></strong></p>
+                                        <ol>
+                                            <li>Certificate &amp; marksheet of class 10<sup>th</sup>, 12<sup>th</sup>, Graduation, PG or any other professional course.</li>
+                                            <li>Registration certificate from respective Clinical/ Nursing/ Pharmacy Council (as applicable).</li>
+                                            <li>Internship completion certificate.</li>
+                                            <li>PAN Card</li>
+                                            <li>Address proof (Passport/ Voter card/ Driving license/ Aadhaar Card)</li>
+                                            <li>Appointment letter and salary slip from the last employer.</li>
+                                            <li>Reliving letter/ Resignation acceptance from the last employer.</li>
+                                            <li>Experience certificate from all previous employer.</li>
+                                            <li>Other Documents:</li>
+                                        </ol>
+                                        <ul>
+                                            <li>4 Passport size photographs.</li>
+                                            <li>Cancel cheque/ Bank passbook first page.</li>
+                                            <li>Covid vacation final certificate.</li>
+                                        </ul>
+                                        <p><strong> </strong></p>
+                                        <p><strong>*</strong>All above mentioned documents will be submitted photocopies with duly self-attested.</p>
+                                        <p> </p>
+                                        <p>You are requested to sign and return to us the duplicate copy of this letter and attached Annexure as a mark of your acceptance.</p>
+                                        <p>We look forward to your valuable contribution in future and wish you all the best.</p>
+                                        <p> </p>
+                                        <p>Yours Faithfully,</p>
+                                        <p>For <strong>Dr. Prabhat Memorial Hiramati Hospital</strong></p>
+                                        <p><strong> </strong></p>
+                                        <p><strong>Authorized Signatory</strong></p>
+                                    </div>
+                                
+                             
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+

@@ -1,0 +1,643 @@
+﻿
+@{
+    HR_MasterPageConfig mpc = ViewBag.mpc;
+    ViewBag.Title = mpc.pageTitle;
+    if (mpc.OtherData != null)
+    {
+        if (mpc.OtherData.ContainsKey("Page_Layout_Path"))
+        {
+            if (mpc.OtherData["Page_Layout_Path"] != "")
+            {
+                Layout = mpc.OtherData["Page_Layout_Path"];
+            }
+        }
+    }
+}
+<script>
+    var data = JSON.stringify({ data: { pageId: '@mpc.pageId' } });
+    gowithData('../../hr/data/tabledata', 'Post', data, function (data) {
+        if (!data.error) {
+            bind_data(data.data);
+        }
+    })
+</script>
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <form class="my-form" id="main-form">
+            @Html.Hidden("frm-page-Id", @mpc.pageId.ToString())
+            @Html.Hidden("HdId")
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        @Html.LabelEditor("GradeId", "ddl", "Grade", "", true)
+
+                        <script>
+                            $(function () {
+                                var data = { type: 'field-bind' };
+                                data['field_name'] = 'GradeId';
+                                data['pageId'] = $('#frm-page-Id').val();
+                                var formData = $('#main-form').serializeArray();
+                                $.map(formData, function (input) {
+                                    data[input.name] = input.value;
+                                });
+                                gowithData('../../hr/data/ddl', 'Post', JSON.stringify({ data: data }), function (data) {
+                                    if (!data.error) {
+                                        var ddl = $('#GradeId');
+                                        $('#GradeId option:not(:first)').remove();
+                                        $.each(data.data, function (i, item) {
+                                            ddl.append($('<option>').text(item.name).val(item.id));
+                                        });
+                                    }
+                                })
+                            });
+                        </script>
+                        @Html.LabelEditor("DeductionType", "ddl", "Deduction Type", "", true, ddl_comma_seperated: "PF,ESI,Professional Tax,TDS,Other", divCssClass: "col-6")
+                        @Html.LabelEditor("DeductionDesc", "text", "Deduction Desc", "", true, divCssClass: "col-6")
+                        @Html.LabelEditor("IsFixed", "ddl", "Deduction Head Type", "", true, divCssClass: "col-6")
+
+                        <script>
+                            $(function () {
+                                var ddl = $('#IsFixed');
+                                ddl.append($('<option>').text('Fixed').val('Yes'));
+                                ddl.append($('<option>').text('Based on Salary').val('No'));
+                            });
+                        </script>
+                        @Html.LabelEditor("ApplyOn", "ddl", "Calculation Based On", "", false, ddl_comma_seperated: "N/A", divCssClass: "col-6")
+                        @Html.LabelEditor("BassedOn", "text", "Amount", "", false, divCssClass: "col-6")
+                        @Html.LabelEditor("IsDeductionOnBoth", "ddl", "Contribution Type", "", true, ddl_comma_seperated: "Employee Only,Both", divCssClass: "col-6")
+
+                        @Html.LabelEditor("Employee_Contribution", "text", "Employee Deduction", "", false, divCssClass: "col-6")
+                        @Html.LabelEditor("Employer_Contribution", "text", "Employer Contribution", "", false, divCssClass: "col-6")
+                        @Html.LabelEditor("Max_Allowed", "text", "Maximum Value in Rupees (If No Limit then leave it blank or 'Zero'))", "", false)
+                        <div class="col-12" id="div_prof">
+                            <div class="row">
+                                <label class="col-4">Range From</label>
+                                <label class="col-4 ms-2">Range To</label>
+                                <label class="col-3 ms-1">Value</label>
+                            </div>
+                            @{ for (var i = 0; i < 5; i++)
+                                            {
+                                <div class="row mb-1">
+                                    <input class="col-4 ms-2" name="rf_@i" id="rf_@i" type="number" />
+                                    <input class="col-4 ms-2" name="rt_@i" id="rt_@i" type="number" />
+                                    <input class="col-3 ms-2" name="rv_@i" id="rv_@i" type="number" />
+                                </div> } }
+
+                        </div>
+                    </div>
+                    <script>
+                        $(function () {
+                            $('#DeductionDesc').val('');
+                            $('#IsFixed').val('');
+                            $('#IsFixed').change();
+                            $('#ApplyOn').val('');
+                            $('#ApplyOn').change();
+                            $('#IsDeductionOnBoth').val('');
+                            $('#IsDeductionOnBoth').change();
+                            $('#Employee_Contribution').val('');
+                            $('#Employer_Contribution').val('');
+                            $('#div_prof').hide();
+                            $('#Max_Allowed').parent().hide();
+                            rest_form();
+                        })
+
+                        function rest_form() {
+                            $('#div_prof').hide();
+                            $('#Max_Allowed').parent().hide();
+                            $('#Employee_Contribution').parent().show();
+                            $('#Employer_Contribution').parent().show();
+                            $('#IsDeductionOnBoth').parent().show();
+                            $('#BassedOn').parent().show();
+                            $('#ApplyOn').parent().show();
+                            $('#IsFixed').parent().show();
+                        }
+                    </script>
+                    <script>
+                        $('#DeductionType').on('change', function () {
+                            var tppe = $(this).val();
+                            rest_form();
+                            if (tppe == 'PF') {
+                                $('#DeductionDesc').val('Provident Fund');
+                                $('#IsFixed').val('No');
+                                $('#IsFixed').change();
+                                $('#ApplyOn').val('Basic Salary');
+                                $('#ApplyOn').change();
+                                $('#IsDeductionOnBoth').val('Both');
+                                $('#IsDeductionOnBoth').change();
+                                $('#BassedOn').val('0');
+                                $('#Employee_Contribution').val('12%');
+                                $('#Employer_Contribution').val('13%');
+                                $('#Max_Allowed').val('0');
+                                $('#Max_Allowed').parent().hide();
+                            }
+                            else if (tppe == 'ESI') {
+                                $('#DeductionDesc').val('ESI Contribution');
+                                $('#IsFixed').val('No');
+                                $('#IsFixed').change();
+                                $('#ApplyOn').val('Gross Salary Bellow');
+                                $('#ApplyOn').change();
+                                $('#IsDeductionOnBoth').val('Both');
+                                $('#IsDeductionOnBoth').change();
+                                $('#BassedOn').val('21000');
+                                $('#Employee_Contribution').val('0.75%');
+                                $('#Employer_Contribution').val('3.25%');
+                                $('#Max_Allowed').val('0');
+                                $('#Max_Allowed').parent().hide();
+                            }
+                            else if (tppe == 'Professional Tax') {
+                                $('#DeductionDesc').val('Professional Tax');
+                                $('#IsFixed').val('Yes');
+                                $('#IsFixed').change();
+                                $('#ApplyOn').val('Gross Salary Above');
+                                $('#ApplyOn').change();
+                                $('#IsDeductionOnBoth').val('Employee Only');
+                                $('#IsDeductionOnBoth').change();
+                                $('#BassedOn').val('20000');
+                                $('#Employee_Contribution').val('200');
+                                $('#Employer_Contribution').val('0');
+                                $('#Max_Allowed').val('0');
+                                $('#div_prof').show();
+                                $('#Employee_Contribution').parent().hide();
+                                $('#Employer_Contribution').parent().hide();
+                                $('#IsDeductionOnBoth').parent().hide();
+                                $('#BassedOn').parent().hide();
+                                $('#ApplyOn').parent().hide();
+                                $('#IsFixed').parent().hide();
+                            }
+                            else {
+                                $('#DeductionDesc').val('');
+                                $('#IsFixed').val('');
+                                $('#IsFixed').change();
+                                $('#ApplyOn').val('');
+                                $('#ApplyOn').change();
+                                $('#IsDeductionOnBoth').val('');
+                                $('#IsDeductionOnBoth').change();
+                                $('#Employee_Contribution').val('');
+                                $('#Employer_Contribution').val('');
+                            }
+
+                        })
+                        $('#IsFixed').on('change', function () {
+                            var isfixed = $(this).val();
+                            $('#ApplyOn').val('');
+                            $('#BassedOn').parent().hide();
+                            $('#ApplyOn').parent().show();
+                            $('#IsDeductionOnBoth').parent().removeClass('col-lg-12');
+                            $('#IsDeductionOnBoth').parent().addClass('col-lg-6');
+                            $('#Employee_Contribution').parent().removeClass('col-lg-12');
+                            $('#Employee_Contribution').parent().addClass('col-lg-6');
+                            $('#Employer_Contribution').parent().removeClass('col-lg-12');
+                            $('#Employer_Contribution').parent().addClass('col-lg-6');
+                            if (isfixed == 'Yes') {
+                                $("#ApplyOn option:not(:first)").remove();
+                                $('#ApplyOn').append($("<option>").text('N/A').val('N/A'));
+                                $('#ApplyOn').append($("<option>").text('Basic Salary Above').val('Basic Salary Above'));
+                                $('#ApplyOn').append($("<option>").text('Basic Salary Bellow').val('Basic Salary Bellow'));
+                                $('#ApplyOn').append($("<option>").text('Gross Salary Bellow').val('Gross Salary Bellow'));
+                                $('#ApplyOn').append($("<option>").text('Gross Salary Above').val('Gross Salary Above'));
+                                $('#ApplyOn').val('N/A');
+                                $('#IsDeductionOnBoth').parent().removeClass('col-lg-12');
+                                $('#IsDeductionOnBoth').parent().addClass('col-lg-6');
+                                $('#ApplyOn').parent().children().eq(0).html('Deduction Condition');
+                            }
+                            else if (isfixed == 'No') {
+                                $("#ApplyOn option:not(:first)").remove();
+                                $('#ApplyOn').append($("<option>").text('Basic Salary').val('Basic Salary'));
+                                $('#ApplyOn').append($("<option>").text('Gross Salary').val('Gross Salary'));
+                                $('#ApplyOn').append($("<option>").text('Basic Salary Above').val('Basic Salary Above'));
+                                $('#ApplyOn').append($("<option>").text('Basic Salary Bellow').val('Basic Salary Bellow'));
+                                $('#ApplyOn').append($("<option>").text('Gross Salary Bellow').val('Gross Salary Bellow'));
+                                $('#ApplyOn').append($("<option>").text('Gross Salary Above').val('Gross Salary Above'));
+                                $('#ApplyOn').parent().children().eq(0).html('Calculation Based On');
+                                $('#ApplyOn').parent().show();
+                                $('#IsDeductionOnBoth').parent().removeClass('col-lg-6');
+                                $('#IsDeductionOnBoth').parent().addClass('col-lg-12');
+                            }
+                        });
+
+                        $('#IsDeductionOnBoth').on('change', function () {
+                            var isboth = $(this).val();
+                            $('#Employer_Contribution').parent().hide();
+                            if (isboth == 'Employee Only') {
+                                $('#Employer_Contribution').val('');
+                                $('#Employee_Contribution').parent().show();
+                                $('#Employee_Contribution').parent().removeClass('col-lg-6');
+                                $('#Employee_Contribution').parent().addClass('col-lg-12');
+                            }
+                            else {
+                                $('#Employee_Contribution').parent().removeClass('col-lg-12');
+                                $('#Employee_Contribution').parent().addClass('col-lg-6');
+                                $('#Employee_Contribution').parent().show();
+                                $('#Employer_Contribution').parent().show();
+                            }
+                        });
+                        $('#ApplyOn').on('change', function () {
+                            var applyon = $(this).val();
+                            $('#BassedOn').parent().hide();
+                            $('#IsDeductionOnBoth').parent().removeClass('col-lg-6');
+                            $('#IsDeductionOnBoth').parent().addClass('col-lg-12');
+                            if (applyon == '' || applyon == 'N/A') {
+                                $('#BassedOn').val('');
+                            }
+                            else if (applyon == 'Basic Salary' || applyon == 'Gross Salary' || applyon == 'N/A') {
+                                $('#BassedOn').val('0');
+                            }
+                            else {
+                                $('#BassedOn').parent().show();
+                                $('#IsDeductionOnBoth').parent().removeClass('col-lg-12');
+                                $('#IsDeductionOnBoth').parent().addClass('col-lg-6');
+                            }
+                        });
+                    </script>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button id="btn-add" type="button" class="btn btn-primary">Add</button>
+                            <button id="btn-cancel" type="button" style="display: none;" class="btn btn-dark">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           </form>
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body px-2 py-1">
+                <table class="table table-bordered table-striped" id="mytable">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Grade Name</th>
+                            <th>Deduction Desc</th>
+                            <th>Deduction Type</th>
+                            <th>Contribution Type</th>
+                            <th>Employee Contribution</th>
+                            <th>Employer Contribution</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div id="grid_prog" style="margin : 0px auto; width:200px">
+                    <span class="spinner-border spinner-border-sm me-2"> </span>
+                    Please wait....
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var actionlist = [];
+    var isEdit = false;
+    var edit_row;
+    $(function () {
+        var data = JSON.stringify({ data: { pageId: '@mpc.pageId' } });
+    gowithData('../../hr/data/tabledata', 'Post', data, function (data) {
+        if (!data.error) {
+            bind_data(data.data);
+        }
+    })
+    emptyForm();
+});
+
+
+function handleSuccess(data) {
+    data = JSON.parse(data);
+    if (data.error) {
+        alertError(data.message);
+        if (isEdit == true) {
+            $('#btn-add').text("Update")
+        }
+        else {
+
+            $('#btn-add').text("Add")
+            $('#btn-cancel').hide();
+        }
+        $('#btn-add').prop("disabled", false);
+    }
+    else {
+        alertSuccess(data.message);
+        emptyForm();
+        if (data.isUpdate) { bind_data(data.data, 2) }
+        else if (data.isReset) { bind_data(data.data) }
+        else { bind_data(data.data, 1) }
+    }
+}
+function fnfailor(data) {
+    if (isEdit = true) {
+        $('#btn-add').text("Update")
+    }
+    else {
+
+        $('#btn-add').text("Add")
+        $('#btn-cancel').hide();
+    }
+}
+function fnbegin() {
+    var btn = $('#btn-add');
+    if (btn.prop('disabled')) {
+        return false; // Prevent multiple clicks while disabled
+    }
+    btn.prop("disabled", true);
+    var ss = `<div  style="margin : 0px auto; width:150px">
+
+                    <span class="spinner-border spinner-border-sm me-2" > </span>
+                        Please wait....
+                        </div>`;
+    btn.html(ss);
+}
+
+function formatDate(inputDate) {
+    var date = new Date(inputDate);
+    var formattedDate = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+    return formattedDate;
+}
+
+</script>
+<script>
+    $('#btn-cancel').on('click', function () {
+        emptyForm();
+    });
+    function emptyForm() { 
+        rest_form();
+        $('#GradeId').val('');
+        $('#DeductionType').val('');
+        $('#DeductionDesc').val('');
+        $('#IsFixed').val('');
+        $('#ApplyOn').val('');
+        $('#BassedOn').val('');
+        $('#IsDeductionOnBoth').val('');
+        $('#Employee_Contribution').val('');
+        $('#Employer_Contribution').val('');
+        $('#Max_Allowed').val('');
+
+        $('#btn-add').text("Add")
+        $('#btn-add').prop("disabled", false);
+        $('#btn-cancel').hide();
+        $('#HdId').val("")
+        $('#model-form').modal("hide");
+        isEdit = false;
+    }
+</script>
+
+<script>
+
+    function openModel() {
+        $('#model-form').modal("show");
+    }
+    function bind_data(data, code) {
+        var showAction = true;
+        var tableBody = $('#mytable tbody');
+        if (code == 2) {
+            edit_row.empty();
+        }
+        else {
+            $('#mytable').DataTable().destroy();
+        }
+
+        if (!code) {
+            tableBody.empty();
+        }
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var div = $('<div>').addClass("d-flex align-items-center")
+            div.append($('<button>').addClass("edit-button btn").attr("data-id", d.Id).html("<i class='bx bx-edit-alt'></i>"))
+            div.append($('<button>').addClass("delete-button btn").attr("data-id", d.Id).html("<i class='bx bx-trash'></i>"))
+
+            var td = $('<td>').append(div).width("55px");
+            if (code == 2) {
+                if (showAction) {
+                    edit_row.append(td);
+                }
+                edit_row.append($('<td>').text(d.grade_name),
+                    $('<td>').text(d.DeductionDesc),
+                    $('<td>').text(d.DeductionType),
+                    $('<td>').text(d.IsDeductionOnBoth),
+                    $('<td>').text(d.Employee_Contribution),
+                    $('<td>').text(d.Employer_Contribution),
+                );
+            }
+            else {
+                var row = $('<tr>');
+                if (showAction) {
+                    row.append(td);
+                }
+                row.append($('<td>').text(d.grade_name),
+                    $('<td>').text(d.DeductionDesc),
+                    $('<td>').text(d.DeductionType),
+                    $('<td>').text(d.IsDeductionOnBoth),
+                    $('<td>').text(d.Employee_Contribution),
+                    $('<td>').text(d.Employer_Contribution),
+                );
+                if (!code) {
+                    tableBody.append(row);
+                }
+                else {
+                    tableBody.prepend(row);
+                }
+            }
+
+
+        });
+        if (code != 2) {
+            var table = $('#mytable').DataTable({
+                lengthChange: false,
+                scrollX: true, scrollCollapse: true,
+                buttons: ['excel', 'pdf', 'print']
+            });
+        }
+
+    }
+     $('#btn-add').on('click', function () { save_data(); });
+            function save_data() {
+
+                var btn = $('#btn-add');
+                if (btn.prop('disabled')) {
+                    return false; // Prevent multiple clicks while disabled
+                }
+                btn.prop("disabled", true);
+                //$("#main-form input:disabled").prop("disabled", false);
+                btn.html(`<div  style="margin : 0px auto; width:150px"> <span class="spinner-border spinner-border-sm me-2" > </span>
+                            Please wait....
+                            </div>`);
+                var data = {};
+                var formData = $("#main-form").serialize(); // Serialize form data
+                $("#main-form :input").each(function () {
+                    if ($(this).prop("disabled")) {
+                        if ($(this).val()) {
+                            formData += `&${$(this).attr("name")}=${$(this).val()}`;
+                        }
+                    }
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "../../../hr/save/page", // Replace with your controller and action names
+                    data: formData,
+                    success: function (resp) {
+                        resp = JSON.parse(resp);
+                       if (resp.error) {
+                           alertError(resp.message);
+                            if (isEdit == true) {
+                                $('#btn-add').text("Update")
+                            }
+                            else {
+
+                                $('#btn-add').text("Add")
+                                $('#btn-cancel').hide();
+                            }
+                            $('#btn-add').prop("disabled", false);
+                        }
+                       else {
+                           alertSuccess(resp.message);
+                           @if(mpc.pageType== "Single Data Form Only")
+                            {
+                                @:$('#btn-add').text("Update")
+                                @:$('#btn-add').prop("disabled", false);
+                                @: bind_form(resp.data);
+                            }
+                            else
+                            {
+                                @: emptyForm();
+                                @: if (resp.isUpdate) { bind_data(resp.data, 2)}
+                                @: else if (resp.isReset) { bind_data(resp.data)}
+                                @: else { bind_data(resp.data,1)}
+                            }
+                        }
+                    },
+                    error: function (error) {
+                        alertError(error);
+                        if (isEdit == true) {
+                            $('#btn-add').text("Update")
+                        }
+                        else {
+
+                            $('#btn-add').text("Add")
+                            $('#btn-cancel').hide();
+                        }
+                        $('#btn-add').prop("disabled", false);
+                    }
+                });
+
+
+            }
+    $('#mytable').edit('../../hr/data/edit', function (data, row) {
+        edit_row = row;
+        isEdit = true;
+        rest_form();
+        debugger
+        $('#main-form').parent().removeClass('d-none');
+        $('#btn-add').text("Update")
+        $('#btn-cancel').show();
+        $('#HdId').val(data[0].Id)
+        $('#GradeId').val(data[0].GradeId)
+        $('#DeductionType').val(data[0].DeductionType)
+        $('#DeductionType').change();
+        $('#DeductionDesc').val(data[0].DeductionDesc)
+        $('#IsFixed').val(data[0].IsFixed)
+        $('#IsFixed').change();
+        $('#ApplyOn').val(data[0].ApplyOn)
+        $('#ApplyOn').change();
+        $('#BassedOn').val(data[0].BassedOn)
+        $('#IsDeductionOnBoth').val(data[0].IsDeductionOnBoth)
+        $('#IsDeductionOnBoth').change();
+        $('#Employee_Contribution').val(data[0].Employee_Contribution)
+        $('#Employer_Contribution').val(data[0].Employer_Contribution)
+        $('#Max_Allowed').val(data[0].Max_Allowed)
+      //  $('#DeductionType').change();
+        console.log(data[0].DeductionType);
+        console.log(data[0].oth_data);
+        if (data[0].DeductionType == "Professional Tax") {
+            var oth_data = JSON.parse(data[0].oth_data);
+            $.each(oth_data, function (indx, d) {
+                console.log(`#rf_${indx}`);
+                console.log(d.from);
+                $(`#rf_${indx}`).val(d.from);
+                $(`#rt_${indx}`).val(d.to);
+                $(`#rv_${indx}`).val(d.value);
+            });
+        }
+    });
+    $('#mytable').delete('../../hr/data/delete', function (data) {
+    });
+
+
+    function apply_filter(filterbtn) {
+        var id = $(filterbtn).attr("data-id");
+
+        var formData = $('#' + id).serializeArray();
+        var serializedData = {};
+
+        $.map(formData, function (input) {
+            serializedData[input.name] = input.value;
+        });
+        $('#' + id).find('select').each(function () {
+            var selectId = $(this).attr('id');
+            var selectedOption = $('#' + selectId + ' option:selected');
+            serializedData[selectId] = selectedOption.text();
+            serializedData[selectId + "_Value"] = selectedOption.val();
+        });
+
+        serializedData['pageId'] = 'mpc.pageId';
+        var data = JSON.stringify({ data: serializedData });
+
+        console.log(data);
+        gowithData("../../hr/filter/" + id, 'POST', data, function (resp) {
+            console.log(resp);
+            bind_data(resp.data);
+        })
+    }
+    function getstatusview(inputString, value) {
+
+        var regex = /\{(.*?)\}/g;
+        var matches = inputString.match(regex);
+        var found = false;
+        var rd = false;
+        if (matches) {
+            var resultList = matches.map(function (match) {
+                return match.replace(/[\{\}]/g, '');
+            });
+            $.each(resultList, function (index, data) {
+                var r = data.split(',');
+                if (r[0] == value) {
+                    found = true;
+                    rd = r;
+                    return false;
+                }
+            })
+        }
+        if (found) {
+
+            if (rd[1].startsWith("bg-")) {
+                return '<span class="badge rounded-pill ' + rd[1] + '"  >' + rd[2] + '  </span>';
+            }
+            else {
+                return '<span class="badge rounded-pill" style="background-color: ' + rd[1] + ';">' + rd[2] + '  </span>';
+            }
+        }
+        else {
+            return '<span class="badge rounded-pill bg-info"  >' + value + '  </span>';
+        }
+    }
+
+
+</script>
+
+

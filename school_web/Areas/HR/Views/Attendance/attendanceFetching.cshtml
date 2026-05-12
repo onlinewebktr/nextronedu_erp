@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Fetching Attendance";
+}
+<script>
+    $(function () {
+        var data = { type: 'fetch-attendance' };
+        console.log(data);
+        Swal.fire(
+            {
+                title: 'Please wait...',
+                text: 'Fetching Attendance from Device.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                    gowithData("../../hr/data/device", "POST", JSON.stringify({ data: data }), function (resp) {
+                        if (!resp.error) {
+                            $('#dev_status').html(resp.message);
+                            alertSuccess(resp.message).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "_blank";
+                                    window.close();
+                                }
+                            });
+                        }
+                        else {
+                            alertError(resp.message);
+                        }
+                    });
+                },
+
+            })
+    })
+</script>
+
+

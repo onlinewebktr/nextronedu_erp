@@ -1,0 +1,9 @@
+﻿@font-face {
+            font-family: 'Kruti_Dev_010';
+            src: url('Kruti_Dev_010.ttf');
+        }
+body {
+     font-family: 'Kruti_Dev_010';
+     font-size:14pt;
+}
+

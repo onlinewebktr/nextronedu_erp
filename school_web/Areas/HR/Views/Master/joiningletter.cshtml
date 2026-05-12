@@ -1,0 +1,304 @@
+﻿
+@{
+    Layout = null;
+    HR_Employee_Master emp = ViewBag.emp as HR_Employee_Master;
+} 
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Joining Letter</title>
+    <link href="~/Payroll/print/certificate.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        //function PrintPanel() {
+        //    var panel = document.getElementById("tblPrintIQ");
+        //    var printWindow = window.open('', '', 'height=400,width=800');
+        //    printWindow.document.write('<html><head>');
+        //    printWindow.document.write('</head><body>');
+        //    printWindow.document.write('<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"/><link href="../Payroll/print/certificate.css" rel="stylesheet" type="text/css" />');
+        //    printWindow.document.write(panel.innerHTML);
+        //    printWindow.document.write('</body ></html>');
+        //    printWindow.document.close();
+        //    setTimeout(function () {
+        //        printWindow.print();
+        //    }, 500);
+        //    return false;
+        //}
+
+        jQuery(".sn-bill-head-text").fitText(0.38);
+    </script>
+    <style>
+
+
+        .page-header, .page-footer img {
+            display: none;
+        }
+
+        .page-header-space {
+            height: 100px;
+        }
+
+        .page-footer, .page-footer-space {
+            margin-top: 80px;
+            /*height: 100px;*/
+        }
+
+        .page-footer {
+            position: fixed;
+            bottom: 0px;
+            width: 800px;
+            margin: 10px 0px 0px 0px;
+        }
+
+        .page-header {
+            position: fixed;
+            top: 0mm;
+            /*width: 100%;*/
+            width: 800px;
+        }
+
+        .page {
+            page-break-after: always;
+            counter-increment: page;
+        }
+
+        /*.page:before {
+                display: block;
+                text-align: right;
+                content: counter(page);
+            }*/
+
+        @@page {
+            margin: 10mm;
+        }
+
+        @@media print {
+            /*  thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }*/
+
+            button {
+                display: none;
+            }
+
+            .noPrint {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            .page-header-space {
+                height: 100px;
+            }
+
+            .page-header, .page-footer img {
+                display: block;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        function printit() {
+            if (window.print) {
+                window.print();
+            }
+        }
+    </script>
+    <script>
+        history.pushState(null, null, window.location.href);
+        history.back();
+        window.onpopstate = () => history.forward();
+    </script>
+</head>
+<body>
+    <form id="form1" >
+        <div class="invoice-sec">
+           
+            <div class="prnt-btn-sec noPrint">
+                <div class="prnt-btn-wpr">
+                    <div class="print-btn-sec">
+                        <div class="noPrint" style="float: left; ">
+                            <a  href="../../hr/home" class="back-btn">
+                            </a>
+                        </div>
+                        <div class="noPrint" style="float: right">
+                            <button ID="print1" onclick="printit()" class="print-btn"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tblPrintIQ">
+                <div class="invoice-inr-sec">
+                    <div class="invoice-wpr">
+                        <div class="certificate-wpr">
+                            <div class="certificate-wpr1-exprnce">
+                                <div class="certificate-wpr2">
+                                    <div class="crtificate-wpr paddlftjoing">
+                                        <h2 class="crtificate-ttl1-h2">Joining Letter</h2>
+
+
+                                        <p class="jng-ltr-top">
+                                            To,<br />
+                                               <span id="lbl_name">@ViewBag.NameTitle @emp.Employee_Name</span>
+                                            <br />
+                                            S/O :
+                                            <span id="lbl_father_name">@emp.Father_Name</span>
+                                            <br />
+                                            Address : 
+                                            <span id="lbl_address">@emp.Address</span>
+                                        </p>
+
+                                        <p class="jng-ltr-subjct-p-modifi">
+                                            Subject:-  Appointment As
+                                            <span id="lbl_designation">@ViewBag.Designation</span>
+                                        </p>
+                                        <p class="jng-ltr-top">
+                                            Dear
+                                            <br />
+                                            <span id="lbl_name1">@ViewBag.NameTitle @emp.Employee_Name</span>
+                                            <br />
+                                            S/O :
+                                            <span id="lbl_father_name1">@emp.Father_Name</span>
+                                            <br />
+                                            Mobile No :
+                                            <span id="lbl_father_name1">@emp.Mobile</span>
+                                            <br />
+                                            Email Id : 
+                                            <span id="lbl_father_name1">@emp.Email</span>
+                                            <br />
+                                            Address :
+                                            <span id="lbl_address1">@emp.Address</span>
+                                        </p>
+
+
+
+                                        <p class="jnngltr-content-p">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is further to our discussion regarding your appointment with
+                                            <span id="lbl_firm_name">@ViewBag.firmName</span>, Which you have accepted and joined. Stated in the said offer letter.  The formal detailed appointment letter is issued here with outlining the terms and conditions governing the said appointment as stated below:-
+                                        </p>
+
+
+
+
+                                        <p class="jnngltr-content-p">
+                                            You will be paid Rs.
+                                            <span id="lbl_salery"> @emp.basic_salary</span>
+                                            as a minimum guarantee including HRA.
+                                        </p>
+
+
+                                        <p class="jng-ltr-ponths-p paddlft000">1.0 Joining Date</p>
+                                        <p class="jng-ltr-ponths-dt-p">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your date of joining stands to be with effect from
+                                            <span id="lbl_joining_date">@emp.Date_of_Joining</span>.
+                                        </p>
+
+
+                                        <p class="jng-ltr-ponths-p paddlft000">2.0 Probation Period. </p>
+                                        <p class="jng-ltr-ponths-dt-p">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You will be on probation for a period &nbsp;&nbsp; of 6 month (six month) may be further  extended at the discretion of the management. Your performance will be reviewed during probationary period . If your performance is found to be satisfactory , your services will be confirmed unless an order in writing confirming you on a post is passed expressly ,You will not be deemed to have been confirmed , even though your probationary period may have expired.</p>
+
+
+                                        <p class="jng-ltr-ponths-p paddlft000">3.0 Leave Facilities.</p>
+                                        <p class="jng-ltr-ponths-dt-p">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You will be entitled for leave as per rules of
+                                            <span id="lbl_firm_name1">@ViewBag.firmName</span>,  applicable from time to time. Before proceeding on leave It has to be approved and sanctioned by the reporting authority and the same to be intimated to the HR department also.
+                                        </p>
+
+                                        <p class="jng-ltr-ponths-p paddlft000">4.0 Duties</p>
+                                        <p class="jng-ltr-ponths-dt-p">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is important to note that owing to the nature of the work , and depending upon the criticality of the requirement, you shall be required to accommodate any/all kinds of changes in the work schedule including night shift work , as decided and communicated to you by the management from time to time.</p>
+
+
+                                        <p class="jng-ltr-ponths-p paddlft000">5.0 Transfer</p>
+                                        <p class="jng-ltr-ponths-dt-p">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The management shall be entitled at any time during the course of your tensure appointment,to transfer you to any of its affiliates, subsidiaries or sister concerns or other units and you will be required to comply with all directions and instructions in that behalf </p>
+
+                                        <p class="jng-ltr-ponths-p paddlft000">6.0 Confidentiality</p>
+                                        <p class="jng-ltr-ponths-dt-p">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You will at no time and under any circumstances , and without obtaining a consent in writing , of the management , during your service, make known or divulge in any manner what so ever any information including secret information , concerning technical processes, patient transaction, finance affairs,business plans, clientele etc. In addition you shall be bound by the decision of the management in regard to any publication (written or otherwise)  of any work with which you may be associated.It is important that your appointment shall be subject to the understanding that you will not engage yourself in any other work or in any full time/part time course engagement.</p>
+
+                                        <p class="jng-ltr-ponths-p paddlft000">7.0 Conduct</p>
+                                        <p class="jng-ltr-ponths-dt-p">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Under no circumstances shall any kind of misconduct both behavioral
+                                            <br />
+                                            (language,attitude, presentability,dishonest, Internperance etc. and functional (communication with patients / patient relatives, indiscipline, chronic late coming or absenteeism etc. shall be permitted indulging In any such act as stated above will call for appropriate action including termination of the appointment . The management decision in this respect shall be final and binding . You shall sign the service rules/SOP on Joining as a token of acceptance of the service rules. if any time it is found that the particulars and testimonials submitted by you are fake and incorrect you will be liable for dismissal / termination from Services.
+                                        </p>
+
+                                        <p class="jng-ltr-ponths-p paddlft000">8.0 Notice Period</p>
+                                        <p class="jng-ltr-ponths-dt-p">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your employment is terminable by giving one month's &nbsp;&nbsp; notice on either side or &nbsp;&nbsp; salary is issue thereof,</p>
+
+                                        <p class="jng-ltr-ponths-p paddlft000">9.0 Remuneration & Medical Benefits</p>
+                                        <p class="jng-ltr-ponths-dt-p">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your remuneration will be as per enclosure . Which shall be effective from your date of joining . Please refer to annexure - A for details . An appropriate amount will be deducted from your payment if the institute provides you accommodation . You will be governed by the medical benefit rules as applicable to you. Additional elsusers if required shall be added to your appointment letter at any stage of your services with this organization.</p>
+
+
+                                        <p class="jng-ltr-ponths-dt1112-p paddlft000"><span>10.0	</span>During probation your services are liable to   termination without notice   or payment in Licu thereof. This term shall apply to either side.</p>
+
+                                        <p class="jng-ltr-ponths-dt1112-p paddlft000">
+                                            <span>11.0	</span>
+                                            The company may change &nbsp;&nbsp; your designation, responsibilities &nbsp;&nbsp; and duties from time to time, as it may deem necessary.
+                                            <br />
+                                            Kindly sign the duplicate copy of this appointment letter in token of your acceptance and return the same to The HR Department
+                                        </p>
+
+                                        <p class="jng-ltr-ponths-p paddlft000">12.0    Please revert with the following documents-:</p>
+                                        <ul class="jng-ltr-ponths-ul joiningpadd">
+                                            <li>◍	Copies of certificates supporting your educational qualification along with mark sheet.</li>
+                                            <li>◍	School leaving certificate in support of your age.</li>
+                                            <li>◍	Your relieving letter from your previous /present employ (not applicable for new &nbsp;&nbsp;&nbsp;&nbsp;entrants)</li>
+                                            <li>◍	Services/experiences certificate(s), if any.</li>
+                                            <li>◍	No. of 5 color passport size latest photographs.</li>
+                                            <li>◍	Medical council registration.</li>
+                                            <li>◍	Copy of Aadhar card and PAN card.</li>
+                                        </ul>
+
+                                        <p class="jng-ltr-ponths11-dt-p">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We look forward to a mutually fruitful association with you, as a member of
+                                            <span id="lbl_firm_name2"> @ViewBag.firmName</span>
+                                            <br />
+                                            family for our information and record, please acknowledge (sign and return) the duplicate copy of this letter as, a token of your acceptance of the above.
+                                        </p>
+
+
+                                        <p class="crtificate-for-p joiningpaddd">
+                                            FOR
+                                            <span id="lbl_firm_name3"> @ViewBag.firmName</span>
+                                        </p>
+
+                                        <p class="jng-ltr-top joiningpaddd">
+                                            To,<br />
+                                            <span>The Manager – HR</span>
+                                        </p>
+
+
+                                        <p class="jnngltr-content-p">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;With reference to the above subject matter, I the undersigned hereby confirm that I
+                                            <br />
+                                            have read understood with free mind hereby state that the terms and conditions stated in this appointed letter are acceptable to me.
+                                        </p>
+
+
+                                        <p class="jnngltr-for-p joiningpaddd">
+                                            FOR
+                                            <span id="lbl_firm_name4">@ViewBag.firmName</span>
+                                        </p>
+
+                                        <p class="jnngltr-for-name-sig joiningpaddd">
+                                            <span id="lbl_hr"></span>
+                                        </p>
+
+                                        <p class="jnngltr-for-name-btm-sig joiningpaddd">Signature…………..…………………………. Name:-………………………………………..</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+

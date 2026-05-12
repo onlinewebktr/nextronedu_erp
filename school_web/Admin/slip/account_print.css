@@ -1,0 +1,188 @@
+﻿
+body, form {
+    margin: 0;
+    padding: 0;
+    height: auto;
+    width: 100%;
+    background: #fff;
+    font-family: Verdana;
+    font-size: 11px !important;
+    font-weight: bold;
+    /*text-transform: uppercase;*/
+}
+
+ul {
+    width: 100%;
+    float: left;
+}
+
+li {
+    width: 100%;
+    float: left;
+}
+/*.header {
+  position: fixed;
+  top: 0;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+}*/
+.container {
+    width: 100% !important;
+    height: 100% !important;
+    float: left !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+legend {
+    font-size: 25px;
+    color: maroon;
+}
+
+p {
+    margin: 0px;
+    padding: 0px;
+}
+
+span {
+    font-family: Verdana;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.forMrow {
+    margin: 0px auto;
+    width: 800px;
+    height: auto;
+}
+
+.row2 {
+    margin: 0px auto;
+    width: 1080px;
+    height: auto;
+}
+
+.branch {
+    margin: 0px auto;
+    /*float: left;*/
+    padding: 0;
+    height: auto;
+    width: 800px;
+    position: relative;
+}
+
+.branch2 {
+    margin: 0;
+    float: left;
+    padding: 0;
+    height: auto;
+    width: 1080px;
+    position: relative;
+}
+
+td.fixed-width {
+    /*padding: 5px;*/
+}
+
+.printTopDiv {
+    width: 100%;
+    height: 50px;
+}
+
+.printBtn {
+    float: right;
+    width: 40px;
+    margin-right: 20px;
+    margin-top: 5px;
+}
+
+table {
+    margin: 0px;
+    float: left;
+    height: auto;
+    width: 100%;
+    padding-left: 15px;
+    padding-bottom: 50px;
+    border-collapse: collapse;
+    padding-right: 0px;
+    padding-top: 0px;
+}
+
+td {
+    /*border: 1px solid #000;*/
+    padding: 2px 0px 0px 0px;
+    vertical-align: top;
+}
+
+    td.border-top {
+        border-top: 2px solid #722626;
+    }
+
+    /*td.border-bottom {
+      
+        text-align: right;
+        padding-right: 133px;
+        padding-bottom: 20px;
+    }*/
+    td.border-bottom {
+        border-bottom: 2px solid #722626;
+    }
+
+    td.border-left {
+        /*border-left: 1px solid black;*/
+        padding-left: 10px;
+    }
+
+    td.border-right {
+        /*border-right: 1px solid #000;*/
+    }
+
+.printSlip {
+    width: 800px;
+    margin: 0px auto;
+}
+
+.data-Table {
+    /*border: 1px solid #000;*/
+}
+
+td.fixed-width {
+    width: 100px;
+}
+
+.slip_col {
+    font-weight: 600;
+}
+
+.dataTables_length {
+    display: none;
+}
+
+.dataTables_filter {
+    display: none;
+}
+
+#example_length, #example_filter {
+    display: none;
+}
+
+@media print {
+    .noPrint {
+        display: none;
+    }
+
+
+    .dataTables_length {
+        display: none;
+    }
+
+    .dataTables_filter {
+        display: none;
+    }
+
+    #example_length, #example_filter {
+        display: none;
+    }
+}

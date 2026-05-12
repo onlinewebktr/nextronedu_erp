@@ -1,0 +1,112 @@
+﻿table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 0;
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+    .table td, .table th {
+        background-color: #fff;
+    }
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+:after, :before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    float: left;
+    font-family: Montserrat,sans-serif!important;
+}
+
+.invoice-sec {
+    margin: 10px 0 0 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+.invoice-inr-sec {
+    margin: 0 auto;
+    padding: 0;
+    width: 600px;
+    height: auto;
+}
+
+.barcode-wpr {
+    margin: 0;
+    padding: 0px 0px;
+    width: 100%;
+    float: left; 
+}
+
+.barcode-img-wpr {
+    margin: 3px -10px 5px 0px;
+    padding: 3px 0px;
+    width: 50%;
+    float: left;
+    text-align:center;
+}
+
+    .barcode-img-wpr img {
+        width: 100%;
+    }
+
+.prnt-btn-sec {
+    margin: 0 auto;
+    padding: 0;
+    width: 750px;
+    height: auto;
+}
+
+.prnt-btn-wpr {
+    margin: 0 0 5px 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    float: left;
+    background: #eafff3;
+}
+
+.print-btn {
+    margin: 0;
+    padding: 0;
+    width: 55px;
+    height: 55px;
+    float: right;
+    background: url(../images/print.png) no-repeat;
+    background-size: 100%;
+    background-color: #00bb51;
+    border: 5px solid #24b663;
+    cursor: pointer;
+}
+
+.back-btn {
+    margin: 0;
+    padding: 0;
+    width: 55px;
+    height: 55px;
+    background: url(../images/back.png) no-repeat;
+    background-size: 100%;
+    background-color: #00bb51;
+    border: 5px solid #24b663;
+    cursor: pointer;
+}

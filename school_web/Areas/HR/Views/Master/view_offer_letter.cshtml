@@ -1,0 +1,363 @@
+﻿
+@{
+    Layout = null;
+}
+ 
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head >
+    <title>Offer Letter</title>
+    <link href="~/Payroll/print/certificate.css" rel="stylesheet" /> 
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+    <style>
+
+
+        .page-header, .page-footer img {
+            display: none;
+        }
+
+        .page-header-space {
+            height: 100px;
+        }
+
+        .page-footer, .page-footer-space {
+            margin-top: 80px;
+            /*height: 100px;*/
+        }
+
+        .page-footer {
+            position: fixed;
+            bottom: 0px;
+            width: 800px;
+            margin: 10px 0px 0px 0px;
+        }
+
+        .page-header {
+            position: fixed;
+            top: 0mm;
+            /*width: 100%;*/
+            width: 800px;
+        }
+
+        .page {
+            page-break-after: always;
+            counter-increment: page;
+        }
+
+        /*.page:before {
+                display: block;
+                text-align: right;
+                content: counter(page);
+            }*/
+
+        @@page {
+            margin: 10mm;
+        }
+
+        @@media print {
+              
+          /*  thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }*/
+
+            button {
+                display: none;
+            }
+        .noPrint {
+            display: none;
+        }
+            body {
+                margin: 0;
+            }
+
+            .page-header-space {
+                height: 100px;
+            }
+
+            .page-header, .page-footer img {
+                display: block;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        function printit() {
+            if (window.print) {
+                window.print();
+            }
+        }
+    </script>
+</head>
+<body>
+    <form id="form1" >
+        <div class="invoice-sec">
+            <div class="prnt-btn-sec noPrint">
+                <div class="prnt-btn-wpr">
+                    <div class="print-btn-sec">
+                        <div class="noPrint" style="float: left; " >
+                            <button ID="btn_back" class="back-btn d-none"  > 
+
+                            </button>
+                        </div>
+                        <div class="noPrint" style="float: right">
+                            <button ID="print1" onclick="printit()" class="print-btn"  ></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tblPrintIQ" >
+                <div class="invoice-inr-sec">
+                    <div class="invoice-wpr">
+                        <div class="certificate-wpr">
+                            <div class="certificate-wpr1">
+                                <div class="certificate-wpr2">
+                                    <div class="crtificate-wpr">
+                                        <div class="page-header" style="text-align: center;">
+                                        </div>
+                                        <div class="page-footer">
+                                        </div>
+                                        <table class="data-Table">
+                                            <thead>
+                                                <tr>
+                                                    <td class="border-top" style="border: none;">
+                                                        <div id="page_header_space"  class="page-header-space" style="text-align: center;">
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="page" style="float: left; margin: 0px; padding: 0px; width: 100%;">
+                                                            <h2 class="crtificate-ttl1-h2">Offer Letter</h2>
+                                                            <table class="data-Table">
+                                                                <tr>
+                                                                    <td style="width: 50px;">
+                                                                        <p class="crtificate-nm-p">
+                                                                            Dear
+                                                                        </p>
+                                                                    </td>
+                                                                    <td>
+                                                                        <p class="crtificate-nm-p">
+                                                                           <span>@ViewBag.name</span>
+                                                                        </p> 
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <p class="crtificate-date-p"> 
+                                                                        </p>
+                                                                    </td>
+                                                                    <td>
+                                                                        <p class="crtificate-nm-p" style="margin: 0; font-size: 14px;">
+                                                                            <span>Mobile No : @ViewBag.mobile</span>
+                                                                            <br/>
+                                                                            <span>Email Id : @ViewBag.email</span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <p class="crtificate-date-p">
+                                                                            Date :
+                                                                        </p>
+                                                                    </td>
+                                                                    <td>
+                                                                        <p class="crtificate-date-p">
+                                                                            <span>@ViewBag.date</span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td>
+                                                                        <p class="crtificate-content-p">
+                                                                            We welcome you to
+                                                                            <span>@ViewBag.firmName</span>
+                                                                            <br />
+                                                                            With reference to your application and the subsequent interview you had with us,
+                                                                            we are pleased to appoint you as
+                                                                            <span>@ViewBag.post</span>
+                                                                            with effect  from 
+                                                                            <span>@ViewBag.joiningDate</span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td>
+                                                                        <ul class="ltrs-ul">
+                                                                            <li>
+                                                                                <strong>Job Description : </strong>
+                                                                                <span>@ViewBag.job_desc</span> 
+                                                                            </li>
+                                                                            <li>
+                                                                                1) You will be on
+                                                                                <span>PROBATION Period for a period of six months</span>
+                                                                                from the date of joining and depending on your performance, the hospital, at its
+                                                                                discretion may extend your PROBATION  period and or may confirm you as a permanent employee.
+                                                                            </li>
+                                                                            <li>
+                                                                                2) During your PROBATION period the employer can terminate you without any notice or by payment of salary
+                                                                                up to last working day, and whereas employee have to serve one month notice or one
+                                                                                month salary in-lieu.
+                                                                            </li>
+                                                                            <li>
+                                                                                3) At the time of resignation / leaving the company, you are required to give a
+                                                                                30 days notice period or one month salary. Similarly after confirmation of your employment
+                                                                                your services can be terminated by the hospital, by giving one month notice and
+                                                                                current month salary calculated up to last working days only. The decision will
+                                                                                be at the discretion of the company. The hospital upon termination of your employment
+                                                                                (during training period or after confirmation)
+                                                                                will not reimburse you the one month salary for following reasons :
+                                                                                <ul class="ltrs1-ul">
+                                                                                    <li>A) If your work is not up to satisfaction/ expectation on your supervisor</li>
+                                                                                    <li>B) In case there is an integrity issue with you.</li>
+                                                                                    <li>C) Any in-disciplinary / unprofessional approach to your fellow colleagues.</li>
+                                                                                    <li>D) Use of abusive language.</li>
+                                                                                    <li>E) Sharing any confidential information to outsider.</li>
+                                                                                    <li>F) Breach of contract if any.</li>
+                                                                                    <li>G) Unauthorized leave.</li>
+                                                                                    <li>H) Non-adherence to company policy prescribed from time to time.</li>
+                                                                                    <li>
+                                                                                        I) Being late for duty frequently or casual approach towards the Organization or
+                                                                                        Patient’s.
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        J) In case the information /documents provided by you at the time of joining find
+                                                                                        to be fake.
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </li>
+                                                                            <li>
+                                                                                4) During the term of your employment, you will devote your full abilities to perform
+                                                                                duties and agree to comply with hospitals policies and standard in force prescribed
+                                                                                from time to time.
+                                                                            </li>
+                                                                            <li>
+                                                                                5) You may be transferred temporarily or permanently for any duty in different department
+                                                                                of the hospital and you will abide by working condition of the same, depending on
+                                                                                the exigencies of work of the hospital.
+                                                                            </li>
+                                                                            <li>
+                                                                                6) You will be governed by the rule and regulation of the employment, hours of work
+                                                                                holidays, discipline and general work practices which will be in force from time
+                                                                                to time.
+                                                                            </li>
+                                                                            <li>
+                                                                                7) You will be responsible for safe keeping and return in good condition of all
+                                                                                hospital Property such as Uniform, I.D. Card, equipment, tools, books, etc. which
+                                                                                may be in your custody.
+                                                                            </li>
+                                                                            <li>
+                                                                                8) At the time of leaving/termination you have to return all company property including
+                                                                                company uniform and I.D. Card to H.R Department and to take NOC for getting clearance
+                                                                                or else company is free to deduct Rs. 2000/- as a cost of the above.
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td>
+                                                                        <p class="slrystpnd-p">
+                                                                            <span>SALARY/STIPEND:</span> - During this period you will be paid amount of 
+                                                                            <span>₹ @ViewBag.salary Per Month </span>  &nbsp;&nbsp;  <b> &&nbsp; EPF + ESIC ( Included / Excluded )</b>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td>
+                                                                        <p class="slrystpnd1-p">
+                                                                            The Terms and conditions of your service are subject to change from time- to- time
+                                                                            by the company Please submit the following to the H.R. Department
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td>
+                                                                        <ul class="ltrs-ul">
+                                                                            <li>1) Copies of certificate in support of your age and Qualification.</li>
+                                                                            <li>2) School leaving certificate in support of your age.</li>
+                                                                            <li>
+                                                                                3) Your relieving letter from your previous/ present employer (not applicable for
+                                                                                new entrants)
+                                                                            </li>
+                                                                            <li>4) Service/Experience certificate(S), if any.</li>
+                                                                            <li>5) Nos. of color passport size latest photographs.</li>
+                                                                            <li>6) Aadhar Card Copy</li>
+                                                                            <li>7) Pan Card Copy</li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td>
+                                                                        <p class="slrystpnd1rr-p">
+                                                                            However, if there is any discrepancy in the copies of the documents / certificates
+                                                                            submitted by you, in support of the above, the hospital reserve the option to revise
+                                                                            your offer or terminate this agreement.
+                                                                        </p>
+                                                                        <p class="slrystpnd1rr-p">
+                                                                            We look forward to a fruitful association with you, as a member of
+                                                                            <span>@ViewBag.firmName</span>
+                                                                            family. For our information and records, please acknowledge (sign and
+                                                                            return) the duplicate copy of this letter, as a token of your acceptance of the
+                                                                            above.
+                                                                        </p>
+                                                                        <p class="crtificate-for-p">
+                                                                            FOR
+                                                                            <span>@ViewBag.firmName</span>
+                                                                        </p>
+                                                                        <p class="slrystpnd1rr-auth-p">
+                                                                            AUTHORISED SIGNATORY
+                                                                        </p>
+                                                                        <p class="slrystpnd1rr-to-p">
+                                                                            <span>
+                                                                                To,
+                                                                                <br />
+                                                                                The Manager- HR
+                                                                            </span>
+                                                                            <br />
+                                                                            With reference to the above subject matter, I, the undersigned hereby confirm that
+                                                                            I have read, understood with free mind hereby state that the terms and conditions
+                                                                            stated in this Appointment Letter are acceptable to me.
+                                                                        </p>
+                                                                        <p class="slrystpnd1rr-btm-p">
+                                                                            Name __________ Signature_________________ Date __________
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td style="padding-top: 0px; padding-bottom: 0px; padding-left: 5px;">
+                                                        <!--place holder for the fixed-position footer-->
+                                                        <div id="page_footer_space"  class="page-footer-space"></div>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

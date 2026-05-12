@@ -1,0 +1,273 @@
+﻿body, #form1 {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    position: absolute;
+    font-family: sans-serif;
+    font-size: 13px;
+    color: #000;
+}
+
+.main {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+.mainautot {
+    margin: 0px auto;
+    padding: 0px;
+    height: auto;
+    width: 850px;
+}
+
+.mainwith {
+    margin: 0px;
+    padding: 5px;
+    height: auto;
+    width: 840px;
+    float: left;
+    border: 1px solid #000;
+}
+
+.top {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+.topcell_left {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 50%;
+    float: left;
+    text-align: left;
+}
+
+.topcell_right {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 50%;
+    float: left;
+    text-align: right;
+}
+
+.heading {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+.leftlogoheading {
+    margin: 0px;
+    padding: 0px;
+    height: 116px;
+    width: 13%;
+    float: left;
+}
+
+.righttextheading {
+    margin: 0px;
+    padding: 0px;
+    height: 116px;
+    width: 80%;
+    float: left;
+}
+
+.slipno {
+    margin: 0px;
+    padding: 0px 0px 4px 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+    border-bottom: 2px solid #000;
+}
+
+.slipno_left {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 25%;
+    float: left;
+    text-align: left;
+}
+
+.slipno_middle {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 55%;
+    float: left;
+    text-align: center;
+}
+
+.slipno_right {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 20%;
+    float: left;
+    text-align: right;
+}
+
+.studentdetails {
+    margin: 4px 0px 0px 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+
+.student_left {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 40%;
+    float: left;
+    text-align: left;
+}
+
+.student_middle {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 30%;
+    float: left;
+    text-align: center;
+}
+
+.student_right {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 30%;
+    float: left;
+    text-align: right;
+}
+
+.pay_particular {
+    margin: 14px 0px 2px 0px;
+    padding: 5px 0px 1px 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+    border-top: 2px dashed #000;
+    text-align: center;
+}
+
+.td2 {
+    text-align: right;
+    padding: 1px 5px 3px 0px;
+    color: #000;
+}
+
+.td3 {
+    text-align: left;
+    padding: 3px 0px 3px 5px;
+    color: #000;
+}
+
+.footer {
+    margin: 10px 0px 0px 0px;
+    border-top: 2px solid #000;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+.footer_left {
+    margin: 5px 0px 0px 0px;
+    padding: 0px;
+    height: auto;
+    width: 50%;
+    float: left;
+    text-align: left;
+}
+
+.footer_middle {
+    margin: 5px 0px 0px 0px;
+    padding: 0px;
+    height: auto;
+    width: 20%;
+    float: left;
+    text-align: right;
+}
+
+.footer_right {
+    margin: 5px 0px 0px 0px;
+    padding: 0px;
+    height: auto;
+    width: 30%;
+    float: left;
+    text-align: right;
+}
+
+.footer_auth_sig {
+    margin: 150px 0px 0px 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+    text-align: left;
+}
+
+.bodrerf1 th {
+    border: 1px solid #000;
+    color: #000;
+    padding: 1px 5px 2px 3px;
+}
+
+.bodrerf1 td {
+    border: 1px solid #000;
+    color: #000;
+}
+
+.sig-left {
+    margin: 0;
+    padding: 0px 5px 0px 0px;
+    width: 25%;
+    float: right;
+}
+
+.rght-sig-img-dv {
+    margin: 0px;
+    width: 100%;
+    float: left;
+    height: 70px;
+    align-items: center;
+    display: flex;
+}
+
+.rght-sig-img {
+    margin: 0px auto;
+    width: auto;
+    height: 45px;
+}
+
+.sig-ps {
+    margin: 0;
+    padding: 3px 0px 0px 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    border-top: 1px solid #858585;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media print {
+    .noPrint {
+        display: none;
+    }
+}

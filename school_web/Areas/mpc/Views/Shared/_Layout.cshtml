@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="~/Areas/mpc/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Areas/mpc/assets/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Areas/mpc/assets/css/icons.css" rel="stylesheet" />
+    <link href="~/Areas/mpc/assets/css/prism.css" rel="stylesheet" />
+    <link href="~/Areas/mpc/assets/css/jquery-ui.min.css" rel="stylesheet" />
+    <script src="~/Areas/mpc/assets/js/jquery.min.js"></script>
+    <script src="~/Areas/mpc/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Areas/mpc/assets/js/select2.min.js"></script>
+    <script src="~/Areas/mpc/assets/js/jquery-ui.min.js"></script>
+    <script src="~/Areas/mpc/assets/js/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Areas/mpc/assets/js/sweetalert2@11.min.js"></script>
+    <script src="~/Areas/mpc/assets/js/mpc.js"></script>
+    <script src="~/Areas/mpc/assets/js/papaparse5.3.0.min.js"></script>
+    <script src="~/Areas/mpc/assets/js/prism.js"></script>
+
+    <link href="~/Areas/mpc/assets/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <script src="~/Areas/mpc/assets/js/jquery.dataTables.min.js"></script>
+
+    @*image croper*@
+    <link href="~/Areas/mpc/assets/js/cropper.min.css" rel="stylesheet" />
+    <script src="~/Areas/mpc/assets/js/cropper.js"></script>
+
+
+</head>
+<body>
+    @if (Request["noFooter"] == null)
+    {
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    @Html.ActionLink("Purnank MPC Controller", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="container-fluid body-content">
+        @RenderBody()
+        @if (Request["noFooter"] == null)
+        {
+            <footer>
+                <hr class="m-0 p-0 mt-2  " />
+                <p class="m-0 pt-2" style="text-align:center">&copy; @DateTime.Now.Year - Purnank MPC</p>
+            </footer>
+        }
+    </div>
+
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+﻿
+@{
+    Layout = null;
+    HR_Employee_Master emp = ViewBag.emp as HR_Employee_Master;
+    double m_gross = 0;
+    double y_gross = 0;
+    double m_deduct = 0;
+    double y_deduct = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CTC Salary Structure </title>
+    <link href="~/Payroll/print/certificate.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+ 
+    <style>
+
+
+        .page-header, .page-footer img {
+            display: none;
+        }
+
+        .page-header-space {
+            height: 100px;
+        }
+
+        .page-footer, .page-footer-space {
+            margin-top: 80px;
+            /*height: 100px;*/
+        }
+
+        .page-footer {
+            position: fixed;
+            bottom: 0px;
+            width: 800px;
+            margin: 10px 0px 0px 0px;
+        }
+
+        .page-header {
+            position: fixed;
+            top: 0mm;
+            /*width: 100%;*/
+            width: 800px;
+        }
+
+        .page {
+            page-break-after: always;
+            counter-increment: page;
+        }
+
+        /*.page:before {
+                display: block;
+                text-align: right;
+                content: counter(page);
+            }*/
+
+        @@page {
+            margin: 10mm;
+        }
+
+        @@media print {
+            /*  thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }*/
+
+            button {
+                display: none;
+            }
+
+            .noPrint {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            .page-header-space {
+                height: 100px;
+            }
+
+            .page-header, .page-footer img {
+                display: block;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        function printit() {
+            if (window.print) {
+                window.print();
+            }
+        }
+    </script>
+    <style>
+        #tbl-income td, th {
+            border: solid gray 1px;
+            padding: 7px;
+            text-align: right;
+        }
+        .member-other-dt-p {
+            display: inline;
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 30px;
+            color: #000;
+        }
+        
+    </style>
+</head>
+<body>
+    <form id="form1">
+        <div class="invoice-sec">
+
+            <div class="prnt-btn-sec noPrint">
+                <div class="prnt-btn-wpr">
+                    <div class="print-btn-sec">
+                        <div class="noPrint" style="float: left; ">
+                            <button ID="btn_back" class="back-btn d-none">
+                            </button>
+                        </div>
+                        <div class="noPrint" style="float: right">
+                            <button ID="print1" onclick="printit()" class="print-btn"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tblPrintIQ">
+                <div class="invoice-inr-sec">
+                    <div class="invoice-wpr">
+                        <div class="certificate-wpr">
+                            <div class="certificate-wpr1-exprnce">
+                                <div class="certificate-wpr2">
+                                    <div class="crtificate-wpr paddlftjoing">
+                                        <h2 class="crtificate-ttl1-h2">CTC Salary Structure</h2>
+
+
+                                        <table style="margin: 30px 0px 30px 0px; padding: 0px 0px 0px 10px; width: 98%; /* height: 9px; */ overflow: hidden; float: left; font-size: 11px; font-weight: 600; line-height: 10px; color: #000;">
+                                            <tr>
+                                                <td>
+
+                                                    <h2 class="member-other-dt-p">
+                                                        <span>Name : </span>
+                                                        <span id="lbl_dob">@emp.Employee_Name</span>
+                                                    </h2>
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h2 class="member-other-dt-p">
+                                                        <span>Employee Code  : </span>
+                                                        <span id="lbl_dob">@emp.Emp_Code</span>
+                                                    </h2>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h2 class="member-other-dt-p">
+                                                        <span>Email  : </span>
+                                                        <span id="lbl_date_of_joining">@emp.Email  </span>
+                                                    </h2>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h2 class="member-other-dt-p">
+                                                        <span>Address : </span>
+                                                        <span id="lbl_blood_group">@emp.Address ,@emp.City @emp.State Pin - @emp.Pincode</span>
+                                                    </h2>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+
+
+                                        <table id="tbl-income" style="width: 100%; " role="grid">
+                                            <thead>
+                                                <tr>
+
+                                                    <th style="width:60%; text-align:left">Particulars</th>
+                                                    <th style="width:20%">Monthly</th>
+                                                    <th style="width:20%">Yearly</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var inc in ViewBag.incomes)
+                                                {
+                                                    var yearly = Convert.ToDouble(inc["inc"]) * 12;
+                                                    y_gross += yearly;
+                                                    m_gross += Convert.ToDouble(inc["inc"]);
+                                                    <tr>
+                                                        <td style="width:60%; text-align:left">@inc["IncomeHead"]</td>
+                                                        <td style="width:20%">@inc["inc"]</td>
+                                                        <td style="width:20%">@yearly</td>
+                                                    </tr>
+                                                }
+                                                <tr>
+                                                    <th style="width:60%; text-align:left">Gross Salary</th>
+                                                    <th style="width:20%">@m_gross</th>
+                                                    <th style="width:20%">@y_gross</th>
+                                                </tr>
+                                                @foreach (var inc in ViewBag.deductions)
+                                                {
+                                                    var yearly = Convert.ToDouble(inc["deduct_emp"]) * 12;
+                                                    m_deduct += Convert.ToDouble(inc["deduct_emp"]);
+                                                    y_deduct += yearly;
+                                                    if (inc["IsDeductionOnBoth"].ToString() == "Both")
+                                                    {
+                                                        <tr>
+                                                            <td style="width:60%; text-align:left">@inc["DeductionDesc"] ( @inc["Employer_Contribution"] )</td>
+                                                            <td style="width:20%">@inc["deduct_emp"]</td>
+                                                            <td style="width:20%">@yearly</td>
+                                                        </tr>
+                                                    }
+
+                                                }
+                                                @{
+                                                    double m_ctc = m_deduct + m_gross;
+                                                    double y_ctc = y_deduct + y_gross;
+                                                }
+                                                <tr>
+                                                    <th style="width:60%; text-align:left">Net CTC</th>
+                                                    <th style="width:20%">@m_ctc</th>
+                                                    <th style="width:20%">@y_ctc</th>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <p class="crtificate-for-p">
+                                            FOR
+                                            <span>@ViewBag.firmName</span>
+                                        </p>
+                                        <p class="slrystpnd1rr-auth-p">
+                                            AUTHORISED SIGNATORY
+                                        </p>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+    </form>
+    
+</body>
+</html>

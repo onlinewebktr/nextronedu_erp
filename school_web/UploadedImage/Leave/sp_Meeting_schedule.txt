@@ -1,0 +1,50 @@
+﻿create PROCEDURE sp_Meeting_schedule
+@Id         int=0,
+@Name       varchar(500) =NULL,
+@Mobile_no      varchar(500) =NULL,
+@Gender         varchar(500) =NULL,
+@Address        varchar(500) =NULL,
+@Meeting_for        varchar(500) =NULL,
+@Meeting_with       varchar(500) =NULL,
+@Location       varchar(500) =NULL,
+@Duration       varchar(500) =NULL,
+@In_time        varchar(500) =NULL,
+@Out_time       varchar(500) =NULL,
+@Meeting_purpose        varchar(500) =NULL,
+@Created_by         varchar(500) =NULL,
+@Created_date       datetime=NULL,
+@Created_idate      int=NULL,
+@sDate         int=NULL,
+@eDate         int=NULL,
+@sp_status       VARCHAR(500)
+ 
+AS
+Begin 
+  
+   if @sp_status ='INSERT'
+   Begin 
+       INSERT INTO Meeting_schedule (Name,Mobile_no,Gender,Address,Meeting_for,Meeting_with,Location,Duration,In_time,Out_time,Meeting_purpose,Created_by,Created_date,Created_idate) values (@Name,@Mobile_no,@Gender,@Address,@Meeting_for,@Meeting_with,@Location,@Duration,@In_time,@Out_time,@Meeting_purpose,@Created_by,@Created_date,@Created_idate);  
+   End 
+  if @sp_status ='UPDATE'
+   Begin 
+        Update Meeting_schedule set Name=@Name,Mobile_no=@Mobile_no,Gender=@Gender,Address=@Address,Meeting_for=@Meeting_for,Meeting_with=@Meeting_with,Location=@Location,Duration=@Duration,In_time=@In_time,Out_time=@Out_time,Meeting_purpose=@Meeting_purpose where Id = @Id; 
+   End  
+    if @sp_status ='FETCH'
+    BEGIN
+        SELECT *,Format(convert(DateTime,Created_date,103), 'dd/MM/yyyy hh:mm tt') as new_date FROM Meeting_schedule order by id desc
+    END
+    
+    if @sp_status ='DELETE'
+    BEGIN
+        Delete FROM Meeting_schedule where Id=@Id;
+    END
+    
+     if @sp_status ='FETCH_BY_ID'
+    BEGIN
+        SELECT * FROM Meeting_schedule where Id=@Id;
+    END
+     if @sp_status ='FETCHBYDATE'
+    BEGIN
+        SELECT *,Format(convert(DateTime,Created_date,103), 'dd/MM/yyyy hh:mm tt') as new_date FROM Meeting_schedule where Created_idate>=@sDate and Created_idate<=@eDate order by id desc
+    END
+End

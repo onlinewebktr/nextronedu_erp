@@ -1,0 +1,495 @@
+﻿
+@{
+    HR_MasterPageConfig mpc = ViewBag.mpc;
+    ViewBag.Title = "Leave Types";
+    if (mpc.OtherData != null)
+    {
+        if (mpc.OtherData.ContainsKey("Page_Layout_Path"))
+        {
+            if (mpc.OtherData["Page_Layout_Path"] != "")
+            {
+                Layout = mpc.OtherData["Page_Layout_Path"];
+            }
+        }
+    }
+
+
+
+    }
+
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <form class="my-form" id="main-form">
+            <input type="hidden" id="frm-page-Id" name="frm-page-Id" value="@ViewBag.pageId" />
+            @Html.Hidden("HdId")
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        @Html.LabelEditor("LeaveType", "ddl", "Leave Type", "", true, "Earned Leave,Casual Leave,Sick Leave,Maternity Leave,Loss of Pay,Compensatory,Other")
+                        @Html.LabelEditor("LeaveName", "txt", "Leave Name", "", true)
+                        @Html.LabelEditor("LeaveCode", "txt", "Leave Code", "", true, divCssClass: "col-md-6")
+                        @Html.LabelEditor("IsPaidLeave", "ddl", "Is Paid Leave", "", true, "Paid,Unpaid,Half Pay", divCssClass: "col-md-6")
+                        @Html.LabelEditor("IsCaryForward", "ddl", "Is Cary Forward", "", false, "Yes,No", divCssClass: "col-md-6")
+                        @Html.LabelEditor("MaxCaryForward", "txt", "Max Cary Forward", "", false, divCssClass: "col-md-6")
+                        @Html.LabelEditor("ColorCode", "color", "Color Code", "#ffffff", false, divCssClass: "col-md-6")
+                    </div>
+                    <div class="row d-none" id="el_con">
+                        <h5 class="text-primary pt-2 mb-1">Earn Leave Condition</h5>
+                        @Html.LabelEditor("EL_day_con", "txt", "No of Day Works", "30", false, divCssClass: "col-md-6")
+                        @Html.LabelEditor("EL_day_leave", "txt", "Earn Leave", "1", false, divCssClass: "col-md-6")
+                        @Html.Hidden("EL_Condition")
+
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+
+                            <button id="btn-add" type="button" class="btn btn-primary">Add</button>
+                            <button id="btn-cancel" type="button" style="display: none;" class="btn btn-dark">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+         </form>
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body px-2 py-1">
+                <table class="table table-bordered table-striped" id="mytable">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Leave Id</th>
+                            <th>Leave Type</th>
+                            <th>Leave Name</th>
+                            <th>Leave Code</th>
+                            <th>Is Cary Forward</th>
+                            <th>Max Cary Forward</th>
+                            <th>Is Paid Leave</th>
+                            <th>E L Condition</th>
+                            <th>Color Code</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div id="grid_prog" style="margin : 0px auto; width:200px">
+                    <span class="spinner-border spinner-border-sm me-2"> </span>
+                    Please wait....
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    $('#EL_day_con').on("input",function () {
+        $('#EL_Condition').val($('#EL_day_con').val() + ' Day work for ' + $('#EL_day_leave').val() +" day leave")
+    } )
+    $('#EL_day_leave').on("input",function () {
+        $('#EL_Condition').val($('#EL_day_con').val() + ' Day work for ' + $('#EL_day_leave').val() + " day leave")
+    } )
+    $('#LeaveType').change(function () {
+        var vl = $(this).val();
+        $('#EL_day_con').val('')
+        $('#EL_day_leave').val('')
+        $('#EL_Condition').val('')
+        $('#el_con').addClass("d-none")
+        //Casual Leave,Sick Leave,Maternity Leave,Loss of Pay,Other
+        if (vl == "Earned Leave") {
+            $('#LeaveName').val(vl)
+            $('#LeaveCode').val('EL')
+            $('#IsPaidLeave').val('Paid')
+            $('#IsCaryForward').val('Yes')
+            $('#MaxCaryForward').val('30')
+            $('#EL_day_con').val('30')
+            $('#EL_day_leave').val('1')
+            $('#el_con').removeClass("d-none")
+            $('#EL_Condition').val($('#EL_day_con').val() + ' Day work for ' + $('#EL_day_leave').val() + " day leave")
+        }
+        else if (vl == "Casual Leave") {
+            $('#LeaveName').val(vl)
+            $('#LeaveCode').val('CL')
+            $('#IsPaidLeave').val('Paid')
+            $('#IsCaryForward').val('No')
+            $('#MaxCaryForward').val('0')
+        }
+        else if (vl == "Sick Leave") {
+
+            $('#LeaveName').val(vl)
+            $('#LeaveCode').val('SL')
+            $('#IsPaidLeave').val('Half Pay')
+            $('#IsCaryForward').val('No')
+            $('#MaxCaryForward').val('0')
+        }
+        else if (vl == "Maternity Leave") {
+            $('#LeaveName').val(vl)
+            $('#LeaveCode').val('ML')
+            $('#IsPaidLeave').val('Half Pay')
+            $('#IsCaryForward').val('No')
+            $('#MaxCaryForward').val('0')
+        }
+        else if (vl == "Loss of Pay") {
+            $('#LeaveName').val("Loss of Pay")
+            $('#LeaveCode').val('LWP')
+            $('#IsPaidLeave').val('Unpaid')
+            $('#IsCaryForward').val('No')
+            $('#MaxCaryForward').val('0')
+        }
+        else if (vl == "Other") {
+            $('#LeaveName').val("")
+            $('#LeaveCode').val('')
+            $('#IsPaidLeave').val('Unpaid')
+            $('#IsCaryForward').val('No')
+            $('#MaxCaryForward').val('0')
+            $('#el_con').removeClass("d-none")
+        }
+    })
+</script>
+<script>
+    var actionlist = [];
+    var isEdit = false;
+    var edit_row;
+    $(function () {
+        var data = JSON.stringify({ data: { pageId: '@ViewBag.pageId' } });
+    gowithData('../../hr/data/tabledata', 'Post', data, function (data) {
+        if (!data.error) {
+            bind_data(data.data);
+        }
+    })
+    emptyForm();
+});
+
+
+function handleSuccess(data) {
+    data = JSON.parse(data);
+    if (data.error) {
+        alertError(data.message);
+        if (isEdit == true) {
+            $('#btn-add').text("Update")
+        }
+        else {
+
+            $('#btn-add').text("Add")
+            $('#btn-cancel').hide();
+        }
+        $('#btn-add').prop("disabled", false);
+    }
+    else {
+        alertSuccess(data.message);
+        emptyForm();
+        if (data.isUpdate) { bind_data(data.data, 2) }
+        else { bind_data(data.data, 1) }
+    }
+}
+function fnfailor(data) {
+    if (isEdit = true) {
+        $('#btn-add').text("Update")
+    }
+    else {
+
+        $('#btn-add').text("Add")
+        $('#btn-cancel').hide();
+    }
+}
+function fnbegin() {
+    var btn = $('#btn-add');
+    if (btn.prop('disabled')) {
+        return false; // Prevent multiple clicks while disabled
+    }
+    btn.prop("disabled", true);
+    var ss = `<div  style="margin : 0px auto; width:150px">
+
+                    <span class="spinner-border spinner-border-sm me-2" > </span>
+                        Please wait....
+                        </div>`;
+    btn.html(ss);
+}
+
+function formatDate(inputDate) {
+    var date = new Date(inputDate);
+    var formattedDate = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+    return formattedDate;
+}
+
+</script>
+<script>
+    $('#btn-cancel').on('click', function () {
+        emptyForm();
+    });
+    function emptyForm() {
+
+        $('#LeaveId').val('');
+        $('#LeaveType').val('');
+        $('#LeaveName').val('');
+        $('#LeaveCode').val('');
+        $('#IsCaryForward').val('No');
+        $('#MaxCaryForward').val('0');
+        $('#IsPaidLeave').val('');
+        $('#EL_Condition').val('');
+
+        $('#btn-add').text("Add")
+        $('#btn-add').prop("disabled", false);
+        $('#btn-cancel').hide();
+        $('#HdId').val("")
+        $('#model-form').modal("hide");
+        $('#EL_Condition').val('')
+        $('#EL_day_con').val('')
+        $('#EL_day_leave').val('')
+        $('#ColorCode').val('#ffffff')
+        $('#el_con').addClass("d-none")
+        isEdit = false;
+    }
+</script>
+
+<script>
+
+    function openModel() {
+        $('#model-form').modal("show");
+    }
+    function bind_data(data, code) {
+        var showAction = true;
+        var tableBody = $('#mytable tbody');
+        if (code == 2) {
+            edit_row.empty();
+        }
+        else {
+            $('#mytable').DataTable().destroy();
+        }
+
+        if (!code) {
+            tableBody.empty();
+        }
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var div = $('<div>').addClass("d-flex align-items-center")
+            div.append($('<button>').addClass("edit-button btn").attr("data-id", d.Id).html("<i class='bx bx-edit-alt'></i>"))
+            div.append($('<button>').addClass("delete-button btn").attr("data-id", d.Id).html("<i class='bx bx-trash'></i>"))
+
+            var td = $('<td>').append(div).width("55px");
+            if (code == 2) {
+                if (showAction) {
+                    edit_row.append(td);
+                }
+                edit_row.append($('<td>').text(d.LeaveId),
+                    $('<td>').text(d.LeaveType),
+                    $('<td>').text(d.LeaveName),
+                    $('<td>').text(d.LeaveCode),
+                    $('<td>').text(d.IsCaryForward),
+                    $('<td>').text(d.MaxCaryForward),
+                    $('<td>').text(d.IsPaidLeave),
+                    $('<td>').text(d.EL_Condition),
+                    $('<td>').text(d.ColorCode).css("background-color",d.ColorCode),
+                );
+            }
+            else {
+                var row = $('<tr>');
+                if (showAction) {
+                    row.append(td);
+                }
+                row.append($('<td>').text(d.LeaveId),
+                    $('<td>').text(d.LeaveType),
+                    $('<td>').text(d.LeaveName),
+                    $('<td>').text(d.LeaveCode),
+                    $('<td>').text(d.IsCaryForward),
+                    $('<td>').text(d.MaxCaryForward),
+                    $('<td>').text(d.IsPaidLeave),
+                    $('<td>').text(d.EL_Condition),
+                    $('<td>').text(d.ColorCode).css("background-color", d.ColorCode),
+                );
+                if (!code) {
+                    tableBody.append(row);
+                }
+                else {
+                    tableBody.prepend(row);
+                }
+            }
+
+
+        });
+        if (code != 2) {
+            var table = $('#mytable').DataTable({
+                lengthChange: false,
+                scrollX: true, scrollCollapse: true,
+                buttons: ['excel', 'pdf', 'print']
+            });
+        }
+
+    }
+
+    $('#mytable').edit('../../hr/data/edit', function (data, row) {
+        edit_row = row;
+        isEdit = true;
+        $('#main-form').parent().removeClass('d-none');
+        $('#btn-add').text("Update")
+        $('#btn-cancel').show();
+        $('#HdId').val(data[0].Id)
+        $('#LeaveType').val(data[0].LeaveType)
+        $('#LeaveName').val(data[0].LeaveName)
+        $('#LeaveCode').val(data[0].LeaveCode)
+        $('#IsCaryForward').val(data[0].IsCaryForward)
+        $('#MaxCaryForward').val(data[0].MaxCaryForward)
+        $('#IsPaidLeave').val(data[0].IsPaidLeave)
+        $('#EL_Condition').val(data[0].EL_Condition)
+        $('#EL_day_con').val(data[0].EL_day_con)
+        $('#EL_day_leave').val(data[0].EL_day_leave)
+        $('#ColorCode').val(data[0].ColorCode)
+        if (data[0].LeaveType == 'Other' || data[0].LeaveType == 'Earned Leave') {
+            $('#el_con').removeClass("d-none")
+        }
+        else {
+            $('#el_con').addClass("d-none")
+        }
+
+    });
+    $('#mytable').delete('../../hr/data/delete', function (data) {
+    });
+
+
+    function apply_filter(filterbtn) {
+        var id = $(filterbtn).attr("data-id");
+
+        var formData = $('#' + id).serializeArray();
+        var serializedData = {};
+
+        $.map(formData, function (input) {
+            serializedData[input.name] = input.value;
+        });
+        $('#' + id).find('select').each(function () {
+            var selectId = $(this).attr('id');
+            var selectedOption = $('#' + selectId + ' option:selected');
+            serializedData[selectId] = selectedOption.text();
+            serializedData[selectId + "_Value"] = selectedOption.val();
+        });
+
+        serializedData['pageId'] = 'mpc.pageId';
+        var data = JSON.stringify({ data: serializedData });
+
+        console.log(data);
+        gowithData("../../hr/filter/" + id, 'POST', data, function (resp) {
+            console.log(resp);
+            bind_data(resp.data);
+        })
+    }
+    function getstatusview(inputString, value) {
+
+        var regex = /\{(.*?)\}/g;
+        var matches = inputString.match(regex);
+        var found = false;
+        var rd = false;
+        if (matches) {
+            var resultList = matches.map(function (match) {
+                return match.replace(/[\{\}]/g, '');
+            });
+            $.each(resultList, function (index, data) {
+                var r = data.split(',');
+                if (r[0] == value) {
+                    found = true;
+                    rd = r;
+                    return false;
+                }
+            })
+        }
+        if (found) {
+
+            if (rd[1].startsWith("bg-")) {
+                return '<span class="badge rounded-pill ' + rd[1] + '"  >' + rd[2] + '  </span>';
+            }
+            else {
+                return '<span class="badge rounded-pill" style="background-color: ' + rd[1] + ';">' + rd[2] + '  </span>';
+            }
+        }
+        else {
+            return '<span class="badge rounded-pill bg-info"  >' + value + '  </span>';
+        }
+    }
+
+     $('#btn-add').on('click', function () { save_data(); });
+            function save_data() {
+
+                var btn = $('#btn-add');
+                if (btn.prop('disabled')) {
+                    return false; // Prevent multiple clicks while disabled
+                }
+                btn.prop("disabled", true);
+                //$("#main-form input:disabled").prop("disabled", false);
+                btn.html(`<div  style="margin : 0px auto; width:150px"> <span class="spinner-border spinner-border-sm me-2" > </span>
+                            Please wait....
+                            </div>`);
+                var data = {};
+                var formData = $("#main-form").serialize(); // Serialize form data
+                $("#main-form :input").each(function () {
+                    if ($(this).prop("disabled")) {
+                        if ($(this).val()) {
+                            formData += `&${$(this).attr("name")}=${$(this).val()}`;
+                        }
+                    }
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "../../../hr/save/page", // Replace with your controller and action names
+                    data: formData,
+                    success: function (resp) {
+                        resp = JSON.parse(resp);
+                       if (resp.error) {
+                           alertError(resp.message);
+                            if (isEdit == true) {
+                                $('#btn-add').text("Update")
+                            }
+                            else {
+
+                                $('#btn-add').text("Add")
+                                $('#btn-cancel').hide();
+                            }
+                            $('#btn-add').prop("disabled", false);
+                        }
+                       else {
+                           alertSuccess(resp.message);
+                           @if(mpc.pageType== "Single Data Form Only")
+                            {
+                                @:$('#btn-add').text("Update")
+                                @:$('#btn-add').prop("disabled", false);
+                                @: bind_form(resp.data);
+                            }
+                            else
+                            {
+                                @: emptyForm();
+                                @: if (resp.isUpdate) { bind_data(resp.data, 2)}
+                                @: else if (resp.isReset) { bind_data(resp.data)}
+                                @: else { bind_data(resp.data,1)}
+                            }
+                        }
+                    },
+                    error: function (error) {
+                        alertError(error);
+                        if (isEdit == true) {
+                            $('#btn-add').text("Update")
+                        }
+                        else {
+
+                            $('#btn-add').text("Add")
+                            $('#btn-cancel').hide();
+                        }
+                        $('#btn-add').prop("disabled", false);
+                    }
+                });
+
+
+            }
+</script>

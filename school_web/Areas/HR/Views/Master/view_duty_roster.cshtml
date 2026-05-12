@@ -1,0 +1,262 @@
+﻿
+@{
+    ViewBag.Title = "Duty Roster";
+}
+<style>
+    .chk_enbled {
+        width: 25px;
+        height: 25px;
+    }
+
+    #tbl-list td {
+        padding: 0;
+    }
+
+        #tbl-list td label {
+            padding: 4px;
+            width: 100%;
+        }
+
+    .nav-link {
+        padding: 0 1rem;
+    }
+</style> 
+
+<script type="text/javascript">
+    function PrintPanel() {
+        var panel = document.getElementById("print-pnl");
+        var printWindow = window.open('', '', 'height=400,width=800');
+        printWindow.document.write(`<html> <head>
+<link href="../Content/theme/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+    #tbl-data td {
+        padding: 0;
+    }
+
+        #tbl-data td label {
+            padding: 4px;
+            width: 100%;
+        }
+</style>
+`);
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(``);
+        printWindow.document.write(panel.innerHTML);
+        printWindow.document.write('</body ></html>');
+        printWindow.document.close();
+        setTimeout(function () {
+            printWindow.print();
+        }, 500);
+        return false;
+    }
+
+
+</script>
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 m-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-lg-4">
+                        <div class="row">
+                            @Html.LabelEditor("Year", "ddl", divCssClass: "col-lg-3 ps-0")
+                            @Html.LabelEditor("Month", "ddl", divCssClass: "col-lg-4 p-0")
+                            @Html.LabelEditor("Duty_Hour", "ddl", "Duty Hour", divCssClass: "col-lg-5 pe-0")
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="row">
+                            @Html.LabelEditor("duration", "ddl", "Rotation Duration", divCssClass: "col-lg-4")
+                            @Html.LabelEditor("Department", "ddl", "Department", divCssClass: "col-lg-3 ps-0")
+                            @Html.LabelEditor("Designation", "ddl", "Designation", divCssClass: "col-lg-3 ps-0")
+                            <div class="col-lg-2"><button type="button" id="btn-find" class="btn btn-primary mt-4">Find</button></div>
+                        </div>
+                    </div>
+                    <script>
+                        $('#Department').select2();
+                        $('#Designation').select2();
+                    </script>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-12 mt-0">
+                        <button id="btnprint" type="button" class="btn btn-success m-4 d-none"  style="position:absolute; right: 15px;" onclick="PrintPanel()">Print</button>
+                        <div id="print-pnl">
+                            <table id="tbl-data" class="table table-striped table-bordered m-2" role="grid">
+                                @*<thead style="background-color: darkturquoise;">
+            </thead>*@
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                       
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    var count = 0;
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    $("#Year option:not(:first)").remove();
+    for (var year = 2023; year <= currentYear + 1; year++) {
+        $('#Year').append($("<option>").text(year).val(year));
+    }
+    $("#Month option:not(:first)").remove();
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    for (let i = 0; i < monthNames.length; i++) {
+        const monthNumber = (i + 1).toString().padStart(2, '0');
+        $('#Month').append($("<option>").text(monthNames[i]).val(monthNumber));
+    }
+    var data = { type: 'duty-hour' }
+    gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+        if (!resp.error) {
+            var ddl = $('#Duty_Hour');
+            $("#Duty_Hour option:not(:first)").remove();
+            $.each(resp.data, function (i, item) {
+                ddl.append($("<option>").text(item.Duty_Hour_Name).val(item.Duty_Hour_id));
+            });
+        }
+    });
+    $('#Year').on('change', function () {
+        $('#Month').val('');
+        $('#Month').change();
+    })
+    $('#Duty_Hour').on('change', function () {
+        get_duration_list();
+    })
+    $('#Month').on('change', function () {
+        get_duration_list();
+    })
+    function get_duration_list() {
+        var year = $('#Year').val();
+        var month = $('#Month').val();
+        var Duty_Hour = $('#Duty_Hour').val();
+        if (!month) {
+            return false;
+        }
+        if (!year) {
+            return false;
+        }
+        if (!Duty_Hour) {
+            return false;
+        }
+
+        var data = { type: 'rotation-duration', month: month, dutyhour: Duty_Hour, year: $('#Year').val() }
+        gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#duration');
+                $("#duration option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.Description).val(item.RotationId));
+                });
+                $("#duration").val('');
+                $('#duration').change();
+            }
+        });
+    }
+
+</script>
+<script>
+    $(function () {
+        var data = { type: 'department' }
+        gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Department');
+                $("#Department option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.department_id));
+                });
+            }
+        });
+    });
+
+
+    $('#Department').on('change', function () {
+        var data = { type: 'designation', DepartmentId: $(this).val() }
+        gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Designation');
+                $("#Designation option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.Designation_id));
+                });
+            }
+        });
+    })
+
+    $('#btn-find').on('click', function () {
+        var data = { type: 'duty-roster-view', RotationId: $('#duration').val(), designation: $('#Designation').val() }
+        gowithData('../../hr/data/report', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var tbody = $('#tbl-data tbody');
+                tbody.empty();
+                //Emp_Code,Employee_Name,Employee_image
+                var Designation = $('#Designation option:selected');
+                var duration = $('#duration option:selected'); 
+                var row1 = $('<tr>').append($('<th colspan="2" style="text-align : center;">').append($('<label style ="font-size: 25px;">').text(`Duty Roster of ${Designation.text()}`), '<br/>', $('<label>').text(`from ${duration.text()}`)));
+                tbody.append(row1);
+
+                $('#btnprint').removeClass("d-none");
+                $.each(resp.data, function (index, d) {
+                   
+                    row1 = $('<tr>').append($('<th colspan="2" style="text-align : center;">').append($('<label style ="font-size: 25px;">').text(d.ShiftName), '<br/>', $('<label>').text(`${dtime(d.In_Time)} to ${dtime(d.Out_Time)}`)));
+                    tbody.append(row1);
+                    if (resp.shift_data[d.ShiftId].length == 0) {
+                        row1 = $('<tr>').append($('<th colspan="2" style="text-align : center;">').append($('<label style ="font-size: 22px; color:#dd0303">').text('No Employee Mapped in this Shift')));
+                        tbody.append(row1);
+                    }
+                    else {
+                        row1 = $('<tr>').append($('<th>').text("Employee Code"), $('<th>').text("Employee Name"));
+                        tbody.append(row1);
+                        $.each(resp.shift_data[d.ShiftId], function (i, emp) {
+                            var row2 = $('<tr>').append($('<td>').append($('<label>').text(emp.Emp_Code)), $('<td>').append($('<label>').text(emp.Employee_Name)));
+                            tbody.append(row2);
+                        });
+                    }
+
+                });
+            }
+        });
+    })
+    function dtime(time24) {
+        // Parse the input time string to get the hours and minutes
+        const [hours, minutes] = time24.split(':').map(Number);
+
+        // Determine the meridiem (AM or PM)
+        const meridiem = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert hours to 12-hour format
+        const hours12 = (hours % 12) || 12;
+
+        // Format the result as a string in 12-hour format
+        const time12 = `${hours12.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${meridiem}`;
+
+        return time12;
+    }
+</script>
+
+

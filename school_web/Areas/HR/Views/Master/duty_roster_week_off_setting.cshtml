@@ -1,0 +1,323 @@
+﻿
+@{
+    ViewBag.Title = "Duty Roster Weekoff Setting";
+}
+<style>
+    .chk_enbled {
+        width: 19px;
+        height: 19px;
+    }
+
+    #tbl-list td, #tbl-list th {
+        padding: 0;
+    }
+
+        #tbl-list td label {
+            padding-left: 4px;
+            width: 100%;
+        }
+
+    .nav-link {
+        padding: 0 1rem;
+    }
+</style>
+ 
+
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 m-auto">
+        <div class="card m-0" >
+            <div class="card-body">
+                <div class="row">
+
+
+
+                    @Html.LabelEditor("Year", "ddl", divCssClass: "col-lg-2")
+                    @Html.LabelEditor("Month", "ddl", divCssClass: "col-lg-2")
+                    @*@Html.LabelEditor("Duty_Hour", "ddl", "Duty Hour", divCssClass: "col-lg-5 pe-0")*@
+
+                    @*@Html.LabelEditor("duration", "ddl", "Rotation Duration", divCssClass: "col-lg-4")*@
+                    @Html.LabelEditor("Department", "ddl", "Department", divCssClass: "col-lg-3")
+                    @Html.LabelEditor("Designation", "ddl", "Designation", divCssClass: "col-lg-3")
+                    <div class="col-lg-1"><button type="button" id="btn-find" class="btn btn-primary mt-4">Find</button></div>
+
+                    <script>
+                        $('#Department').select2();
+                        $('#Designation').select2();
+                    </script>
+
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-12 mt-0 pt-1">
+                        <div id="print-pnl" style="overflow: auto; height: calc(100vh - 300px);">
+                            <table id="tbl-data" class="table table-bordered d-none" role="grid" style="width:100%">
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <table id="tbl-list" class="table table-bordered" role="grid" style="width:100%">
+                                <thead style="position: sticky; top: -1px; background: whitesmoke;">
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-footer d-flex">
+
+                <button class="btn btn-primary  me-4" id="btn-submit">Submit</button>
+                <h4 id="msg"></h4>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var count = 0;
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    $("#Year option:not(:first)").remove();
+    for (var year = 2023; year <= currentYear + 1; year++) {
+        $('#Year').append($("<option>").text(year).val(year));
+    }
+    $("#Month option:not(:first)").remove();
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    for (let i = 0; i < monthNames.length; i++) {
+        const monthNumber = (i + 1).toString().padStart(2, '0');
+        $('#Month').append($("<option>").text(monthNames[i]).val(monthNumber));
+    }
+    $(function () {
+        $('#Year').val('@My.Now.Year')
+        $('#Year').change();
+        $('#Month').val('@My.Now.ToString("MM")')
+        $('#Month').change();
+    });
+    
+   
+
+    $('#Year').on('change', function () {
+        $('#Month').val('');
+        $('#Month').change();
+        $('#tbl-list tbody').empty();
+        $('#msg').html('');
+    })
+    
+    $('#Month').on('change', function () {
+
+        $('#tbl-list tbody').empty();
+        $('#msg').html('');
+    })
+    $('#Designation').on('change', function () {
+
+        $('#tbl-list tbody').empty();
+        $('#msg').html('');
+    })
+    
+
+</script>
+<script>
+    $(function () {
+        var data = { type: 'department' }
+        gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Department');
+                $("#Department option:not(:first)").remove();
+                ddl.append($("<option>").text('All').val('0'));
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.department_id));
+                });
+                // $('#Department').select2();
+                $('#tbl-list tbody').empty();
+                $('#msg').html('');
+            }
+        });
+    });
+
+
+    $('#Department').on('change', function () {
+        var data = { type: 'designation', DepartmentId: $(this).val() }
+        gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Designation');
+                $("#Designation option:not(:first)").remove();
+                ddl.append($("<option>").text("All").val("0"));
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.Designation_id));
+                });
+
+                //$('#Designation').select2();
+            }
+        });
+        $('#tbl-list tbody').empty();
+        $('#msg').html('');
+    })
+    $('#btn-submit').on('click', function () {
+        var Designation = $('#Designation').val();
+        var data = { Designation: Designation, Month: $('#Month').val(), Year: $('#Year').val(), data_list: JSON.stringify(datalist) }
+        $('#msg').html("Please wait...");
+        $(this).prop("disabled", true);
+        $('#msg').removeClass("d-none").removeClass("text-danger").removeClass("text-success").addClass("text-primary");
+        gowithData('../../hr/save/duty-roster-weekoff', 'POST', JSON.stringify({ data: data }), function (resp) {
+            $('#btn-submit').prop("disabled", false);
+            if (!resp.error) {
+                alertSuccess(resp.message);
+                $('#msg').html(resp.message);
+                $('#msg').removeClass("d-none").removeClass("text-danger").addClass("text-success").removeClass("text-primary");
+            }
+            else {
+                alertError(resp.message);
+                $('#msg').html(resp.message);
+                $('#msg').removeClass("d-none").addClass("text-danger").removeClass("text-success").removeClass("text-primary");
+            }
+        });
+    })
+    $('#btn-find').on('click', function () {
+        var data = { type: 'duty-roster-weekoff-seetting', Month: $('#Month').val(), Year: $('#Year').val(), designation: $('#Designation').val(),  department: $('#Department').val() }
+        gowithData('../../hr/data/report', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var tbody = $('#tbl-data thead');
+                tbody.empty();
+                //Emp_Code,Employee_Name,Employee_image
+
+                if (resp.data.length == 0) {
+                    var row1 = $('<tr>').append($('<th colspan="2" style="text-align : center;">').append($('<label style ="font-size: 25px;">').text(`No Record found`)));
+                    tbody.append(row1);
+                    $('#tbl-list tbody').empty();
+                    $('#tbl-list thead').empty();
+                    $('#msg').html('');
+                }
+                else {
+                    var tb = $('#tbl-list thead');
+                    tb.empty();
+                    colList = Object.keys(resp.data[0]);
+                    var th = $('<tr>');
+                    var cl = 0;
+                    $.each(colList, function (ind, k) {
+                        if (k == 'EmployeeId') {
+                        }
+                        else if (cl == 0) {
+                            th.append($('<th>').text(k.trim()).css('text-align', 'left').css('padding-left', '5px'));
+                            cl = 1;
+                        }
+                        else {
+                            th.append($('<th>').text(k.trim()).css('text-align', 'center'));
+                        }
+                    })
+                    tb.append(th);
+                    datalist = resp.data;
+                    bind_chkbox_data();
+                    //  tbody.append($('<tr>').append($('<td>').addClass("p-0").append(table.append(tb))));
+                }
+            }
+        });
+    })
+    var datalist = [];
+    var colList = [];
+    function bind_chkbox_data() {
+        var tb = $('#tbl-list tbody');
+        tb.empty();
+        $.each(datalist, function (index, d) {
+            var cl = 0;
+            var tr = $('<tr>');
+            $.each(colList, function (ind, k) {
+
+                if (k == 'EmployeeId') {
+                }
+                else if (k == 'Employee Name') {
+                    tr.append($('<td>').text(d[k]).css('text-align', 'left').css('padding-left', '5px'));
+                }
+                else if (k == 'W-Off') {
+                    tr.append($('<td>').text(d[k]).css('text-align', 'center'));
+                }
+                else if (k == 'Max-WOff') {
+                    tr.append($('<td>').text(d[k]).css('text-align', 'center'));
+                }
+                else {
+                    var ischecked = d[k] == '1';
+                    if (d[k] == "True") {
+                        ischecked = true;
+                    }
+                    if (d[k] == "0" || d[k] == "1" || d[k] == "False" || d[k] == "True") {
+                        tr.append($('<td style="text-align: center; line-height: 0;">').append($('<input type="checkbox" class="chk_enbled my-1"   data-dk="' + k + '"  data-did="' + index + '">').prop('checked', ischecked)));
+                    }
+                    else {
+                        tr.append($('<td>').text(d[k]).css('text-align', 'center'));
+                    }
+                   
+                }
+                cl++;
+            })
+            tb.append(tr);
+        });
+    }
+    $('#tbl-list').on('change', '.chk_enbled', function () {
+        // console.log("st")
+        var ind = parseInt($(this).data('did'));
+        //  console.log("ind" + ind)
+        var dk = $(this).data('dk');
+        //console.log("ind" + dk)
+        if (!datalist[ind]['W-Off']) {
+            datalist[ind]['W-Off'] = 0;
+        }
+        var cnt = parseInt(datalist[ind]['W-Off']); 
+        var max_weekoff = parseInt(datalist[ind]['Max-WOff']);
+        if ($(this).prop("checked") == true) {
+
+            if (max_weekoff < 4 && cnt >= max_weekoff) {
+                alertErrorNotification(`Max ${max_weekoff} Week off allowed per month`)
+                datalist[ind][dk] = false;
+            } 
+            else if (cnt >= 4) {
+                alertErrorNotification("Max 4 Week off allowed per month")
+                datalist[ind][dk] = false;
+            }
+            else {
+                datalist[ind][dk] = $(this).prop("checked");
+                datalist[ind]['W-Off'] = cnt + 1;
+            }
+
+        }
+        else {
+            datalist[ind][dk] = $(this).prop("checked");
+            datalist[ind]['W-Off'] = cnt - 1;
+        }
+        bind_chkbox_data();
+    })
+    function dtime(time24) {
+        // Parse the input time string to get the hours and minutes
+        const [hours, minutes] = time24.split(':').map(Number);
+
+        // Determine the meridiem (AM or PM)
+        const meridiem = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert hours to 12-hour format
+        const hours12 = (hours % 12) || 12;
+
+        // Format the result as a string in 12-hour format
+        const time12 = `${hours12.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${meridiem}`;
+
+        return time12;
+    }
+</script>
+ 
+
+

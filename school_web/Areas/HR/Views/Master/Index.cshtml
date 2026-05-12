@@ -1,0 +1,1245 @@
+﻿
+@{
+    HR_MasterPageConfig mpc = ViewBag.mpc;
+    ViewBag.Title = mpc.pageTitle;
+    var formclass = "col-lg-12";
+    var dataclass = "col-lg-12";
+    var modaltype = "modal-lg";
+    var area = "hr";
+    var allowExcelUplad = false;
+    if (mpc.OtherData != null)
+    {
+        if (mpc.OtherData.ContainsKey("Page_Layout_Path"))
+        {
+            if (mpc.OtherData["Page_Layout_Path"] != "")
+            {
+                Layout = mpc.OtherData["Page_Layout_Path"];
+
+                //if (My.isSchool)
+                {
+                    if (!Layout.Contains("Areas"))
+                    {
+                        Layout = Layout.Replace("~/Views", "~/Areas/HR/Views");
+                    }
+                }
+            }
+        }
+    }
+    if (mpc.formType == "LeftRight")
+    {
+        if (!mpc.action.isAddNewAllow)
+        {
+            formclass = "col-lg-12";
+            dataclass = "col-lg-12";
+            mpc.formType = "PopUp";
+            modaltype = "modal-md";
+        }
+        else
+        {
+            formclass = "col-lg-4";
+            dataclass = "col-lg-8";
+        }
+    }
+}
+<script src="~/Content/js/papaparse5.3.0.min.js"></script>
+<style>
+    .row {
+        --bs-gutter-x: 0.5rem;
+        --bs-gutter-y: 0;
+    }
+
+    .table.dataTable {
+        margin-top: 0px !important;
+    }
+
+    #mytable {
+        min-height: 100px;
+    }
+
+    .dataTables_scroll {
+        border: 1px solid #ddd !important;
+        margin-top: 0.25rem !important;
+    }
+
+    .filter-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+</style>
+@if (ViewBag.IsHome)
+{
+    Html.RenderPartial("home");
+}
+else if (ViewBag.pageNotFound)
+{
+    //if (ViewBag.IsHR == "0")
+    //{
+    //    Layout = "~/Views/Shared/_LayoutEmployee.cshtml";
+    //}
+    Html.RenderPartial("page-not-found");
+}
+
+else
+{
+    var allowaction = false;
+    if (mpc.pageType == "Form")
+    {
+        if (mpc.action.isEditAllow)
+        {
+            allowaction = true;
+        }
+        if (mpc.action.isDeleteAllow)
+        {
+            allowaction = true;
+        }
+        allowExcelUplad = false;
+    }
+    if (!allowaction)
+    {
+        if (mpc.action.actionList != null)
+        {
+            if (mpc.action.actionList.Length > 0)
+            {
+                allowaction = true;
+            }
+        }
+    }
+    if (mpc.pageType == "Single Data Form Only")
+    {
+        formclass = "col-lg-10 mx-auto";
+    }
+
+    <div>
+
+        <div class="page-breadcrumb d-flex align-items-center mb-2">
+            <div class="ps-3 d-none d-md-flex">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item">
+                            <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">@mpc.pageTitle</li>
+                    </ol>
+                </nav>
+            </div>
+            @if (mpc.pageType == "Form")
+            {
+                if (mpc.formType == "PopUp")
+                {
+                    if (mpc.action.isAddNewAllow)
+                    {
+                        <div class="ms-auto">
+                            <button type="button" onclick="openModel()" id="btn_new" class="btn btn-success btn-sm"><i class="bx bx-plus-circle"></i> Add New</button>
+                            @if (allowExcelUplad)
+                            {
+                                <button type="button" onclick="openUploadCSVModel()" class="btn btn-outline-secondary btn-sm"><i class="bx bx-upload"></i> &nbsp;  Upload CSV</button>
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    if (mpc.action.isAddNewAllow)
+                    {
+                        <div class="ms-auto">
+                            @if (allowExcelUplad)
+                            {
+                                <button type="button" onclick="openUploadCSVModel()" class="btn btn-outline-secondary btn-sm"><i class="bx bx-upload"></i>Upload CSV</button>
+                            }
+                        </div>
+                    }
+                }
+
+            }
+
+        </div>
+
+        <div class="row">
+            @if (mpc.pageType == "Form" || mpc.pageType == "Single Data Form Only")
+            {
+                if (mpc.formType == "PopUp" && mpc.pageType != "Single Data Form Only")
+                {
+                    <div class="modal fade" id="model-form" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                        <div class="modal-dialog @modaltype">
+                            <form class="my-form" id="main-form">
+                                @Html.Hidden("frm-page-Id", @mpc.pageId.ToString())
+                                @Html.Hidden("HdId")
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Add @mpc.pageTitle</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="row">
+                                            @foreach (var p in mpc.pcd)
+                                            {
+                                                if (!p.isField)
+                                                {
+
+                                                }
+                                                else if (p.fieldType == "MultiLine")
+                                                {
+                                                    @Html.MasterField(p, "col-md-12", area: area)
+                                                }
+                                                else
+                                                {
+                                                    @Html.MasterField(p, "col-md-6", area: area)
+                                                }
+
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer p-2 d-block">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+
+                                                <button id="btn-add" type="button" class="btn btn-primary">Add</button>
+                                                <button id="btn-cancel" type="button" style="display: none;" class="btn btn-dark">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="@formclass">
+                        <form class="my-form" id="main-form">
+                            @Html.Hidden("frm-page-Id", @mpc.pageId.ToString())
+                            @Html.Hidden("HdId")
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        @foreach (var p in mpc.pcd)
+                                        {
+                                            if (!p.isField)
+                                            {
+
+                                            }
+                                            else if (p.fieldType == "MultiLine")
+                                            {
+                                                @Html.MasterField(p, "col-md-12", area: area)
+                                            }
+                                            else
+                                            {
+                                                @Html.MasterField(p, "col-md-6", area: area)
+                                            }
+
+                                        }
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+
+                                            <button id="btn-add" type="button" class="btn btn-primary">Add</button>
+                                            <button id="btn-cancel" type="button" style="display: none;" class="btn btn-dark">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+
+
+
+                }
+            }
+            else
+            {
+                @Html.Hidden("frm-page-Id", @mpc.pageId.ToString())
+                @Html.Hidden("HdId")
+            }
+            @if (mpc.pageType != "Single Data Form Only")
+            {
+                <div class="@dataclass">
+                    <div class="card">
+                        @if (mpc.filters.Count > 0)
+                        {
+                            <div class="card-header pb-0">
+                                <div class="row">
+                                    @foreach (var f in mpc.filters)
+                                    {
+                                        <form id="@f.uniqueId" class="d-flex mb-2 w-auto">
+
+                                            @foreach (var fi in f.filteritems)
+                                            {
+                                                @Html.MasterField(fi, "input-group me-2", area)
+                                            }
+                                            <div class="filter-btn">
+                                                <button class="btn btn-primary" type="button" data-id="@f.uniqueId" onclick="apply_filter(this)" style="width: auto; ">@f.btnName</button>
+                                            </div>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        <div class="card-body px-2 py-1">
+
+                            <table class="table table-bordered table-striped" id="mytable" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        @if (allowaction)
+                                        {
+                                            <th class="no-export">Action</th>
+                                        }
+
+                                        @foreach (var p in mpc.gcd)
+                                        {
+                                            if (p.isShowOnGrid)
+                                            {
+                                                <th>@p.displayText</th>
+                                            }
+                                        }
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div id="grid_prog" style="margin : 0px auto; width:200px">
+                                <span class="spinner-border spinner-border-sm me-2"> </span>
+                                Please wait....
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                @Html.Hidden("HdId")
+                <div id="act-modals12">
+
+
+                    @if (mpc.action.actionList != null)
+                    {
+                        foreach (ActionList al in mpc.action.actionList)
+                        {
+                            var fileds = "";
+                            if (al.type == "Url")
+                            {
+                                continue;
+                            }
+                            <div class="modal fade" id="model-@al.uniqueId" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                <div class="modal-dialog modal-lg">
+
+                                    @Html.Hidden("act-cust-Id", al.action_id)
+                                    @Html.Hidden("HdId")
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">@al.name</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+
+                                            </div>
+                                            <div class="row">
+                                                @if (al.type == "Form")
+                                                {
+                                                    foreach (var p in mpc.pcd)
+                                                    {
+                                                        if (!al.col_list.Contains(p.columnName))
+                                                        {
+                                                            continue;
+                                                        }
+                                                        if (!p.isField)
+                                                        {
+
+                                                        }
+                                                        else if (p.fieldType == "MultiLine")
+                                                        {
+                                                            fileds += p.columnName + ",";
+                                                            @Html.MasterField(p, "col-lg-12", area: area)
+                                                        }
+                                                        else
+                                                        {
+                                                            fileds += p.columnName + ",";
+                                                            @Html.MasterField(p, "col-xxl-6 col-xl-6  col-lg-12  col-md-4 col-sm-6", area: area)
+                                                        }
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    foreach (var p in al.act_pcd)
+                                                    {
+
+                                                        if (p.fieldType == "MultiLine")
+                                                        {
+                                                            fileds += p.columnName + ",";
+                                                            @Html.MasterField(p, "col-lg-12", area: area)
+                                                        }
+                                                        else
+                                                        {
+                                                            fileds += p.columnName + ",";
+                                                            @Html.MasterField(p, "col-xxl-6 col-xl-6  col-lg-12  col-md-4 col-sm-6", area: area)
+                                                        }
+                                                    }
+                                                }
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer p-2 d-block">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+
+                                                    <button id="btn-add-@al.uniqueId" type="submit" class="btn btn-primary">@al.btn_text</button>
+                                                    <button type="button" data-bs-dismiss="modal" class="btn btn-dark ms-3">Cancel</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            fileds = fileds.TrimEnd(',');
+                            <script>
+
+                        $(`#btn-add-@al.uniqueId`).on("click", function () {
+                            var fields = '@fileds';
+                            var ss = fields.split(',');
+                            var data = { pageId: '@mpc.pageId', action_id: '@al.action_id', ID: $(this).data("id") }
+                            $.each(ss, function (indx, d) {
+                                data[d] = $(`#${d}`).val();
+                            })
+                            submitdata("../../hr/save/action_form", JSON.stringify({ data: data }), function (resp) {
+
+                                if (!resp.error) {
+                                    console.log(resp.data_action);
+                                    if (resp.data_action =="remove") {
+
+                                        var table = $('#mytable').DataTable();
+                                        var rowIndex = table.row(select_tr).index();
+                                        table.row(rowIndex).remove().draw();
+                                        select_tr.remove();
+                                    }
+                                    else if (resp.data_action == "status") {
+                                        console.log("dolr");
+                                        select_tr.addClass("bg-light-primary");
+                                    }
+                                    else if (resp.data) {
+                                        bind_data(resp.data);
+                                    }
+                                    $('#model-@al.uniqueId').modal("hide");
+                                    $.each(ss, function (indx, d) {
+                                        $(`#${d}`).val('');
+                                    })
+                                }
+
+                            })
+                        });
+                            </script>
+                        }
+                    }
+                </div>
+            }
+        </div>
+
+        @Html.BeginModal("mdl-upxl", "Upload using CSV file").Content(@<div>
+            @Html.LabelEditor("csv_file", "file-csv", "Browse CSV File", isRequired: true, area: area)
+            <div class="row mt-2" id="div2" style="max-height: calc(100vh - 300px); overflow: auto;">
+                <table class="table table-bordered table-striped m-0 " style="width:100%" id="csv_data">
+                    <thead style="position: sticky; top: -1px; background-color:whitesmoke; ">
+
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>).Footer(@<div>
+        <button type="button" id="btn_upload_csv" class="btn btn-success btn-sm d-none"><i class="bx bx-upload"></i>Upload</button>
+        <button type="button" id="btn_sample" class="btn btn-outline-info btn-sm"><i class="bx bx-cloud-download"></i>Download Sample</button>
+
+    </div>).Create()
+        <script>
+            $(function () {
+                $('#file_csv_file').removeAttr("onchange");
+            })
+
+            $(`#btn_sample`).on("click", function () {
+                window.open("../../../@area/m-sample/@mpc.pageId","_blanck");
+            })
+            function openUploadCSVModel() {
+                $('#file_csv_file').val(null);
+                var thead = $("#csv_data thead");
+                thead.empty();
+                var tbody = $("#csv_data tbody");
+                tbody.empty();
+                $('#btn_sample').removeClass("d-none");
+                $('#btn_upload_csv').addClass("d-none");
+                $("#mdl-upxl").modal("show")
+            }
+
+            $('#file_csv_file').on('change', function () {
+                console.log("file select")
+                var csvFile = $(this)[0].files[0];
+                if (csvFile) {
+                    //empty_form();
+
+                    var fileExtension = csvFile.name.split('.').pop().toLowerCase();
+                    if (fileExtension != "csv") {
+                        alertError("Please Select Valid CSV File Only")
+                        $('#csv_file').val('');
+                        return false;
+                    }
+                    //fileupload($('#file_csv_file')[0])
+                    console.log("file select2")
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        console.log("file loaded")
+                        var csvContent = e.target.result;
+                        csvToJson(csvContent);
+                        $('#btn_sample').addClass("d-none");
+                        $('#btn_upload_csv').removeClass("d-none");
+                    };
+                    reader.readAsText(csvFile);
+
+                }
+            });
+            var datalist = [];
+            var file_loaded = false;
+            function csvToJson(csvContent) {
+                Papa.parse(csvContent, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function (results) {
+                        file_loaded = true;
+                        datalist = results.data;
+                        load_csv_datatable();
+                    }
+                });
+            }
+            function load_csv_datatable() {
+                var thead = $("#csv_data thead");
+                thead.empty();
+                var tbody = $("#csv_data tbody");
+                tbody.empty();
+                if (datalist.length > 0) {
+                    var d1 = datalist[0];
+                    var keys = Object.keys(d1);
+                    var tr = $('<tr>')
+                    $.each(keys, function (ind, k) {
+                        tr.append($('<th>').text(k));
+                    })
+                    thead.append(tr);
+                    $.each(datalist, function (indx, d) {
+                        tr = $('<tr>')
+                        $.each(keys, function (ind, k) {
+                            tr.append($('<td>').text(d[k]));
+                        })
+                        tbody.append(tr);
+                    })
+                }
+
+            }
+
+            $("#btn_upload_csv").click(function () {
+                var data = { pageId: '@mpc.pageId' };
+                data.datalist = JSON.stringify(datalist)
+                skip_invalid_data = $('#skip_invalid_data').prop("checked");
+                submitdata("../../../@area/data/uploadcsv", JSON.stringify({ data: data }), function (resp) {
+                    if (resp.error) {
+                        if (resp.needVerify) {
+                            load_verified_datatable(resp.skiped_data)
+                        }
+                    }
+                    else if (resp.skip) {
+                        console.log(resp.skiped_data);
+                        load_verified_datatable(resp.skiped_data)
+                        bind_data(resp.data);
+                    }
+                    else {
+                        bind_data(resp.data);
+                        $("#mdl-upxl").modal("hide")
+                    }
+
+                });
+            });
+            function load_verified_datatable(data) {
+                var thead = $("#csv_data thead");
+                thead.empty();
+                var tbody = $("#csv_data tbody");
+                tbody.empty();
+                if (data.length > 0) {
+                    var d1 = data[0];
+                    var keys = Object.keys(d1);
+                    var tr = $('<tr>')
+                    $.each(keys, function (ind, k) {
+                        if (k == "error" || k == "message") {
+
+                        }
+                        else {
+
+                            tr.append($('<th>').text(k));
+                        }
+
+                    })
+                    tr.append($('<th>').text("Message"));
+                    thead.append(tr);
+                    $.each(data, function (indx, d) {
+
+                        if (d.error) {
+                            tr = $('<tr>')
+
+                            $.each(keys, function (ind, k) {
+                                if (k == "error" || k == "message") {
+
+                                }
+                                else {
+
+                                    tr.append($('<td>').text(d[k]));
+                                }
+                            })
+                            tr.append($('<td>').text(d.message));
+                            tr.addClass("bg-danger");
+                            tbody.append(tr);
+                        }
+                    })
+
+                    $.each(data, function (indx, d) {
+
+                        if (!d.error) {
+                            tr = $('<tr>')
+
+                            $.each(keys, function (ind, k) {
+                                if (k == "error" || k == "message") {
+
+                                }
+                                else {
+
+                                    tr.append($('<td>').text(d[k]));
+                                }
+                            })
+                            tr.append($('<td>').text(""));
+                            tbody.append(tr);
+                        }
+
+                    })
+                }
+
+            }
+
+        </script>
+        <script>
+
+            @if (mpc.action.actionList != null)
+             {
+                 foreach (ActionList al in mpc.action.actionList)
+                 {
+                    @: function submit_@al.uniqueId () {
+                    @: var data = {};
+                     foreach (var p in al.act_pcd)
+                       {
+
+                           @: data['@p.displayText'] = $('#@p.columnName').val();
+
+                    }
+                   // @: submitdata('../../save/data', JSON.stringify({ data: data }), function (data) { console.log(data); })
+                    @:console.log(data);
+                    @:}
+                 }
+             }
+        function enableDisabledFields() {
+            // Enable disabled fields before form submission
+            $("#action_form input:disabled").prop("disabled", false);
+            $("#action_form select:disabled").prop("disabled", false);
+            return true; // Continue with form submission
+        }
+
+        </script>
+        <script>
+        var actionlist = [];
+        var isEdit = false;
+        var edit_row;
+        $(function () {
+            var data = JSON.stringify({ data: { pageId: '@mpc.pageId' } });
+            gowithData('../../@area/data/tabledata', 'Post', data, function (data) {
+                if (!data.error) {
+                @if(mpc.pageType== "Single Data Form Only")
+                {
+                    @: bind_form(data.data);
+                }
+                else
+                {
+                    @: bind_data(data.data);
+                }
+                }
+            })
+            @if(mpc.pageType== "Form")
+            {
+                @: emptyForm();
+            }
+
+        });
+            $('#btn-add').on('click', function () { save_data(); });
+            function save_data() {
+
+                var btn = $('#btn-add');
+                if (btn.prop('disabled')) {
+                    return false; // Prevent multiple clicks while disabled
+                }
+                btn.prop("disabled", true);
+                //$("#main-form input:disabled").prop("disabled", false);
+                btn.html(`<div  style="margin : 0px auto; width:150px"> <span class="spinner-border spinner-border-sm me-2" > </span>
+                            Please wait....
+                            </div>`);
+                var data = {};
+                var formData = $("#main-form").serialize(); // Serialize form data
+                $("#main-form :input").each(function () {
+                    if ($(this).prop("disabled")) {
+                        if ($(this).val()) {
+                            formData += `&${$(this).attr("name")}=${$(this).val()}`;
+                        }
+                    }
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "../../../@area/save/page", // Replace with your controller and action names
+                    data: formData,
+                    success: function (resp) {
+                        resp = JSON.parse(resp);
+                       if (resp.error) {
+                           alertError(resp.message);
+                            if (isEdit == true) {
+                                $('#btn-add').text("Update")
+                            }
+                            else {
+
+                                $('#btn-add').text("Add")
+                                $('#btn-cancel').hide();
+                            }
+                            $('#btn-add').prop("disabled", false);
+                        }
+                       else {
+                           alertSuccess(resp.message);
+                           @if(mpc.pageType== "Single Data Form Only")
+                            {
+                                @:$('#btn-add').text("Update")
+                                @:$('#btn-add').prop("disabled", false);
+                                @: bind_form(resp.data);
+                            }
+                            else
+                            {
+                                @: emptyForm();
+                                @: if (resp.isUpdate) { bind_data(resp.data, 2)}
+                                @: else if (resp.isReset) { bind_data(resp.data)}
+                                @: else { bind_data(resp.data,1)}
+                            }
+                        }
+                    },
+                    error: function (error) {
+                        alertError(error);
+                        if (isEdit == true) {
+                            $('#btn-add').text("Update")
+                        }
+                        else {
+
+                            $('#btn-add').text("Add")
+                            $('#btn-cancel').hide();
+                        }
+                        $('#btn-add').prop("disabled", false);
+                    }
+                });
+
+
+            }
+
+        function handleSuccess(data) {
+                data = JSON.parse(data);
+                    if (data.error) {
+                        alertError(data.message);
+                        if (isEdit == true) {
+                            $('#btn-add').text("Update")
+                        }
+                        else {
+
+                            $('#btn-add').text("Add")
+                            $('#btn-cancel').hide();
+                        }
+                        $('#btn-add').prop("disabled", false);
+                    }
+                    else {
+                        alertSuccess(data.message);
+                        @if(mpc.pageType== "Single Data Form Only")
+                        {
+                            @:$('#btn-add').text("Update")
+                            @:$('#btn-add').prop("disabled", false);
+                            @: bind_form(data.data);
+                        }
+                        else
+                        {
+                            @: emptyForm();
+                            @: if (data.isUpdate) { bind_data(data.data, 2)}
+                            @: else if (data.isReset) { bind_data(data.data)}
+                            @: else { bind_data(data.data,1)}
+                        }
+                    }
+                }
+        function fnfailor(data) {
+            if (isEdit = true) {
+                $('#btn-add').text("Update")
+            }
+            else {
+
+                $('#btn-add').text("Add")
+                $('#btn-cancel').hide();
+            }
+        }
+        function fnbegin() {
+                var btn = $('#btn-add');
+                if (btn.prop('disabled')) {
+                    return false; // Prevent multiple clicks while disabled
+            }
+            $("#main-form input:disabled").prop("disabled", false);
+                btn.prop("disabled", true);
+                var ss = `<div  style="margin : 0px auto; width:150px">
+
+                        <span class="spinner-border spinner-border-sm me-2" > </span>
+                            Please wait....
+                            </div>`;
+                btn.html(ss);
+                }
+
+        function formatDate(inputDate) {
+            var date = new Date(inputDate);
+            var formattedDate = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+            return formattedDate;
+        }
+
+        </script>
+        @if (mpc.pageType == "Form")
+        {
+            <script>
+            $('#btn-cancel').on('click', function () {
+                emptyForm();
+            });
+            function emptyForm() {
+                    @foreach (var p in mpc.pcd)
+                    {
+
+                        @:  $('#@p.columnName').val("@p.defaultValue");
+
+                         if (p.onChanged)
+                        {
+                        @:  $('#@p.onChangedField').removeAttr('data-@p.columnName');
+                    @:$('#@p.onChangedField').change();
+                    }
+                        if (p.fieldType.Contains("File"))
+                        {
+                @:  $('#file_@p.columnName').val("");
+                @:  $('#img_@p.columnName').hide();
+            }
+ if (p.fieldType.Contains("CheckBox-List"))
+                    {
+                             @: $("input[name='@p.columnName']").prop("checked", false);
+                        }
+
+                    }
+                 $('#btn-add').text("Add")
+                 $('#btn-add').prop("disabled", false);
+                    $('#btn-cancel').hide();
+                    $('#HdId').val("")
+                    $('#model-form').modal("hide");
+                    isEdit = false;
+            }
+            </script>
+        }
+        @*@if (mpc.pageType == "Report")
+            {
+                <script>
+                    function custom_action_click(fld) {
+                        var fld = $(fld);
+                        console.log('click ok');
+                        var form = $('#action-form-' + fld.attr('data-uid'));
+                        var hiddenField = form.find('#HdId');
+                        hiddenField.val(fld.attr('data-id'))
+                        $('#model-' + fld.attr('data-uid')).modal("show");
+                    }
+                </script>
+            }*@
+
+        <script>
+            var select_tr;
+            function custom_action_click(fld) {
+                var fld = $(fld);
+                $('#btn-add-' + fld.attr('data-uid')).attr('data-id', fld.attr('data-id'))
+                select_tr = $(this).closest('tr');
+                $('#act-modals12').find('.modal-body input, .modal-body textarea, .modal-body select').val('');
+                $('#model-' + fld.attr('data-uid')).modal("show");
+            }
+        </script>
+        @if (mpc.pageType == "Single Data Form Only")
+        {
+            <script>
+              function bind_form(data) {
+                if (data.length == 0) {}
+                else {
+                    $('#btn-add').text("Update")
+                    if (data[0].Id) {
+                        $('#HdId').val(data[0].Id)
+                    }
+                    else if (data[0].id) {
+                        $('#HdId').val(data[0].id)
+                    }
+
+                    @foreach (var p in mpc.pcd)
+                        {
+                            if (p.isField)
+                            {
+
+                                if (p.fieldType.Contains("File"))
+                                {
+                                    @: $('#@p.columnName').val(data[0].@p.columnName)
+                                    @: $('#img_@p.columnName').attr("src", data[0].@p.columnName)
+                                    @: $('#img_@p.columnName').show()
+                                }
+                                else if (p.fieldType.Contains("TimePicker"))
+                                {
+                                    @: $('#@p.columnName').val(convertTo24Hour(data[0].@p.columnName))
+                                }
+                                else if (p.fieldType.Contains("DatePicker"))
+                                {
+                                    @: $('#@p.columnName').val(formatDate(data[0].@p.columnName));
+                                }
+                                else if (p.fieldType.Contains("CheckBox-List"))
+                                {
+                                    @: $("input[name='@p.columnName']").prop("checked", false);
+                                    @: muticheck('@p.columnName', data[0].@p.columnName)
+                                }
+                                else if (p.fieldType.Contains("RadioButton"))
+                                {
+                                    @: muticheck('@p.columnName', data[0].@p.columnName)
+                                    @: $('input[name="@p.columnName"]').change();
+                                }
+                                else
+                                {
+                                    @: $('#@p.columnName').val(data[0].@p.columnName)
+                                }
+                                if(p.onChanged)
+                                {
+                                    @: $('#@p.onChangedField').attr('data-@p.columnName', data[0].@p.columnName);
+                                    @: $('#@p.onChangedField').change();
+                                }
+
+                            }
+                        }
+                    }
+            }
+
+            </script>
+        }
+        @if (mpc.pageType != "Single Data Form Only")
+        {
+            <script>
+
+             function openModel() {
+                 $('#model-form').modal("show");
+             }
+               function bind_data(data, code) {
+                var showAction = false;
+                 @if (allowaction)
+                                {
+                                   @:  showAction = true;
+                                }
+
+            var tableBody = $('#mytable tbody');
+            if (code == 2) {
+                edit_row.empty();
+            }
+            else {
+                $('#mytable').DataTable().destroy();
+            }
+
+            if (!code) {
+                tableBody.empty();
+            }
+            $('#grid_prog').hide();
+
+            var type = '@mpc.pageType';
+
+            $.each(data, function (index, d) {
+                var div = $('<div>').addClass("d-flex align-items-center")
+                @if (mpc.pageType=="Form") {
+                    if (mpc.action.isEditAllow)
+                                {
+                                   @:   div.append($('<button>').addClass("edit-button btn").attr("data-id", d.Id).html("<i class='bx bx-edit-alt'></i>"))
+                                }
+                    if (mpc.action.isDeleteAllow)
+                                {
+                                   @:   div.append($('<button>').addClass("delete-button btn").attr("data-id", d.Id).html("<i class='bx bx-trash'></i>"))
+                                }
+                }
+
+                        var div_ddl = $('<div>').addClass("dropdown ms-1")
+                div_ddl.append(`<div class="dropdown-toggle dropdown-toggle-nocaret cursor-pointer badge bg-info text-dark" data-bs-toggle="dropdown">	<i class='bx bx-dots-horizontal-rounded font-22'></i></div>`)
+                var ul = $('<ul>').addClass("dropdown-menu")
+                div_ddl.append(ul)
+                $.each(actionlist, function (index, act) {
+                    table.append(actionrow(act));
+                });
+                ul.append(
+                    @if (mpc.action.actionList!=null) {
+                        foreach(ActionList al in mpc.action.actionList)
+                        {
+
+                          @:$('<li>').append($('<span>').attr("data-id", d.Id).attr("data-uid", '@al.uniqueId').attr("onclick", `custom_action_click(this)`).addClass("dropdown-item").append("<i class='@al.icon'></i>").append("@al.name")),
+                        }
+                    }
+                )
+                @if (mpc.action.actionList != null &&  mpc.action.actionList.Length > 0)
+                {
+                     @: div.append(div_ddl)
+                }
+
+
+        var td = $('<td>').append(div).width("55px");
+                 if (code == 2) {
+                     if (showAction) {
+                         edit_row.append(td);
+                     }
+    edit_row.append(
+       @foreach (var g in mpc.gcd)
+                        {
+        if (g.isShowOnGrid)
+        {
+
+            if (g.dataType=="Image")
+            {
+                                     @: $('<td>').html('<a href="'+d.@g.columnName+'" target="_blank"><img src="'+d.@g.columnName+'" class="img-thumbnail" style="height: 50px;" ></a>'),
+                                }
+                        else if (g.dataType=="Other File")
+                                {
+                                     @: $('<td>').html('<a href="' + d.@g.columnName+ '" target="_blank" download ><i class="fas fa-file-download" style="font-size: 2rem;"></i></a>'),
+                                }
+                        else if (g.dataType=="Status")
+                                {
+                                     @: $('<td>').html(getstatusview('@g.requiredData', d.@g.columnName)),
+                                }
+                        else
+                        {
+ @: $('<td>').text(d.@g.columnName),
+                        }
+                            }
+                        }
+                        );
+                 }
+                 else {
+                     var row = $('<tr>');
+                     if (showAction) {
+                         row.append(td);
+                     }
+                     row.append(
+                        @foreach (var g in mpc.gcd)
+                        {
+                            if (g.isShowOnGrid)
+                            {
+                                 if (g.dataType=="Image")
+                                {
+                                     @: $('<td>').html('<a href="'+d.@g.columnName+'" target="_blank"><img src="'+d.@g.columnName+'" class="img-thumbnail" style="height: 50px;" ></a>'),
+                                }
+                        else if (g.dataType=="Other File")
+                                {
+                                     @: $('<td>').html('<a href="' + d.@g.columnName+ '" target="_blank" download ><i class="fas fa-file-download" style="font-size: 2rem;"></i></a>'),
+                                }
+                        else if (g.dataType=="Status")
+                                {
+                                     @: $('<td>').html(getstatusview('@g.requiredData', d.@g.columnName)),
+                                }
+                        else
+                        {
+ @: $('<td>').text(d.@g.columnName),
+                        }
+                            }
+                        }
+                    );
+                     if (!code) {
+                         tableBody.append(row);
+                     }
+                     else {
+                         tableBody.prepend(row);
+                     }
+                 }
+
+
+                });
+            if (code != 2) {
+                var table = $('#mytable').DataTable({
+                    lengthChange: false,
+                    scrollX: true, scrollCollapse: true,
+                    buttons: [{
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':visible:not(.no-export)' // Include only visible columns except those with class 'no-export'
+                        }
+                    },{
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':visible:not(.no-export)' // Include only visible columns except those with class 'no-export'
+                        }
+                    },{
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':visible:not(.no-export)' // Include only visible columns except those with class 'no-export'
+                        }
+                    }]
+                });
+                table.buttons().container().appendTo('#mytable_wrapper .col-md-6:eq(0)');
+            }
+
+        }
+
+                $('#mytable').edit(`../../@area/data/edit`, function (data, row) {
+            edit_row = row ;
+            isEdit = true;
+            $('#main-form').parent().removeClass('d-none');
+            $('#btn-add').text("Update")
+            $('#btn-cancel').show();
+            $('#HdId').val(data[0].Id)
+            @foreach (var p in mpc.pcd)
+            {
+                if (p.isField)
+                {
+
+                    if (p.fieldType.Contains("File"))
+                    {
+                        @:  $('#@p.columnName').val(data[0].@p.columnName)
+                        @: $('#img_@p.columnName').attr("src", data[0].@p.columnName)
+                        @: $('#img_@p.columnName').show()
+                    }
+                    else if (p.fieldType.Contains("TimePicker"))
+                    {
+
+                        @:  $('#@p.columnName').val(convertTo24Hour(data[0].@p.columnName))
+
+                    }
+                    else if (p.fieldType.Contains("DatePicker"))
+                    {
+                        @:  $('#@p.columnName').val(formatDate(data[0].@p.columnName));
+                    }
+                    else if (p.fieldType.Contains("CheckBox-List"))
+                    {
+                            @: $("input[name='@p.columnName']").prop("checked", false);
+                            @: muticheck('@p.columnName',data[0].@p.columnName)
+                    }
+                    else if (p.fieldType.Contains("RadioButton"))
+                    {
+                            @: muticheck('@p.columnName', data[0].@p.columnName)
+                            @: $('input[name="@p.columnName"]').change();
+
+                    }
+                    else
+                    {
+                        @:  $('#@p.columnName').val(data[0].@p.columnName)
+                    }
+                    if(p.onChanged)
+                        {
+                        @:  $('#@p.onChangedField').attr('data-@p.columnName',data[0].@p.columnName);
+                        @:  $('#@p.onChangedField').change();
+                        }
+                    if(mpc.events!=null)
+                    {
+                        foreach(var ev in mpc.events)
+                        {
+                            if(ev.fieldName==p.columnName)
+                            {
+                                @:$('#@p.columnName').change();
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            @if (mpc.formType == "PopUp")
+                    {
+                    @: openModel();
+                    }
+
+        });
+        $('#mytable').delete('../../@area/data/delete', function (data) {
+
+        });
+
+
+    function apply_filter(filterbtn) {
+            var id = $(filterbtn).attr("data-id");
+
+            var formData = $('#' + id).serializeArray();
+            var serializedData = {};
+
+            $.map(formData, function (input) {
+                serializedData[input.name] = input.value;
+            });
+            $('#' + id).find('select').each(function () {
+                var selectId = $(this).attr('id');
+                var selectedOption = $('#' + selectId + ' option:selected');
+                serializedData[selectId] = selectedOption.text();
+                serializedData[selectId + "_Value"] = selectedOption.val();
+            });
+
+            serializedData['pageId'] = '@mpc.pageId';
+            var data = JSON.stringify({ data: serializedData });
+
+        console.log(data);
+        gowithData("../../@area/filter/" + id, 'POST', data, function (resp) {
+                console.log(resp);
+                bind_data(resp.data);
+            })
+        }
+    function getstatusview(inputString, value) {
+        if (!value) {
+            value='null'
+        }
+        var regex = /\{(.*?)\}/g;
+        var matches = inputString.match(regex);
+        var found = false;
+        var rd = false;
+        if (matches) {
+            var resultList = matches.map(function (match) {
+                return match.replace(/[\{\}]/g, '');
+            });
+            $.each(resultList, function (index, data) {
+                var r = data.split(',');
+                if (r[0] == value) {
+                    found = true;
+                    rd = r;
+                    return false;
+                }
+            })
+        }
+        if (found) {
+
+            if (rd[1].startsWith("bg-")) {
+                return '<span class="badge rounded-pill ' + rd[1] + '"  >' + rd[2] + '  </span>';
+            }
+            else {
+                return '<span class="badge rounded-pill" style="background-color: ' + rd[1] + ';">' + rd[2] + '  </span>';
+            }
+        }
+        else {
+            return '<span class="badge rounded-pill bg-info"  >' + value + '  </span>';
+        }
+    }
+
+
+            </script>
+        }
+        <script>
+
+
+        </script>
+
+        @Html.pageEvents(mpc.events)
+
+    </div>
+
+}

@@ -1,0 +1,442 @@
+﻿
+@{
+    ViewBag.Title = "Loan & Advance";
+}
+
+
+
+
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="ms-auto">
+        <button class="btn btn-success btn-sm" type="button" onclick="add_advance_entry()" style="width: auto; "><i class="bx bx-plus-circle"></i> New Advance Entry</button>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header pb-0">
+        <div class="d-flex mb-2 w-auto">
+
+            <div class="form-group me-2">
+                @Html.Label("Employee", new { @class = "form-group-text" })
+                @Html.DropDownList("Employee", "All", new { @class = "form-select select", style = "max-width : 280px; min-width : 280px;" })
+            </div>
+
+            <div class="filter-btn">
+                <button class="btn btn-primary" type="button" id="btn-find" style="width: auto; ">Find</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body px-2 py-1">
+        <table class="table table-bordered table-striped" id="mytable">
+            <thead class="fixed-header">
+                <tr>
+                    <th class="no-export">Action</th>
+                    <th>Employee Name</th>
+                    <th>Employee Code</th>
+                    @*<th>Department</th>
+                        <th>Designation</th>*@
+                    <th>Loan Amount</th>
+                    <th>RePayment Mode</th>
+                    <th>Adjusted Amount</th>
+                    <th>Balance Amount</th>
+                    <th>EMI</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div id="grid_prog" style="margin : 0px auto; width:200px">
+            <span class="spinner-border spinner-border-sm me-2"> </span>
+            Please wait....
+        </div>
+    </div>
+</div>
+
+@Html.BeginModal("mdl-advance", "Advance Entry", "modal-lg").Content(@<div id="myDiv" class="row">
+    @Html.LabelEditor("Employee_Id", "ddl", "Employee")
+    @Html.LabelEditor("Amount", "number", "Amount", divCssClass: "col-md-6")
+    @Html.LabelEditor("Repayment_Option", "ddl", "Re-Payment Option", divCssClass: "col-md-6", ddl_comma_seperated: "Cash,Adjusted in Salary")
+    @Html.LabelEditor("Is_Pay_EMI", "ddl", "Is Pay in EMI", divCssClass: "col-md-6", ddl_comma_seperated: "Yes,No")
+    @Html.LabelEditor("EMI_Per_Month", "number", "EMI Per Month", divCssClass: "col-md-6 d-none")
+    @Html.LabelEditor("No_of_Installment", "number", "No of Installment", divCssClass: "col-md-6 d-none")
+    @Html.LabelEditor("Deduction_After", "date", "Repayment Date", divCssClass: "col-md-6")
+    @Html.LabelEditor("Approved_By", "text", "Approved By", divCssClass: "col-md-12")
+    @Html.LabelEditor("Remarks", "multiline", "Remarks", divCssClass: "col-md-12")
+
+
+</div>).Footer(@<div>
+    <button class="btn btn-primary" id="btn-submit">Submit</button>
+    <button class="btn btn-secondary ms-2" id="btn-cancel">Cancel</button>
+</div>).Create()
+
+
+@Html.BeginModal("mdl-payment", "Loan Re-Payment Entry", "modal-lg").Content(@<div id="myDiv" class="row">
+    @Html.LabelEditor("Employee_Name", "lbl", "Employee_Name")
+    @Html.LabelEditor("LoanAmount", "lbl", "Loan Amount", divCssClass: "col-md-4")
+    @Html.LabelEditor("AdjustedAmount", "lbl", "Adjusted Amount", divCssClass: "col-md-4")
+    @Html.LabelEditor("BalanceAmount", "lbl", "Balance Amount", divCssClass: "col-md-4")
+    @Html.LabelEditor("PaymentAmount", "number", "Payment Amount", divCssClass: "col-md-6")
+    @Html.LabelEditor("PaymentDate", "date", "Payment Date", divCssClass: "col-md-6")
+    @Html.LabelEditor("PayemntRemarks", "multiline", "Remarks", divCssClass: "col-md-12")
+                                                                                  <div class="col-md-12 mt-2"> 
+                                                                                      <button class="btn btn-primary" id="btn-payment-submit">Submit</button>
+                                                                                      <button class="btn btn-secondary ms-2" id="btn-payment-cancel">Cancel</button>
+                                                                                  </div>
+    <h5>Payment History</h5>
+    <div class="col-md-12">
+        <table class="table table-sm table-bordered table-striped mb-0" id="tbl-payment">
+            <thead class="fixed-header">
+                <tr>
+                    <th class="no-export">Action</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Mode_of_Payment</th>
+                    <th>Remarks</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    
+
+</div>).Footer(@<div> 
+</div>).Create()
+
+<script>
+    var id = '';
+    var tr = '';
+    $('#mdl-payment .modal-footer').remove();
+    function add_advance_entry() {
+        editId = "";
+        $('#Deduction_After').prop("min", '@My.Now.ToString("yyyy-MM-dd")');
+        $('#myDiv input,select,textarea').val('');
+        $('#Employee_Id').change();
+        $('#mdl-advance').modal("show");
+    }
+    $('#btn-cancel').on('click', function () {
+        $('#myDiv input,select,textarea').val('');
+        $('#Employee_Id').change();
+        $('#mdl-advance').modal("hide");
+    })
+    $('#btn-payment-cancel').on('click', function () {
+        $('#mdl-payment').modal("hide");
+    })
+    $('#btn-find').on('click', function () {
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        $('#grid_prog').show();
+        var data = { type: 'list-by-employee' };
+        data.Employee_Id = $('#Employee').val()
+        gowithData("../oth/data/loan", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data)
+            }
+        })
+    })
+    $('#btn-submit').on('click', function () {
+        if (!$('#Employee_Id').val()) {
+            alertErrorNotification("Please Select Employee");
+            return false;
+        }
+        if (!$('#Amount').val()) {
+            alertErrorNotification("Please Enter Amount");
+            return false;
+        }
+        if (!$('#Repayment_Option').val()) {
+            alertErrorNotification("Please Select Re-Payment Option");
+            return false;
+        }
+        if (!$('#Is_Pay_EMI').val()) {
+            alertErrorNotification("Please Specify Is Pay in EMI");
+            return false;
+        }
+        if ($('#Is_Pay_EMI').val()=="Yes") {
+            if (!$('#EMI_Per_Month').val()) {
+                alertErrorNotification("Please Specify EMI Per Month in rupies");
+                return false;
+            }
+            if (!$('#No_of_Installment').val()) {
+                alertErrorNotification("Please Specify No of Installment");
+                return false;
+            }
+        }
+
+        if (!$('#Deduction_After').val()) {
+            alertErrorNotification("Please Select Repayment Date");
+            return false;
+        }
+        if (!$('#Approved_By').val()) {
+            alertErrorNotification("Please Select Repayment Date");
+            return false;
+        }
+        var data = { type: 'submit' }
+        data.Employee_Id = $('#Employee_Id').val();
+        data.editId = editId;
+        data.Amount = $('#Amount').val();
+        data.Repayment_Option = $('#Repayment_Option').val();
+        data.Is_Pay_EMI = $('#Is_Pay_EMI').val();
+        data.EMI_Per_Month = $('#EMI_Per_Month').val();
+        data.No_of_Installment = $('#No_of_Installment').val();
+        data.Deduction_After = $('#Deduction_After').val();
+        data.Remarks = $('#Remarks').val();
+        data.Approved_By = $('#Approved_By').val();
+        submitdata("../oth/data/loan", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                $('#mdl-advance').modal("hide");
+                bind_table(resp.data);
+            }
+        })
+    })
+    $('#Is_Pay_EMI').on('change', function () {
+        console.log($(this).val())
+        if ($(this).val() == "Yes") {
+            $('#EMI_Per_Month').parent().removeClass("d-none");
+            $('#No_of_Installment').parent().removeClass("d-none");
+        }
+        else {
+            $('#EMI_Per_Month').parent().addClass("d-none");
+            $('#No_of_Installment').parent().addClass("d-none");
+        }
+    })
+
+    $('#Amount').on('change', function () {
+        if ($(this).val()) {
+            var amt = parseFloat($('#Amount').val(), 0);
+            if ($('#EMI_Per_Month').val()) {
+                var emi = parseFloat($('#EMI_Per_Month').val(), 0);
+                inst = amt / emi;
+                $('#No_of_Installment').val(Math.ceil(inst));
+            }
+        }
+    })
+    $('#EMI_Per_Month').on('change', function () {
+        if ($(this).val()) {
+            var amt = parseFloat($('#Amount').val(), 0);
+            var emi = parseFloat($(this).val(), 0);
+            var inst = amt / emi;
+            $('#No_of_Installment').val(Math.ceil(inst));
+        }
+    })
+
+    $('#No_of_Installment').on('change', function () {
+
+        if ($(this).val()) {
+            var amt = parseFloat($('#Amount').val(), 0);
+            var inst = parseFloat($(this).val(), 0);
+            var emi = Math.round(amt / inst);
+            $('#EMI_Per_Month').val(emi);
+        }
+    })
+    $(function () {
+
+        $('#Employee_Id').css("width",'100%')
+        $('#Employee_Id').select2();
+        var data = { type: 'list' };
+        gowithData("../oth/data/loan", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Employee');
+                $("#Employee option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.Employee_Name).val(item.Employee_Id));
+                });
+                ddl = $('#Employee_Id');
+                $("#Employee_Id option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.Employee_Name).val(item.Employee_Id));
+                });
+                bind_table(resp.data_1)
+            }
+        })
+    })
+    var editId = "";
+    function bind_table(data) {
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var div = $('<div>').addClass("d-flex align-items-center")
+            data.Id = d.Id;
+            var edit_btn = $('<button class="edit-button btn"><i class="bx bx-edit-alt"></i></button>');
+            var delete_btn = $('<button class="delete-button btn"><i class="bx bx-trash"></i></button>');
+            var payment_btn = $('<button class="edit-button btn">Payment</button>');
+            delete_btn.on('click', function () {
+                alertConfirm("Are you sure want to delete it?", function () {
+                    var data = { type: 'delete' }
+                    data.editId = editId;
+                    data.Employee_Id = d.Employee_Id;
+                    submitdata("../oth/data/loan", JSON.stringify({ data: data }), function (resp) {
+                        if (!resp.error) {
+                            $('#mdl-advance').modal("hide");
+
+                            bind_table(resp.data);
+                        }
+                    })
+                });
+            })
+            edit_btn.on('click', function () {
+                  $('#Deduction_After').prop("min", '@My.Now.ToString("yyyy-MM-dd")');
+                    $('#mdl-advance').modal("show");
+                editId = d.Id;
+                $('#Employee_Id').val(d.Employee_Id).change();
+                    $('#Amount').val(d.Amount);
+                    $('#Repayment_Option').val(d.Repayment_Option);
+                $('#Is_Pay_EMI').val(d.Is_Pay_EMI);
+                $('#Is_Pay_EMI').change();
+                    $('#EMI_Per_Month').val(d.EMI_Per_Month);
+                    $('#No_of_Installment').val(d.No_of_Installment);
+                    $('#Deduction_After').val(d.Deduction_After);
+                    $('#Remarks').val(d.Remarks);
+                    $('#Approved_By').val(d.Approved_By);
+            })
+            payment_btn.on('click', function () {
+                var data = { type: 'repayment-history' };
+                data.Employee_Id = d.Employee_Id;
+                data.Advance_Id = d.Advance_Id;
+                gowithData("../oth/data/loan", "POST", JSON.stringify({ data: data }), function (resp) {
+                    if (!resp.error) {
+                        bind_payment_history(resp.data)
+                    }
+                })
+                $('#mdl-payment').modal("show");
+                editId = d.Employee_Id;
+                Advance_Id = d.Advance_Id;
+                // pattern="\d*" min="0"
+                $('#PaymentAmount').prop('pattern', '\d*').prop('min', '0');
+                $('#Employee_Name').text(`${d.Employee_Name} | ${d.Emp_Code}`);
+                $('#LoanAmount').text(d.Amount);
+                $('#AdjustedAmount').text(d.Adjusted_Amount);
+                $('#BalanceAmount').text(d.Balance);
+                if (parseFloat(d.EMI_Per_Month, 0) > parseFloat(d.Balance, 0)) {
+
+                    $('#PaymentAmount').val(d.Balance);
+                }
+                else {
+                    $('#PaymentAmount').val(d.EMI_Per_Month);
+                }
+                $('#PaymentDate').val('@My.Now.dateString()');
+                $('#PayemntRemarks').val('');
+            })
+            div.append(edit_btn, delete_btn)
+            if (d.Status == "Cleared") {
+                div.empty(); 
+            }
+            var td = $('<td>').append(div).width("55px");
+            var row = $('<tr>').append(td,
+                $('<td>').text(d.Employee_Name),
+                $('<td>').text(d.Emp_Code),
+                //$('<td>').text('d.Department'),
+                //$('<td>').text('d.Designation'),
+                $('<td>').text(d.Amount),
+                $('<td>').text(d.Repayment_Option),
+                $('<td>').text(d.Adjusted_Amount),
+                $('<td>').text(d.Balance),
+                $('<td>').text(d.EMI_Per_Month),
+                $('<td>').text(d.Created_Date),
+                $('<td>').text(d.Status),
+                $('<td>').append(payment_btn),
+            );
+            tableBody.append(row);
+        });
+        refreshtable('#mytable');
+    }
+    var Advance_Id = "";
+    $('#btn-payment-submit').on('click', function () {
+        //PayemntRemarks
+        if (!$('#PaymentAmount').val()) {
+            alertErrorNotification("Please Enter Amount");
+            return false;
+        }
+        if (!$('#PaymentDate').val()) {
+            alertErrorNotification("Please Select  Payment Date");
+            return false;
+        }
+        var amt = parseFloat($('#PaymentAmount').val(), 0);
+        var bal = parseFloat($('#BalanceAmount').text(), 0);
+        if (amt > bal) {
+            alertErrorNotification("Payment Amount can not be more then Balance Amount");
+            return false;
+        }
+        var data = { type: 'repayment-submit' }
+        data.Employee_Id = editId;
+        data.Advance_Id = Advance_Id;
+        data.Amount = $('#PaymentAmount').val();
+        data.PaymentDate = $('#PaymentDate').val();
+        data.PayemntRemarks = $('#PayemntRemarks').val();
+        submitdata("../oth/data/loan", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                //$('#mdl-payment').modal("hide");
+                  $('#PaymentAmount').val('');
+               // $('#PaymentDate').val('@My.Now.dateString()');
+                $('#PayemntRemarks').val('');
+                bind_table(resp.data_1);
+                bind_payment_history(resp.data)
+                $.each(resp.data_2, function (index, d1) {
+                    $('#AdjustedAmount').text(d1.Adjusted_Amount);
+                    $('#BalanceAmount').text(d1.Balance);
+                })
+            }
+        })
+    })
+
+    function bind_payment_history(data) {
+        var tableBody = $('#tbl-payment tbody');
+        tableBody.empty();
+        $.each(data, function (index, d) {
+
+            var btn = $('<button class="edit-button btn">Cancel</button>');
+            if (d.Status == "Canceled") {
+                btn = "";
+            }
+            var row = $('<tr>').append($('<td>').append(btn),
+                $('<td>').text(d.Date),
+                $('<td>').text(d.Amount),
+                $('<td>').text(d.Mode_of_Payment),
+                $('<td>').text(d.Remarks),
+                $('<td>').text(d.Status),
+            );
+            tableBody.append(row);
+            if (d.Status != "Canceled") {
+                btn.on('click', function () {
+
+                    alertConfirm("Are you sure want to cancel this payment?", function () {
+                        var data = { type: 'delete-payment' }
+                        data.Id = d.Id;
+                        data.Employee_Id = d.Employee_Id;
+                        data.Advance_Id = d.Advance_Id;
+                        submitdata("../oth/data/loan", JSON.stringify({ data: data }), function (resp) {
+                            if (!resp.error) {
+                                $('#mdl-advance').modal("hide");
+                                bind_table(resp.data_1);
+                                bind_payment_history(resp.data);
+                                $.each(resp.data_2, function (index, d1) {
+                                    $('#AdjustedAmount').text(d1.Adjusted_Amount);
+                                    $('#BalanceAmount').text(d1.Balance);
+                                })
+
+                            }
+                        })
+                    });
+                });
+            }
+            
+        })
+    }
+</script>
+

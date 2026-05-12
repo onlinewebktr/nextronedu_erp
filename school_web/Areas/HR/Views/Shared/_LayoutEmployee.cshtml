@@ -1,0 +1,158 @@
+﻿@{
+    Firm_Details firm = ViewBag.firm as Firm_Details;
+    Session["Firm_Details"] = firm = My.getFirmDetails();
+    if (firm == null)
+    {
+        firm = Session["Firm_Details"] as Firm_Details;
+    }
+    if (firm == null)
+    {
+
+    }
+    if(User.Identity.IsAuthenticated)
+    {
+        My.getUserInfo(ViewBag, Session, User.Identity.Name);
+    }
+
+
+    ViewBag.firm_name = firm.firm_name;
+    ViewBag.logo = firm.logo;
+ }
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <link rel="icon" href="~/Content/theme/images/favicon.png" type="image/png" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="~/Content/theme/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/app.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/icons.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+
+    <link href="~/Content/theme/css/cropper.min.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/cropper.js"></script>
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+    <script src="~/Content/js/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Content/js/my.js"></script>
+    <script src="~/Content/js/jquery-ui.min.js"></script>
+    <link href="~/Content/theme/plugins/notifications/css/lobibox.min.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/bootstrap-material-datetimepicker/js/moment.min.js"></script>
+    <script src="~/Content/theme/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js"></script>
+    <script src="~/Content/theme/plugins/metismenu/js/metisMenu.min.js"></script>
+    @if (ViewBag.ShowPageOnly == true)
+    {
+<style>
+    .page-wrapper {
+        height: 100%;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+    }
+</style>}
+    <style>
+        #mytable {
+            height: 300%;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 35px;
+        }
+
+        .select2-container .select2-selection--single {
+            padding: 4px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        @if (ViewBag.ShowPageOnly == null || ViewBag.ShowPageOnly == false)
+        {<!--sidebar wrapper -->
+                <div class="sidebar-wrapper" data-simplebar="true">
+                    <div class="sidebar-header">
+                        <div>
+                            <img src="@ViewBag.logo" class="logo-icon" alt="logo icon">
+                        </div>
+                        <div>
+                            <h4 class="logo-text">Admin</h4>
+                        </div>
+                        <div class="toggle-icon ms-auto">
+                            <i class='bx bx-arrow-to-left'></i>
+                        </div>
+                    </div>
+
+                    <ul class="metismenu" id="menu">
+                    </ul>
+                </div>
+                                @Html.Hidden("hd_user", User.Identity.Name)
+                                                <script>
+                                                    $('#menu').updatemenu('hrms');
+                                                </script> <!--end sidebar wrapper --> <!--start header -->
+                                                                                                <header>
+                                                                                                    <div class="topbar d-flex align-items-center">
+                                                                                                        <nav class="navbar navbar-expand">
+                                                                                                            <div class="mobile-toggle-menu">
+                                                                                                                <i class='bx bx-menu'></i>
+                                                                                                            </div>
+                                                                                                            <div class="search-bar flex-grow-1">
+                                                                                                                <h4 class="logo-text">@ViewBag.firm_name</h4>
+                                                                                                            </div>
+                                                                                                            <div class="user-box dropdown">
+                                                                                                                <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                                                                    <img id="user-pr-image" src="@ViewBag.UserProfileImage" onerror="this.src = '../../Content/Images/user-icon.png'" class="user-img">
+
+                                                                                                                    <div class="user-info ps-3">
+                                                                                                                        <p id="user-pr-name" class="user-name mb-0">@ViewBag.UserName</p>
+                                                                                                                        <p class="designattion mb-0">@ViewBag.UserType</p>
+                                                                                                                    </div>
+                                                                                                                </a>
+                                                                                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                                                                                    <li>
+                                                                                                                        <a class="dropdown-item" href="../../hr/change-password"><i class="bx bx-cog"></i><span>Change Password</span></a>
+                                                                                                                    </li>
+
+                                                                                                                    <li>
+                                                                                                                        <a class="dropdown-item" href="../../hr/logout"><i class='bx bx-log-out-circle'></i><span>Logout</span></a>
+                                                                                                                    </li>
+                                                                                                                </ul>
+                                                                                                            </div>
+                                                                                                        </nav>
+                                                                                                    </div>
+                                                                                                </header> <!--end header -->}
+        <!--start page wrapper -->
+        <div class="page-wrapper">
+            <div class="page-content p-2">
+                @RenderBody()
+            </div>
+        </div>
+        <!--end page wrapper -->
+        @if (ViewBag.ShowPageOnly == null || ViewBag.ShowPageOnly == false)
+        {<!--start overlay-->
+                <div class="overlay toggle-icon"></div> <!--end overlay--> <!--Start Back To Top Button-->
+                                                                <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a> <!--End Back To Top Button-->
+                                                                                                <footer class="page-footer">
+                                                                                                    <p class="mb-0">Copyright © 2021. All right reserved.</p>
+                                                                                                </footer>}
+    </div>
+    @Html.BeginModal("mdl-crop", "Crop Image").Content(@<div id="tht" style="max-height: calc(100vh - 250px); overflow:auto">
+        <img id="croppedImage" style="max-width:100%;">
+    </div>).Footer(@<div><button id="mdl-btn-crop" class="btn btn-primary">Crop Image</button></div>).Create()
+    <script src="~/Content/theme/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/theme/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="~/Content/theme/js/app.js"></script>
+    <script src="~/Content/js/sweetalert2@11.min.js"></script>
+    <script src="~/Content/theme/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/theme/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>>
+    <script src="~/Content/theme/plugins/notifications/js/notifications.min.js"></script>
+    <script src="~/Content/theme/plugins/notifications/js/lobibox.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+﻿@{
+
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <link rel="icon" href="~/Content/theme/images/favicon.png" type="image/png" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="~/Content/theme/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/app.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/icons.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+    <script src="~/Content/js/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Content/js/my.js"></script>
+    <script src="~/Content/js/jquery-ui.min.js"></script>
+    <link href="~/Content/theme/plugins/notifications/css/lobibox.min.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/bootstrap-material-datetimepicker/js/moment.min.js"></script>
+    <script src="~/Content/theme/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js"></script>
+
+    <link href="~/Content/theme/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/select2/js/select2.min.js"></script>
+    <style>
+        .sidebar-wrapper .metismenu {
+            padding: 0 !important;
+            margin-top: 5px;
+        }
+
+            .sidebar-wrapper .metismenu li + li {
+                margin-top: 0px !important;
+            }
+
+            /*<i class='bx bx-table' > </i >*/
+            .sidebar-wrapper .metismenu a {
+                padding: 0px 5px;
+                font-size: 13px;
+                color: #5f5f5f;
+                letter-spacing: 0.5px;
+                border: none;
+            }
+
+            .sidebar-wrapper .metismenu a {
+                padding: 0px 5px;
+                font-size: 13px;
+                color: #5f5f5f;
+                letter-spacing: 0.5px;
+                border: none;
+            }
+
+            .sidebar-wrapper .metismenu ul a {
+                padding: 0px 0px 0px 16px;
+                font-size: 12px;
+                border: 0;
+            }
+
+            .sidebar-wrapper .metismenu a .parent-icon {
+                font-size: 16px;
+                line-height: 0.5;
+            }
+
+            .sidebar-wrapper .metismenu li:first-child {
+                margin-top: 0px !important;
+            }
+
+            .sidebar-wrapper .metismenu a .menu-title {
+                margin-left: 4px;
+            }
+
+        .page-wrapper {
+            height: 100%;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 300px;
+        }
+
+        .sidebar-wrapper {
+            width: 300px;
+            height: 100%;
+        }
+
+        body {
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+
+        <!--sidebar wrapper -->
+
+        @Html.Hidden("hd_user", User.Identity.Name)
+        @if (ViewBag.isDBMS == null)
+        {
+            <style>
+                .page-wrapper { 
+                    margin-left: 0;
+                }
+            </style>
+        }
+        else
+        {
+    <div class="sidebar-wrapper" data-simplebar="true">
+
+        <ul class="metismenu" id="menu">
+        </ul>
+    </div>
+                    <script>
+                        var data = { type: 'table' }
+                        gowithData('../../hr/data/dbms', 'POST', JSON.stringify({ data: data }), function (resp) {
+                            if (!resp.error) {
+                                var menu = $('#menu');
+                                $.each(resp.data, function (i, item) {
+                                    var li = $('<li></li>');
+                                    var a = $('<a></a>').attr("href", "#");
+                                    var icon = $('<i></i>').attr("class", "parent-icon bx bx-table").attr("style", "color: #F44336;");
+                                    var lbl = $('<div></div>').attr("class", "menu-title").html(item.TABLE_NAME);
+
+                                });
+                            }
+                        });
+                    </script>}
+
+
+        <div class="page-wrapper">
+            <div class="page-content p-2">
+                <div>
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/Content/theme/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/theme/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="~/Content/theme/plugins/metismenu/js/metisMenu.min.js"></script>
+    <script src="~/Content/theme/js/app.js"></script>
+    <script src="~/Content/js/sweetalert2@11.min.js"></script>
+    <script src="~/Content/theme/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/theme/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>>
+    <script src="~/Content/theme/plugins/notifications/js/notifications.min.js"></script>
+    <script src="~/Content/theme/plugins/notifications/js/lobibox.min.js"></script>
+</body>
+</html>

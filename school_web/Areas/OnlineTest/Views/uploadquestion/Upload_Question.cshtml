@@ -1,0 +1,510 @@
+﻿
+@{
+    Layout = null;
+
+
+}
+
+ 
+<!-- Render TinyMCE content safely -->
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+
+    <title>Upload Question</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="~/Content/theme/plugins/notifications/css/lobibox.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/icons.css" rel="stylesheet" />
+    <link href="~/Areas/OnlineTest/css/upload_question.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery-1.10.2.min.js"></script>
+
+    <style>
+	body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0f2f5;
+    padding: 0px;
+}
+        .container {
+            max-width: 100%;
+            padding: 0px 5px 0px 10px;
+        }
+        .tox-tinymce {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            box-shadow: none;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            overflow: hidden;
+            position: relative;
+            visibility: inherit !important;
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+      @*  <h2>Question Entry Form</h2>*@
+        <div>
+
+            <!-- Test & Subject -->
+            <div style="width:100%" id="serchdata">
+
+
+                <label for="test">Select Test Name</label>
+                <select name="test" required id="testname">
+                    <option value="">-- Select Test --</option>
+
+                </select>
+
+                <label for="subject">Select Subject</label>
+                <select name="subject" required id="subject">
+                    <option value="">-- Select Subject --</option>
+
+                </select>
+            </div>
+            <!-- Question -->
+            <label>Question</label>
+            <div class="option-block">
+
+                <script>
+                    
+                    $(function () {
+                        tinymce.init({
+                            selector: '#question_text, #questionexplanation_text',
+                            width: 600,
+                            height: 300,
+                            plugins: [
+                                'advlist', 'autolink', 'link', 'image', 'lists', 'charmap',
+                                'preview', 'anchor', 'pagebreak', 'searchreplace', 'wordcount',
+                                'visualblocks', 'code', 'fullscreen', 'insertdatetime',
+                                'media', 'table', 'emoticons', 'help'
+                            ],
+                            toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                                'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+                                'forecolor backcolor emoticons | help',
+                            menubar: 'file edit view insert format tools table help',
+                            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+                             
+                        });
+
+                        if (mode.toLowerCase() === 'edit') {
+                            setTimeout(function () {
+                                bind_edit_data()
+                            }, 500)
+                            
+                        }
+                    });
+                </script>
+
+
+
+
+                <textarea id="question_text" name="area" class="form-control" style="min-height: 200px; width: 100%"></textarea>
+
+                @*<input type="text" id="question_text" name="area" placeholder="Enter question text">*@
+                @*<div class="divider">OR</div>
+        <input type="file" name="question_image" accept="image/*">*@
+            </div>
+
+            <!-- Options -->
+            <label>Option 1</label>
+            <div class="option-block">
+                <input type="text" name="option1_text" placeholder="Enter Option 1 text">
+                @*<div class="divider">OR</div>
+                    <input type="file" name="option1_image" accept="image/*">*@
+            </div>
+
+            <label>Option 2</label>
+            <div class="option-block">
+                <input type="text" name="option2_text" placeholder="Enter Option 2 text">
+                @*<div class="divider">OR</div>
+                    <input type="file" name="option2_image" accept="image/*">*@
+            </div>
+
+            <label>Option 3</label>
+            <div class="option-block">
+                <input type="text" name="option3_text" placeholder="Enter Option 3 text">
+                @*<div class="divider">OR</div>
+                    <input type="file" name="option3_image" accept="image/*">*@
+            </div>
+
+            <label>Option 4</label>
+            <div class="option-block">
+                <input type="text" name="option4_text" placeholder="Enter Option 4 text">
+                @*<div class="divider">OR</div>
+                    <input type="file" name="option4_image" accept="image/*">*@
+            </div>
+
+            <!-- Answer -->
+            <label for="answer">Correct Answer</label>
+            <select name="answer" required>
+                <option value="-- Select Correct Option --">-- Select Correct Option --</option>
+                <option value="Option1">Option 1</option>
+                <option value="Option2">Option 2</option>
+                <option value="Option3">Option 3</option>
+                <option value="Option4">Option 4</option>
+            </select>
+
+            <label>Question Explanation</label>
+            <div class="option-block">
+
+                @*<script>
+                    $(function () {
+                        tinymce.init({
+                            selector: '#questionexplanation_text',
+                            width: 600,
+                            height: 300,
+                            
+                            plugins: [
+                                'advlist',
+                                'autolink',
+                                'link',
+                                'image',
+                                'lists',
+                                'charmap',
+                                'preview',
+                                'anchor',
+                                'pagebreak',
+                                'searchreplace',
+                                'wordcount',
+                                'visualblocks',
+                                'code',
+                                'fullscreen',
+                                'insertdatetime',
+                                'media',
+                                'table',
+                                'emoticons',
+                                'help'
+                            ],
+                          
+                            toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                                'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+                                'forecolor backcolor emoticons | help',
+                            menubar: 'file edit view insert format tools table help',
+                            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+                        });
+                    });
+                </script>*@
+
+                <textarea id="questionexplanation_text" name="area" class="form-control" style="min-height: 200px; width: 100%"></textarea>
+
+                @*<input type="text" id="question_text" name="area" placeholder="Enter question text">*@
+                @*<div class="divider">OR</div>
+                    <input type="file" name="question_image" accept="image/*">*@
+            </div>
+
+
+            <!-- Submit -->
+            <button type="submit" id="submitBtn">Submit Question</button>
+        </div>
+    </div>
+
+    <link href="~/assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
+
+    <script src="~/Content/js/my.js"></script>
+    <script src="~/Content/js/sweetalert2@11.min.js"></script>
+    <script src="~/Content/js/prism.js"></script>
+    <script src="~/Content/theme/plugins/notifications/js/notifications.min.js"></script>
+    <script src="~/Content/theme/plugins/notifications/js/lobibox.min.js"></script>
+    <script src="~/assets/plugins/select2/js/select2.min.js"></script>
+    @*<script src="@Html.Raw(ViewBag.TinyMC_link)"></script>*@
+   <script src="https://cdn.tiny.cloud/1/pkb3eywakhhwd27m4sou7nwf7c06u3itts5lbyb9vtwhgz26/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        var testid = "";
+        var usertype = "";
+        const params = new URLSearchParams(window.location.search);
+        const teacherid = params.get('regid') || params.get('REGID');
+
+        try {
+            usertype = params.get('type')
+
+            if (usertype === null || usertype.trim() === "") {
+
+
+               
+                usertype = "";
+
+            }
+            else {
+                usertype = params.get('type')
+                 
+            }
+        }
+        catch
+        {
+            
+            usertype = "";
+        }
+
+
+
+
+        $(document).ready(function () {
+            bind_ddl_test();
+
+        });
+        function bind_ddl_test() {
+            const requestData = {
+                type: 'gettestname',
+                teacherid: teacherid
+            };
+            gowithData("../../OnlineTest/data/ddl", "POST", JSON.stringify({ data: requestData }), function (resp) {
+                if (!resp.error) {
+                    var ddl = $('#testname');
+                    $("#testname option:not(:first)").remove();
+                    $.each(resp.data, function (i, item) {
+                        ddl.append($("<option>").text(item.Exam_name).val(item.Entry_id));
+                    });
+                    ddl.val('');
+                }
+            });
+        }
+        $('#testname').on('change', function () {
+            testid = $(this).val();  // <-- Update testid here
+            if (testid === "" || testid === null) {
+
+                alertErrorNotification("Please select a test name.");
+                $('#subject').empty().append('<option value="">-- Select Subject --</option>'); // Clear subject list
+                return;
+            }
+
+
+            bind_ddl_subject();      // Then call the function
+        });
+
+        function bind_ddl_subject() {
+            const requestData = {
+                type: 'getsubject',
+                teacherid: teacherid,
+                testid: testid,
+                  usertype: usertype,
+
+            };
+
+            gowithData("../../OnlineTest/data/ddl", "POST", JSON.stringify({ data: requestData }), function (resp) {
+                if (!resp.error) {
+                    var ddl = $('#subject');
+                    $("#subject option:not(:first)").remove(); // Clear old options (except default)
+
+                    $.each(resp.data, function (i, item) {
+                        ddl.append($("<option>").text(item.Subject_name).val(item.Subject_id));
+                    });
+
+                    ddl.val('');
+                } else {
+                    console.error("Failed to load subjects");
+                }
+            });
+        }
+
+        var id = "";
+        var mode = "";
+
+        $(document).ready(function () {
+            $('#submitBtn').on('click', function () {
+                // Ensure these are defined globally or locally before use
+                let currentMode = typeof mode !== "undefined" ? mode.toLowerCase() : "save"; // fallback
+
+                if (currentMode === 'edit') {
+                    let isValid = true;
+
+                    const question = tinymce.get('question_text').getContent().trim();
+                    const option1 = $('input[name="option1_text"]').val().trim();
+                    const option2 = $('input[name="option2_text"]').val().trim();
+                    const option3 = $('input[name="option3_text"]').val().trim();
+                    const option4 = $('input[name="option4_text"]').val().trim();
+                    const answer = $('select[name="answer"]').val();
+                    const questionexplanation = tinymce.get('questionexplanation_text').getContent().trim();
+
+                    if (!question) {
+                        isValid = false;
+                        alertErrorNotification("Please enter the Question text");
+                    }
+                    if (!option1 || !option2 || !option3 || !option4) {
+                        isValid = false;
+                        alertErrorNotification("Please fill in all 4 options.");
+                    }
+                    if (!answer || answer === "-- Select Correct Option --") {
+                        isValid = false;
+                        alertErrorNotification("Please select the correct Answer");
+                    }
+                    if (!isValid) return;
+
+                    const requestData = {
+                        question,
+                        option1,
+                        option2,
+                        option3,
+                        option4,
+                        answer,
+                        questionexplanation,
+                        teacherid: teacherid,
+                        type: 'data_update',
+                        id: id
+                    };
+
+                    gowithData("../../OnlineTest/data/datasave", "POST", JSON.stringify({ data: requestData }), function (resp) {
+                        if (!resp.error) {
+                            $('input[name^="option"]').val('');
+                            $('select[name="answer"]').val('-- Select Correct Option --');
+                            tinymce.get('question_text').setContent('');
+                            tinymce.get('questionexplanation_text').setContent('');
+                            
+
+                            // Don't redeclare global variables with `var` if already declared globally
+                            id = "0";
+                            mode = "save";
+                            alertSuccess("The question has been updated successfully.");
+                           
+                            $('#serchdata').show();
+                            $("#submitBtn").text("Save Question");
+                        } else {
+
+                            alertErrorNotification("Something is wrong");
+                        }
+                    });
+
+                } else {
+                    let isValid = true;
+
+                    const test = $('#testname').val();
+                    const subject = $('#subject').val();
+                    const question = tinymce.get('question_text').getContent().trim();
+                    const option1 = $('input[name="option1_text"]').val().trim();
+                    const option2 = $('input[name="option2_text"]').val().trim();
+                    const option3 = $('input[name="option3_text"]').val().trim();
+                    const option4 = $('input[name="option4_text"]').val().trim();
+                    const answer = $('select[name="answer"]').val();
+                    const questionexplanation = tinymce.get('questionexplanation_text').getContent().trim();
+
+                    if (!test) {
+                        isValid = false;
+                        alertErrorNotification("Please select a Test Name.");
+                    }
+                    if (!subject) {
+                        isValid = false;
+                        alertErrorNotification("Please select a Subject");
+                    }
+                    if (!question) {
+                        isValid = false;
+                        alertErrorNotification("Please enter the Question text");
+                    }
+                    if (!option1 || !option2 || !option3 || !option4) {
+                        isValid = false;
+                        alertErrorNotification("Please fill in all 4 options.");
+                    }
+                    if (!answer || answer === "-- Select Correct Option --") {
+                        isValid = false;
+                        alertErrorNotification("Please select the correct Answer");
+                    }
+                    if (!isValid) return;
+
+                    const requestData = {
+                        test,
+                        subject,
+                        question,
+                        option1,
+                        option2,
+                        option3,
+                        option4,
+                        answer,
+                        questionexplanation,
+                        teacherid: teacherid,
+                        type: 'savequestion',
+                    };
+
+                    gowithData("../../OnlineTest/data/datasave", "POST", JSON.stringify({ data: requestData }), function (resp) {
+                        if (!resp.error) {
+                            $('input[name^="option"]').val('');
+                            $('select[name="answer"]').val('-- Select Correct Option --');
+                            tinymce.get('question_text').setContent('');
+                            tinymce.get('questionexplanation_text').setContent('');
+                            
+                            $('#serchdata').show();
+                            $("#submitBtn").text("Save Question");
+                            alertSuccess("The question has been saved successfully.");
+                        }
+                        else {
+                            alertError(resp.message);
+                           
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
+    <script>
+     
+     
+        // Safely retrieve 'id' (case-insensitive) and default to 0
+        
+          id = params.get('id') || params.get('ID');
+        id = id !== null ? id : 0;
+
+        // Safely retrieve 'mode' or fallback to 'save'
+          mode = params.get('mode') || params.get('MODE');
+        mode = mode !== null ? mode : 'save';
+
+        function bind_edit_data() {
+            const requestData = {
+                type: 'get_data_for_edit',
+                
+                id: id
+            };
+
+            gowithData("../../OnlineTest/data/datasave", "POST", JSON.stringify({ data: requestData }), function (resp) {
+                if (!resp.error && resp.data.length > 0) {
+                    $.each(resp.data, function (index, d) {
+                        // Populate form fields
+                        $('#serchdata').hide();
+                      
+                        
+
+                        $('input[name="option1_text"]').val(d.Option1);
+                        $('input[name="option2_text"]').val(d.Option2);
+                        $('input[name="option3_text"]').val(d.Option3);
+                        $('input[name="option4_text"]').val(d.Option4);
+                        $('select[name="answer"]').val(d.AnswerOption);
+
+                        
+                       
+                        $("#submitBtn").text("Update Question");
+                        //console.log(d.Question_name, d.Explanation);
+                       
+                        //if (tinymce.get('question_text')) {
+                        //    tinymce.get('question_text').setContent(d.Question_name || '');
+                        //}
+
+                        //if (tinymce.get('questionexplanation_text')) {
+                        //   
+                        //}
+                        tinymce.get('question_text').setContent(d.Question_name || '');
+                        tinymce.get('questionexplanation_text').setContent(d.Explanation || '');
+                        //bindQuestionData(d);
+                       
+                       
+                    });
+                } else {
+                    
+                }
+            });
+        }
+
+        // ✅ Call bind_edit_data() automatically if mode is 'edit'
+       
+
+        
+        
+    </script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="User.master.cs" Inherits="school_web.Student_Profile.User" %>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>
+        <asp:ContentPlaceHolder ID="title" runat="server">
+        </asp:ContentPlaceHolder>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <link rel="icon" type="../images/ico"   href="../images/favicon.ico" />
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
+    <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+    <link href="css/style.css" rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="css/morris.css" type="text/css" />
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="js/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <link href='//fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet' type='text/css' />
+    <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
+    <script src="../Autocomplete/jquery-ui.js" type="text/javascript"></script>
+    <link href="../Autocomplete/jquery.autocomplete.css" rel="stylesheet" />
+    <link href="../Autocomplete/jquery-ui.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <style type="text/css">
+        .not-active {
+            pointer-events: none;
+            cursor: default;
+            text-decoration: none;
+            color: black;
+        }
+
+        .border {
+            /*border: 1px solid red;*/
+            background-color: none;
+        }
+
+        .form-group {
+            padding: 0px!important;
+        }
+    </style>
+    <script type="text/javascript" language="javascript">
+        function DisableBackButton() {
+            window.history.forward()
+        }
+        DisableBackButton();
+        window.onload = DisableBackButton;
+        window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+        window.onunload = function () { void (0) }
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+        <div class="page-container">
+            <!--/content-inner-->
+            <div class="left-content">
+                <div class="mother-grid-inner">
+                    <div class="agile3-grids " style="margin-top: 0">
+                        <div class="header-main" style="padding: 0">
+                            <div class="logo-w3-agile" style="width: 73%; background-color: #fff">
+                                <p style="width: 40%; text-align: left; float: left;">  <asp:Label ID="lbl_school" runat="server" Text="Label"></asp:Label></p>
+                                <p style="float: left; width: 30%;">
+                                    <a href="#" style="text-transform: none; color: #1b93e1;">Welcome
+                                    <asp:Literal ID="ltName" runat="server"></asp:Literal></a>
+                                </p>
+                            </div>
+
+                            <div class="profile_details w3l pull-right">
+                                <ul>
+                                    <li class="dropdown profile_details_drop">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <div class="profile_img">
+                                                <span class="prfil-img">
+                                                    <asp:Image ID="imgMember" Style="max-width: 45px; float: left; max-height: 45px;" runat="server" ImageUrl="../../images/male-icon.png" />
+                                                </span>
+                                                <div class="user-name">
+                                                    <p>
+                                                        <asp:Label ID="lbl_membername" runat="server" Text="Label"></asp:Label>
+                                                    </p>
+                                                    <span>
+                                                        <asp:Label ID="lbl_membercode" runat="server" Text="Label"></asp:Label></span>
+                                                </div>
+                                                <i class="fa fa-angle-down"></i>
+                                                <i class="fa fa-angle-up"></i>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                        <ul class="dropdown-menu drp-mnu">
+                                            <li><a href="View_Profile.aspx"><i class="fa fa-user"></i>Profile</a> </li>
+                                            <li><a href="Change_password.aspx"><i class="fa fa-key"></i>Change Password</a> </li>
+                                            <%--<li><a href="../Default.aspx"><i class="fa fa-cog"></i>Go To Website</a> </li>--%>
+                                            <li><a href="#"><i class="fa fa-sign-out"></i>
+                                                <asp:LinkButton PostBackUrl="~/Student_Profile/logout.aspx" ID="LinkButton1" runat="server">Log Out</asp:LinkButton></a> </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="left-content">
+
+                <div class="mother-grid-inner">
+
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                    </asp:ContentPlaceHolder>
+
+                    <div class="copyrights">
+                        <p style="display: none"> <asp:Label ID="lbl_footer" runat="server"  ></asp:Label>  </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="sidebar-menu">
+                <header class="logo1">
+						<a href="#" class="sidebar-icon"> <span class="fa fa-bars"></span> </a> 
+					</header>
+                <div style="border-top: 1px ridge rgba(255, 255, 255, 0.15)"></div>
+                <div class="menu">
+                    <ul id="menu">
+                        <li><a href="Dashboard.aspx"><i class="fa fa-tachometer"></i><span>Dashboard</span><div class="clearfix"></div>
+                        </a></li>
+                        <li id="Li12">
+                            <a href="View_Profile.aspx"><i class="fa fa-users" aria-hidden="true"></i><span>Your Profile</span>
+                            </a>
+                        </li>
+                        <li id="Li1">
+                            <a href="#">
+                                <i class="fa fa-book"></i>
+                                <span>My Subject</span>
+                                <div class="clearfix"></div>
+                            </a>
+                        </li>
+                        <li id="Li3">
+                            <a href="#"><i class="fa fa-desktop" aria-hidden="true"></i><span>Home Work</span>
+                            </a>
+                        </li>
+                        <li id="Li2">
+                            <a href="#"><i class="fa fa-key" aria-hidden="true"></i><span>Change Password</span>
+                                <div class="clearfix"></div>
+                            </a>
+                        </li>
+                        <li id="menu-academico">
+                            <a href="logout.aspx">
+                                <i class="fa fa-power-off"></i>
+                                <span>Log Out</span>
+                                <div class="clearfix"></div>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <script type="text/javascript">
+            var toggle = true;
+
+            $(".sidebar-icon").click(function () {
+                if (toggle) {
+                    $(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
+                    $("#menu span").css({ "position": "absolute" });
+                }
+                else {
+                    $(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
+                    setTimeout(function () {
+                        $("#menu span").css({ "position": "relative" });
+                    }, 400);
+                }
+
+                toggle = !toggle;
+            });
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var navoffeset = $(".header-main").offset().top;
+                $(window).scroll(function () {
+                    var scrollpos = $(window).scrollTop();
+                    if (scrollpos >= navoffeset) {
+                        $(".header-main").addClass("fixed");
+                    } else {
+                        $(".header-main").removeClass("fixed");
+                    }
+                });
+
+            });
+        </script>
+        <script src="js/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="js/scripts.js" type="text/javascript"></script>
+        <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    </form>
+</body>
+</html>

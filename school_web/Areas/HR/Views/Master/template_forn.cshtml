@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "{0}";
+}
+
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    @Html.LabelEditor("Id", "txt", "Id", "", true)
+                    @Html.LabelEditor("Name", "txt", "Name", "", true)
+                    @Html.LabelEditor("Address", "multiline", "Address", "", true)
+                    @Html.LabelEditor("Is_Active", "txt", "Is Active", "", true)
+                    @Html.LabelEditor("Age", "txt", "Age", "", true)
+                    @Html.LabelEditor("height", "txt", "Height", "", true)
+                    @Html.LabelEditor("Registration_Time", "datetime-local", "Registration Time", "", true)
+                    @Html.LabelEditor("Date_of_Birth", "date", "Dateof Birth", "", true)
+                    @Html.LabelEditor("remarks", "multiline", "Remarks", "", true)
+                </div> 
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-sm-12"> 
+                        <button id="btn-add" type="submit" class="btn btn-primary">Add</button>
+                        <button id="btn-cancel" type="button" style="display: none;" class="btn btn-dark">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body px-2 py-1">
+                <table class="table table-bordered table-striped" id="mytable">
+                    <thead>
+                        <tr>
+                            {2} 
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div id="grid_prog" style="margin : 0px auto; width:200px">
+                    <span class="spinner-border spinner-border-sm me-2"> </span>
+                    Please wait....
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div> 

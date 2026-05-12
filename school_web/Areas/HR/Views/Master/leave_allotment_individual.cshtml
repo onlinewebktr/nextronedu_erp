@@ -1,0 +1,444 @@
+﻿
+@{
+    HR_MasterPageConfig mpc = ViewBag.mpc;
+    ViewBag.Title = mpc.pageTitle;
+    if (mpc.OtherData != null)
+    {
+        if (mpc.OtherData.ContainsKey("Page_Layout_Path"))
+        {
+            if (mpc.OtherData["Page_Layout_Path"] != "")
+            {
+                Layout = mpc.OtherData["Page_Layout_Path"];
+            }
+        }
+    }
+}
+<script src="~/Content/js/mpc.js"></script>
+<script>
+    var data = JSON.stringify({ data: { pageId: '@mpc.pageId' } });
+    gowithData('../../hr/data/tabledata', 'Post', data, function (data) {
+        if (!data.error) {
+            bind_data(data.data);
+        }
+    })
+</script>
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <form class="my-form" id="main-form">
+            @Html.Hidden("frm-page-Id", @mpc.pageId.ToString())
+            @Html.Hidden("HdId")
+            @Html.Hidden("HdDesignation")
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        @Html.LabelEditor("DepartmentId", "ddl", "Department", "", false)
+
+
+                        @Html.LabelEditor("DesignationId", "ddl", "Designation", "", false)
+
+                        @Html.LabelEditor("Employee", "ddl", "Employee Name", "", false)
+                        <div id="leavesection">
+
+                        </div>
+                        <script>
+
+                            $(function () {
+                                runSQLapi("y7m8", {}, function (resp) {
+                                    var data = resp.data;
+                                    bind_ddl_option('DepartmentId', data[0])
+                                    $('#DepartmentId').change();
+                                })
+                                $('#DepartmentId').on('change', function () {
+                                    $('#DesignationId').val('');
+                                    $('#Employee').val('');
+                                    if ($('#DepartmentId').val()) {
+                                        runSQLapi("g4gb", { DepartmentId: $('#DepartmentId').val() }, function (resp) {
+                                            var data = resp.data;
+                                            bind_ddl_option('DesignationId', data[0])
+                                            $('#DesignationId').val($('#DesignationId').attr('designation_id'))
+                                            $('#DesignationId').removeAttr('designation_id')
+                                            $('#DesignationId').change();
+                                        })
+                                    }
+
+                                });
+                                $('#DesignationId').on('change', function () {
+                                    $('#Employee').val('');
+                                    if ($('#DesignationId').val()) {
+                                        runSQLapi("rf8m", { Designation_id: $('#DesignationId').val() }, function (resp) {
+                                            var data = resp.data;
+                                            bind_ddl_option('Employee', data[0])
+                                            $('#Employee').val($('#Employee').attr('employee_id'))
+                                            $('#Employee').removeAttr('employee_id')
+                                            $('#Employee').change();
+                                        })
+                                    }
+                                });
+                                $('#Employee').on('change', function () {
+                                    if ($('#Employee').val()) {
+                                        runSQLapi("rf56", { EmployeeId: $('#Employee').val() }, function (resp) {
+                                            var data = resp.data;
+                                            var ld = data[0];
+                                            $.each(ld, function (index, d) {
+                                                $('#leave_' + d.LeaveTypeId).val(d.No_of_Leave)
+                                            })
+                                            console.log(data);
+                                        })
+                                    }
+                                });
+                                var data = JSON.stringify({ data: { code: 'al001' } });
+                                gowithData('../../hr/data/api', 'Post', data, function (data) {
+                                    console.log(data);
+                                    if (!data.error) {
+                                        console.log(data.data[0]);
+                                        $.each(data.data[0], function (i, d) {
+                                            console.log(d);
+                                            $('#leavesection').append($(` <div class="col-12">
+                                                                                                                    <label class="form-label" >${d.LeaveName}</label>
+                                                                                                                    <input type='hidden' name='hd_leave_${d.LeaveId}' value='${d.LeaveName}' >
+                                                                                                                    <input class="form-control" id="leave_${d.LeaveId}" name="leave_${d.LeaveId}" type="number" value="">
+                                                                                                               </div>`));
+
+                                        })
+                                    }
+                                })
+                            });
+
+                        </script>
+
+
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+
+                            <button id="btn-add" type="button" class="btn btn-primary">Submit</button>
+                            <button id="btn-cancel" type="button" style="display: none;" class="btn btn-dark">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           </form>
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body px-2 py-1">
+                <table class="table table-bordered table-striped" id="mytable">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Employee Name</th>
+                            <th>Employee Code</th>
+                            <th>Department</th>
+                            <th>Designation</th>
+                            <th>Leave Details</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div id="grid_prog" style="margin : 0px auto; width:200px">
+                    <span class="spinner-border spinner-border-sm me-2"> </span>
+                    Please wait....
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var actionlist = [];
+    var isEdit = false;
+    var edit_row;
+    $(function () {
+        var data = JSON.stringify({ data: { pageId: '@mpc.pageId' } });
+    gowithData('../../hr/data/tabledata', 'Post', data, function (data) {
+        if (!data.error) {
+            bind_data(data.data);
+        }
+    })
+    emptyForm();
+});
+
+
+function handleSuccess(data) {
+    data = JSON.parse(data);
+    if (data.error) {
+        alertError(data.message);
+        if (isEdit == true) {
+            $('#btn-add').text("Update")
+        }
+        else {
+
+            $('#btn-add').text("Submit")
+            $('#btn-cancel').hide();
+        }
+        $('#btn-add').prop("disabled", false);
+    }
+    else {
+        alertSuccess(data.message);
+        emptyForm();
+        bind_data(data.data);
+    }
+}
+function fnfailor(data) {
+    if (isEdit = true) {
+        $('#btn-add').text("Update")
+    }
+    else {
+
+        $('#btn-add').text("Submit")
+        $('#btn-cancel').hide();
+    }
+}
+function fnbegin() {
+    var btn = $('#btn-add');
+    if (btn.prop('disabled')) {
+        return false; // Prevent multiple clicks while disabled
+    }
+    btn.prop("disabled", true);
+    var ss = `<div  style="margin : 0px auto; width:150px">
+
+                    <span class="spinner-border spinner-border-sm me-2" > </span>
+                        Please wait....
+                        </div>`;
+    btn.html(ss);
+}
+
+function formatDate(inputDate) {
+    var date = new Date(inputDate);
+    var formattedDate = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+    return formattedDate;
+}
+
+</script>
+<script>
+    $('#btn-cancel').on('click', function () {
+        emptyForm();
+    });
+    function emptyForm() {
+        $("input[type='number']").val("");
+        $('#DepartmentId').removeAttr('data-DesignationId');
+        $('#DepartmentId').val('');
+        $('#DesignationId').val('');
+        $('#DepartmentId').change();
+        $('#btn-add').text("Submit")
+        $('#btn-add').prop("disabled", false);
+        $('#DesignationId').prop("disabled", false);
+        $('#DepartmentId').prop("disabled", false);
+        $('#btn-cancel').hide();
+        $('#HdId').val("")
+        $('#HdDesignation').val("")
+        isEdit = false;
+    }
+</script>
+
+<script>
+
+    function openModel() {
+        $('#model-form').modal("show");
+    }
+    var data_details = [];
+    function bind_data(data) {
+        var showAction = true;
+        data_details = data;
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var div = $('<div>').addClass("d-flex align-items-center")
+            div.append($('<button>').addClass("edit-button btn").attr("data-id", index).html("<i class='bx bx-edit-alt'></i>"))
+            var td = $('<td>').append(div).width("55px");
+            var row = $('<tr>');
+            if (showAction) {
+                row.append(td);
+            }
+            var td1 = $('<td>');
+            if (d.leave_details) {
+                td1.append(`${d.leave_details.replace(",", "<br/>")}`);
+            }
+            else {
+                td1.text('');
+            }
+            row.append(
+                $('<td>').text(d.Employee_Name),
+                $('<td>').text(d.Emp_Code),
+                $('<td>').text(d.department),
+                $('<td>').text(d.designation),
+                td1,
+            );
+            tableBody.append(row);
+        });
+        var table = $('#mytable').DataTable({
+            lengthChange: false,
+            scrollX: true, scrollCollapse: true,
+            buttons: ['excel', 'pdf', 'print']
+        });
+
+    }
+    $('#mytable').on('click', '.edit-button', function () {
+        row = $(this).closest('tr');
+        edit_row = row;
+        isEdit = true;
+        var id = parseInt($(this).data('id'));
+        var ed = data_details[id];
+        $('#main-form').parent().removeClass('d-none');
+        $('#btn-add').text("Update")
+        $('#btn-cancel').show();
+        $('#HdId').val(data[0].Id);
+        $('#HdDesignation').val(ed.Designation_id)
+        $('#DepartmentId').val(ed.Department_id)
+        $('#DesignationId').attr('designation_id', ed.Designation_id)
+        $('#Employee').attr('employee_id', ed.Employee_id)
+        $('#DepartmentId').change()
+    })
+
+
+    function apply_filter(filterbtn) {
+        var id = $(filterbtn).attr("data-id");
+
+        var formData = $('#' + id).serializeArray();
+        var serializedData = {};
+
+        $.map(formData, function (input) {
+            serializedData[input.name] = input.value;
+        });
+        $('#' + id).find('select').each(function () {
+            var selectId = $(this).attr('id');
+            var selectedOption = $('#' + selectId + ' option:selected');
+            serializedData[selectId] = selectedOption.text();
+            serializedData[selectId + "_Value"] = selectedOption.val();
+        });
+
+        serializedData['pageId'] = 'mpc.pageId';
+        var data = JSON.stringify({ data: serializedData });
+
+        console.log(data);
+        gowithData("../../hr/filter/" + id, 'POST', data, function (resp) {
+            console.log(resp);
+            bind_data(resp.data);
+        })
+    }
+    function getstatusview(inputString, value) {
+
+        var regex = /\{(.*?)\}/g;
+        var matches = inputString.match(regex);
+        var found = false;
+        var rd = false;
+        if (matches) {
+            var resultList = matches.map(function (match) {
+                return match.replace(/[\{\}]/g, '');
+            });
+            $.each(resultList, function (index, data) {
+                var r = data.split(',');
+                if (r[0] == value) {
+                    found = true;
+                    rd = r;
+                    return false;
+                }
+            })
+        }
+        if (found) {
+
+            if (rd[1].startsWith("bg-")) {
+                return '<span class="badge rounded-pill ' + rd[1] + '"  >' + rd[2] + '  </span>';
+            }
+            else {
+                return '<span class="badge rounded-pill" style="background-color: ' + rd[1] + ';">' + rd[2] + '  </span>';
+            }
+        }
+        else {
+            return '<span class="badge rounded-pill bg-info"  >' + value + '  </span>';
+        }
+    }
+
+     $('#btn-add').on('click', function () { save_data(); });
+            function save_data() {
+
+                var btn = $('#btn-add');
+                if (btn.prop('disabled')) {
+                    return false; // Prevent multiple clicks while disabled
+                }
+                btn.prop("disabled", true);
+                //$("#main-form input:disabled").prop("disabled", false);
+                btn.html(`<div  style="margin : 0px auto; width:150px"> <span class="spinner-border spinner-border-sm me-2" > </span>
+                            Please wait....
+                            </div>`);
+                var data = {};
+                var formData = $("#main-form").serialize(); // Serialize form data
+                $("#main-form :input").each(function () {
+                    if ($(this).prop("disabled")) {
+                        if ($(this).val()) {
+                            formData += `&${$(this).attr("name")}=${$(this).val()}`;
+                        }
+                    }
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "../../../hr/save/page", // Replace with your controller and action names
+                    data: formData,
+                    success: function (resp) {
+                        resp = JSON.parse(resp);
+                       if (resp.error) {
+                           alertError(resp.message);
+                            if (isEdit == true) {
+                                $('#btn-add').text("Update")
+                            }
+                            else {
+
+                                $('#btn-add').text("Add")
+                                $('#btn-cancel').hide();
+                            }
+                            $('#btn-add').prop("disabled", false);
+                        }
+                       else {
+                           alertSuccess(resp.message);
+                           @if(mpc.pageType== "Single Data Form Only")
+                            {
+                                @:$('#btn-add').text("Update")
+                                @:$('#btn-add').prop("disabled", false);
+                                @: bind_form(resp.data);
+                            }
+                            else
+                            {
+                                @: emptyForm();
+                                @: if (resp.isUpdate) { bind_data(resp.data, 2)}
+                                @: else if (resp.isReset) { bind_data(resp.data)}
+                                @: else { bind_data(resp.data,1)}
+                            }
+                        }
+                    },
+                    error: function (error) {
+                        alertError(error);
+                        if (isEdit == true) {
+                            $('#btn-add').text("Update")
+                        }
+                        else {
+
+                            $('#btn-add').text("Add")
+                            $('#btn-cancel').hide();
+                        }
+                        $('#btn-add').prop("disabled", false);
+                    }
+                });
+
+
+            }
+</script>

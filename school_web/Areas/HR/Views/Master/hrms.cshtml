@@ -1,0 +1,157 @@
+﻿@{
+    Layout = "~/Areas/HR/Views/Shared/_LayoutEmployee.cshtml";
+    HR_Employee_Master emp = ViewBag.emp as HR_Employee_Master;
+}
+<div>
+
+    <div class="container">
+        <div class="main-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center"> 
+                                <img id="im_image" src="@emp.Employee_image" alt="Admin" onerror="this.src='../../Content/Images/user-icon.png'" class="rounded-circle bg-primary p-1" width="170"  height="170" >
+                                <div class="mt-3">
+                                    <h4 id="lb_name">@emp.Employee_Name</h4>
+                                    <h5 id="lb_ndame">Emp Code : @emp.Emp_Code</h5>
+                                    <p class="text-secondary mb-1">@ViewBag.Designaion</p>
+                                    <p id="lb_address" class="text-muted font-size-sm">@emp.Address</p> 
+                                </div>
+                            </div>
+                            <hr class="my-4" />
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Full Name</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <input id="name" type="text" class="form-control" placeholder="full name" value="@emp.Employee_Name" />
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <input id="email" type="email" class="form-control" value="@emp.Email" />
+                                </div>
+                            </div> 
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Mobile</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <input type="text" id="mobile" class="form-control" value="@emp.Mobile" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Profile Image</h6>
+                                </div>
+                               
+                                @Html.LabelEditor("profile_image","file",value:emp.Employee_image,divCssClass: "col-sm-9 text-secondary",isNoLabel:true, area: "hr")
+                            </div>
+
+                            @*<div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">
+                                        Blood Group
+                                    </h6>
+                                </div>
+                                @Html.LabelEditor("blood_group", "ddl",value:emp.Blood_group, divCssClass: "col-sm-9 text-secondary", isNoLabel: true,ddl_comma_seperated: "N/A,A+,B+,AB+,O+,A-,B-,AB-,O-")
+                            </div>*@
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">
+                                        Marital Status
+                                    </h6>
+                                </div>
+                                @Html.LabelEditor("marital_status", "ddl",value:emp.Marital_Status, divCssClass: "col-sm-9 text-secondary", isNoLabel: true,ddl_comma_seperated: "MARRIED,UNMARRIED,DIVORCED,WIDOWED")
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Address</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <textarea rows="2" id="address" class="form-control"  >@emp.Address</textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9 text-secondary">
+                                    <input type="button" id="btn-save" class="btn btn-primary px-4" value="Save Changes" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#btn-save').on('click', function () {
+        //return true;
+        
+        if (!$('#name').val()) {
+            alertErrorNotification("Name is Required");
+            return false;
+        }
+        if (!$('#email').val()) {
+            alertErrorNotification("Email is Required");
+            return false;
+        }
+        if (!$('#marital_status').val()) {
+            alertErrorNotification("Marital Status is Required");
+            return false;
+        }
+        if (!$('#address').val()) {
+            alertErrorNotification("Address is Required");
+            return false;
+        }
+        if (!$('#mobile').val()) {
+            alertErrorNotification("Mobile is Required");
+            return false;
+        }
+        var btn = $('#btn-save');
+        if (btn.prop('disabled')) {
+            return false; // Prevent multiple clicks while disabled
+        }
+        btn.prop("disabled", true);
+        var ss = `<div  style="margin : 0px auto; width:150px"> 
+                        <span class="spinner-border spinner-border-sm me-2" > </span>
+                            Please wait....
+                            </div>`;
+        btn.html(ss);
+        var data = { name: $('#name').val(), email: $('#email').val(), marital_status: $('#marital_status').val(), address: $('#address').val(), mobile: $('#mobile').val(), image: $('#profile_image').val() }
+        gowithData("../../hr/save/myprofile", 'POST', JSON.stringify({ data: data }), function (resp) {
+            btn.prop("disabled", false);
+            btn.html("Save Changes");
+            if (resp.error) {
+               
+                alertError(resp.message);
+            }
+            else {
+                alertSuccess(resp.message);
+                bind_data();
+            } 
+        })
+    })
+    function bind_data() {
+        $('#lb_name').html($('#name').val())
+        $('#lb_address').html($('#address').val())
+        $('#im_image').prop('src', $('#profile_image').val())
+        $('#user-pr-name').html($('#name').val())
+        $('#user-pr-image').prop('src',$('#profile_image').val()) 
+    }
+    
+</script>

@@ -1,0 +1,21 @@
+﻿@font-face {
+    font-family: 'Bookman_Old';
+    src: url('BOOKOS.TTF');
+    src: local('BOOKOS'), local('proxima-nova'), url('BOOKOS.TTF') format('opentype');
+}
+
+
+@font-face {
+    font-family: 'Calibri_Bold';
+    src: url('Calibri Bold.TTF');
+    src: local('Calibri_Bold'), local('Calibri_Bold'), url('Calibri Bold.TTF') format('opentype');
+}
+
+
+
+
+@font-face {
+    font-family: 'Calibri_Bold_Italic';
+    src: url('Calibri Bold Italic.ttf');
+    src: local('Calibri_Bold_Italic'), local('Calibri_Bold_Italic'), url('Calibri Bold Italic.ttf') format('opentype');
+}

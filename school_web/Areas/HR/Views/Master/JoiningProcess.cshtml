@@ -1,0 +1,1256 @@
+﻿
+@{
+    //Layout = null;
+    ViewBag.ShowPageOnly = true;
+    Employee_Apply emp = ViewBag.emp as Employee_Apply;
+    var isreadonly = "readonly";
+    if(My.GlobalData("CalculateByGross")=="1")
+    {
+        isreadonly = "";
+    }
+}
+<link href="~/Payroll/css/steps.css" rel="stylesheet" />
+<style>
+    .form-ttleS {
+        margin: 0px 0px 0px 0px;
+        padding: 8px 10px 5px 10px;
+        width: 100%;
+        float: left;
+        font-size: 18px;
+        color: #0296bd;
+        border-bottom: 1px solid #ddd;
+    }
+
+    input[type=checkbox], input[type=radio] {
+        border: 1px solid #b5b5b5;
+        border-radius: 2px;
+        cursor: pointer;
+        height: 20px;
+        margin: 0 4px 0 0;
+        transition: border-color .2s linear,background-color .2s linear,box-shadow .2s linear;
+        vertical-align: text-bottom;
+        width: 20px;
+    }
+
+    .form-label {
+        font-weight: 500; 
+        margin-bottom: 2px !important;
+        margin-top: 2px !important;
+    }
+
+    th {
+        font-weight: 500;
+    }
+
+    .form-control[readonly] {
+        background-color: #fbfbfb;
+    }
+    .form-control:disabled {
+        background-color: #e9ecef; 
+    }
+
+    .online_frm-grp-h {
+        height: auto;
+        width: 100%;
+        margin: 11px 0px 5px 0px;
+        padding: 0px 0px 0px 0px;
+        float: left;
+        color: #000;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 20px;
+        text-align: left;
+        font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .form_control {
+        border-color: rgb(18 18 19);
+        width: 100%;
+        margin: 0px 0px 0px 0px;
+        padding: 3px 15px 3px 9px;
+        float: left;
+        border: 1px solid rgb(18 18 19);
+        font-size: 14px;
+        color: #000;
+        height: 34px;
+        text-align: left;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+        box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .border {
+        border: 1px solid #ffffff !important;
+    }
+
+    .card-body {
+        flex: 1 1 auto;
+        padding: 0rem 1rem 1rem 1rem;
+    }
+
+    tfoot, th, thead {
+        border-color: inherit;
+        border-style: solid;
+        border-width: 0;
+        vertical-align: middle;
+        background: #1cfdae !important;
+    }
+</style>
+<script>
+    history.pushState(null, null, window.location.href);
+    history.back();
+    window.onpopstate = () => history.forward();
+</script>
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <form id="myForm">
+            <input type="hidden" id="applyId" name="applyId" value="@emp.Apply_id" />
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="stepper-wrapper" id="stepper-div">
+                        <div class="stepper-item active" id="a1" data-id="page_personal_info">
+                            <div class="step-counter">1</div>
+                            <div class="step-name">Personal Information</div>
+                        </div>
+
+                        <div class="stepper-item" id="a2" data-id="page_communication_address_info">
+                            <div class="step-counter">2</div>
+                            <div class="step-name">Communication Address</div>
+                        </div>
+
+                        <div class="stepper-item" id="a3" data-id="page_family_info">
+                            <div class="step-counter">3</div>
+                            <div class="step-name">Family Information</div>
+                        </div>
+                        <div class="stepper-item" id="a4" data-id="Page_Academic_Maped">
+                            <div class="step-counter">4</div>
+                            <div class="step-name">Academic Professional</div>
+                        </div>
+                        <div class="stepper-item" id="a5" data-id="Page_Proficiency_Languagesn">
+                            <div class="step-counter">5</div>
+                            <div class="step-name">Proficiency in Languages</div>
+                        </div>
+                        <div class="stepper-item" id="a6" data-id="Page_Organization_info">
+                            <div class="step-counter">6</div>
+                            <div class="step-name">Office Use Only</div>
+                        </div>
+                        <div class="stepper-item" data-id="Page_docoment">
+                            <div class="step-counter">7</div>
+                            <div class="step-name">Documents Upload</div>
+                        </div>
+                        <div class="stepper-item" data-id="Page_Salary">
+                            <div class="step-counter">8</div>
+                            <div class="step-name">Salary Structure</div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 border rounded" style="padding: 0px 0px 20px 0px !important; float: left; width: 100%;" id="page_personal_info" visible="true">
+                        <h2 class="form-ttleS">Job Information</h2>
+                        <div class="row g-3 needs-validation" style="padding: 0px 10px 10px 10px;">
+                            @Html.LabelEditor("post_applied", "text", "Post Applied For", emp.Apply_for, true, editorHtmlAttributes: new { @readonly = "true" }, divCssClass: "col-md-3")
+
+                        </div>
+                        <h2 class="form-ttleS">Personal Information</h2>
+                        <div class="g-3 needs-validation" style="padding: 0px 10px 10px 10px;">
+                            <div class="row">
+
+                                @Html.LabelEditor("Salutation", "ddl", "Salutation", emp.Salutation, true, editorHtmlAttributes: new { @readonly = "true" }, divCssClass: "col-md-3")
+
+                                @Html.LabelEditor("First_Name", "text", "First Name", emp.First_Name, true, divCssClass: "col-md-3")
+                                @Html.LabelEditor("Middle_Name", "text", "Middle Name", emp.Middle_Name, divCssClass: "col-md-3")
+
+                                @Html.LabelEditor("Last_Name", "text", "Last Name", emp.Last_Name, divCssClass: "col-md-3")
+                                @Html.LabelEditor("Emailid", "text", "Email", emp.Emailid, divCssClass: "col-md-3", isRequired: true)
+                                @Html.LabelEditor("Date_birthday", "date", "Date Of Birth", My.isValidDate(emp.Date_birthday), true, divCssClass: "col-md-3")
+                                @Html.LabelEditor("Gender", "ddl", "Gender", emp.Gender.ToUpper(), true, divCssClass: "col-md-3", ddl_comma_seperated: "MALE,FEMALE, THIRD GENDER")
+                                @Html.LabelEditor("Place_Of_Birth", "text", "Place Of Birth", emp.Place_Of_Birth, false, divCssClass: "col-md-3")
+                                @Html.LabelEditor("Birth_State", "text", "Birth State", emp.Birth_State, false, divCssClass: "col-md-3")
+                                @Html.LabelEditor("Religion", "ddl", "Religion", emp.Religion, true, divCssClass: "col-md-3", ddl_comma_seperated: "HINDU,BUDDHIST,SIKH,CHRISTIAN,JAINISM,MUSLIM,OTHERS")
+                                @Html.LabelEditor("Nationality", "text", "Nationality", emp.Nationality, true, divCssClass: "col-md-3")
+                                @Html.LabelEditor("Marital_Status", "ddl", "Marital Status", emp.Marital_Status, true, divCssClass: "col-md-3", ddl_comma_seperated: " MARRIED,UNMARRIED, DIVORCED,CHRISTIAN,WIDOWED")
+
+                                @Html.LabelEditor("passport_photo", "file", "Passport Size Photo", emp.passport_photo, false, divCssClass: "col-md-6", area: "hr")
+                                @Html.LabelEditor("Signature", "file", "Signature", emp.Signature, false, divCssClass: "col-md-6", area: "hr")
+                            </div> 
+                        </div>
+
+                    </div>
+
+                    <div class="p-4 border rounded" style="padding: 0px 0px 20px 0px !important; float: left; width: 100%;" id="page_communication_address_info" visible="false">
+                        <h2 class="form-ttleS">Communication Address</h2>
+
+                        <div class="g-3 needs-validation" style="padding: 0px 10px 10px 10px;">
+
+
+                            <div class="row">
+                                @Html.LabelEditor("Address_CA", "text", "Address", emp.Address_CA, true, divCssClass: "col-md-6")
+                                @Html.LabelEditor("City_CA", "text", "City", emp.City_CA, true, divCssClass: "col-md-3")
+                                @Html.LabelEditor("State_CA", "text", "State", emp.State_CA, true, divCssClass: "col-md-3")
+                                @Html.LabelEditor("Pincode_CA", "text", "Pin Code", emp.Pincode_CA, true, divCssClass: "col-md-3")
+                                @Html.LabelEditor("mobile_no_CA", "text", "Mobile No", emp.mobile_no_CA, divCssClass: "col-md-3", isRequired: true)
+                                @Html.LabelEditor("Residence_telephone_no_CA", "text", "Residence Telephone No", emp.Residence_telephone_no_CA, divCssClass: "col-md-3")
+
+
+                            </div>
+
+
+                            @*<h2 class="form-ttleS">
+            Permanent Address (Check this box if Communication Address & Permanent Address are the same.)
+            <asp:CheckBox ID="chk_same_check_box" OnCheckedChanged="chk_same_check_box_CheckedChanged" AutoPostBack="true" />
+        </h2>*@
+                            <div class="form-group form-check p-3 mx-3">
+                                <input style="font-size:18px; color:#000" type="checkbox" class="form-check-input" id="chk_same_check_box" onchange="handleCheckboxChange()" OnCheckedChanged="chk_same_check_box_CheckedChanged" AutoPostBack="true">
+                                <label class="form-check-label" for="chk_same_check_box">Permanent Address (Check this box if Communication Address & Permanent Address are the same.)</label>
+                            </div>
+
+                            <script>
+                                function handleCheckboxChange() {
+                                    var checkbox = document.getElementById("chk_same_check_box");
+                                    var addressCA = document.getElementById("Address_CA");
+                                    var pAddressCA = document.getElementById("address_pa");
+                                    var City_CA = document.getElementById("City_CA");
+                                    var State_CA = document.getElementById("State_CA");
+                                    var Pincode_CA = document.getElementById("Pincode_CA");
+                                    var city_pa = document.getElementById("city_pa");
+                                    var state_pa = document.getElementById("state_pa");
+                                    var pin_pa = document.getElementById("pin_pa");
+
+                                    if (checkbox.checked) {
+                                        // If checkbox is checked, copy values from Address_CA to P_Address_CA
+                                        pAddressCA.value = addressCA.value;
+                                        city_pa.value = City_CA.value;
+                                        state_pa.value = State_CA.value;
+                                        pin_pa.value = Pincode_CA.value;
+                                    } else {
+                                        // If checkbox is unchecked, you may want to clear P_Address_CA or handle it differently
+                                        pAddressCA.value = "";
+                                        city_pa.value = "";
+                                        state_pa.value = "";
+                                        pin_pa.value = "";
+                                    }
+                                }
+                            </script>
+
+                            <div class="row">
+
+                                @Html.LabelEditor("address_pa", "text", "Address", emp.address_pa, true, divCssClass: "col-md-6")
+                                @Html.LabelEditor("city_pa", "text", "City", emp.city_pa, true, divCssClass: "col-md-3")
+                                @Html.LabelEditor("state_pa", "text", "State", emp.state_pa, true, divCssClass: "col-md-3")
+                                @Html.LabelEditor("pin_pa", "text", "Pin Code", emp.pin_pa, true, divCssClass: "col-md-3")
+
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="p-4 border rounded" style="padding: 0px 0px 20px 0px !important; float: left; width: 100%;" id="page_family_info" visible="false">
+                        <h2 class="form-ttleS">Family Information</h2>
+                        <div class="row">
+
+                            @Html.LabelEditor("fathername", "text", "Father Name", emp.fathername, isRequired: true, divCssClass: "col-md-3")
+                            @Html.LabelEditor("father_occupation", "text", "Father Occupation", emp.father_occupation, divCssClass: "col-md-3")
+                            @Html.LabelEditor("mother_name", "text", "Mother Name", emp.mother_name, divCssClass: "col-md-3")
+                            @Html.LabelEditor("mother_occupation", "text", "Mother Occupation", emp.mother_occupation, divCssClass: "col-md-3")
+
+
+                            @Html.LabelEditor("Spouse_name", "text", "Spouse Name", emp.Spouse_name, divCssClass: "col-md-3")
+                            @Html.LabelEditor("spouse_qualification", "text", "Spouse's Qualification", emp.spouse_qualification, divCssClass: "col-md-3")
+                            @Html.LabelEditor("spouse_profession", "text", "Spouse's Profession", emp.spouse_profession, divCssClass: "col-md-3")
+                            @Html.LabelEditor("Spouses_job_is_transferable", "ddl", "Spouse's job is transferable", emp.Spouses_job_is_transferable, divCssClass: "col-md-3", ddl_comma_seperated: "YES,NO,N/A")
+                            @Html.LabelEditor("spouse_organization", "text", "Spouse's Organization", emp.spouse_organization, divCssClass: "col-md-6")
+                            @Html.LabelEditor("spouse_designation", "text", "Spouse's Designation", emp.spouse_designation, divCssClass: "col-md-3")
+
+
+
+                        </div>
+                        <h2 class="form-ttleS">Children Information</h2>
+                        <div class="row">
+                            @Html.LabelEditor("chiled_name1", "text", "Name", emp.chiled_name1, divCssClass: "col-md-4")
+                            @Html.LabelEditor("chiled_gender1", "ddl", "Gender", emp.chiled_gender1, divCssClass: "col-md-4", ddl_comma_seperated: "MALE,FEMALE, THIRD GENDER")
+                            @Html.LabelEditor("chiled_age1", "number", "Age", emp.chiled_age1, divCssClass: "col-md-4")
+
+                            @Html.LabelEditor("chiled_name2", "text", "Name", emp.chiled_name2, divCssClass: "col-md-4")
+                            @Html.LabelEditor("chiled_gender2", "ddl", "Gender", emp.chiled_gender2, divCssClass: "col-md-4", ddl_comma_seperated: "MALE,FEMALE, THIRD GENDER")
+                            @Html.LabelEditor("chiled_age2", "number", "Age", emp.chiled_age3, divCssClass: "col-md-4")
+
+                            @Html.LabelEditor("chiled_name3", "text", "Name", emp.chiled_name3, divCssClass: "col-md-4")
+                            @Html.LabelEditor("chiled_gender3", "ddl", "Gender", emp.chiled_gender3, divCssClass: "col-md-4", ddl_comma_seperated: "MALE,FEMALE, THIRD GENDER")
+                            @Html.LabelEditor("chiled_age3", "number", "Age", emp.chiled_age3, divCssClass: "col-md-4")
+
+                        </div>
+
+
+
+
+                    </div>
+
+                    <div class="p-4 border rounded" style="padding: 0px 0px 20px 0px !important; float: left; width: 100%;" id="Page_Academic_Maped" visible="false">
+                        <div class="p-4 border rounded" style="padding: 0px 0px 20px 0px !important; float: left; width: 100%;" id="Page_Academic_Maped" visible="false">
+
+                            <h2 class="form-ttleS">Academic Qualification</h2>
+                            <div class="row">
+                                <div class="col-12">
+
+                                    <table class="table-bordered" id="#lngs" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 55px;">SL No</th>
+                                                <th style="width: 130px;">Qualification</th>
+                                                <th>Main Subjects</th>
+                                                <th>School/College</th>
+                                                <th>Board/University</th>
+                                                <th>Year of Passing</th>
+                                                <th>Full Marks</th>
+                                                <th>Marks Obtained</th>
+                                                <th>Percentage of Marks</th>
+                                                <th>Division</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                var dict = new Dictionary<string, string>();
+                                                dict["metric"] = "High School/10th";
+                                                dict["inter"] = "Inter/+2";
+                                                dict["grad"] = "Graduation";
+                                                dict["pg"] = "Post Graduation";
+                                                dict["mp"] = "PHD";
+                                                if (My.isHospital)
+                                                {
+                                                    dict["md"] = "MD";
+                                                    dict["mbbs"] = "MBBS";
+                                                }
+                                                else if (My.isSchool)
+                                                {
+                                                    dict["b_ed"] = "B.Ed";
+                                                    dict["m_ed"] = "M.Ed";
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                                dict["oth"] = "Any Other";
+                                                var cnt = 0;
+                                                foreach (var key in dict.Keys)
+                                                {
+                                                    cnt++;
+                                                    <tr>
+                                                        <th style="text-align:center">@cnt</th>
+                                                        <th>@dict[key]</th>
+                                                        <td> @Html.TextBox(@key + "_sub", "", new { @class = "form-control" }) </td>
+                                                        <td> @Html.TextBox(@key + "_school", "", new { @class = "form-control" }) </td>
+                                                        <td> @Html.TextBox(@key + "_board", "", new { @class = "form-control" }) </td>
+                                                        <td> @Html.TextBox(@key + "_year", "", new { @class = "form-control" }) </td>
+                                                        <td> @Html.TextBox(@key + "_f_marks", "", new { @class = "form-control f_marks", mkey = key }) </td>
+                                                        <td> @Html.TextBox(@key + "_marks_obtain", "", new { @class = "form-control f_marks", mkey = key }) </td>
+                                                        <td> @Html.TextBox(@key + "_marks", "", new { @class = "form-control", mkey = key }) </td>
+                                                        <td> @Html.DropDownList(@key + "_division", "DISTINCTION,FIRST,SECOND,THIRD,NA", "Select", new { @class = "form-select" }) </td>
+                                                    </tr>
+                                                }
+                                            }
+
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                            </div>
+                            <script>
+                                $(function () {
+                                    mevent();
+                                })
+                                function mevent() {
+                                    $(".f_marks").on("input", function () {
+                                        var key = $(this).attr("mkey");
+
+                                        var fm = parseFloat($(`#${key}_f_marks`).val());
+                                        console.log(fm);
+                                        // Checking if 'fm' is not a number or is NaN, and setting it to 1 if true
+                                        if (isNaN(fm) || !isFinite(fm)) {
+                                            fm = 1;
+                                        }
+
+                                        // Extracting and converting the value of an input field with the ID `${key}_marks_obtain` to a floating-point number
+                                        var mo = parseFloat($(`#${key}_marks_obtain`).val());
+
+                                        // Checking if 'mo' is not a number or is NaN, and setting it to 0 if true
+                                        if (isNaN(mo) || !isFinite(mo)) {
+                                            mo = 0;
+                                        }
+
+                                        // Calculating the percentage only if 'fm' is not zero to avoid division by zero
+                                        var p = fm !== 0 ? (mo * 100) / fm : 0;
+
+                                        // Updating the value of an input field with the ID `${key}_marks`
+                                        $(`#${key}_marks`).val(p.toFixed(2));
+                                    })
+                                }
+
+                            </script>
+
+
+
+                            <h2 class="form-ttleS">Experience Details</h2>
+                            <div class="row">
+                                <div class="col-12">
+
+                                    <table class="table-bordered" id="tbl_exp" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 55px;">SL No</th>
+                                                <th style="min-width: 300px;">Name of the Organization</th>
+                                                <th>Designation</th>
+                                                <th>Employment Duration</th>
+                                                <th>Drawn Salary (Gross)</th>
+                                                <th>Reason For Leaving</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+
+                                                for (var a = 1; a < 5; a++)
+                                                {
+                                                    <tr>
+                                                        <th style="text-align:center">@a</th>
+
+                                                        <td> @Html.TextBox("org_name_" + @a, "", new { @class = "form-control" }) </td>
+                                                        <td> @Html.TextBox("org_designation_" + @a, "", new { @class = "form-control" }) </td>
+                                                        <td> @Html.TextBox("org_duration_" + @a, "", new { @class = "form-control" }) </td>
+                                                        <td> @Html.TextBox("org_salary_" + @a, "", new { @class = "form-control" }) </td>
+                                                        <td> @Html.TextBox("org_leaving_" + @a, "", new { @class = "form-control" }) </td>
+
+                                                    </tr>
+                                                }
+                                            }
+
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="p-4 border rounded" style="padding: 0px 0px 20px 0px !important; float: left; width: 100%;" id="Page_Proficiency_Languagesn" visible="false">
+                        <h2 class="form-ttleS">
+                            Proficiency In Languages
+
+                        </h2>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <table class="table-bordered" id="#lngs" style="width: 100%;">
+                                    <tr>
+                                        <td style="font-size: 17px!important; padding: 6px 10px 6px 7px; font-weight: bold;">English<sup></sup></td>
+                                        <td style="text-align: center;">
+                                            @Html.CheckBox("English_read", emp.English_read == "Yes")
+                                            <label for="English_read">Read</label>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            @Html.CheckBox("English_write", emp.English_write == "Yes")
+                                            <label for="English_write">Write</label>
+
+                                        </td>
+                                        <td style="text-align: center;">
+                                            @Html.CheckBox("English_Speak", emp.English_Speak == "Yes")
+                                            <label for="English_Speak">Speak</label>
+                                        </td>
+
+
+
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 17px!important; padding: 6px 10px 6px 7px; font-weight: bold;">Hindi<sup></sup></td>
+                                        <td style="text-align: center;">
+                                            @Html.CheckBox("Hindi_read", emp.Hindi_read == "Yes")
+                                            <label for="Hindi_read">Read</label>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            @Html.CheckBox("Hindi_write", emp.Hindi_write == "Yes")
+                                            <label for="Hindi_write">Write</label>
+
+                                        </td>
+                                        <td style="text-align: center;">
+                                            @Html.CheckBox("Hindi_speak", emp.Hindi_speak == "Yes")
+                                            <label for="Hindi_speak">Speak</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size: 17px!important; padding: 6px 10px 6px 7px; font-weight: bold;">Bengali<sup></sup></td>
+                                        <td style="text-align: center;">
+                                            @Html.CheckBox("Bangla_read", emp.Bangla_read == "Yes")
+                                            <label for="Bangla_read">Read</label>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            @Html.CheckBox("Bangla_write", emp.Bangla_write == "Yes")
+                                            <label for="Bangla_write">Write</label>
+
+                                        </td>
+                                        <td style="text-align: center;">
+                                            @Html.CheckBox("Bangla_speak", emp.Bangla_speak == "Yes")
+                                            <label for="Bangla_speak">Speak</label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            @Html.LabelEditor("Other_Language", "text", "Any Other Language Know", emp.Other_Language, divCssClass: "col-md-6")
+                            @Html.LabelEditor("Proficiency_In_Computer", "ddl", "Proficiency In Computer", emp.Proficiency_In_Computer, divCssClass: "col-md-6", ddl_comma_seperated: "NA,NO,YES")
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="p-4 border rounded" style="padding: 0px 0px 20px 0px !important; float: left; width: 100%;" id="Page_Organization_info" visible="false">
+                        <h2 class="form-ttleS">Office Use Only </h2>
+                        <div class="g-3 needs-validation">
+                            <div class="row">
+
+                                @Html.LabelEditor("Grade", "ddl", value: (string)ViewBag.grade, divCssClass: "col-md-2", isRequired: true, editorHtmlAttributes: new { @readonly = "true" })
+                                @Html.LabelEditor("Department", "text", value: (string)ViewBag.department, divCssClass: "col-md-3", isRequired: true, editorHtmlAttributes: new { @readonly = "true" })
+                                @Html.LabelEditor("Designation", "text", value: (string)ViewBag.designation, divCssClass: "col-md-3", isRequired: true, editorHtmlAttributes: new { @readonly = "true" })
+
+                                @Html.LabelEditor("Week_off", "ddl", "Week Off", divCssClass: "col-md-2", isRequired: true, ddl_comma_seperated: "Default,Mon,Tue,Wed,Thu,Fri,Sat,Sun", value: "Default")
+                                @Html.LabelEditor("Max_Leave_Allowed", "ddl", "Max Weekoff Allowed", "Default", divCssClass: "col -md-2", isRequired: true, ddl_comma_seperated: "Default,0,1,2,3,4")
+
+                                @Html.LabelEditor("Punch_card", "text", "Punch Card No", divCssClass: "col-md-3")
+                                @Html.LabelEditor("office_email", "text", "Official Email Id", divCssClass: "col-md-3")
+                                @Html.LabelEditor("PAN", "text", "PAN", divCssClass: "col-md-3")
+                                @Html.LabelEditor("AadharNo", "text", "Aadhar No", divCssClass: "col-md-3")
+
+                                <h2 class="form-ttleS">Bank Account Details </h2>
+                                @Html.LabelEditor("Bank_Name", "text", "Bank Name", divCssClass: "col-md-6")
+                                @Html.LabelEditor("Branch", "text", "Branch", divCssClass: "col-md-6")
+                                @Html.LabelEditor("Account_No", "text", "Account No.", divCssClass: "col-md-4")
+                                @Html.LabelEditor("IFSC", "text", "IFSC", divCssClass: "col-md-4")
+                                @Html.LabelEditor("MICR", "text", "MICR", divCssClass: "col-md-4")
+                                <h2 class="form-ttleS">Other Details </h2>
+
+                                @Html.LabelEditor("EPF_No", "text", "E.P.F. No.", divCssClass: "col-md-4")
+                                @Html.LabelEditor("esic_no", "text", "E.S.I.C.No.", divCssClass: "col-md-4")
+                                @Html.LabelEditor("BloodGroup", "ddl", "BloodGroup", divCssClass: "col-md-4", ddl_comma_seperated: "N/A,A+,B+,AB+,O+,A-,B-,AB-,O-")
+                                @Html.LabelEditor("date_of_joining", "date", "Date of Joining", My.isValidDate(emp.JoiningDate), divCssClass: "col-md-4")
+                                @if (emp.Emp_code == "")
+                                {
+                            <div class="col-md-2">
+                                <label class="form-label">
+                                    Employee Code :
+                                </label>
+                                <input id="chk_emp" name="chk_emp" checked="checked" type="checkbox"> <label style="font-weight:bold" for="chk_emp">Auto Generated</label>
+                                @Html.TextBox("Employee_Code", "", new { @class = "form-control", disabled = "" })
+                            </div> }
+                        else
+                        {
+                            <div class="col-md-2">
+                                <label class="form-label">
+                                    Employee Code :
+                                </label>
+                                <input id="chk_emp" name="chk_emp" type="checkbox"> <label style="font-weight:bold" for="chk_emp">Auto Generated</label>
+                                @Html.TextBox("Employee_Code", emp.Emp_code, new { @class = "form-control", disabled = "" })
+                            </div>}
+
+
+                                @if (My.isHospital)
+                                {
+                            @Html.LabelEditor("HMS_User_Id", "text", "HMS User Id", isRequired: true, divCssClass: "col-md-2")
+                                            @Html.LabelEditor("HMS_User_Type", "ddl", "HMS User Type", isRequired: true, divCssClass: "col-md-2")
+                                                            <script>
+                                                                $(function () {
+                                                                    var data = { type: 'hms-emp-usertype' };
+                                                                    data.name = '@emp.First_Name';
+                                                                    data.mobile = '@emp.mobile_no_CA';
+                                                                    data.emp_code = '@emp.Emp_code';
+                                                                    gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+                                                                        if (!resp.error) {
+                                                                            $.each(resp.data, function (i, item) {
+                                                                                $('#Password').val(item.password);
+                                                                                $('#HMS_User_Id').val(item.user_id);
+                                                                            });
+
+                                                                            var ddl = $('#HMS_User_Type');
+                                                                            $("#HMS_User_Type option:not(:first)").remove();
+                                                                            $.each(resp.utypes, function (i, item) {
+                                                                                ddl.append($("<option>").text(item.User_Type).val(item.User_Type_id));
+                                                                            });
+                                                                            $("#HMS_User_Type").val();
+                                                                            $("#HMS_User_Type").val(resp.utype_id);
+                                                                        }
+                                                                    })
+                                                                })
+                                                            </script>}
+
+                                @if (My.isSchool)
+                                {
+
+                                            @Html.LabelEditor("User_Type", "ddl", "User Type", isRequired: true, divCssClass: "col-md-2")
+                                                            <script>
+                                                                $(function () {
+                                                                    var data = { type: 'school-emp-usertype' };
+                                                                    gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+                                                                        if (!resp.error) {
+                                                                          
+
+                                                                            var ddl = $('#User_Type');
+                                                                            $("#User_Type option:not(:first)").remove();
+                                                                            $.each(resp.data, function (i, item) {
+                                                                                ddl.append($("<option>").text(item.Type_master).val(item.Type_master));
+                                                                            });
+                                                                        }
+                                                                    })
+                                                                })
+                                                            </script>}
+
+
+
+
+                                @Html.LabelEditor("Password", "text", "HRMS Password", divCssClass: "col-md-2")
+                                @Html.LabelEditor("job_desc", "multiline", "Job Description", emp.job_desc, divCssClass: "col-md-12")
+
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                    <div class="p-4 border rounded" style="padding: 0px !important; margin: 10px 0px 0px 0px;" id="Page_docoment" visible="false">
+                        <h2 class="form-ttleS">Documents</h2>
+                        <div class="row g-3 needs-validation">
+                            @Html.LabelEditor("Doc_Name", "text", "Document Name", divCssClass: "col-md-4")
+                            @Html.LabelEditor("choose_file", "file", "Choose File", divCssClass: "col-md-4", area: "hr")
+
+                            <div class="col-md-3 pt-4">
+
+                                <button type="button" id="btn-doc-upload" class="btn btn-primary">Upload</button>
+
+                            </div>
+
+
+
+                            <div class="col-md-12" id="documentS" visible="false">
+                                <label for="validationCustom01" class="form-label">Uploaded Document</label>
+                                <table id="tbl-docs" class="table table-striped table-bordered dataTable" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Document Name</th>
+                                            <th>Document</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="p-4 border rounded" style="padding: 0px !important; margin: 10px 0px 0px 0px;" id="Page_Salary" visible="false">
+                        <h2 class="form-ttleS">Salary Section</h2>
+                        <div class="row g-3 needs-validation">
+                            @*@Html.LabelEditor("Grade", "ddl", value: (string)ViewBag.grade, divCssClass: "col-md-3", isRequired: true, editorHtmlAttributes: new { @readonly = "true" })*@
+                            @*@Html.LabelEditor("Net_Gross_Salaray", "text", "Gross", divCssClass: "col-md-4")*@
+                            <hr />
+                            <div class="col-md-5 mt-0">
+                                <table id="tbl-income" class="table table-striped table-bordered dataTable" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Income Head</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <tfoot style="background-color:floralwhite !important;">
+                                        <tr style="font-weight:600; color:maroon">
+                                            <td>#</td>
+                                            <td>Gross Salary</td>
+                                            <td>
+                                                <span id="Gross"  class="px-2 d-none"></span>
+                                                <input type="number" @isreadonly id="Net_Gross_Salaray" class="form-control form-control-sm">
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                                <h5>Employer's Contributions</h5>
+                                <table id="tbl-employer" class="table table-striped table-bordered dataTable" role="grid">
+                                    <tbody>
+                                        <tr>
+                                            <td>#</td>
+                                            <td>Income Head</td>
+                                            <td>300</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-7 mt-0">
+                                <table id="tbl-deduct" class="table table-striped table-bordered dataTable" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Deduction Head</th>
+                                            <th>Amount</th>
+                                            <th>Is Enable</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <tfoot style="background-color:floralwhite !important;">
+                                        <tr style="font-weight:600; color:maroon">
+                                            <td>#</td>
+                                            <td>Total Deduction</td>
+                                            <td colspan="2"><span id="Deduction" class="px-2"></span></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <script>
+                                $('#Net_Gross_Salaray').on('input', function () {
+                                    var inp = parseFloat($('#Net_Gross_Salaray').val(), 0);
+                                    $.each(incomes, function (index, d) {
+                                        incomes[index].inc = inp * parseFloat(d.Percentage_of_Gross, 0) / 100;
+                                        var element = $('[data-id="' + index + '"].edit-text');
+                                        element.val(d.inc);
+                                    });
+                                    //calulate_incomehead()
+                                    calulate_deduction()
+                                    bind_deduction_table()
+                                });
+                            </script>
+                            <table id="tbl-details" class="table table-striped table-bordered" role="grid" width="100%">
+                                <tbody>
+                                    <tr style="text-align:center; ">
+                                        <td>Gross Salary</td>
+                                        <td>Deduction</td>
+                                        <td>Net/InHand Salary </td>
+                                        <td>Employer Contribution</td>
+                                        <td>CTC (Monthly)</td>
+                                        <td>CTC (Yearly)</td>
+                                    </tr>
+
+                                    <tr style="text-align:center; font-weight:600">
+                                        <td><span id="lblGross">0.00</span></td>
+                                        <td><span id="lblDeduction"></span></td>
+                                        <td><span id="lblNet_Salary"></span></td>
+                                        <td><span id="lblEmployeer_Contribution"></span> </td>
+                                        <td><span id="lblCTC_month"></span></td>
+                                        <td><span id="lblCTC_year"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <input type="hidden" id="current_tab" value="a1" />
+                        <input type="hidden" id="prev_tab" value="" />
+                        <div class="col-6">
+                            <button type="button" id="btn-back" class="btn btn-primary">Back</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" style="float:right" id="btn-next" class="btn btn-primary">Next</button>
+                            <button type="submit" style="float:right; display:none" id="btn-submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <script>
+            $(function () {
+                //$('#lngs input[type="checkbox"]').prop('disabled', true);
+                gotoPage(0);
+                bindEmployeeList();
+                gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: { type: 'GradeDesignation' } }), function (resp) {
+                    if (!resp.error) {
+                        var ddl = $('#Grade');
+                        $("#Grade option:not(:first)").remove();
+                        $.each(resp.grade, function (i, item) {
+                            ddl.append($("<option>").text(item.grade_name).val(item.grade_id));
+                        });
+                        ddl.val('@emp.Grade')
+                        //ddl = $('#Department');
+                        //$("#Department option:not(:first)").remove();
+                        //$.each(resp.department, function (i, item) {
+                        //    ddl.append($("<option>").text(item.name).val(item.department_id));
+                        //});
+                        //ddl = $('#Designation');
+                        //$("#Designation option:not(:first)").remove();
+                        //$.each(resp.designation, function (i, item) {
+                        //    ddl.append($("<option>").text(item.name).val(item.Designation_id));
+                        //});
+                    }
+                })
+                gowithData("../../hr/data/salary_structure_apply", "POST", JSON.stringify({ data: { App_id: '@emp.Apply_id' } }), function (resp) {
+                    if (!resp.error) {
+
+                        deductions = resp.deduction_head;
+                        incomes = resp.income_heads;
+                        bind_income_table()
+                        bind_deduction_table()
+                        var basic = 0
+                        var gross = 0;
+                        var total_deduct = 0;
+                        var emp_contri = 0;
+                        $.each(incomes, function (i, item) {
+                            if (item.IsBasic == 'Yes') {
+                                basic += parseFloat(item.inc)
+                            }
+                            gross += parseFloat(item.inc)
+                        });
+                        $.each(deductions, function (i, item) {
+                            total_deduct += item.deduct
+                            emp_contri += item.deduct_emp
+                        });
+                        $('#Gross').text(gross);
+                        $('#Deduction').text(total_deduct);
+                        $('#lblGross').text(gross);
+                        $('#lblDeduction').text(total_deduct);
+                        $('#lblNet_Salary').text(gross - total_deduct);
+                        $('#lblEmployeer_Contribution').text(emp_contri);
+                        $('#lblCTC_month').text(gross + emp_contri);
+                        $('#lblCTC_year').text((gross + emp_contri) * 12);
+                    }
+                })
+            })
+            function bindEmployeeList() {
+                var data = { type: 'name_initital' };
+                gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+                    if (!resp.error) {
+                        var ddl = $('#Salutation');
+                        $("#Salutation option:not(:first)").remove();
+                        $.each(resp.data, function (i, item) {
+                            ddl.append($("<option>").text(item.Initial_name).val(item.Initial_id));
+                        });
+                        ddl.val('@emp.Salutation')
+                    }
+                })
+            }
+            function gotoPage(eid) {
+                $("#current_tab").val(eid);
+                $("#stepper-div").children().removeClass("active");
+               $("#stepper-div").children().removeClass("completed");
+                $.each($("#stepper-div").children(), function (index, el) {
+                    var di = '#' + $(el).attr('data-id')
+                    if (index < eid) {
+                        $(el).addClass('completed')
+                        $(di).hide();
+                    }
+                    else if (index == eid) {
+                        $(el).addClass('active')
+                        $(di).show();
+                    }
+                    else {
+                        $(di).hide();
+                        $(el).removeClass('completed')
+                        $(el).removeClass('active')
+                    }
+
+                })
+                $('#btn-back').hide();
+                $('#btn-next').hide();
+                $('#btn-submit').hide();
+                if (eid > 0) {
+                    $('#btn-back').show();
+                }
+                if (eid < 7) {
+                    $('#btn-next').show();
+                }
+                if (eid == 7) {
+                    $('#btn-submit').show();
+                }
+            }
+            $('#btn-back').click(function () {
+                var currentValue = parseInt($("#current_tab").val());
+                if (currentValue > 0) {
+                    currentValue = currentValue - 1;
+                    gotoPage(currentValue);
+                }
+
+            })
+            $('#btn-next').click(function () {
+
+                var currentValue = parseInt($("#current_tab").val());
+                if (currentValue == 0) {
+
+                    if ($("#Salutation").val() == "" || $("#Salutation").val() == "Select" || $("#Salutation").val() == null) {
+                        alertError("Salutation is required");
+                        return false;
+                    }
+                    if ($("#First_Name").val() == "") {
+                        alertError("First Name is required");
+                        return false;
+                    }
+                    if ($("#Emailid").val() == "") {
+                        alertError("Email is required");
+                        return false;
+                    }
+                    if ($("#Date_birthday").val() == "") {
+                        alertError("Date of birth is required");
+                        return false;
+                    }
+                    if ($("#Gender").val() == "" || $("#Gender").val() == "Select" || $("#Gender").val() == null) {
+                        alertError("Gender is required");
+                        return false;
+                    }
+                    //if ($("#Place_Of_Birth").val() == "") {
+                    //    alertError("Place Of Birth is required");
+                    //    return false;
+                    //} if ($("#Birth_State").val() == "") {
+                    //    alertError(" Birth State is required");
+                    //    return false;
+                    //}
+                    if ($("#Religion").val() == "" || $("#Religion").val() == "Select" || $("#Religion").val() == null) {
+                        $("#Religion").val("HINDU")
+                    }
+                    if ($("#Nationality").val() == "" || $("#Nationality").val() == "Select" || $("#Nationality").val() == null) {
+                        $("#Nationality").val("Indian")
+                    }
+                    if ($("#Marital_Status").val() == "" || $("#Marital_Status").val() == "Select" || $("#Marital_Status").val() == null) {
+                        $("#Marital_Status").val("UNMARRIED");
+                    }
+                    //if ($("#passport_photo").val() == "") {
+                    //    alertError("A Passport Size Photo is required");
+                    //    return false;
+                    //}
+                    //if ($("#Signature").val() == "") {
+                    //    alertError("Signature is required");
+                    //    return false;
+                    //}
+                }
+                if (currentValue == 1) {
+                    if ($("#Address_CA").val() == "") {
+                        alertError("Address is required");
+                        return false;
+                    }
+                    if ($("#City_CA").val() == "") {
+                        alertError("City is required");
+                        return false;
+                    }
+                    if ($("#State_CA").val() == "") {
+                        alertError("State is required");
+                        return false;
+                    }
+                    if ($("#Pincode_CA").val() == "") {
+                        alertError("Pincode is required");
+                        return false;
+                    }
+                    if ($("#address_pa").val() == "") {
+                        alertError("Permanent Address is required");
+                        return false;
+                    }
+                    if ($("#mobile_no_CA").val() == "") {
+                        alertError("Mobile No is required");
+                        return false;
+                    }
+
+                }
+                if (currentValue == 2) {
+
+                    if ($("#fathername").val() == "") {
+                        alertError("Father Name is required");
+                        return false;
+                    }
+
+                }
+                if (currentValue == 3) {
+
+
+                    if ($("#Under_Service_Bond").val() == "" || $("#Under_Service_Bond").val() == "Select" || $("#Under_Service_Bond").val() == null) {
+                        $("#Under_Service_Bond").val('No');
+                    }
+
+                }
+                if (currentValue == 4) {
+                    if ($("#Proficiency_In_Computer").val() == "" || $("#Proficiency_In_Computer").val() == "Select" || $("#Proficiency_In_Computer").val() == null) {
+
+                        $("#Proficiency_In_Computer").val('No');
+                    }
+                }
+                if (currentValue == 5) {
+                    if ($("#Grade").val() == "") {
+                        alertError("Please Select Grade");
+                        return false;
+                    }
+                    if ($("#Department").val() == "") {
+                        alertError("Please Select Department");
+                        return false;
+                    }
+                    if ($("#BloodGroup").val() == "" || $("#BloodGroup").val() == "Select" || $("#BloodGroup").val() == null) {
+                        alertError("Plese Select  Blood Group");
+                        return false;
+                    }
+                    if ($("#Designation").val() == "") {
+                        alertError("Please Select Designation");
+                        return false;
+                    }
+                    if ('@My.isSchool' == 'True' && $('#User_Type').val() == "") {
+                          alertError("Please select user type");
+                          return false;
+                }
+                    if ($("#HMS_User_Id").val() == "") {
+                        alertError("Please Enter  User Id");
+                        return false;
+                    }
+                    if ($("#HMS_User_Type").val() == "") {
+                        alertError("Please Enter Hospital User Type");
+                        return false;
+                    }
+                    if ($("#Password").val() == "") {
+                        $("#Password").val('123');
+                    }
+                    if ($("#date_of_joining").val() == "") {
+                        alertError("Please Joining Date");
+                        return false;
+                    }
+                    if (!$("#chk_emp").prop('checked')) {
+                        if ($("#Employee_Code").val() == "") {
+                            alertError("Please Enter Employee Code");
+                            return false;
+                        }
+                    }
+
+                }
+                currentValue = currentValue + 1;
+                gotoPage(currentValue);
+
+            })
+            $('#chk_emp').change(function () {
+                var currentValue = $("#chk_emp").prop('checked');
+
+                if (currentValue) {
+                    $('#Employee_Code').prop("disabled",true);
+                    $('#Employee_Code').val('');
+                }
+                else {
+                    $('#Employee_Code').prop("disabled", false);
+                }
+            })
+            var documents = [];
+            $('#btn-doc-upload').click(function () {
+                var Doc_Name=  $("#Doc_Name").val()
+                var choose_file = $("#choose_file").val()
+                if (Doc_Name == "") {
+                    alertError("Please Enter Document Name")
+                }
+                else if (choose_file == "") {
+                    alertError("Please Select a file")
+                }
+                else {
+                    var data = { Doc_Name: Doc_Name, file: choose_file }
+                    documents.push(data);
+                    bind_doc_table();
+                    $("#Doc_Name").val("");
+                    $("#choose_file").val("");
+                    $("#img_choose_file").hide();
+                }
+            })
+            $('#tbl-docs').on('click', '.delete-button',function () {
+                var ind = parseInt($(this).data('id'));
+
+                alertConfirm("Are you sure want to delete this?", function(){
+                    documents.splice(ind, 1)
+                    bind_doc_table();
+                })
+            })
+
+            function bind_doc_table() {
+                var tableBody = $('#tbl-docs tbody');
+                tableBody.empty();
+                $.each(documents, function (index, d) {
+                    var div = $('<div>').addClass("d-flex align-items-center")
+                    div.append(
+                        $('<button>').addClass("delete-button btn").attr("data-id", index).html("<i class='bx bx-trash'></i>"),
+                    )
+                    var td = $('<td>').append(div).width("55px");
+                    var row = $('<tr>').append(
+                        $('<td>').text(index+1),
+                        $('<td>').text(d.Doc_Name),
+                        $('<td>').append('<img src="'+d.file+'" class="img-thumbnail" style="height: 70px;" id="img_choose_file">'),
+                        td,
+                    );
+                    tableBody.append(row);
+                });
+            }
+             function get_qualification() {
+                gowithData("../../hr/data/get_qualification", "POST", JSON.stringify({ data: { App_id: '@emp.Apply_id', Emp_code: '@emp.Emp_code' } }), function (resp) {
+                    if (!resp.error) {
+
+                        console.log(resp.data);
+                        $.each(resp.data, function (i, d) {
+                            var cls = "metric";
+                            if (d.Qualification == "Inter/+2") {
+                                cls = "inter";
+                            }
+                            else if (d.Qualification == "Graduation") {
+                                cls = "grad";
+                            }
+                            else if (d.Qualification == "Post Graduation") {
+                                cls = "pg";
+                            }
+                            else if (d.Qualification == "M Phil.") {
+                                cls = "mp";
+                            }
+                            else if (d.Qualification == "Any Other") {
+                                cls = "oth";
+                            }
+                            $(`#${cls}_sub`).val(d.Main_Subjects);
+                            $(`#${cls}_school`).val(d.School_College);
+                            $(`#${cls}_board`).val(d.Board_University);
+                            $(`#${cls}_year`).val(d.Year_of_Passing);
+                            $(`#${cls}_marks`).val(d.Percentage_of_Marks);
+                            $(`#${cls}_division`).val(d.Division);
+                            $(`#${cls}_marks_obtain`).val(d.Marks_obtain);
+                            $(`#${cls}_f_marks`).val(d.Full_Marks);
+                        });
+                        var ds = JSON.parse(resp.exp_data[0].Emp_Experience);
+                        $.each(ds, function (i, d) {
+                            var a = i + 1;
+                            $(`#org_name_${a}`).val(d.org_name);
+                            $(`#org_designation_${a}`).val(d.Designation);
+                            $(`#org_duration_${a}`).val(d.Employement_Duration);
+                            $(`#org_salary_${a}`).val(d.Salary);
+                            $(`#org_leaving_${a}`).val(d.Leaving_Reason);
+                        });
+                    }
+                })
+            }
+
+            $('#myForm').submit(function (e) {
+                e.preventDefault();
+                var formArray = $(this).serializeArray();
+                var formData = {};
+                $(formArray).each(function (index, obj) {
+                    formData[obj.name] = obj.value;
+                });
+
+
+                formData["Gross"] = $('#lblGross').text();
+                formData["Deduction"] = $('#lblDeduction').text();
+                formData["Net_Salary"] = $('#lblNet_Salary').text();
+                formData["Employeer_Contribution"] = $('#lblEmployeer_Contribution').text();
+                formData["CTC_month"] = $('#lblCTC_month').text();
+                formData["CTC_year"] = $('#lblCTC_year').text();
+                formData["HMS_User_Type_Name"] = $('#HMS_User_Type option:selected').text();
+                $('#myForm input[type="checkbox"]').each(function () {
+                    formData[this.name] = $(this).prop('checked');
+                });
+
+                //$('#myForm :disabled').each(function () {
+                //    formData[this.name] = $(this).val()
+                //});
+                var data = { formdata: JSON.stringify(formData)};
+                data.incomes = JSON.stringify(incomes);
+                data.deductions = JSON.stringify(deductions) ;
+                data.documents = JSON.stringify(documents) ;
+                data.designation = $('#Designation option:selected').text();
+                data.applyId = $('#applyId').val();
+                submitdata("../../hr/save/joiningemployee", JSON.stringify({data: data}), function (resp) {
+                    if (!resp.error) {
+                        window.location.href = "../../hr/joiningletter/" + resp.EmpId;
+                    } else {
+                        if (resp.message.indexOf("change")) {
+                            alertConfirm(resp.message, function () {
+                                data.changeIt = "1";
+                                submitdata("../../hr/data/joiningemployee", JSON.stringify({ data: data }), function (resp) {
+                                    if (!resp.error) {
+                                        window.location.href = "../../hr/joiningletter/" + resp.EmpId;
+                                    }
+                                })
+                            })
+                        }
+                    }
+                });
+            })
+            function formatDate(inputDate) {
+                var date = new Date(inputDate);
+                var formattedDate = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+                return formattedDate;
+            }
+        </script>
+        <script src="~/Content/js/salary_performa_1.js"></script>
+
+
+        <script>
+
+            var deductions = [];
+            var incomes = [];
+            var basic = 0;
+            $("#Grade").on("change", function () {
+                var grade = $(this).val();
+                gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: { type: 'IncomeDeduct', grade: grade } }), function (resp) {
+                    if (!resp.error) {
+                        $.each(incomes, function (i, item) {
+                            if (item.IsBasic == 'Yes') {
+                                basic = item.inc;
+                            }
+                        });
+                        deductions = resp.deduction;
+                        incomes = resp.income;
+                        $.each(incomes, function (i, item) {
+                            if (item.IsVeriable == 'Yes') {
+                                var amount = get_calculation_on(item.CalculationBassedOn)
+                                if (item.PercentageValue.includes('%')) {
+                                    item.inc = amount * parseFloat(item.PercentageValue) / 100;
+                                }
+                                else {
+                                    item.inc = parseFloat(item.PercentageValue)
+                                }
+                            }
+                            else {
+                                item.inc = parseFloat(item.PercentageValue)
+                            }
+                            if (item.IsBasic == 'Yes') {
+                                item.inc = basic;
+                            }
+                        });
+                        $.each(deductions, function (i, item) {
+                            item.isEnable = true;
+                        });
+                        calulate_deduction();
+                        bind_income_table()
+                        bind_deduction_table()
+                    }
+                })
+            })
+
+        </script>
+
+    </div>
+</div>

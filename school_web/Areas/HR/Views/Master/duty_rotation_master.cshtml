@@ -1,0 +1,419 @@
+﻿
+@{
+    HR_MasterPageConfig mpc = ViewBag.mpc;
+    ViewBag.Title = "Monthly Rotation Duration Master";
+    if (mpc.OtherData != null)
+    {
+        if (mpc.OtherData.ContainsKey("Page_Layout_Path"))
+        {
+            if (mpc.OtherData["Page_Layout_Path"] != "")
+            {
+                Layout = mpc.OtherData["Page_Layout_Path"];
+            }
+        }
+    }
+}
+
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4  pe-0">
+        <form class="my-form" id="main-form">
+            @Html.Hidden("frm-page-Id", ViewBag.pageId as string)
+            @Html.Hidden("HdId")
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        @Html.LabelEditor("DutyHourId", "ddl", "Duty Hour", isRequired: true, divCssClass: "col-12")
+                        @Html.LabelEditor("Year", "ddl", isRequired: true, divCssClass: "col-6")
+                        @Html.LabelEditor("Month", "ddl", isRequired: true, divCssClass: "col-6 ps-0")
+                        <div class="col-lg-12">
+                            <div class="row d-none mb-2" id="Roration_1">
+                                @Html.LabelEditor("Roration_1_From", "date", "From", "", true, isReadonly: true, divCssClass: "col-6")
+                                @Html.LabelEditor("Roration_1_To", "date", "To", "", true, divCssClass: "col-6 ps-0", editorHtmlAttributes: new { data_id = 1 })
+                            </div>
+                            @for (int i = 2; i <= 20; i++)
+                            {
+                <div class="row d-none mb-2" id="Roration_@i">
+                    @Html.LabelEditor("Roration_" + i + "_From", "date", isReadonly: true, divCssClass: "col-6", isNoLabel: true)
+                    @Html.LabelEditor("Roration_" + i + "_To", "date", divCssClass: "col-6 ps-0", isNoLabel: true, editorHtmlAttributes: new { data_id = i })
+                </div>}
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+
+                            <button id="btn-add" type="submit" class="btn btn-primary">Add</button>
+                            <button id="btn-cancel" type="button" style="display: none;" class="btn btn-dark">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </form>
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body px-2 py-1">
+                <table class="table table-bordered table-striped"  style="width:100%" id="mytable">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Duty Hour</th>
+                            <th>Rotation Month</th>
+                            <th>Rotation Details</th>  
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div id="grid_prog" style="margin : 0px auto; width:200px">
+                    <span class="spinner-border spinner-border-sm me-2"> </span>
+                    Please wait....
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    $(function () {
+        runSQLapi('aluj32', {}, function (resp) {
+            bind_ddl_option('DutyHourId', resp.data[0])
+        })
+    });
+    $("#Year option:not(:first)").remove();
+    for (var year = 2023; year <= currentYear + 1; year++) {
+        $('#Year').append($("<option>").text(year).val(year));
+    }
+    $("#Month option:not(:first)").remove();
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    for (let i = 0; i < monthNames.length; i++) {
+        const monthNumber = (i + 1).toString().padStart(2, '0');
+        $('#Month').append($("<option>").text(monthNames[i]).val(monthNumber));
+    }
+   
+
+</script>
+<script>
+    $('#Year').on('change', function () {
+        $('#Month').val('');
+        $('#Month').change();
+    })
+    $('#Month').on('change', function () {
+        var month = $(this).val();
+        for (var i = 1; i <= 20; i++) {
+            $(`#Roration_${i}`).addClass('d-none');
+        } 
+        if (month) {
+            var year = $('#Year').val();
+            var startdate = `${year}-${month}-01`;
+            $('#Roration_1_From').val(startdate);
+            const lastDate = getLastDateOfMonth(startdate);
+            $('#Roration_1_To').val(lastDate);
+            $('#Roration_1').removeClass('d-none');
+            $('#Roration_1_To').attr("max", lastDate)
+            $('#Roration_1_To').attr("min", startdate)
+        }
+    })
+    $('input[type="date"]').change(function () {
+        var selectedDate = $(this).val();
+        var id = parseInt($(this).attr("data_id"));
+        if (id > 0) {
+            id = id + 1;
+            if (selectedDate) {
+                for (var i = id+1; i <= 20; i++) {
+                    $(`#Roration_${i}`).addClass('d-none');
+                } 
+                const lastDate = getLastDateOfMonth(selectedDate);
+                if (lastDate == selectedDate) {
+                    $(`#Roration_${id}`).addClass('d-none');
+                }
+                else {
+                    const date = new Date(selectedDate);
+                    date.setDate(date.getDate() + 1);
+                    var startdate = date.toISOString().slice(0, 10)
+                    $(`#Roration_${id}_From`).val(startdate);
+                    $(`#Roration_${id}_To`).attr("max", lastDate)
+                    $(`#Roration_${id}_To`).attr("min", startdate)
+                    $(`#Roration_${id}_To`).val(lastDate);
+                    $(`#Roration_${id}`).removeClass('d-none');
+                }
+            }
+        } 
+    });
+      function getLastDateOfMonth(dateString) { 
+        const date = new Date(dateString); 
+        const nextMonthFirstDay = new Date(date.getFullYear(), date.getMonth() + 1, 1);  
+        return nextMonthFirstDay.toISOString().slice(0, 10);
+    }
+</script>
+<script>
+    var actionlist = [];
+    var isEdit = false;
+    var edit_row;
+   $(function () {
+        var data = JSON.stringify({ data: { pageId: '@ViewBag.pageId' } });
+    gowithData('../../hr/data/tabledata', 'Post', data, function (data) {
+        if (!data.error) {
+            bind_data(data.data);
+        }
+    })
+    emptyForm();
+});
+
+
+function handleSuccess(data) {
+    data = JSON.parse(data);
+    if (data.error) {
+        alertError(data.message);
+        if (isEdit == true) {
+            $('#btn-add').text("Update")
+        }
+        else {
+
+            $('#btn-add').text("Add")
+            $('#btn-cancel').hide();
+        }
+        $('#btn-add').prop("disabled", false);
+    }
+    else {
+        alertSuccess(data.message);
+        emptyForm();
+        if (data.isUpdate) { bind_data(data.data, 2) }
+        else { bind_data(data.data, 1) }
+    }
+}
+function fnfailor(data) {
+    if (isEdit = true) {
+        $('#btn-add').text("Update")
+    }
+    else {
+
+        $('#btn-add').text("Add")
+        $('#btn-cancel').hide();
+    }
+}
+function fnbegin() {
+    var btn = $('#btn-add');
+    if (btn.prop('disabled')) {
+        return false; // Prevent multiple clicks while disabled
+    }
+    btn.prop("disabled", true);
+    var ss = `<div  style="margin : 0px auto; width:150px">
+
+                    <span class="spinner-border spinner-border-sm me-2" > </span>
+                        Please wait....
+                        </div>`;
+    btn.html(ss);
+}
+
+function formatDate(inputDate) {
+    var date = new Date(inputDate);
+    var formattedDate = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+    return formattedDate;
+}
+
+</script>
+<script>
+    $('#btn-cancel').on('click', function () {
+        emptyForm();
+    });
+    function emptyForm() {
+
+        $('#Year').val('');
+        $('#Month').val('');  
+        $('#btn-add').text("Add")
+        $('#btn-add').prop("disabled", false);
+        $('#btn-cancel').hide();
+        $('#HdId').val("")
+        $('#model-form').modal("hide");
+        for (var i = 1; i <= 20; i++) {
+
+            $(`#Roration_${i}_From`).val('');
+            $(`#Roration_${i}_To`).val('');
+            $(`#Roration_${i}`).addClass('d-none'); 
+        }
+        isEdit = false;
+    }
+</script>
+
+<script>
+
+
+    function bind_data(data, code) {
+        var showAction = true;
+        var tableBody = $('#mytable tbody');
+        if (code == 2) {
+            edit_row.empty();
+        }
+        else {
+            $('#mytable').DataTable().destroy();
+        }
+
+        if (!code) {
+            tableBody.empty();
+        }
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var div = $('<div>').addClass("d-flex align-items-center")
+            div.append($('<button>').addClass("edit-button btn").attr("data-id", d.Id).html("<i class='bx bx-edit-alt'></i>"))
+            div.append($('<button>').addClass("delete-button btn").attr("data-id", d.Id).html("<i class='bx bx-trash'></i>"))
+
+            var td = $('<td>').append(div).width("55px");
+            if (code == 2) {
+                if (showAction) {
+                    edit_row.append(td);
+                }
+                edit_row.append($('<td>').text(d.Duty_Hour_Name),$('<td>').text(d.Rotation_Month),
+                    $('<td>').text(d.Rotation_Details),
+                );
+            }
+            else {
+                var row = $('<tr>');
+                if (showAction) {
+                    row.append(td);
+                }
+                row.append($('<td>').text(d.Duty_Hour_Name),$('<td>').text(d.Rotation_Month),
+                    $('<td>').html(d.Rotation_Details.replace(/,/g,'<br/>')),
+                );
+                if (!code) {
+                    tableBody.append(row);
+                }
+                else {
+                    tableBody.prepend(row);
+                }
+            }
+
+
+        });
+        if (code != 2) {
+            var table = $('#mytable').DataTable({
+                lengthChange: false,
+                scrollX: true, scrollCollapse: true,
+              buttons: ['excel', 'pdf', 'print']
+            });
+        }
+
+    }
+         $('#btn-add').on('click', function () { save_data(); });
+            function save_data() {
+
+                var btn = $('#btn-add');
+                if (btn.prop('disabled')) {
+                    return false; // Prevent multiple clicks while disabled
+                }
+                btn.prop("disabled", true);
+                //$("#main-form input:disabled").prop("disabled", false);
+                btn.html(`<div  style="margin : 0px auto; width:150px"> <span class="spinner-border spinner-border-sm me-2" > </span>
+                            Please wait....
+                            </div>`);
+                var data = {};
+                var formData = $("#main-form").serialize(); // Serialize form data
+                $("#main-form :input").each(function () {
+                    if ($(this).prop("disabled")) {
+                        if ($(this).val()) {
+                            formData += `&${$(this).attr("name")}=${$(this).val()}`;
+                        }
+                    }
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "../../../hr/save/page", // Replace with your controller and action names
+                    data: formData,
+                    success: function (resp) {
+                        resp = JSON.parse(resp);
+                       if (resp.error) {
+                           alertError(resp.message);
+                            if (isEdit == true) {
+                                $('#btn-add').text("Update")
+                            }
+                            else {
+
+                                $('#btn-add').text("Add")
+                                $('#btn-cancel').hide();
+                            }
+                            $('#btn-add').prop("disabled", false);
+                        }
+                       else {
+                           alertSuccess(resp.message);
+                           @if(mpc.pageType== "Single Data Form Only")
+                            {
+                                @:$('#btn-add').text("Update")
+                                @:$('#btn-add').prop("disabled", false);
+                                @: bind_form(resp.data);
+                            }
+                            else
+                            {
+                                @: emptyForm();
+                                @: if (resp.isUpdate) { bind_data(resp.data, 2)}
+                                @: else if (resp.isReset) { bind_data(resp.data)}
+                                @: else { bind_data(resp.data,1)}
+                            }
+                        }
+                    },
+                    error: function (error) {
+                        alertError(error);
+                        if (isEdit == true) {
+                            $('#btn-add').text("Update")
+                        }
+                        else {
+
+                            $('#btn-add').text("Add")
+                            $('#btn-cancel').hide();
+                        }
+                        $('#btn-add').prop("disabled", false);
+                    }
+                });
+
+
+            }
+    $('#mytable').edit('../../hr/data/edit', function (data, row) {
+        emptyForm();
+        edit_row = row;
+        isEdit = true;
+        $('#main-form').parent().removeClass('d-none');
+        $('#btn-add').text("Update")
+        $('#btn-cancel').show();
+        $('#HdId').val(data[0].Id)
+        $('#Year').val(data[0].Year)
+        $('#Month').val(data[0].Month)
+        $('#DutyHourId').val(data[0].DutyHourId)
+        var details = JSON.parse(data[0].extra);
+        console.log(data[0].extra);
+        var startdate = `${data[0].Year}-${data[0].Month}-01`;
+        var lastDate = getLastDateOfMonth(startdate);
+        $.each(details, function (index, d) {
+            var i = index + 1;
+            $(`#Roration_${i}_From`).val(d.Start_Date);
+            $(`#Roration_${i}_To`).val(d.End_Date);
+            $(`#Roration_${i}`).removeClass('d-none');
+            $(`#Roration_${i}_To`).attr("max", lastDate);
+            $(`#Roration_${i}_To`).attr("min", d.Start_Date);
+        });
+    });
+    $('#mytable').delete('../../hr/data/delete', function (data) {
+    });
+
+
+</script>

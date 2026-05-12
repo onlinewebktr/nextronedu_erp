@@ -1,0 +1,326 @@
+﻿
+@{
+    Layout = null;
+    HR_Employee_Master emp = ViewBag.emp;
+}
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Joining Letter</title>
+    <link href="~/Payroll/print/certificate.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+
+    <style>
+        p {
+            margin: 5px 0px;
+        }
+
+        table, td {
+            border: 1px solid #929292;
+        }
+
+        td {
+            padding-left: 8px;
+        }
+
+        .page-header, .page-footer img {
+            display: none;
+        }
+
+        .page-header-space {
+            height: 100px;
+        }
+
+        .page-footer, .page-footer-space {
+            margin-top: 80px;
+            /*height: 100px;*/
+        }
+
+        .page-footer {
+            position: fixed;
+            bottom: 0px;
+            width: 800px;
+            margin: 10px 0px 0px 0px;
+        }
+
+        .page-header {
+            position: fixed;
+            top: 0mm;
+            /*width: 100%;*/
+            width: 800px;
+        }
+
+        .page {
+            page-break-after: always;
+            counter-increment: page;
+        }
+
+        /*.page:before {
+                display: block;
+                text-align: right;
+                content: counter(page);
+            }*/
+
+        @@page {
+            margin: 10mm;
+        }
+
+        @@media print {
+            /*  thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }*/
+
+            button {
+                display: none;
+            }
+
+            .noPrint {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            .page-header-space {
+                height: 100px;
+            }
+
+            .page-header, .page-footer img {
+                display: block;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        function printit() {
+            if (window.print) {
+                window.print();
+            }
+        }
+    </script>
+    <script>
+        history.pushState(null, null, window.location.href);
+        history.back();
+        window.onpopstate = () => history.forward();
+    </script>
+</head>
+<body>
+    <form id="form1">
+        <div class="invoice-sec">
+
+            <div class="prnt-btn-sec noPrint">
+                <div class="prnt-btn-wpr">
+                    <div class="print-btn-sec">
+                        <div class="noPrint" style="float: left; ">
+                            <a href="../../hr/home" class="back-btn">
+                            </a>
+                        </div>
+                        <div class="noPrint" style="float: right">
+                            <button ID="print1" onclick="printit()" class="print-btn"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tblPrintIQ">
+                <div class="invoice-inr-sec">
+                    <div class="invoice-wpr">
+                        <div class="certificate-wpr">
+                            <div style="font-family: 'Times New Roman'; font-size: 17px; ">
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><strong><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></strong></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><strong><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></strong></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><strong><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>DPMH/HR-Appt/@emp.Id.ToString("000")&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;@emp.Date_of_Joining</span></em></strong></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;background:white;'><strong><span style='font-size:13px;line-height:115%;font-family:"Times New Roman","serif";color:black;background:white;'>@ViewBag.NameTitle @emp.Employee_Name</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;background:white;'><strong><span style='font-size:13px;line-height:115%;font-family:"Times New Roman","serif";color:black;background:white;'>Add:&nbsp; @emp.Address</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;background:white;'><strong><span style='font-size:13px;line-height:115%;font-family:"Times New Roman","serif";color:black;background:white;'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;background:white;'><strong><span style='font-size:13px;line-height:115%;font-family:"Times New Roman","serif";color:black;background:white;'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;background:white;'><strong><span style='font-size:13px;line-height:115%;font-family:"Times New Roman","serif";color:black;background:white;'>Email Id:&nbsp; @emp.Email</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;background:white;'><strong><span style='font-size:13px;line-height:115%;font-family:"Times New Roman","serif";color:black;background:white;'>Contact No: @emp.Mobile</span></strong></p>
+                                <h1 style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><u><span style="font-size:13px;">Subject: Letter of Association</span></u></h1>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;background:white;'><span style='font-size:13px;line-height:115%;font-family:"Times New Roman","serif";color:black;'>Dear <strong><span style="background:white;">@ViewBag.NameTitle @emp.Employee_Name</span></strong></span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>With reference to your application and subsequent discussion we had with you, we are pleased to offer you the position of <strong>&ldquo;@ViewBag.Designation&rdquo;</strong></span><span style='font-size:13px;font-family:"Times New Roman","serif";'>in the department of <strong>&ldquo;@ViewBag.Department&rdquo;</strong><span style="color:black;">. This offer takes effect from your date of joining, which shall not be later than <strong>30<sup>th</sup> September 2022</strong>.&nbsp;</span></span><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>You will report to the &ldquo;<strong>Head of</strong></span><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;Internal Medicine</span></strong><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&rdquo;&nbsp;</span><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>or to any other person as may be communicated to you from time to time. Your compensation package would be as discussed during our conversation and detailed in <strong>Annexure I</strong>.&nbsp;</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>You shall initially be providing services in the&nbsp;</span><strong><span style='font-size:12px;font-family:"Times New Roman","serif";'>Dr. Prabhat Memorial Hiramati Hospital</span></strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>, (</span><span style='font-size:12px;font-family:"Times New Roman","serif";'>A unit of Caring Hands Healthcare Pvt. Ltd.</span><span style='font-size:13px;font-family:"Times New Roman","serif";'>, said as DPMH) Patna. However as and when required, you may be required to provide your services in any other wards, departments, affiliates, subsidiaries, sister concerns or other units and you will be required to comply with all directions and instructions in that behalf.&nbsp;</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>You shall be available for your services on regular / daily basis. It is also important to note that owing to the nature of the assignments and depending on the criticality of the requirement / requirement of patient, you shall be required to accommodate any/ all kinds of changes in the service schedule, as discussed &amp; agreed with you by the Management from time to time.&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>You will be responsible for the hospital promotion &amp; development. For the same, you may be required to attend different Medical Camps, Media Interview, Conference, Publications, CME, Medical Talks &amp; Emergency Calls organized / required by the hospital from time to time. You may also require to visit different Corporate Houses, Doctors, etc for the patient turnover, growth and development of the hospital.</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";margin-left:27.0pt;text-align:justify;text-indent:-18.0pt;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>It is important that your consultancy association shall be subject to the understanding that you will not engage yourself in any other assignment or in any full time / part time course / engagement, except with the mutual discussion &amp; documentation with the Dr. Prabhat Memorial Hiramati Hospital Management.&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";margin-left:27.0pt;text-align:justify;text-indent:-18.0pt;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>If you / your dependent family members, have or wish to have a financial / gainful interest in any business with Dr. Prabhat Memorial Hiramati Hospitalor any of its subsidiaries / units, then it would be obligatory on your part to tender a written declaration, before such a deal is entered into.&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>You shall abide by the rules and regulations of the Organization as may be in force from time to time.&nbsp;</span><span style='font-size:13px;font-family:"Times New Roman","serif";'>You shall have to strictly comply with all provisions of all HR and other policies of the Organization, including the Anti-Sexual Harassment Policy, and new policies and amendments of existing policies which may be announced from time to time, during your tenure with the Organization.&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>We are looking at this association as a long term constructive &amp; mutually rewarding engagements. However, should the need arise by either parties under unavoidable circumstances; either party can terminate the agreement with one months&rsquo; prior written notice or the equivalent amount in lieu of. However, this measure should only be taken as a last resort after all attempts of continuing the engagement in mutually agreeable terms fail. Also note that no leave with or without salary shall form a part of the notice period. You would be released from the organization subject to proper handover of the responsibilities handled by you during your tenure with the organization and successful completion of the notice period.</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>You will comply with all ethical practices followed in the industry and with various codes governing doctors (like MCI guidelines, etc.) and also adhere to the quality / care standards practiced / proposed by our hospital. You have also confirmed to us that you are eligible to practice in the State of Bihar and shall provide us with a copy of your registration for our records as it is required from a medico legal perspective.</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                               
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>As a professional, you must be having your indemnity insurance covered and we shall be pleased to have a copy of the same for our records. We shall mutually decide the adequacy of the cover depending on the classification of the risks and the number of cases etc. from time to time.</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:27.0pt;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;background:white;'>To improve the patient safety and overall quality of care, you and your team <em>must</em><em>&nbsp;</em>prescribe all the patients through digital system meaning thereby all the prescription &amp; report should be computer <em>generated</em><em>.</em></span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>This offer is based on the information furnished by you in your application for rendering services and during the discussions you have had with us. If at any stage in future it comes to light that any of the information furnished by you is incorrect or any relevant information has been withheld, then the agreement shall stand null &amp; void without notice.</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>Please note that this is a letter of association as your acceptance of this offer and joining your duties. Other terms and conditions that will be governing your association.</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>Your remuneration and service terms are confidential between you and the organization and you are obliged to comply in maintaining absolute secrecy to the terms and conditions. Payment of all remuneration will be subjected to policies, rules and regulations of the Organization, as applicable from time to time.</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>You shall abide by the rules and regulations of the Organization as may be in force from time to time.</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>You are requested to sign and return to us the duplicate copy of this letter and attached Annexure as a mark of your acceptance.</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><span style='font-size:13px;font-family:"Times New Roman","serif";'>We look forward to your valuable contribution in future and&nbsp;</span><span style='font-size:13px;font-family:"Times New Roman","serif";'>wish you all the best.</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>Yours Sincerely,</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>For&nbsp;</span></strong><strong><span style='font-size:12px;font-family:"Times New Roman","serif";'>Dr. Prabhat Memorial Hiramati Hospital</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";margin-left:-9.0pt;text-indent:9.0pt;'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";margin-left:-9.0pt;text-indent:9.0pt;'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";margin-left:360.0pt;text-indent:-360.0pt;'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>Authorized Signatory &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  @ViewBag.NameTitle @emp.Employee_Name</span></strong></p>
+                                
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                               <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>Annexure I</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong>&nbsp;</strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:left;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong>&nbsp;</strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:left;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><u><span style='font-size:13px;font-family:"Times New Roman","serif";'>Confidential</span></u></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:left;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong>&nbsp;</strong></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;background:white;'><strong><span style='font-size:13px;line-height:115%;font-family:"Times New Roman","serif";color:black;background:white;'>@ViewBag.NameTitle @emp.Employee_Name</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>Add:&nbsp; @emp.Address</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;background:white;'>Email Id:&nbsp; @emp.Email</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;background:white;'>Contact No:&nbsp; @emp.Mobile</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:justify;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>Professional</span></strong><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;Fee:&nbsp;</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <table style="border: none;width:365.5pt;margin-left:61.2pt;border-collapse:collapse;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:217.1pt;border:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt;">
+                                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:center;'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>Monthly Professional Fee</span></strong></p>
+                                            </td>
+                                            <td style="width:148.4pt;border:solid windowtext 1.0pt;border-left:none;padding:  0cm 5.4pt 0cm 5.4pt;height:14.0pt;">
+                                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:center;'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>Amount (Rs.)</span></strong></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:217.1pt;border:solid windowtext 1.0pt;border-top:none;padding:  0cm 5.4pt 0cm 5.4pt;height:14.0pt;">
+                                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:  normal;font-size:17px;font-family:"Calibri","sans-serif";'><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>*Monthly Professional Fee</span></p>
+                                            </td>
+                                            <td style="width:148.4pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:14.0pt;"><br></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;background:white;'><strong><span style='font-size:13px;line-height:115%;font-family:"Times New Roman","serif";color:black;background:white;'>&nbsp;</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>*&nbsp;</span></strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>*<strong><span style="color:black;">Monthly Professional Fee</span>: Rupees &nbsp; &nbsp; &nbsp; &nbsp;of association. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</strong></span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;text-align:justify;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <ul style="list-style-type: disc;margin-left:26px;">
+                                    <li><span style='font-family:"Times New Roman","serif";font-size:9.5pt;color:black;'>The above mentioned</span><span style='font-family:"Times New Roman","serif";'>professional fee&nbsp;</span><span style='font-family:"Times New Roman","serif";font-size:9.5pt;color:black;'>is applicable for a minimum five hours of association&nbsp;</span><span style='font-family:"Times New Roman","serif";font-size:13px;'>on regular / daily basis</span><span style='font-family:"Times New Roman","serif";font-size:9.5pt;color:black;'>.</span></li>
+                                    <li><span style='line-height:115%;font-family:"Times New Roman","serif";font-size:12px;'>TDS and such other statutory deductions would be deducted as per applicable norms.</span></li>
+                                    <li><span style='font-family:"Times New Roman","serif";font-size:9.0pt;'>In case you are required to travel for hospital&rsquo;s work, the company will make appropriate arrangements, or you will be reimbursed expenses as permissible under the rules of the company.</span></li>
+                                </ul>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:justify;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:justify;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:justify;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:justify;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";margin-left:360.0pt;text-indent:-360.0pt;'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>Authorized Signatory &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  @ViewBag.NameTitle @emp.Employee_Name</span></strong></p>
+                                
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'>&nbsp;</p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";'>The above Professional fee details are confidential and the same should not be disclosed / discussed. The organization follows a fair and equitable policy for&nbsp;Professional fees&nbsp;with regard to post, however a variation may exist due to varied educational qualification, skill sets, time spent with the organization, performance etc. and same is not open to comparison.</span></em></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:normal;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></em></p>
+                                
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                               
+                                <p style='margin-top:0cm;margin-right:28.45pt;margin-bottom:.0001pt;margin-left:0cm;text-align:center;font-size:21px;font-family:"Trebuchet MS","sans-serif";'><strong><span style='font-size:13px;font-family:"Times New Roman","serif";'>Annexure II</span></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:center;'><strong>&nbsp;</strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:center;'><strong><u><span style='font-size:13px;font-family:"Times New Roman","serif";'>Documents required for Joining/ Onboarding</span></u></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:center;'><strong>&nbsp;</strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><span style='font-size:13px;font-family:"Times New Roman","serif";'>On the date of joining, please bring the following documents for verification / submission.</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:center;'><strong>&nbsp;</strong></p>
+                                <ol class="decimal_type" style="list-style-type: upper-roman;margin-left:26px;">
+                                    <li>
+                                        <span style='font-family:"Times New Roman","serif";font-size:13px;'>Original and photocopies of educational certificates and mark sheets&nbsp;</span>
+                                        <ol class="decimal_type" start="1" style="list-style-type: lower-alpha;">
+                                            <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>10<sup>th</sup> standard</span></li>
+                                            <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>12<sup>th</sup> standard</span></li>
+                                            <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>Graduation (1<sup>st</sup>, 2<sup>nd</sup>, 3<sup>rd</sup>&amp; 4<sup>th</sup> year)</span></li>
+                                            <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>Internship if applicable</span></li>
+                                            <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>Post-graduation certificate (1<sup>st</sup>, 2<sup>nd</sup>&amp; 3<sup>rd</sup> year)</span></li>
+                                            <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>Professional course certificates if any. *</span></li>
+                                        </ol>
+                                    </li>
+                                    <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>Registration certificate*</span></li>
+                                    <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>Release letter, experience certificate &amp; salary certificate for last three months from previous and present employer[s].</span></li>
+                                    <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>Bank statement of last three months showing salary credit.</span></li>
+                                    <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>Four passport size-coloured photographs.</span></li>
+                                    <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>Original and photocopy of PAN Card&nbsp;</span></li>
+                                    <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>Permanent address proof. *</span></li>
+                                    <li><span style='font-family:"Times New Roman","serif";font-size:13px;'>Professional Indemnity Certificate (in case of a Clinician) *</span></li>
+                                </ol>
+                                
+                               
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><span style='font-size:13px;font-family:"Times New Roman","serif";'>&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";'><strong><u><span style='font-size:13px;font-family:"Times New Roman","serif";'>*Kindly note if there are any changes/updating in these documents, the same needs to be submitted to the HR department from time to time.</span></u></strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:center;'><strong>&nbsp;</strong></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:center;'><strong>&nbsp;</strong></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;font-size:17px;font-family:"Calibri","sans-serif";'><span style="font-size:13px;line-height:115%;">&nbsp;</span></p>
+                                <p style='margin:0cm;margin-bottom:.0001pt;font-size:17px;font-family:"Calibri","sans-serif";text-align:justify;'><em><span style='font-size:13px;font-family:"Times New Roman","serif";color:black;'>&nbsp;</span></em></p>
+                            </div>
+
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+

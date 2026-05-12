@@ -1,0 +1,162 @@
+﻿@font-face {
+    font-family: certificate;
+    src: url(../fonts/certificate/Certificate-Bold.ttf);
+}
+
+@font-face {
+    font-family: 'K2D';
+    src: url(../fonts/k2d-cufonfonts/K2D-Bold.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'K2D';
+    src: url(../fonts/k2d-cufonfonts/K2D-Medium.ttf);
+    font-weight: normal;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 0;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+    .table td, .table th {
+        background-color: #fff;
+    }
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+:after, :before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body, #form1 {
+    padding: 0px;
+    margin: 0px 0px 0px 0px;
+    height: auto;
+    width: 100%;
+    font-family: 'K2D';
+}
+
+h2, h2, h3, h4, h5, h6 {
+    font-family: 'K2D';
+}
+
+.section {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.hiddenOnPrint {
+    display: none;
+}
+
+table tr td {
+    padding: 5px 4px !important;
+    border: 1px solid #272727;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    text-align: center;
+}
+
+.top-rows {
+    font-size: 16px;
+    background: #ebebeb !important;
+    font-weight: 700;
+    padding: 6px 10px 7px 10px !important;
+}
+
+.scnd-rows {
+    font-size: 16px;
+    font-weight: 700;
+    background: #f7f7f7 !important;
+}
+
+.last-rows {
+    font-size: 16px;
+    font-weight: 800;
+    padding: 8px 4px !important;
+}
+
+.incomeLeft {
+    width: 100%;
+    display: inline-block;
+    padding: 5px 0px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.txtright {
+    text-align: right;
+}
+
+.width50 {
+    width: 50%;
+}
+
+.txtcntr {
+    text-align: center;
+}
+
+
+.exp-grd {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+    .exp-grd table {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+    }
+
+        .exp-grd table tr th {
+            padding: 3px 5px;
+            text-align: left;
+            border: 1px solid #b9b9b9;
+            background: #e7e7e7;
+            font-size: 14px;
+        }
+
+        .exp-grd table tr td {
+            padding: 3px 5px;
+            font-size: 13px;
+            text-align: left;
+            border: 1px solid #818181;
+        }
+
+
+.prnsign {
+    margin: 40px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    text-align: right;
+    font-weight: 500;
+    color: #000;
+}

@@ -1,0 +1,13 @@
+ 
+sp_Fee_collection_day_end_report
+sp_Fee_Collection_Report
+sp_Fee_collection_report_new
+sp_Fetch_month_dues
+sp_fetch_monthly_fee
+sp_fetch_monthly_fee_discount
+
+select top 100 * from dbo.[Student_mapping_with_TransportPath]
+ RRK/716
+ Se
+ select (isnull((select top 1 disc_amount from dbo.[Discount_Master_for_bus] where admission_no=1004 and month='September' and session_id=1 and TransportationPath_id=79 and Transportation_Id=2756 and Boarding_Point_id=4 ),(select top 1 disc_amount from dbo.[Discount_Master_for_bus] where  admission_no='All' and month='September' and session_id=1 and TransportationPath_id=79 and Transportation_Id=2756 and Boarding_Point_id=4 ))) disc_amount
+ from Student_mapping_with_TransportPath smt join Transportation_Fee_Master tr on smt.TransportPath_id=tr.Transportation_path_id and  smt.Boarding_Point_id=tr.Boarding_Point_id and tr.Month='September' and tr.Session_id='1' where  smt.Year_month<=202309 and smt.TransportationPath_id='1003' and smt.Transportation_Id=2756 and smt.Boarding_Point_id=4 and smt.Admission_no='1004') t

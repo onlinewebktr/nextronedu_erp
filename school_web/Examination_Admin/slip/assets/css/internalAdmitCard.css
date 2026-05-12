@@ -1,0 +1,1115 @@
+﻿@font-face {
+    font-family: 'K2D';
+    src: url(../../../../assets/fonts/k2d-cufonfonts/K2D-Bold.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'K2D';
+    src: url(../../../../assets/fonts/k2d-cufonfonts/K2D-Medium.ttf);
+    font-weight: normal;
+}
+
+body, #form1 {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    color: #000 !important;
+    font-family: K2D;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 0;
+    font-family: K2D;
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+    .table td, .table th {
+        background-color: #fff;
+    }
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+:after, :before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.informatchild22 {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 18px;
+    line-height: 23px;
+    color: #303030;
+    text-align: center;
+    font-weight: 600;
+}
+
+.informatchild22-pp {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 15px;
+    float: left;
+    font-size: 14px;
+    line-height: 23px;
+    color: #000;
+    text-align: left;
+    font-weight: 400;
+}
+
+
+.printpage-sec {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.mainbox-view {
+    height: auto;
+    width: 100%;
+    margin: 7px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.view-sectext {
+    height: auto;
+    width: 50%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.view-sectext-p {
+    height: auto;
+    width: 33%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 15px 0px 0px;
+    float: left;
+    font-size: 14px;
+    line-height: 23px;
+    color: #333;
+    font-weight: 400;
+    text-align: right;
+}
+
+.viewsection-lable {
+    height: auto;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left !important;
+    font-size: 14px;
+    line-height: 23px;
+    color: #333;
+    font-weight: 600;
+    text-align: left;
+}
+
+.onlinereg-sectext-h2 {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 7px 0px;
+    padding: 3px 15px 3px 15px;
+    float: left;
+    font-size: 16px !important;
+    line-height: 25px;
+    color: #303030 !important;
+    font-weight: 600;
+    text-align: left;
+    background: #b3f7a6;
+    letter-spacing: 0.5px;
+}
+
+.printlogo4455 {
+    width: 100px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.name1sec1sts {
+    height: auto;
+    width: 50%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.name1sec {
+    height: auto;
+    width: 30%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+
+.headdivv {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+
+.schoolnameheadin {
+    width: 76%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.printlogo {
+    width: 100px;
+    margin: 0px auto;
+    padding: 5px 0px 0px 0px;
+    display: block;
+}
+
+.pimages {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.pimages33 {
+    height: 40px;
+    width: 40px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    border-style: none;
+}
+
+.pimages44 {
+    height: 50px;
+    width: 50px !important;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: right;
+    border-style: none;
+}
+
+.backpring3 {
+    height: 45px;
+    width: 45px !important;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: right;
+    border-style: none;
+}
+
+/*********kk***********/
+.printheadse333 {
+    height: auto;
+    width: 100%;
+    margin: 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+
+.pimages22 {
+    height: auto;
+    width: 800px;
+    margin: 0px auto;
+    padding: 0px 0px 0px 0px;
+}
+
+.printpage-sec-main {
+    width: 100%;
+    padding: 5px;
+    float: left;
+    border: 3px solid #cdc000;
+    position: relative;
+    height: 545px;
+}
+
+.prmarg95 {
+    height: auto;
+    width: 10%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.qualimain-sec {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 10px;
+    float: left;
+}
+
+.informatchild22-lab {
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.informatchild22-pp33 {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/*.pp33italic {
+    font-style: italic;
+}*/
+
+.acardd {
+    height: auto;
+    width: 100%;
+    margin: 1px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.admitcarterm1 {
+    width: 100%;
+    margin: 3px 0px 5px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 18px;
+    line-height: 20px;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+    color: #0c6068;
+}
+.admitcarterm1sss {
+    width: 100%;
+    margin: 2px 0px 2px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 18px;
+    line-height: 20px;
+    font-weight: 800;
+    color: #B00606;
+    text-align: center;
+    text-transform: uppercase;
+}
+.admitcarterm2 {
+    height: auto;
+    width: 100%;
+    margin: 2px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 19px;
+    line-height: 33px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.admit-for-h {
+    height: auto;
+    width: 100%;
+    margin: 4px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+    .admit-for-h span {
+        background: #e3e3e3;
+        padding: 1px 5px;
+        border-radius: 2px;
+        border: 1px solid #dddddd;
+    }
+
+.qualificationsec {
+    height: auto;
+    width: 100%;
+    margin: 15px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 16px;
+    line-height: 23px;
+    font-weight: 600;
+    text-align: left;
+    color: #222;
+}
+
+.qualificationsec-lablett {
+    margin: 3px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+    font-size: 14px;
+    line-height: 23px;
+    color: #444;
+    text-align: left;
+    font-weight: 600;
+}
+
+.qualificationsec-id {
+    font-size: 15px;
+    line-height: 0px;
+    float: left;
+    text-align: center;
+    width: 100%;
+    font-weight: 600;
+    margin: 10px 0px 10px 0px;
+    padding: 0px 0px 0px 0px;
+}
+
+
+.qualificationsec-lable {
+    margin: 3px 0px 15px 0px;
+    padding: 0px 0px 0px 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+    font-size: 14px;
+    line-height: 23px;
+    color: #444;
+    text-align: left;
+    font-weight: 400;
+}
+
+.qualificationsec-terms {
+    margin: 20px 0px 20px 0px;
+    padding: 0px 0px 0px 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+    font-size: 14px;
+    line-height: 23px;
+    color: #222;
+    text-align: left;
+}
+
+.dateplace {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 10px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.txt-date {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    height: auto;
+    width: 50px;
+    float: left;
+    font-size: 14px;
+    line-height: 23px;
+    color: #222;
+    text-align: left;
+    font-weight: 600;
+}
+
+.txt-date-label {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    height: auto;
+    width: 100px;
+    float: left;
+    font-size: 14px;
+    line-height: 23px;
+    color: #222;
+    text-align: left;
+    font-weight: 400;
+}
+
+.studid-lable {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    height: auto;
+    width: 100px;
+    float: left;
+    font-size: 14px;
+    line-height: 23px;
+    color: #222;
+    text-align: right;
+    font-weight: 400;
+}
+
+.namehead { 
+    width: 100%;
+    margin: 5px 0px 5px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.nameheadp {
+    width: 140px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 14px;
+    line-height: 25px;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.nameheadprght {
+    width: 70px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 14px;
+    line-height: 25px;
+    font-weight: 700;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.nameheadll {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 5px;
+    float: left;
+    font-size: 14px;
+    line-height: 25px;
+    font-weight: 700;
+    text-align: left;
+    color: #000;
+    text-transform: uppercase;
+    max-width: 220px;
+}
+
+.studimggr {
+    margin: -3px 0px 0px 0px;
+    padding: 0px;
+    float: left;
+    height: 139px;
+    width: 17%;
+    position: relative;
+    border: 2px dashed #878200;
+    overflow: hidden;
+}
+
+.studimggrt {
+    width: 100%;
+    margin: 0px auto;
+    padding: 0px 0px 0px 0px;
+    display: block;
+    z-index: 9;
+    position: relative;
+}
+
+
+.spdottt {
+    float: right;
+}
+
+.nammarggg {
+    height: auto;
+    width: 100%;
+    margin: 6px 0px 0px 0px;
+    padding: 6px 0px 0px 0px;
+    float: left;
+    border-top: 1px solid #F4F2C9;
+}
+
+.parsmarmmm {
+    height: auto;
+    width: 100%;
+    margin: -2px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+
+.courses-sec33 {
+    height: auto;
+    width: 100%;
+    margin: 2px 0px 30px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.signatpp {
+    height: auto;
+    width: 243px;
+    margin: 0px 0px 0px 0px;
+    padding: 5px 0px 0px 0px;
+    float: left;
+    font-size: 14px;
+    line-height: 25px;
+    font-weight: 800;
+    text-align: center;
+    border-top: 1px solid #c1bebe;
+}
+
+.fattext22 {
+    height: auto;
+    width: 340px;
+    margin: 0px 0px 8px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.Mobfattext22 {
+    height: auto;
+    width: 430px;
+    margin: 0px 0px 8px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.administration-paragraph {
+    height: auto;
+    width: 100%;
+    margin: 5px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+
+.signatseccc {
+    height: auto;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 6px 0px 5px;
+    float: left;
+}
+
+.sig-dv {
+    margin: 0;
+    padding: 6px 0px 0px 0px;
+    width: 100%;
+    float: left;
+    position: absolute;
+    bottom: 20px;
+}
+
+.sig-left {
+    margin: 0;
+    padding: 0px 20px 0px 20px;
+    width: 33%;
+    float: left;
+    min-height: 5px;
+}
+
+.lft-sig-img-dv {
+    margin: 0px;
+    width: 100%;
+    float: left;
+    height: 45px;
+    text-align: center;
+}
+
+.lft-sig-img {
+    margin: 0px auto;
+    width: auto;
+    height: 45px;
+}
+
+.cntr-sig-img-dv {
+    margin: 0px;
+    width: 100%;
+    float: left;
+    height: 45px;
+    text-align: center;
+}
+
+.cntr-sig-img {
+    margin: 0px auto;
+    width: auto;
+    height: 45px;
+}
+
+.rght-sig-img-dv {
+    margin: 0px;
+    width: 100%;
+    float: left;
+    height: 45px;
+    text-align: center;
+}
+
+.rght-sig-img {
+    margin: 0px auto;
+    width: auto;
+    max-height: 45px;
+    max-width: 125px;
+}
+
+.sig-ps {
+    margin: 0;
+    padding: 3px 0px 0px 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    border-top: 1px solid #858585;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.invoice-sec {
+    margin: 10px 0 0 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+.invoice-inr-sec {
+    margin: 0px 0px;
+    padding: 0;
+    width: 800px;
+    float: left;
+}
+
+.invoice-wpr {
+    margin: 0px 0px 5px 0px;
+    padding: 2px;
+    width: 100%;
+    height: auto;
+    float: left;
+    background: #ffffff;
+    border: 2px solid #cdc000;
+}
+
+.prnt-btn-sec {
+    margin: 0 auto;
+    padding: 0;
+    width: 800px;
+    height: auto;
+}
+
+.prnt-btn-wpr {
+    margin: 0 0 5px 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    float: left;
+    background: #eafff3;
+}
+
+.print-btn {
+    margin: 0;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    float: right;
+    background: url(../images/print.png) no-repeat;
+    background-size: 100%;
+    background-color: #00bb51;
+    border: 5px solid #24b663;
+    cursor: pointer;
+}
+
+.back-btn {
+    margin: 0;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    background: url(../images/back.png) no-repeat;
+    background-size: 100%;
+    background-color: #00bb51;
+    border: 5px solid #24b663;
+    cursor: pointer;
+    float: left;
+}
+
+table {
+    width: 100%;
+    float: left;
+}
+
+    table tr th {
+        padding: 5px 5px;
+        font-size: 14px;
+        font-weight: 700;
+        text-align: left;
+        font-family: K2D;
+        text-transform: uppercase;
+        border: 1px solid #cdc000;
+        background: #F4F2C9;
+    }
+
+    table tr td {
+        padding: 5px 5px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid #cdc000;
+        text-align: left;
+        font-family: K2D;
+        text-transform: uppercase;
+    }
+
+
+.courses-sec33 table {
+    width: 100%;
+    float: left;
+}
+
+    .courses-sec33 table tr th {
+        padding: 5px;
+        font-size: 14px;
+        font-weight: 700;
+        border: 1px solid #000;
+        text-align: left;
+        font-family: K2D;
+    }
+
+    .courses-sec33 table tr td {
+        padding: 5px 5px;
+        font-size: 14px;
+        font-weight: 600;
+        border: 0px solid #000;
+        text-align: left;
+        font-family: K2D;
+    }
+
+/*===================================*/
+.ints-loader-wpr {
+    display: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    float: left;
+    background: #ffffff80;
+    position: fixed;
+    z-index: 9999999999;
+    left: 0;
+    bottom: 0;
+    top: 0;
+}
+
+.ints-loader-wpr-inr {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ints-loader {
+    background-color: #fff;
+    padding: 6px 15px;
+    height: auto;
+    -webkit-border-radius: 9px 9px 9px 9px;
+    border-radius: 2px;
+    border: 1px solid #fff;
+    box-shadow: 0 3px 14px 1px rgba(92,91,91,.85);
+}
+
+.ints-loader-txt {
+    color: #414141;
+    font-weight: 500;
+    font-size: 16px;
+    z-index: 999999;
+    position: relative;
+    letter-spacing: 1px;
+    text-align: center;
+    margin: 0px;
+    line-height: 33px;
+}
+
+.ints-loader-img {
+    width: 30px;
+    margin: 0px 8px 0 0;
+    float: left;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.add-lbl {
+    float: left;
+    width: 530px;
+    position: absolute;
+    top: 1px;
+}
+
+.posreltiv {
+    position: relative;
+}
+
+.imp-note-dv {
+    width: 100%;
+    float: left;
+}
+
+.rmrks-p {
+    width: 100%;
+    float: left;
+    margin: 6px 0px 0px 0px;
+    line-height: 25px;
+    font-size: 12px;
+}
+
+.imp-note-dv ol {
+    margin: 0px;
+}
+
+    .imp-note-dv ol li {
+        margin: 0px 0px 4px 0px;
+        line-height: 25px;
+    }
+
+.studimgphotop {
+    margin: 0px;
+    padding: 33px 0px 0px 0px;
+    text-align: center;
+    color: #5a5a5a;
+    font-size: 14px;
+    position: absolute;
+    z-index: 0;
+}
+
+.printpage-sec-mainadmtcrd {
+    width: 100%;
+    padding: 5px;
+    float: left;
+    border: 3px solid #85c798;
+    position: relative;
+}
+
+.affixPhototxt {
+    position: absolute;
+    text-align: center;
+    color: #ababab;
+    font-size: 14px;
+    top: 24px;
+    letter-spacing: 1px;
+}
+
+.printpagewprs {
+    margin: 0px auto;
+    padding: 0px;
+    height: auto;
+    width: 800px;
+}
+
+.mainautot {
+    margin: 0px;
+    padding: 0px;
+    width: 49%;
+    float: left;
+}
+
+ul {
+    margin: 0px;
+}
+
+.wdth30 {
+    width: 30%;
+}
+
+.wdth40 {
+    width: 40%;
+}
+
+.image-headers {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+}
+
+    .image-headers img {
+        margin: 0px auto;
+        max-width: 100%;
+    }
+
+.dues-msg-p {
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    color: #000;
+    font-size: 13px;
+}
+
+    .dues-msg-p span {
+        font-weight: 600;
+    }
+
+.stdinfodv {
+    width: 83%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.stdinfodv1sts {
+    width: 60%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.stdinfodv2sec {
+    width: 40%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+/*#lbl_imp_note p {
+    margin: 0px 0px 0px 0px;
+}*/
+
+#lbl_imp_note p {
+    margin: 0px 0px 4px 0px;
+    text-transform: none;
+    font-weight: 300;
+    font-size: 12px;
+    color: #000;
+}
+
+.lftdb {
+    margin: 0px 15px 0px 0px;
+}
+
+.rghtdb {
+    margin: 0px 0px 0px 15px;
+}
+
+.topdb {
+    margin: 0px 0px 15px 0px;
+}
+
+.bottomdb {
+    margin: 15px 0px 0px 0px;
+}
+
+.mainPagewidth-2x2 {
+    width: 1100px;
+}
+
+.width-sgle-page-2x2 {
+    width: 535px;
+}
+
+.mainPagewidth-1x2 {
+    width: 1200px;
+}
+
+.width-sgle-page-1x2 {
+    width: 565px;
+}
+
+.height-sgle-page-2x2 {
+    height: 766px;
+}
+
+.height-sgle-page-1x2 {
+    height: 815px;
+}
+
+.topBtmdb1x2 {
+    margin: 0px;
+}
+
+.lftdb1x2 {
+    margin: 0px 34px 0px 0px;
+}
+
+.rghtdb1x2 {
+    margin: 0px 0px 0px 35px;
+}
+
+.studentinfOwdth-2x2 {
+    width: 407px;
+}
+
+.studentinfOwdthlft-2x2 {
+    width: 264px;
+}
+
+.studentinfOwdthRght-2x2 {
+    width: 142px;
+}
+
+.studentinfOwdth-1x2 {
+    width: 431px;
+}
+
+.studentinfOwdthlft-1x2 {
+    width: 285px;
+}
+
+.studentinfOwdthRght-1x2 {
+    width: 145px;
+}
+
+.nobreak {
+    white-space: nowrap;
+    word-break: keep-all;
+}
+
+.duesStatusBtm {
+    width: 100%;
+    margin: 50px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 17px;
+}
+
+    .duesStatusBtm i {
+        margin: 0px 0px 0px 0px;
+        padding: 0px 5px 2px 5px;
+        border: 1px solid #cdc000;
+        background: #F4F2C9;
+        font-style: normal;
+        color: #000;
+    }
+
+    .duesStatusBtm span {
+        margin: 0px 0px -5px 2px;
+        padding: 0px 0px 0px 0px;
+        border-bottom: 3px dotted #b1a500;
+        width: 63%;
+        display: inline-block;
+    }
+
+
+.topdb1x2 {
+    margin: 0px 0px 30px 0px;
+}
+
+.btmdb1x2 {
+    margin: 30px 0px 0px 0px;
+}

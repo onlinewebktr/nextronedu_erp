@@ -1,0 +1,313 @@
+﻿
+@{
+    ViewBag.Title = "Salary On Manual Attendance";
+}
+<style>
+    .fixed-header {
+        position: sticky;
+        top: 0;
+        background-color: #f0f0f0;
+        z-index: 1;
+    }
+    .table-container {
+        max-height: calc(100vh - 270px); /* Adjust the maximum height as needed */
+        overflow-y: scroll;
+    }
+</style>
+ 
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div> 
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card my-1">
+            <div class="card-body p-2">
+                <div class="row">
+                    @Html.LabelEditor("Firm", "ddl", divCssClass: "col-sm-3")
+                    @Html.LabelEditor("Year", "ddl", divCssClass: "col-sm-2")
+                    @Html.LabelEditor("Month", "ddl", divCssClass: "col-sm-2")
+                    <div class="col-sm-2 mt-4 pt-1">
+                        <button id="btn-find" type="button" class="btn btn-primary">Find</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#btn-find').on("click", function () {
+            if (!$('#Year').val()) {
+                alertErrorNotification('Please select Year')
+                return false;
+            }
+            if (!$('#Month').val()) {
+                alertErrorNotification('Please select Month')
+                return false;
+            }
+            if (!$('#Firm').val()) {
+                alertErrorNotification('Please select Firm')
+                return false;
+            }
+            $('#grid_prog').show();
+           
+            var data = { type: 'employee-list' };
+            data["Firm"] = $('#Firm').val()
+            data["Year"] = $('#Year').val()
+            data["Month"] = $('#Month').val() 
+            gowithData("../../hr/data/salary-on-manual-attendance", "POST", JSON.stringify({ data: data }), function (resp) {
+                if (!resp.error) { 
+                    bind_data(resp.data)
+                }
+            }) 
+        })
+    </script>
+    <div class="col-lg-12">
+        <div class="card my-1">
+            <div class="card-body p-2">
+                <div id="printpnl"  >
+
+                    <div id="grid_prog" style="margin : 0px auto; width:200px; display:none">
+                        <span class="spinner-border spinner-border-sm me-2"> </span>
+                        Please wait....
+                    </div>
+                    <div id="data_list" style="width: 100%; max-height: calc(100vh - 315px); overflow: auto ">
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary" id="btn-make-attendance" >Make Attendance</button> 
+            </div>
+            <script>
+                $('#btn-make-attendance').on("click", function () {
+                     
+                   // $('#grid_prog').show();
+                    
+                    var data = { type: 'make-salary' };
+                    data["Year"] = $('#Year').val()
+                    data["Month"] = $('#Month').val()
+                    data["Firm"] = $('#Firm').val()
+                    data["data_list"] = JSON.stringify(data_lst); 
+                    //submitdata("../../hr/data/salary-on-manual-attendance", JSON.stringify({ data: data }), function (resp) {
+                    //    $('#grid_prog').hide();
+                    //    if (!resp.error) {
+                    //        window.location.href = "../../salary/salary-chart";
+                    //    }
+                    //})
+
+                    Swal.fire(
+                        {
+                            title: 'Please wait...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading()
+                                gowithData("../../hr/data/salary-on-manual-attendance", 'POST', JSON.stringify({ data: data }), function (resp) {
+                                    if (resp.error) {
+                                        if (resp.recalculate) {
+                                            Swal.fire({
+                                                title: "Salary Already Created",
+                                                icon: 'warning',
+                                                html: resp.message,
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Re-Calculate',
+                                                allowOutsideClick: false
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    recalculate();
+                                                }
+                                            })
+                                        }
+                                        else {
+                                            alertError(resp.message)
+                                        }
+                                    }
+                                    else {
+                                        alertSuccess(resp.message).then((result) => {
+                                            if (result.isConfirmed) { 
+                                                window.location.href = "../../hr/salay/calculation-details";
+                                            }
+                                        }) 
+                                    }
+                                });
+                            },
+
+                        })
+                })
+
+                function recalculate() {
+                    var data = { type: "re-calculate" };
+                    data["Year"] = $('#Year').val()
+                    data["Month"] = $('#Month').val()
+                    data["Firm"] = $('#Firm').val()
+                    data["data_list"] = JSON.stringify(data_lst);
+                    Swal.fire(
+                        {
+                            title: 'Please wait...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading()
+                                gowithData("../../hr/data/salary-on-manual-attendance", 'POST', JSON.stringify({ data: data }), function (resp) {
+                                    if (resp.error) {
+
+                                        alertError(resp.message)
+                                    }
+                                    else {
+                                        alertSuccess(resp.message).then((result) => {
+                                            console.log(result.isConfirmed)
+                                            if (result.isConfirmed) {
+
+                                                window.location.href = "../../hr/salay/calculation-details";
+                                            }
+                                        })
+
+                                    }
+                                });
+                            },
+
+                        })
+
+                }
+
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+     
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        $("#Year option:not(:first)").remove();
+        for (var year = 2023; year <= currentYear+2; year++) {
+            $('#Year').append($("<option>").text(year).val(year));
+        }
+        $("#Month option:not(:first)").remove();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        for (let i = 0; i < monthNames.length; i++) {
+            const monthNumber = (i + 1).toString().padStart(2, '0');
+            $('#Month').append($("<option>").text(monthNames[i]).val(monthNumber));
+        }
+        var data = { type: 'firm-list' }
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Firm');
+                $("#Firm option:not(:first)").remove();
+                var firm = '1';
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.firm_name).val(item.firm_id));
+                });
+                ddl.val(firm);
+            }
+        })
+    });
+    var data_lst = [];
+    function bind_data(data) {
+        $('#data_list').empty();
+        data_lst = data;
+        var lst = $('#data_list');
+        var table = $('<table>').attr("id","mytable");
+        var tbody = $('<tbody>');
+        var thead = $('<thead>').addClass("fixed-header");
+        table.append(thead)
+        table.append(tbody)
+        table.addClass("table  table-striped  table-bordered my-2");
+        thead.append($('<tr>').append(
+            $('<th>').text('Employee Name'),
+            $('<th>').text('Emp Code'),
+            $('<th>').text('Month'),
+            $('<th>').text("Days In Months"),
+            $('<th>').text("Working Days"),
+            $('<th>').text("Full Day Present"),
+            $('<th>').text("Half Day Present"),
+            $('<th>').text("Paid Days"),
+        ));
+        $.each(data, function (indx, d) {
+            d.new_atten = d.pre_atten;
+            var row = $('<tr>').append(
+                $('<td>').text(d.Employee_Name),
+                $('<td>').text(d.Emp_Code),
+                $('<td>').text(d.Month),
+                $('<td>').text(d.Days_in_Month),
+                $('<td>').text(d.working_days), 
+                $('<td>').append($('<input type="number" class="form-control full_day_inpt" >').val(d.full_day).attr("data-max_days", d.Days_in_Month).attr("data-indx", indx).attr("id", `inp_full_${d.Emp_Code}`)),
+                $('<td>').append($('<input type="number" class="form-control half_day_inpt" >').val(d.half_day).attr("data-max_days", d.Days_in_Month).attr("data-indx", indx).attr("id", `inp_hall_${d.Emp_Code}`)),
+                $('<td>').append($('<span>').text(d.Paid_Days).attr("id", `pd_${d.Emp_Code}`)),
+            );
+            tbody.append(row);
+        }); 
+        
+        lst.append(table);
+        var table1 = $('#mytable').DataTable({ 
+            lengthChange: false,
+            scrolly: true, scrollCollapse: true,
+            paging: false,
+        });
+        $('#grid_prog').hide();
+
+        $('.full_day_inpt').on('input', function () { 
+            var inputValue = $(this).val();
+            var max = parseInt($(this).data("max_days"), 10);
+            var indx = parseInt($(this).data("indx"), 10); 
+
+            // Parse the input value as an integer
+            var intValue = parseInt(inputValue, 10);
+            // Check if the value is within the desired range
+            if (isNaN(intValue) || intValue < 0) { 
+                intValue = 0;
+            } else if (intValue > max) {
+                // If the input is greater than 30, set it to 30
+                $(this).val(max);
+                intValue = max;
+            }
+            var d = data_lst[indx]; 
+            d.full_day = intValue;
+            d.Paid_Days = d.full_day + parseInt(d.half_day, 10)/2.0;
+            var max_days = d.Days_in_Month - d.full_day;
+            $(`#inp_hall_${d.Emp_Code}`).data("max_days", max_days);
+            $(`#pd_${d.Emp_Code}`).text(d.Paid_Days);
+        });
+        $('.half_day_inpt').on('input', function () {
+            var inputValue = $(this).val();
+            var max = parseInt($(this).data("max_days"), 10);
+            var indx = parseInt($(this).data("indx"), 10); 
+
+            // Parse the input value as an integer
+            var intValue = parseInt(inputValue, 10);
+            // Check if the value is within the desired range
+            if (isNaN(intValue) || intValue < 0) {
+                intValue = 0;
+            } else if (intValue > max) {
+                // If the input is greater than 30, set it to 30
+                $(this).val(max);
+                intValue = max;
+            }
+            var d = data_lst[indx];
+            d.half_day = intValue; 
+            d.Paid_Days = parseInt(d.full_day,10) + d.half_day / 2.0;
+            var max_days = d.Days_in_Month - d.half_day;
+            $(`#inp_full_${d.Emp_Code}`).data("max_days", max_days);
+            $(`#pd_${d.Emp_Code}`).text(d.Paid_Days);
+        });
+    }
+
+   
+
+</script>
+

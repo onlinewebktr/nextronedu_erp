@@ -1,0 +1,197 @@
+﻿
+@{ Layout = null;
+                HR_Employee_Master emp = ViewBag.emp as HR_Employee_Master; }
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Id Card</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,200,300,400,500,600,700,800" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Acme:100,200,300,400,500,600,700,800" rel="stylesheet" />
+
+    <link href="~/Payroll/assets/css/IdCard.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+
+    <style>
+        .id-profile-img-tir-front {
+            margin: 67px 41px 0px 0px;
+            padding: 0px 0px 0px 0px;
+            height: auto;
+            float: right;
+        }
+    </style>
+    <script type="text/javascript">
+        function PrintPanel() {
+            var panel = document.getElementById("tblPrintIQ");
+            var printWindow = window.open('', '', 'height=400,width=800');
+            printWindow.document.write('<html><head>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write('<link href="../../Payroll/assets/css/IdCard.css" rel="stylesheet" type="text/css" /><link href="https://fonts.googleapis.com/css?family=Open+Sans:100,200,300,400,500,600,700,800" rel="stylesheet" /> <link href="https://fonts.googleapis.com/css?family=Acme:100,200,300,400,500,600,700,800" rel="stylesheet" />');
+            printWindow.document.write(panel.innerHTML);
+            printWindow.document.write('</body ></html>');
+            printWindow.document.close();
+            setTimeout(function () {
+                printWindow.print();
+            }, 500);
+            return false;
+        }
+    </script>
+
+    @*<style media="print" type="text/css">
+            @media print {
+                .id-card-vr-wpr {
+                    margin: 0px;
+                    padding: 0px;
+                    width: 271px;
+                    height: auto;
+                    float: left;
+                    background: url(../../assets/images/id-front.jpg) no-repeat;
+                    background-size: 255%;
+                }
+            }
+        </style>*@
+
+    <style>
+        .form-btn {
+            width: 96px;
+            /* float: left; */
+            margin: 0px 20px 0px 0px;
+            padding: 8px 10px 7px;
+            text-transform: capitalize;
+            text-align: center;
+        }
+    </style>
+
+    <script language="javascript" type="text/javascript">
+        function down() {
+            window.top.close();
+        }
+    </script>
+</head>
+<body>
+    <form id="form1">
+        <div class="id-card-sec">
+            <div class="id-card-center-sec">
+                <div class="id-card-inr-sec">
+                    <div class="id-card-page-print-btn-sec">
+
+                        <div class="id-card-page-print-btn-sec" style="float: left; width: 100%; text-align: center;">
+
+                            <button ID="print1" onclick="return PrintPanel()" class="form-btn btn-print">Print</button>
+                        </div>
+
+
+                        <div id="tblPrintIQ">
+                            <div class="ids-card-wpr">
+                                <div class="ids-back-img-sec">
+                                    <img src="~/Payroll/print/front_tirhut.png" class="ids-back-img" style="" />
+                                </div>
+                                <div class="id-card-content-sec">
+                                    <div class="id-profile-img-tir-front">
+                                        <img style=" border-radius: 50%; height: 122px; width: 129px;" src="@emp.Employee_image" class="id-profile-img" />
+                                    </div>
+
+                                    <div class="member-dt-sec">
+                                        <h2 class="member-name-p" style=" margin-top: 30px; font-size: 22px; color: darkslateblue;">
+                                            <span id="lbl_member_name">@emp.Employee_Name</span>
+                                        </h2>
+                                        <h2 class="member-name-p" style="margin-top: 10px; font-size: 16px; color: darkslateblue; ">
+                                            <span id="lbl_desig">@ViewBag.Designation</span>
+                                        </h2>
+                                        <h2 class="member-name-p" style=" margin-top: 25px; font-size: 15px; color: white; text-align: center;">
+                                            <span id="lbl_desig">@ViewBag.Department</span>
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="ids-card-wpr">
+                                <div class="ids-back-img-sec">
+                                    <img src="~/Payroll/print/back_tirhut.png" class="ids-back-img" />
+                                </div>
+                                <div class="id-card-content-sec">
+
+                                    <h2 class="member-other-dt-p1" style=" width: 100%; margin: 10px 0px 0px 0px; text-align: center;color:white;font-size:11px">
+                                        <span id="lbl_valid_upto">This card is valid upto </span>
+                                    </h2>
+
+                                    <h2 class="member-other-dt-p1" style="width: 90%;margin: 15px 10px 0px 10px;">
+                                        <span id="lbl_hospital_address" style="float: left;width: 60%;font-size: 10px;font-weight: bold;">
+                                            Emp Codes
+                                        </span>
+                                        <span id="lbl_hospital_address" style="float: left;width: 40%;font-size: 10px;font-weight: bold;">
+                                            @emp.Emp_Code
+                                        </span>
+
+                                    </h2>
+                                    <h2 class="member-other-dt-p1" style="width: 90%;margin: 10px 10px 0px 10px;">
+                                        <span id="lbl_hospital_address" style="float: left;width: 60%;font-size: 10px;font-weight: bold;">
+                                            Contact No
+                                        </span>
+                                        <span id="lbl_hospital_address" style="float: left;width: 40%;font-size: 10px;font-weight: bold;">
+                                            @emp.Mobile
+                                        </span>
+
+                                    </h2>
+
+                                    <h2 class="member-other-dt-p1" style="width: 90%;margin: 10px 10px 0px 10px;">
+                                        <span id="lbl_hospital_address" style="float: left;width: 60%;font-size: 10px;font-weight: bold;">
+                                            Aadhar No
+                                        </span>
+                                        <span id="lbl_hospital_address" style="float: left;width: 40%;font-size: 10px;font-weight: bold;">
+                                            @emp.AadharNo
+                                        </span>
+
+                                    </h2>
+                                    <h2 class="member-other-dt-p1" style="width: 90%;margin: 10px 10px 0px 10px;">
+                                        <span id="lbl_hospital_address" style="float: left;width: 60%;font-size: 10px;font-weight: bold;">
+                                            Blood Group
+                                        </span>
+                                        <span id="lbl_hospital_address" style="float: left;width: 40%;font-size: 10px;font-weight: bold;">
+                                            @emp.Blood_group
+                                        </span>
+
+                                    </h2>
+                                    <h2 class="member-other-dt-p1" style="width: 90%;margin: 10px 10px 0px 10px;">
+                                        <span id="lbl_hospital_address" style="float: left;width: 60%;font-size: 10px;font-weight: bold;">
+                                            Emergency Contact
+                                        </span>
+                                        <span id="lbl_hospital_address" style="float: left;width: 40%;font-size: 10px;font-weight: bold;">
+                                            @emp.Mobile
+                                        </span>
+
+                                    </h2>
+                                    <h2 class="member-other-dt-p1" style="width: 90%;margin: 10px 10px 0px 10px;">
+                                        <span id="lbl_hospital_address" style="float: left;width: 60%;font-size: 10px;font-weight: bold;">
+                                            Date of  Issue
+                                        </span>
+                                        <span id="lbl_hospital_address" style="float: left;width: 40%;font-size: 10px;font-weight: bold;">
+                                            @emp.Date_of_Joining
+                                        </span>
+
+                                    </h2>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        const now = new Date();
+        const nextYear = new Date(now.setFullYear(now.getFullYear() + 1));
+
+        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        const formattedDate = nextYear.toLocaleDateString('en-GB', options).replace(/ /g, '. ');
+
+        $('#lbl_valid_upto').text('This card is valid up to ' + formattedDate);
+    });
+
+</script>

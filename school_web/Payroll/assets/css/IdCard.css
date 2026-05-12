@@ -1,0 +1,356 @@
+﻿body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.id-card-sec {
+    margin: 20px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+.id-card-center-sec {
+    margin: 0px auto;
+    padding: 0px;
+    width: 700px;
+    height: auto;
+}
+
+.id-card-inr-sec {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+.ids-card-wpr {
+    margin: 20px 35px;
+    padding: 0px;
+    width: 205px;
+    height: 321px;
+    float: left;
+    position: relative;
+}
+
+.ids-back-img-sec {
+    width: 205px;
+    height: 321px;
+    float: left;
+    overflow: hidden;
+}
+
+.ids-back-img {
+    width: 205px;
+    height: 321px;
+}
+
+.id-card-content-sec {
+    margin: 0px;
+    padding: 0px;
+    width: 205px;
+    height: 321px;
+    float: left;
+    position: absolute;
+    border: 1px solid #3fb7eb;
+}
+
+.member-code-p {
+    margin: 0px;
+    padding: 5px 0px 0px 0px;
+    width: 97%;
+    height: auto;
+    float: left;
+    font-size: 14px;
+    text-align: right;
+    font-weight: 600;
+    letter-spacing: .5px;
+    color: #33b3ea;
+}
+
+.id-profile-img-sec {
+    margin: 80px 56px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    height: auto;
+    float: right;
+}
+
+.id-profile-img {
+    margin: 0px auto;
+    padding: 0px;
+    width: 83px;
+    height: 92px;
+}
+
+.id-round-img-sec {
+    margin: -24px 0px 0px -25px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+    text-align: center;
+    z-index: 99;
+    position: relative;
+}
+
+.id-round-img {
+    margin: 0px auto;
+    padding: 0px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}
+
+.member-dt-sec {
+    margin: 5px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+
+.member-name-p {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    min-height: 13px;
+    height: auto;
+    float: left;
+    font-family: 'Acme', sans-serif;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: #182947;
+    letter-spacing: 0px;
+    line-height: 13px;
+}
+
+.member-desig-p {
+    margin: 2px 0px 6px 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+    font-family: 'Acme', sans-serif;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #e16c0b;
+    letter-spacing: 1px;
+}
+
+.member-other-dt-p {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 10px;
+    /*width: 75%;*/
+    height: auto;
+    display: inline;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 12px;
+    color: #000;
+}
+
+.member-other-dt-p1 {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 90%;
+  /*  height: 9px;*/
+    overflow: hidden;
+    float: left;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 10px;
+    color: #000;
+}
+
+.member-other-dt-p2 {
+    margin: 1px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 75%;
+    min-height: 14px;
+    height: auto;
+    float: left;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 15px;
+    color: #000;
+}
+
+.member-other-dt-p3 {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 75%;
+    min-height: 8px;
+    height: auto;
+    float: left;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 8px;
+    color: #000;
+}
+
+.member-other-dt-p4 {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 75%;
+    height: auto;
+    float: left;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 14px;
+    color: #000;
+}
+
+.member-other-dt-p5 {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 75%;
+    height: auto;
+    float: left;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 12px;
+    color: #000;
+}
+
+.member-other-dt-p6 {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 75%;
+    height: auto;
+    float: left;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 12px;
+    color: #000;
+}
+
+.member-desig-website-p {
+    margin: 13px 0px 4px 0px;
+    padding: 0px;
+    width: 97%;
+    height: auto;
+    float: left;
+    font-family: 'Acme', sans-serif;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 400;
+    color: #1f8ab8;
+    letter-spacing: 1px;
+}
+
+
+
+.certificats-wpr {
+    margin: 0px 0px;
+    padding: 0px;
+    width: 850px;
+    height: 637px;
+    float: left;
+    position: relative;
+}
+
+.certificats-img-sec {
+    width: 850px;
+    height: 637px;
+    float: left;
+    overflow: hidden;
+}
+
+.certificats-img {
+    width: 850px;
+    height: 633px;
+}
+
+.certificats-content-sec {
+    margin: 0px;
+    padding: 0px;
+    float: left;
+    position: absolute;
+}
+
+.certificats-dt-sec {
+    margin: 364px 0px 0px 0px;
+    padding: 0px 0px 0px 152px;
+    width: 78%;
+    height: auto;
+    float: left;
+}
+
+.certificats-p {
+    margin: 0px;
+    padding: 5px 0px 0px 0px;
+    width: 97%;
+    height: auto;
+    float: left;
+    font-size: 15px;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #000;
+}
+
+
+.certificats-p1 {
+    margin: 0px;
+    padding: 5px 0px 0px 0px;
+    width: 97%;
+    height: auto;
+    float: left;
+    letter-spacing: .5px;
+    color: #000000;
+    font-size: 13px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid #000;
+}
+
+
+.certificats-center-sec {
+    margin: 0px auto;
+    padding: 0px;
+    width: 850px;
+    height: auto;
+}
+
+.btn-print {
+    background: #01a54f;
+    border: 0px;
+    border-radius: 3px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-back {
+    background: #ee1d23;
+    border: 0px;
+    border-radius: 3px;
+    color: #fff;
+    padding: 10px 8px 8px !important;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 16px;
+    width: 67px !important;
+}
+
+.qr-wprS {
+    margin: 10px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+.certificat-qr-wprS {
+    margin: 83px 0px 0px 29px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}

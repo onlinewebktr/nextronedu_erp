@@ -1,0 +1,402 @@
+﻿@{
+
+    ViewBag.firm_name = "Purnank MPC";
+    ViewBag.logo = "";
+    //if (User.Identity.IsAuthenticated)
+    //{
+    //    My.getUserInfo(ViewBag, Session, User.Identity.Name);
+    //}
+    var showMenu = "d-done d-md-block";
+    var showBack = "d-md-none d-flex";
+    if (Request.RawUrl.ToLower().Contains( "m-"+ViewBag.sector+"-home"))
+    {
+        showMenu = "";
+        showBack = "d-none";
+    }
+    var dt = ViewBag.dt as System.Data.DataTable;
+
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @*<script src="~/Scripts/MicrosoftAjax.js"></script>*@
+    @*<script src="~/Scripts/MicrosoftAjax.debug.js"></script>*@
+
+    <meta charset="UTF-8">
+    <link rel="icon" href="~/Content/theme/images/favicon.png" type="image/png" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="~/Content/theme/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/app.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/icons.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+    <script src="~/Content/js/jquery.unobtrusive-ajax.js"></script>
+
+    <script src="~/Content/theme/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/theme/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/Content/js/my_v1.js"></script>
+    @*<script src="~/Content/js/jquery-ui.min.js"></script>*@
+    <script src="~/Content/theme/plugins/bootstrap-material-datetimepicker/js/moment.min.js"></script>
+    <script src="~/Content/theme/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.min.js"></script>
+    <link href="~/Content/theme/plugins/notifications/css/lobibox.min.css" rel="stylesheet" />
+
+    <link href="~/Content/theme/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/select2/js/select2.min.js"></script>
+    @*<script src="~/Areas/Store/Assets/store.js"></script>*@
+    <link href="~/Content/theme/plugins/jquey-ui/jquery-ui.min.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/jquey-ui/jquery-ui.min.js"></script>
+    <link href="~/Content/theme/plugins/jquey-ui/jquery-ui.structure.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/jquey-ui/jquery-ui.theme.min.css" rel="stylesheet" />
+    <link href="~/Content/theme/css/cropper.min.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/cropper.js"></script>
+
+    @if (ViewBag.ShowPageOnly == true)
+    {
+        <style>
+            .page-wrapper {
+                height: 100%;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                margin-left: 0px;
+            }
+        </style>
+    }
+    <style>
+        .select2-container {
+            min-width: 100%;
+        }
+        /*  .sidebar-wrapper {
+            background-image: url(../images/bg-themes/4.png);
+            background-size: 100% 100%;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #171717;
+            border-right: 1px solid rgb(228 228 228 / 0%);
+        }
+        .sidebar-wrapper .metismenu a {
+            color: rgb(255 255 255 / 85%);
+        }*/
+        .ui-front {
+            z-index: 10000;
+        }
+
+        .modal-body {
+            overflow: auto;
+            max-height: calc(100vh - 180px);
+        }
+
+            .modal-body thead {
+                position: sticky;
+                top: -0.51rem;
+                background: whitesmoke;
+            }
+
+        .ui-menu-item-wrapper {
+            border-bottom: #ccc solid 0.5px;
+        }
+
+        #mytable {
+            width: 100% !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 35px;
+        }
+
+        .select2-container .select2-selection--single {
+            padding: 4px;
+            height: auto;
+        }
+
+        .store_text {
+            font-size: 15px;
+            margin-left: 10px;
+            margin-bottom: 0;
+            letter-spacing: 1px;
+            color: #0a2e64;
+        }
+
+        .btn-plus {
+            background: rebeccapurple;
+            padding: 0 5px;
+            height: 13px;
+            color: white;
+            line-height: 0.7;
+            border-radius: 3px;
+        }
+
+        .table > :not(caption) > * > * {
+            padding: 0.2rem 0.3rem 0.05rem .5rem;
+        }
+
+        .dt-buttons button {
+            padding: 0 .5rem;
+        }
+
+        input[type="search"] {
+            padding: .15rem .5rem;
+            min-height: 0;
+        }
+
+        .page-link {
+            padding: .1rem .75rem;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            padding-top: .3rem;
+        }
+
+        .topbar .navbar {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        .usr-img {
+            height: 70px;
+            width: 70px;
+            border-radius: 50% !important;
+            background: whitesmoke;
+            padding: 5px;
+        }
+
+        .sidebar-header {
+            margin-bottom: -10px;
+            position: relative;
+        }
+
+        .sidebar-wrapper .metismenu {
+            margin-top: 0px !important;
+        }
+
+        @@media (max-width: 768px) {
+            .topbar {
+                background: saddlebrown;
+                border-bottom: 1px solid rgb(228 228 228 / 0%);
+            }
+
+                .topbar .navbar .navbar-nav .nav-link {
+                    color: #212529;
+                }
+
+            .mobile-toggle-menu {
+                color: #ffffff;
+            }
+
+            .user-name {
+                font-size: 15px;
+                font-weight: 500;
+                color: #fff !important;
+            }
+
+            .logo-text {
+                color: #fff;
+            }
+
+            .user-box {
+                border-left: none;
+                margin-left: 0;
+            }
+
+            .mobile-toggle-menu1 {
+                display: block;
+                font-size: 26px;
+                color: white;
+                cursor: pointer;
+            }
+        }
+    </style>
+    <script>
+        $(function () {
+              var p_img = '@ViewBag.UserProfileImage';
+            var logo = '@ViewBag.logo';
+            if (p_img) {
+                $('#img_usr').attr('src',p_img);
+            }
+            else if (logo) {
+                $('#img_usr').attr('src',logo);
+            }
+            else  {
+                $('#img_usr').attr('src','../../../Content/Images/logo.png');
+            }
+            $(".mobile-toggle-menu1").on('click', function () {
+
+                window.history.back();
+            });
+        })
+        function isNumeric(value) {
+            return !isNaN(value) && !isNaN(parseFloat(value));
+        }
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        @if (ViewBag.ShowPageOnly == null || ViewBag.ShowPageOnly == false)
+        {
+            <!--sidebar wrapper -->
+            <div class="sidebar-wrapper" data-simplebar="true">
+                <div class="sidebar-header d-md-flex d-none">
+
+                    <div>
+                        <img src="@ViewBag.mpc_Logo" style="height: 55px;" alt="logo icon">
+                    </div>
+                    <div class="toggle-icon ms-auto">
+                        <i class='bx bx-arrow-to-left'></i>
+                    </div>
+                </div>
+                <div class="d-md-none d-block">
+                    <div>
+                        <div class="ms-2 mt-2">
+                            <img class="rounded usr-img card-img" src="@ViewBag.UserProfileImage" id="img_usr" onerror="this.src = '../../../Content/Images/logo.png'" alt="...">
+                        </div>
+                        <div class="ms-2">
+                            <h5 class="card-title mb-0">@ViewBag.UserName</h5>
+                            <small class="text-muted">@ViewBag.UserType</small>
+                        </div>
+                        <hr class="m-0 mt-2" />
+                    </div>
+                </div>
+                <ul class="metismenu mm-show" id="menu">
+
+                    <li><a class="mm-active" href='javascript:goto_page("../../../../@ViewBag.sector/c/home")'><i class="parent-icon bx bx-home" style="color: #F44336"></i><div class="menu-title">Home</div></a></li>
+                    <li><a href='javascript:goto_page("../../../../@ViewBag.sector/c2/mpc-firm")'><i class="parent-icon bx bx-home" style="color: #F44336"></i><div class="menu-title">Firm Details</div></a></li>
+                    @foreach (var dr in dt.getRows())
+                    {//class="mm-active"<i class='bx bx-chevrons-right'></i>
+                        <li><a href='javascript:goto_page("/@ViewBag.sector/c2/@dr["pageUrl"]")'><i class="parent-icon bx bx-chevrons-right" style="color: #F44336"></i><div class="menu-title">@dr["pageTitle"]</div></a></li>
+                    }
+
+                </ul>
+            </div>
+            @Html.Hidden("hd_user", User.Identity.Name)
+
+            <!--end sidebar wrapper -->
+            <!--start header -->
+            <header>
+                <div class="topbar @showMenu align-items-center">
+                    <nav class="navbar navbar-expand">
+                        <div class="mobile-toggle-menu">
+                            <i class='bx bx-menu'></i>
+                        </div>
+                        <div class="search-bar flex-grow-1">
+                            <h4 class="logo-text">@ViewBag.mpc_firm_name</h4>
+                            @*<span class="store_text">@ViewBag.Store_Name (@ViewBag.Store_Type)</span>*@
+                        </div>
+                        <div class="user-box dropdown  d-none d-md-block">
+                            <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="@ViewBag.mpc_Logo" onerror="this.src = '../../Content/Images/user-icon.png'" class="user-img">
+
+                                <div class="user-info ps-3">
+                                    <p class="user-name mb-0">@ViewBag.UserName</p>
+                                    <p class="designattion mb-0">@ViewBag.UserType</p>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                @*<li>
+                                        <a class="dropdown-item" href="../../store/change-password"><i class="bx bx-cog"></i><span>Change Password</span></a>
+                                    </li>*@
+
+                                <li>
+                                    <a class="dropdown-item" href="../../seeds/logout"><i class='bx bx-log-out-circle'></i><span>Logout</span></a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="user-box d-md-none d-block">
+                            <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#">
+                                <img src="@ViewBag.mpc_Logo" onerror="this.src = '../../../Content/Images/logo.png'" class="user-img">
+
+                                <div class="ps-3">
+                                    <p class="user-name mb-0">@ViewBag.mpc_firm_name</p>
+                                </div>
+                            </a>
+
+                        </div>
+                    </nav>
+                </div>
+                <div class="topbar @showBack  align-items-center">
+                    <nav class="navbar navbar-expand">
+                        <div class="mobile-toggle-menu1">
+                            <i class='bx bx-arrow-back'></i>
+                        </div>
+
+
+
+                        <div class="user-box d-md-none d-block">
+                            <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#">
+
+
+                                <div>
+                                    <p class="user-name mb-0 py-2" style="font-size: 18px;">@ViewBag.Title</p>
+                                </div>
+                            </a>
+
+                        </div>
+                    </nav>
+                </div>
+            </header>
+            <!--end header -->
+        }
+        <!--start page wrapper -->
+        <div class="page-wrapper">
+            <div class="page-content p-2 pb-0">
+
+                @RenderBody()
+
+                @Html.BeginModal("mdl-add-more", "", "modal-lg").Content(@<div id="ifrm">
+
+                </div>).Create()
+
+                @Html.BeginModal("mdl-crop", "Crop Image").Content(@<div id="tht" style="max-height: calc(100vh - 250px); overflow:auto">
+                    <img id="croppedImage" style="max-width:100%;">
+                </div>).Footer(@<div><button id="mdl-btn-crop" class="btn btn-primary">Crop Image</button></div>).Create()
+            </div>
+        </div>
+
+        <script>
+            $('#mdl-add-more').on('hidden.bs.modal', function () {
+                addNewOption(mod_title);
+            });
+        </script>
+        <!--end page wrapper -->
+        @if (ViewBag.ShowPageOnly == null || ViewBag.ShowPageOnly == false)
+        {
+            <!--start overlay-->
+            <div class="overlay toggle-icon"></div>
+            <!--end overlay-->
+            <!--Start Back To Top Button-->
+            <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+            <!--End Back To Top Button-->
+            <footer class="page-footer  d-none d-md-block">
+                <p class="mb-0">Copyright &copy; @DateTime.Now.Year. All right reserved.  v1.0</p>
+            </footer>
+        }
+    </div>
+
+    <script src="~/Content/theme/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/theme/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="~/Content/theme/plugins/metismenu/js/metisMenu.min.js"></script>
+    <script src="~/Content/theme/js/app.js"></script>
+    <script src="~/Content/js/sweetalert2@11.min.js"></script>
+    <script src="~/Content/theme/plugins/notifications/js/notifications.min.js"></script>
+    <script src="~/Content/theme/plugins/notifications/js/lobibox.min.js"></script>
+    <script>
+        function goto_page(url) {
+            showProg();
+            window.location.href = url;
+            setTimeout(myFunction, 1000); 
+        }
+        function myFunction() {
+            Swal.close();
+        }
+    </script>
+</body>
+</html>

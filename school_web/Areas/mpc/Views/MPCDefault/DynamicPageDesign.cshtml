@@ -1,0 +1,292 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPC Design Page</title>
+    <link href="~/Areas/mpc/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Areas/mpc/assets/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Areas/mpc/assets/css/icons.css" rel="stylesheet" /> 
+    <link href="~/Areas/mpc/assets/css/jquery-ui.min.css" rel="stylesheet" />
+    <script src="~/Areas/mpc/assets/js/jquery.min.js"></script>
+    <script src="~/Areas/mpc/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Areas/mpc/assets/js/select2.min.js"></script>
+    <script src="~/Areas/mpc/assets/js/jquery-ui.min.js"></script>
+    <script src="~/Areas/mpc/assets/js/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Areas/mpc/assets/js/sweetalert2@11.min.js"></script>
+    <script src="~/Areas/mpc/assets/js/mpc.js"></script> 
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/neo.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>*@
+
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@latest/min/vs/loader.js"></script>
+
+    <style>
+        .form-label {
+            margin-bottom: 0;
+        }
+
+        /*.CodeMirror {
+            height: calc(100vh - 132px);*/
+            /*height:   132px;*/
+        /*}*/
+       #htmlEditor {
+            height: calc(100vh - 132px);
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="container-fluid body-content mt-2">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="card mb-0">
+                    <div class="card-header  pt-0 pb-1">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label" for="Page_Title">Page Type</label>
+                                <select class="form-select form-select-sm " id="Page_Type" name="Page_Type">
+                                    <option>New</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label" for="Page_Id">Page Id</label>
+                                <input class="form-control form-control-sm" id="Page_Id" name="Page_Id" type="text" value="@ViewBag.pageId">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="Page_Title">Page Title</label>
+                                <input class="form-control form-control-sm " id="Page_Title" name="Page_Title" type="text" value="@ViewBag.Title">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="Page_Layout">Page Layout</label>
+                                <input class="form-control form-control-sm " id="Page_Layout" name="Page_Layout" type="text" value="">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-body p-1">
+                        @*<textarea id="MyCode"></textarea>*@
+                        <div   id="htmlEditor"></div>
+                    </div>
+                    <div class="card-footer">
+                        <button id="btnUpdate" class="btn btn-sm btn-primary">Save</button>
+                        <button class="btn btn-sm btn-outline-primary" style="float:right" type="button" onclick="view_page()">
+                            🌐 View Page
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card p-0 mb-0">
+                    <iframe id="mframe" style="height: calc(100vh - 17px); width: 100%;">
+                    </iframe>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <script>
+        $(function () {
+            $("#Page_Layout").autocomplete({
+                minLength: 0,
+                source: function (request, response) {
+                    var data = {};
+                    data.term = request.term;
+                    gowithData("../../../mpc-api/getLayoutName", 'POST', JSON.stringify({ data: data }), function (resp) {
+                        if (!resp.error) {
+                            response(resp.data);
+                        }
+                    })
+                }
+            });
+            $("#Page_Layout").focus(function () {
+                $(this).autocomplete("search", ''); // Trigger search with an empty string
+            });
+        })
+        var getContent = false;
+        function loadDesign() {
+            var pageId=$('#Page_Id').val();
+            var url = "../../dp/" + pageId;
+            if (pageId == "" || $('#Page_Type')=='New' ) {
+                url = "about:blank";
+            }
+            $("#mframe").attr("src", url);
+        }
+        function view_page() {
+            var pageId = $('#Page_Id').val();
+            var url = "../../dp/" + pageId;
+            if (pageId) {
+                window.open(url)
+            }
+        }
+        $(document).keydown(function (event) {
+            if (event.ctrlKey || event.metaKey) {
+                if (event.key === 'c' || event.key === 'v' || event.key === 'p' || event.key === 'a' || event.key === 'x') {
+                    return; // Allow default behavior for Ctrl+C, Ctrl+V, Ctrl+P
+                }
+
+                event.preventDefault();
+                if (event.key === 's') {
+                    $('#btnUpdate').click();
+                }// Prevent browser from handling Ctrl+* or Meta+* shortcuts
+            }
+        });
+
+        $('#btnUpdate').click(function () {
+            var data = {};
+            data.Page_Id =$('#Page_Id').val();
+            data.Page_Title = $('#Page_Title').val();
+            data.Page_Type = $('#Page_Type').val();
+            data.Page_Layout = $('#Page_Layout').val();
+            data.Page_Content = editor.getValue();
+            gowithData("../../../mpc-api/updatePageData", "POST", JSON.stringify({ data: data }), function (resp) {
+                if (resp.error) {
+                    alertError(resp.message)
+                }
+                else {
+                    loadDesign()
+                    if ($('#Page_Type').val() == "New") {
+                        $('#Page_Type').append($('<option>').text(`${data.Page_Title} (${resp.data})`).val(resp.data));
+                        getContent = false;
+                        $('#Page_Type').val(resp.data).change();
+                        $('#Page_Id').prop('disabled', true);
+                    }
+                }
+            },true)
+        });
+        var editor
+        $('#Page_Type').on('change', function () {
+            if ($(this).val() == "New") {
+                $('#Page_Id').prop('disabled', false);
+                $('#Page_Title').val('');
+                $('#Page_Id').val('');
+                if (editor) {
+                    editor.setValue('');
+                }
+                loadDesign();
+            }
+            else {
+                $('#Page_Id').val($(this).val());
+                $('#Page_Title').val($(this).ddlText().split('(')[0].trim());
+                $('#Page_Id').prop('disabled', true);
+                if (getContent) {
+                    loadDesign();
+                    gowithData("../../../mpc-api/getPageData", "POST", JSON.stringify({ data: { Page_Id: $(this).val() } }), function (resp) {
+                        editor.setValue(resp.data);
+                        setTimeout(function () {
+                            editor.getAction('editor.action.formatDocument').run();
+                        }, 400)
+                    }, true)
+                }
+                getContent = true;
+            }
+        })
+        $(function () {
+            $('#Page_Id').val("@ViewBag.pageId");
+            $('#Page_Title').val("@ViewBag.PageTitle");
+            $('#Page_Id').prop('disabled', true);
+            loadDesign()
+            //editor = CodeMirror.fromTextArea(document.getElementById("MyCode"), {
+            //    mode: "htmlmixed",
+            //    theme: "neo",
+            //    lineNumbers: true,
+            //    lineWrapping: true,
+            //    tabSize: 3,
+            //    indentWithTabs: true
+            //});
+            if ('@ViewBag.PageType' == "New") {
+                 gowithData("../../../mpc-api/getPageList", "POST", null, function (resp) {
+                    $("#Page_Type").bind_ddl_data(resp.data);
+                    getContent = false;
+                     $('#Page_Type').val("@ViewBag.PageType").change();
+
+            $('#Page_Id').val("@ViewBag.pageId");
+                     $('#Page_Title').val("@ViewBag.PageTitle");
+                })
+            }
+            else {
+                 gowithData("../../../mpc-api/getPageData", "POST", JSON.stringify({ data: { Page_Id: "@ViewBag.pageId" } }), function (resp) {
+                    if (!editor) {
+                        content = resp.data;
+                    }
+                    else {
+                        editor.setValue(resp.data);
+                        setTimeout(function () {
+                            editor.getAction('editor.action.formatDocument').run();
+                        }, 400)
+                    }
+                 })
+                 gowithData("../../../mpc-api/getPageList", "POST", null, function (resp) {
+                    $("#Page_Type").bind_ddl_data(resp.data);
+                    getContent = false;
+                    $('#Page_Type').val("@ViewBag.pageId").change();
+                })
+            }
+
+
+            $('#Page_Type').select2();
+        });
+    </script>
+    <script> 
+        var content = '<!DOCTYPE html><html><head></head><body></body></html>';
+        require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@latest/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+
+            editor= monaco.editor.create(document.getElementById('htmlEditor'), {
+                value: content ,
+                language: 'html',
+                theme: 'vs', 
+               // Layout & Appearance
+               fontSize: 13,
+               fontFamily: 'Fira Code, monospace',
+               lineNumbers: 'on',                 // 'on' | 'off' | 'relative' | 'interval'
+               wordWrap: 'on',                    // 'on' | 'off' | 'wordWrapColumn'
+               minimap: { enabled: true },        // Show code preview sidebar
+               scrollBeyondLastLine: false,
+               smoothScrolling: true,
+               automaticLayout: true,             // Resize with window/container
+
+               // Editor Features
+               autoClosingBrackets: 'always',
+               autoClosingQuotes: 'always',
+               autoIndent: 'advanced',
+               formatOnType: true,                // Auto format while typing
+               formatOnPaste: true,
+               folding: true,
+               tabSize: 2,
+               insertSpaces: true,
+               detectIndentation: false,
+               renderWhitespace: 'boundary',      // 'none' | 'boundary' | 'all'
+               renderLineHighlight: 'all',
+
+               // Code Suggestions / IntelliSense
+               quickSuggestions: true,
+               suggestOnTriggerCharacters: true,
+               snippetSuggestions: 'inline',      // 'top' | 'bottom' | 'inline' | 'none'
+               wordBasedSuggestions: true,
+               parameterHints: { enabled: true },
+
+               // Miscellaneous
+               readOnly: false,
+               contextmenu: true,
+               scrollbar: {
+                   verticalScrollbarSize: 8,
+                   horizontalScrollbarSize: 8
+               },
+           });
+            
+        });
+    </script>
+</body>
+</html>

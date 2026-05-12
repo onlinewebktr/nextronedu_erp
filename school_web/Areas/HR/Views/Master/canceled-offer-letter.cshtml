@@ -1,0 +1,360 @@
+﻿@{
+    //ViewBag.Title = "Employee Applied List";
+}
+<style>
+    .row {
+        --bs-gutter-x: 0.5rem;
+        --bs-gutter-y: 0;
+    }
+
+    .table.dataTable {
+        margin-top: 0px !important;
+    }
+
+    #mytable {
+        min-height: 300px;
+    }
+
+    .dataTables_scroll {
+        border: 1px solid #ddd !important;
+        margin-top: 0.25rem !important;
+    }
+
+    .filter-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+</style>
+
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header pb-0">
+        <div class="d-flex mb-2 w-auto">
+
+            <div class="form-group me-2">
+                @Html.Label("Firm", new { @class = "form-group-text" })
+                @Html.DropDownList("Firm", "All", new { @class = "form-select", style = "max-width : 280px;" })
+            </div>
+            
+            <div class="form-group me-2">
+                @Html.Label("Session", new { @class = "form-group-text" })
+                @Html.DropDownList("Session", "Select", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="form-group me-2">
+                @Html.Label("Hiring", new { @class = "form-group-text" })
+                @Html.DropDownList("Hiring", "Select", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="form-group me-2">
+                @Html.Label("Post Applied", new { @class = "form-group-text", @for = "Post_Applied" })
+                @Html.DropDownList("Post_Applied", "Select", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="filter-btn">
+                <button class="btn btn-primary" type="button" onclick="apply_filter(this)" style="width: auto; ">Find</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body px-2 py-1">
+        <table class="table table-bordered table-striped" id="mytable">
+            <thead class="fixed-header">
+                <tr>
+                    <th>Action</th>
+                    @*<th>Session</th>*@
+                    <th>Firm</th>
+                    <th>Application Id</th>
+                    <th>Date</th>
+                    <th>Post Applied</th>
+                    <th>Applicant Name</th>
+                    <th>Email id</th>
+                    <th>Mobile No</th>
+                    <th>Gross Salary</th>
+                    <th>Joining Date</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div id="grid_prog" style="margin : 0px auto; width:200px">
+            <span class="spinner-border spinner-border-sm me-2"> </span>
+            Please wait....
+        </div>
+    </div>
+</div>
+<div>
+    @Html.BeginModal("model-action", "Re-Generate Offer Letter", "modal-xl").Content(@<div class="row">
+
+        <div class="col-lg-3">
+            @Html.LabelEditor("Grade", "ddl", isRequired: true)
+        </div>
+        <div class="col-lg-3">
+            @Html.LabelEditor("joining-date", "date", "Joining Date", isRequired: true)
+        </div>
+        <div class="col-lg-6">
+            @Html.LabelEditor("joining-remarks", "text", "Joining Remarks", isRequired: true)
+        </div>
+
+        <div class="col-lg-5 mt-0">
+            <table id="tbl-income" class="table table-striped table-bordered my-2" role="grid">
+                <thead style="background-color: darkturquoise;">
+                    <tr>
+                        <th>#</th>
+                        <th>Income Head</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-7 mt-0">
+            <table id="tbl-deduct" class="table table-striped table-bordered my-2" role="grid">
+                <thead style="background-color: darkturquoise;">
+                    <tr>
+                        <th>#</th>
+                        <th>Deduction Head</th>
+                        <th>Amount</th>
+                        <th>Employer's Contribution</th>
+                        <th>Is Enabled</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        @Html.LabelEditor("Gross", "text", "Gross Salary", divCssClass: "col-md-2 mt-0", editorHtmlAttributes: new { @readonly = "true" })
+        @Html.LabelEditor("Deduction", "text", "Total Deduction", divCssClass: "col-md-2 mt-0", editorHtmlAttributes: new { @readonly = "true" })
+        @Html.LabelEditor("Net_Salary", "text", "Net Salary", divCssClass: "col-md-2 mt-0", editorHtmlAttributes: new { @readonly = "true" })
+        @Html.LabelEditor("Employeer_Contribution", "text", "Employer Contribution", divCssClass: "col-md-2 mt-0", editorHtmlAttributes: new { @readonly = "true" })
+        @Html.LabelEditor("CTC_month", "text", "CTC (Monthly)", divCssClass: "col-md-2 mt-0", editorHtmlAttributes: new { @readonly = "true" })
+        @Html.LabelEditor("CTC_year", "text", "CTC (Yearly)", divCssClass: "col-md-2 mt-0", editorHtmlAttributes: new { @readonly = "true" })
+
+
+
+    </div>).Footer(@<button class="btn btn-primary" id="btn-hiring">Submit</button>).Create()
+
+</div>
+
+<script>
+    var id = '';
+    var tr = '';
+    $('#mytable').on('click', '.action-table', function () {
+        id = $(this).data('id');
+        tr = $(this).closest('tr');
+        var action = $(this).data('action');
+        console.log(action);
+        if (action == 'Hiring') {
+
+            var data = { type: 'Grade' };
+            gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+                if (!resp.error) {
+                    deductions = [];
+                    incomes = [];
+                    var ddl = $('#Grade');
+                    $("#Grade option:not(:first)").remove();
+                    $.each(resp.data, function (i, item) {
+                        ddl.append($("<option>").text(item.grade_name).val(item.grade_id));
+                    });
+                    $("#Grade").val('');
+                    bind_income_table();
+                    bind_deduction_table();
+                    calulate_deduction();
+                    $('#model-action').modal("show");
+                }
+            })
+           
+        }
+    });
+     
+    $(function () {
+        var data = { type: 'canceled-offer-letter' };
+
+        gowithData("../../hr/data/employeePendingList", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data)
+                var ddl = $('#Session');
+                $("#Session option:not(:first)").remove();
+                $.each(resp.session, function (i, item) {
+                    ddl.append($("<option>").text(item.SessionName).val(item.SessionId));
+                });
+                ddl = $('#Firm');
+                ddl.empty();
+                $.each(resp.firms, function (i, item) {
+                    ddl.append($("<option>").text(item.firm_name).val(item.firm_id));
+                });
+            }
+        })
+    })
+    $("#Session").change(function () {
+        var data = { type: 'session' };
+        data["session"] = $(this).val()
+        gowithData("../../hr/data/employeePendingList", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Hiring');
+                $("#Hiring option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.HiringName).val(item.Hiring_id));
+                });
+            }
+        })
+    });
+    $("#Hiring").change(function () {
+        var data = { type: 'hiring' };
+        data["hiring"] = $(this).val()
+        gowithData("../../hr/data/employeePendingList", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Post_Applied');
+                $("#Post_Applied option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.Designation_id));
+                });
+            }
+        })
+    });
+    function apply_filter() {
+        var data = { type: 'canceled-offer-letter-filter' };
+        data["Hiring"] = $('#Hiring').val()
+        data["Session"] = $('#Session').val()
+        data["Post_Applied"] = $('#Post_Applied').val()
+        data["Firm"] = $('#Firm').val()
+        $('#grid_prog').show();
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        gowithData("../../hr/data/employeePendingList", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data);
+            }
+        })
+    }
+    function bind_table(data) {
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var div = $('<div>').addClass("d-flex align-items-center")
+            var div_ddl = $('<div>').addClass("dropdown ms-1")
+            div_ddl.append(`<div class="dropdown-toggle dropdown-toggle-nocaret cursor-pointer badge bg-info text-dark" data-bs-toggle="dropdown">	<i class='bx bx-dots-horizontal-rounded font-22'></i></div>`)
+            var ul = $('<ul>').addClass("dropdown-menu")
+            div_ddl.append(ul)
+            ul.append(
+
+                //<a class="dropdown-item text-bold" href="print/Employee_Form_Apply.aspx?regiDs=EMP202304200645102" target="_blank"><span>View Details</span> </a>
+                $('<li>').append($('<a class="dropdown-item text-bold" href="../../Payroll/Employee_Form_Apply.aspx?regiDs=' + d.Apply_id + '" target="_blank"><span> <i class="bx bx-detail me-2"></i>View Details</span> </a>')),
+                //$('<li>').append($('<a class="dropdown-item text-bold" href="../../view-offer-letter/' + d.Apply_id + '" target="_blank"><span> <i class="bx bx-file me-2"></i>View Offer Letter</span> </a>')),
+                //$('<li>').append($('<a class="dropdown-item text-bold" href="../../joining/' + d.Apply_id + '" target="_blank"><span> <i class="bx bx-file me-2"></i>Start Joining Process</span> </a>')),
+                //$('<li>').append($('<span>').attr("data-id", d.Apply_id).attr("data-action", 'Cancel').addClass("dropdown-item action-table text-danger").append("<i class='bx bx-x-circle me-2'></i>").append("Cancel Offer Letter")),
+               // $('<li>').append($('<span>').attr("data-id", d.Apply_id).attr("data-action", 'start').addClass("dropdown-item action-table").append("<i class='bx bx-badge-check me-2'></i>").append("Regenerate Offer Letter")),
+                $('<li>').append($('<span>').attr("data-id", d.Apply_id).attr("data-action", 'Hiring').addClass("dropdown-item action-table").append("<i class='bx bx-badge-check me-2'></i>").append("Re-Generate Offer Letter")),
+            )
+            div.append(div_ddl)
+            var td = $('<td>').append(div).width("55px");
+            var row = $('<tr>').append(td,
+                //$('<td>').text(d.SessionName),
+                $('<td>').text(d.Firm),
+                $('<td>').text(d.Apply_id),
+                $('<td>').text(d.Date),
+                $('<td>').text(d.Apply_for),
+                $('<td>').text(d.fullName),
+                $('<td>').text(d.Emailid),
+                $('<td>').text(d.mobile_no_CA),
+                $('<td>').text(d.Salary),
+                $('<td>').text(d.JoiningDate),
+                $('<td>').text(d.Remarks),
+            );
+            tableBody.append(row);
+        });
+
+        $('#mytable').DataTable({
+            lengthChange: false,
+            scrollX: true, scrollCollapse: true,
+            buttons: ['excel', 'pdf', 'print']
+        });
+    }
+    $('#btn-hiring').click(function () {
+        var date = $('#joining-date').val();
+        if (!date) {
+            alertError("Please Select Joining Date");
+            return false;
+        }
+        var grade = $('#Grade').val();
+        if (!grade) {
+            alertError("Please Select Grade");
+            return false;
+        }
+        var remark = $('#joining-remarks').val();
+        var gross = $('#Gross').val();
+        var deduction = $('#Deduction').val();
+        var netsalary = $('#Net_Salary').val();
+        var emp_cont = $('#Employeer_Contribution').val();
+        var CTC_year = $('#CTC_year').val();
+        var Grade = $('#Grade').val();
+        var CTC_month = $('#CTC_month').val();
+        var data = { type: 'generate-offer-letter', id: id, date: date, gross: gross, remark: remark, }
+        data.deduction = deduction;
+        data.netsalary = netsalary;
+        data.emp_cont = emp_cont;
+        data.CTC_year = CTC_year;
+        data.CTC_month = CTC_month;
+        data.Grade = Grade;
+        data.income_heads = JSON.stringify(incomes);
+        data.deduction_head = JSON.stringify(deductions);
+        submitdata("../../hr/data/employeePendingList", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                $('#model-action').modal("hide");
+                tr.addClass("bg-success");
+                window.open('../../hr/view-offer-letter/' + id, '_blank');
+            }
+        })
+    });
+
+</script>
+
+<script src="~/Content/js/salary_performa_1.js"></script>
+<script>
+
+    var deductions = [];
+    var incomes = [];
+    $('#Grade').change(function () {
+        var grade = $(this).val();
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: { type: 'IncomeDeduct', grade: grade } }), function (resp) {
+            if (!resp.error) {
+                deductions = resp.deduction;
+                incomes = resp.income;
+                $.each(incomes, function (i, item) {
+                    if (item.IsVeriable == 'Yes') {
+                        var amount = get_calculation_on(item.CalculationBassedOn)
+                        if (item.PercentageValue.includes('%')) {
+                            item.inc = amount * parseFloat(item.PercentageValue) / 100;
+                        }
+                        else {
+                            item.inc = parseFloat(item.PercentageValue)
+                        }
+                    }
+                    else {
+                        item.inc = parseFloat(item.PercentageValue)
+                    }
+                });
+                $.each(deductions, function (i, item) {
+                    item.isEnable = true;
+                });
+                calulate_deduction();
+                bind_income_table()
+                bind_deduction_table()
+            }
+        })
+    })
+  
+</script>

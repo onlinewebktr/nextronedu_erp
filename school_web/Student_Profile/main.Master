@@ -1,0 +1,362 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="main.master.cs" Inherits="school_web.Student_Profile.main" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width-device-width, initial-scale=1" />
+    <meta name="keywords" content="My Admin" />
+    <meta name="description" content="My Admin" />
+
+    <title>
+        <asp:ContentPlaceHolder ID="title" runat="server" />
+    </title>
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet" />
+    <link href="assets/css/fontawesome-all.css" rel="stylesheet" />
+    <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="assets/css/black-dashboard.min.css" rel="stylesheet" />
+    <link href="assets/css/mobmenu.css" rel="stylesheet" />
+    <link href="assets/css/custom.css" rel="stylesheet" />
+    <script src="assets/js/jquery-1.10.2.min.js"></script>
+    <%-- <link href="assets/css/fontawesome-all.css" rel="stylesheet" />
+    <%:Styles.Render("~/bundles/MyAppStartupCss")%>
+    <%:Scripts.Render("~/bundles/MyAppStartupJs")%>--%>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+    <style>
+        @media (max-width: 991.98px) {
+            .navbar {
+                top: 0px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="sm" runat="server" EnableCdn="true"></asp:ScriptManager>
+        <div class="wrapper">
+            <div class="navbar-minimize-fixed ">
+                <button class="minimize-sidebar btn btn-link btn-just-icon" style="display: none">
+                    <i class="tim-icons icon-align-center visible-on-sidebar-regular text-muted "></i>
+                    <i class="tim-icons icon-bullet-list-67 visible-on-sidebar-mini text-muted"></i>
+                </button>
+            </div>
+
+            <div class="main-panel">
+                <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent sticky">
+                    <div class="container-fluid">
+                        <div class="navbar-wrapper">
+                            <div class="navbar-minimize d-inline">
+                                <a href="#!" class="minimize-sidebar btn btn-link btn-just-icon mobile-menu-toggler">
+                                    <i class="tim-icons icon-align-center visible-on-sidebar-regular"></i>
+                                    <i class="tim-icons icon-bullet-list-67 visible-on-sidebar-mini"></i>
+                                </a>
+                            </div>
+                            <a href="home.aspx">
+                                <i class="far fa-home" style="margin: 0px 7px 0px 0px; color: #ffffff; background: #db006c; padding: 2px 3px 2px 2px; border-radius: 2px;"></i></a>
+                            <asp:Label ID="lbl_school_name" runat="server" class="school-name"></asp:Label>
+
+                            <div class="navbar-toggle d-inline" style="display: none !important;">
+                                <button type="button" class="navbar-toggler">
+                                    <span class="navbar-toggler-bar bar1"></span>
+                                    <span class="navbar-toggler-bar bar2"></span>
+                                    <span class="navbar-toggler-bar bar3"></span>
+                                </button>
+                            </div>
+                            <a class="navbar-brand" href="javascript:void(0)">
+                                <asp:Label ID="lbl_Name" runat="server" Text=""></asp:Label></a>
+                        </div>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-bar navbar-kebab"></span>
+                            <span class="navbar-toggler-bar navbar-kebab"></span>
+                            <span class="navbar-toggler-bar navbar-kebab"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navigation">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="dropdown nav-item" style="display: none">
+                                    <a href="javascript:void(0)" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                        <div class="notification d-none d-lg-block d-xl-block"></div>
+                                        <i class="tim-icons icon-sound-wave"></i>
+                                        <p class="d-lg-none">
+                                            Notifications
+                                        </p>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right dropdown-navbar">
+                                        <li class="nav-link">
+                                            <a href="#" class="nav-item dropdown-item">Mike John responded to your email</a>
+                                        </li>
+                                        <li class="nav-link">
+                                            <a href="javascript:void(0)" class="nav-item dropdown-item">You have 5 more tasks</a>
+                                        </li>
+                                        <li class="nav-link">
+                                            <a href="javascript:void(0)" class="nav-item dropdown-item">Your friend Michael is in town</a>
+                                        </li>
+                                        <li class="nav-link">
+                                            <a href="javascript:void(0)" class="nav-item dropdown-item">Another notification</a>
+                                        </li>
+                                        <li class="nav-link">
+                                            <a href="javascript:void(0)" class="nav-item dropdown-item">Another one</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown nav-item">
+                                    <a href="logout.aspx" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                        <div class="photo">
+                                            <asp:Image ID="Image1" runat="server" alt="Profile Photo" />
+                                        </div>
+                                        <b class="caret d-none d-lg-block d-xl-block"></b>
+                                        <p class="d-lg-none">
+                                            Log out
+                                        </p>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-navbar">
+                                        <li class="nav-link">
+                                            <a data-toggle="modal" href="#myModalProfile" class="nav-item dropdown-item">Profile</a>
+                                        </li>
+                                        <li class="nav-link">
+                                            <a href="change-password.aspx" class="nav-item dropdown-item">Change Password</a>
+                                        </li>
+                                        <li class="dropdown-divider"></li>
+                                        <li class="nav-link">
+                                            <a href="logout.aspx" class="nav-item dropdown-item">Log out</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="separator d-lg-none"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <i class="tim-icons icon-simple-remove"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+
+
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <ul class="nav">
+                            <%-- <li class="nav-item">
+                                <a href="../About_School/School_History.aspx" class="nav-link" target="_blank">School Story
+                                </a>
+                            </li>--%>
+                            <%-- <li class="nav-item">
+                                <a href="javascript:void(0)" class="nav-link">Notice Board
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" class="nav-link">Help Line
+                                </a>
+                            </li>--%>
+                        </ul>
+                        <div class="copyright">
+                            <asp:Label ID="lbl_footer" runat="server"></asp:Label>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+
+
+
+
+
+            <!-- Mobile Menu -->
+            <div class="mobile-menu-overlay"></div>
+            <!-- End .mobil-menu-overlay -->
+
+            <div class="mobile-menu-container mobile-menu-light">
+                <div class="mobile-menu-wrapper">
+                    <%--<h1 class="mb-nav-title">Purnank
+                <span class="mobile-menu-close"><i class="fa fa-times"></i></span>
+                    </h1>--%>
+
+                    <div class="mnu-usr-sec">
+                        <div class="mnu-usr-logo-sec">
+                            <asp:Image ID="Image2" runat="server" />
+                        </div>
+                        <p class="mnu-usr-name-p" runat="server" id="student_name"></p>
+
+                        <ul class="mnu-usr-oth-info-ul">
+                            <li><span>Class</span>
+                                <p runat="server" id="student_class"></p>
+                            </li>
+                            <li class="mnu-ul-li"><span>Section</span>
+                                <p runat="server" id="student_section"></p>
+                            </li>
+                            <li class="mnu-ul-li"><span>Roll No.</span>
+                                <p runat="server" id="student_roll"></p>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <nav class="mobile-nav">
+                        <ul class="mobile-menu">
+                            <li>
+                                <a href="home.aspx" rel="canonical"><i class="far fa-home"></i>Dashboard</a>
+                            </li>
+
+
+                            <%--<li><a href="#!" rel="canonical"><i class="far fa-home"></i>Blog Master<span class="11"></span></a>
+                                <ul>
+                                    <li><a href="blog-master.aspx" rel="canonical">Add Blog</a> </li>
+                                    <li><a href="added-blog-list.aspx" rel="canonical">View Blog List</a> </li>
+                                </ul>
+                            </li>--%>
+
+                            <li><a href="School-History.aspx" rel="canonical" class="contac"><i class="far fa-school"></i>School History
+                            </a></li>
+                            <li><a href="Chairman-Desk.aspx" rel="canonical" class="contac"><i class="far fa-user-alt"></i>Chairman's Desk</a></li>
+                            <li><a href="Principal-Desk.aspx" rel="canonical" class="contac"><i class="far fa-user-alt"></i>Principal's Desk</a></li>
+                            <li><a href="Vice-Principal-Desk.aspx" rel="canonical" class="contac"><i class="far fa-user-alt"></i>Vice Principal's Desk</a></li>
+                            <li><a href="events.aspx" rel="canonical" class="contac"><i class="far fa-calendar"></i>Events</a></li>
+                            <li><a href="school-calendar.aspx" rel="canonical" class="contac"><i class="far fa-calendar-alt"></i>School Calendar</a></li>
+                            <li><a href="today-notice-board.aspx" rel="canonical" class="contac"><i class="far fa-clipboard-list"></i>Notice Board</a></li>
+                            <li><a href="helpline.aspx" rel="canonical" class="contac"><i class="far fa-phone-office"></i>Help Line</a></li>
+
+                            <li><a href="logout.aspx" rel="canonical" class="contac"><i class="fas fa-sign-out"></i>Logout</a></li>
+                        </ul>
+                    </nav>
+                    <!-- End .mobile-nav -->
+                </div>
+                <!-- End .mobile-menu-wrapper -->
+            </div>
+            <!-- End .mobile-menu-container -->
+
+        </div>
+
+
+
+        <div id="myModalProfile" class="modal fade" role="dialog" style="padding-left: 0px !important">
+            <div class="modal-dialog mdl-prif" style="margin: 0.5rem auto; padding: 0px 10px;">
+                <div class="modal-content">
+                    <div class="modal-body modal-body-pp">
+                        <div class="prof-popup">
+                            <div class="prof-popup-img">
+                                <asp:Image ID="Image3" runat="server" />
+                            </div>
+                            <asp:Label ID="lbl_namess" class="prof-popup-std-info-prof-name-p" runat="server"></asp:Label>
+                            <ul class="prof-popup-dt-ul">
+                                <li><a href="profile.aspx">Details</a></li>
+                            </ul>
+
+
+                            <div class="prof-popup-std-info">
+                                <div class="prof-popup-std-info-inr">
+                                    <div class="prof-popup-std-info-row">
+                                        <p class="prof-popup-std-info-row-p">Session : </p>
+                                        <asp:Label ID="lbl_psessions" class="prof-popup-std-info-row-pspan" runat="server"></asp:Label>
+                                    </div>
+                                    <div class="prof-popup-std-info-row">
+                                        <p class="prof-popup-std-info-row-p">Admission No. : </p>
+                                        <asp:Label ID="lbl_adm_No" runat="server" class="prof-popup-std-info-row-pspan"></asp:Label>
+                                    </div>
+                                    <div class="prof-popup-std-info-row">
+                                        <p class="prof-popup-std-info-row-p">Class Name : </p>
+                                        <asp:Label ID="lbl_class_name" runat="server" class="prof-popup-std-info-row-pspan"></asp:Label>
+                                    </div>
+                                    <div class="prof-popup-std-info-row">
+                                        <p class="prof-popup-std-info-row-p">Section : </p>
+                                        <asp:Label ID="lbl_section" runat="server" class="prof-popup-std-info-row-pspan"></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="assets/js/black-dashboard.min.js?v=1.1.1"></script>
+        <script src="assets/js/popper.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/perfect-scrollbar.jquery.min.js"></script>
+
+
+
+
+
+
+
+        <script src="assets/js/mobMenu.js"></script>
+
+        <script src="assets/js/jquery.dataTables.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#datatable').DataTable({
+                    "pagingType": "full_numbers",
+                    "lengthMenu": [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, "All"]
+                    ],
+                    responsive: true,
+                    language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: "Search records",
+                    }
+
+                });
+
+                var table = $('#datatable').DataTable();
+
+                // Edit record
+                table.on('click', '.edit', function () {
+                    $tr = $(this).closest('tr');
+                    if ($($tr).hasClass('child')) {
+                        $tr = $tr.prev('.parent');
+                    }
+
+                    var data = table.row($tr).data();
+                    alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
+                });
+
+                // Delete a record
+                table.on('click', '.remove', function (e) {
+                    $tr = $(this).closest('tr');
+                    if ($($tr).hasClass('child')) {
+                        $tr = $tr.prev('.parent');
+                    }
+                    table.row($tr).remove().draw();
+                    e.preventDefault();
+                });
+
+                //Like record
+                table.on('click', '.like', function () {
+                    alert('You clicked on Like button');
+                });
+            });
+        </script>
+
+
+
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                // initialise Datetimepicker and Sliders
+                blackDashboard.initDateTimePicker();
+                if ($('.slider').length != 0) {
+                    demo.initSliders();
+                }
+            });
+        </script>
+    </form>
+</body>
+</html>

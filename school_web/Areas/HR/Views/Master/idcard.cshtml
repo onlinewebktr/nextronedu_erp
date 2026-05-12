@@ -1,0 +1,184 @@
+﻿
+@{
+    Layout = null;
+    HR_Employee_Master emp = ViewBag.emp as HR_Employee_Master;
+} 
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head >
+    <title>Id Card</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,200,300,400,500,600,700,800" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Acme:100,200,300,400,500,600,700,800" rel="stylesheet" />
+
+    <link href="~/Payroll/assets/css/IdCard.css" rel="stylesheet" /> 
+    <script src="~/Content/theme/js/jquery.min.js"></script> 
+
+    <script type="text/javascript">
+        function PrintPanel() {
+            var panel = document.getElementById("tblPrintIQ");
+            var printWindow = window.open('', '', 'height=400,width=800');
+            printWindow.document.write('<html><head>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write('<link href="../../Payroll/assets/css/IdCard.css" rel="stylesheet" type="text/css" /><link href="https://fonts.googleapis.com/css?family=Open+Sans:100,200,300,400,500,600,700,800" rel="stylesheet" /> <link href="https://fonts.googleapis.com/css?family=Acme:100,200,300,400,500,600,700,800" rel="stylesheet" />');
+            printWindow.document.write(panel.innerHTML);
+            printWindow.document.write('</body ></html>');
+            printWindow.document.close();
+            setTimeout(function () {
+                printWindow.print();
+            }, 500);
+            return false;
+        }
+    </script>
+
+   @*<style media="print" type="text/css">
+        @media print {
+            .id-card-vr-wpr {
+                margin: 0px;
+                padding: 0px;
+                width: 271px;
+                height: auto;
+                float: left;
+                background: url(../../assets/images/id-front.jpg) no-repeat;
+                background-size: 255%;
+            }
+        }
+    </style>*@ 
+
+    <style>
+        .form-btn {
+            width: 96px;
+            /* float: left; */
+            margin: 0px 20px 0px 0px;
+            padding: 8px 10px 7px;
+            text-transform: capitalize;
+            text-align: center;
+        }
+    </style>
+
+    <script language="javascript" type="text/javascript">
+        function down() {
+            window.top.close();
+        }
+    </script>
+</head>
+<body>
+    <form id="form1" >
+        <div class="id-card-sec">
+            <div class="id-card-center-sec">
+                <div class="id-card-inr-sec">
+                    <div class="id-card-page-print-btn-sec">
+
+                        <div class="id-card-page-print-btn-sec" style="float: left; width: 100%; text-align: center;"> 
+                            
+                            <button ID="print1" onclick="return PrintPanel()" class="form-btn btn-print">Print</button>
+                        </div>
+
+
+                        <div id="tblPrintIQ" >
+                            <div class="ids-card-wpr">
+                                <div class="ids-back-img-sec"> 
+                                    <img src="~/Payroll/print/id-front.jpg"  class="ids-back-img"  />
+                                </div>
+                                <div class="id-card-content-sec">
+                                    <div class="id-profile-img-sec"> 
+                                        <img src="@emp.Employee_image" class="id-profile-img" />
+                                    </div>
+
+                                    <div class="member-dt-sec">
+                                        <h2 class="member-name-p">
+                                            <span id="lbl_member_name" >@emp.Employee_Name</span>
+                                        </h2>
+                                        <h2 class="member-name-p">
+                                            <span id="lbl_desig">@ViewBag.Designation</span>
+                                        </h2>
+                                        <h2 class="member-name-p">
+                                            <span id="lbl_location" ></span>
+                                        </h2> 
+
+                                        <table style="margin: 0px 0px 0px 0px; padding: 0px 0px 0px 10px; width: 98%; /* height: 9px; */
+    overflow: hidden; float: left; font-size: 11px; font-weight: 600; line-height: 10px; color: #000;">
+                                            <tr>
+                                                <td >
+                                                    <b>D.O.B </b>
+                                                    <h2 class="member-other-dt-p">
+                                                        <span id="lbl_dob">@ViewBag.dob</span>
+                                                    </h2>
+                                                </td>
+                                            </tr>
+                                            <tr> 
+                                                <td>
+                                                    <b>D.O.J </b>
+                                                    <h2 class="member-other-dt-p">
+                                                        <span id="lbl_date_of_joining">@emp.Date_of_Joining</span>
+                                                    </h2>
+                                                </td>
+                                            </tr>
+                                            <tr> 
+                                                <td>
+                                                    <b>Blood Group</b>
+                                                    <h2 class="member-other-dt-p">
+                                                        <span id="lbl_blood_group">@emp.Blood_group</span>
+                                                    </h2>
+                                                </td>
+                                            </tr>
+                                            <tr> 
+                                                <td>
+                                                    <b>Address</b>
+                                                    <h2 class="member-other-dt-p">
+                                                        <span id="lbl_at">@emp.Address</span>
+                                                    </h2>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+
+                                        <!-- <h2 class="member-other-dt-p2">
+                                            <span id="lbl_po" ></span>
+                                        </h2>
+                                        <h2 class="member-other-dt-p3">
+                                            <span id="lbl_dist" ></span>
+                                        </h2>
+                                        <h2 class="member-other-dt-p4">
+                                            <span id="lbl_state" ></span>
+                                        </h2>
+                                        <h2 class="member-other-dt-p5">
+                                            <span id="lbl_pin" ></span>
+                                        </h2>
+                                        <h2 class="member-other-dt-p6">
+                                            <span id="lbl_mob" ></span>
+                                        </h2>-->
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="ids-card-wpr">
+                                <div class="ids-back-img-sec">
+                                    <img src="~/Payroll/print/id-back.jpg" class="ids-back-img" /> 
+                                </div>
+                                <div class="id-card-content-sec">
+                                    <div class="id-profile-img-sec" style="margin: 20px 66px 0px 0px!important; padding: 0px 0px 0px 0px; height: auto; float: right; border-radius: 50%;">
+                                      
+                                        <img id="img_logo"  class="id-profile-img" Style="width: 70px; height: 70px; border-radius: 50%;" src="@ViewBag.firmlogo" />
+                                    </div>
+                                    <div class="qr-wprS">
+                                        <div id="pnl_qrcode" Style="text-align: center;">
+                                            <img id="img_qrgo"   Style="width: 140px; height: 140px;" src="@ViewBag.qrCode" />
+                                        </div>
+
+                                        <h2 class="member-other-dt-p1" style="padding: 0px 0px 0px 10px; width: 92%; margin: 5px 0px 0px 0px;">
+                                            <span id="lbl_hospital_address"> <b>Address : </b> &nbsp;&nbsp;&nbsp; @ViewBag.firmaddress</span>
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+

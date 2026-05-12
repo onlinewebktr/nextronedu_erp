@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Uploading Employee Detail To Device";
+}
+
+ 
+<script>
+    $(function () {
+        var data = { type: 'upload-user' };
+        console.log(data);
+        Swal.fire(
+            {
+                title: 'Please wait...',
+                text: 'Uploading Employee Details to Device.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                    gowithData("../../hr/data/device", "POST", JSON.stringify({ data: data }), function (resp) {
+                        if (!resp.error) {
+                            
+                            alertSuccess(resp.message).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "../../hr/home"; 
+                                }
+                            });
+                        }
+                        else {
+                            alertError(resp.message);
+                        }
+                    });
+                },
+
+            })
+    })
+</script>

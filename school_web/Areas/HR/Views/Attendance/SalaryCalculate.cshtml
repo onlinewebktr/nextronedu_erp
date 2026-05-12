@@ -1,0 +1,405 @@
+﻿
+@{
+    ViewBag.Title = "Salary Calculate";
+}
+
+<style>
+    td {
+        padding-right: 10px;
+        border: none;
+    }
+
+    th {
+        padding-right: 30px;
+    }
+
+    .img-employee {
+        height: 50px;
+        width: 50px;
+        margin-right: 5px;
+        float: left;
+    }
+
+    .tbl-data {
+        padding: 0px;
+        font-size: 10px;
+        margin-left: -1px;
+        width: calc(100% + 2px);
+    }
+
+        .tbl-data th, td {
+            padding: 0px 2px;
+            font-size: 12px;
+            border: #bdbdbd solid 1px;
+            text-align: center;
+        }
+</style>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnPrint").click(function () {
+            var contents = $("#printpnl").html();
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head><title>Print</title>');
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="../../Content/theme/css/bootstrap.min.css" rel="stylesheet" type="text/css" />');
+            frameDoc.document.write(`<style>
+    td {
+        padding-right: 10px;
+        border: none;
+    }
+
+    th {
+        padding-right: 30px;
+    }
+
+    .img-employee {
+        height: 50px;
+        width: 50px;
+        margin-right: 5px;
+        float: left;
+    }
+
+    .tbl-data {
+        padding: 0px;
+        font-size: 10px;
+        margin-left: -1px;
+        width: calc(100% + 2px);
+    }
+
+        .tbl-data th, td {
+            padding: 0px 2px;
+            font-size: 12px;
+            border: #bdbdbd solid 1px;
+            text-align: center;
+        }
+</style>`);
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+        });
+    });
+</script>
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="ms-auto"  id="div-xls">
+        @*<input type="button" id="btnPrint" value="Print" />*@
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card  m-0">
+            <div class="card-body p-2" id="printpnl">
+                <div class="row">
+                    @Html.LabelEditor("Firm", "ddl", divCssClass: "col-lg-2")
+                    @Html.LabelEditor("Year", "ddl", divCssClass: "col-lg-2")
+                    @Html.LabelEditor("Month", "ddl", divCssClass: "col-lg-2")
+                    <div class="col-md-2 mt-4 pt-1">
+                        <button id="btn-find" type="button" class="btn btn-primary">Find</button>
+                    </div>
+                    <div class="col-lg-4"  >
+                        <div   id="div-srch" style="float:right">
+
+                        </div>
+                    </div>
+                    <div class="col-12">
+
+                        <div style="overflow: auto; max-height: calc(100vh - 290px);">
+                            <table class="table table-bordered table-striped  mt-2" id="mytable">
+                                <thead>
+                                    <tr>
+                                        <th>Employee Name</th>
+                                        <th>Emp Code</th>
+                                        <th>Firm</th>
+                                        <th>Year</th>
+                                        <th>Month</th>
+                                        <th>Days in Month</th>
+                                        <th>Working Days In Month</th>
+                                        <th>Week Off</th>
+                                        <th>Calculated W-Off</th>
+                                        <th>Night-Off</th>
+                                        <th>Full Day Present</th>
+                                        <th>Half Day</th>
+                                        <th>Late Comming</th>
+                                        <th>Paid Leave</th>
+                                        <th>Half Day Leave</th>
+                                        <th>UnPaid Leave</th>
+                                        <th>Late Deduction</th>
+                                        <th>Paid Days</th>
+                                        <th>Worked in Hour</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <div id="grid_prog" style="margin : 0px auto; width:200px; display:none">
+                            <span class="spinner-border spinner-border-sm me-2"> </span>
+                            Please wait....
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-none" id="dv_foot">
+                <input type="button" value="Calculate Salary" id="btn-calculate" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(function () {
+        bindGrade();
+    });
+    function bindGrade() {
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        $("#Year option:not(:first)").remove();
+        for (var year = 2023; year <= currentYear + 1; year++) {
+            $('#Year').append($("<option>").text(year).val(year));
+        }
+        $('#Year').val('@My.Now.Year')
+        $("#Month option:not(:first)").remove();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        for (let i = 0; i < monthNames.length; i++) {
+            const monthNumber = (i + 1).toString().padStart(2, '0');
+            $('#Month').append($("<option>").text(monthNames[i]).val(monthNumber));
+        }
+        $('#Month').val('@My.Now.Month.ToString("00")')
+        var data = { type: 'firm-list' }
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Firm');
+                $("#Firm option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.firm_name).val(item.firm_id));
+                    if (!ddl.val()) {
+
+                        ddl.val(item.firm_id);
+                    }
+                });
+            }
+        })
+    }
+    $('#btn-find').on("click", function () {
+
+        if (!$('#Firm').val()) {
+            alertErrorNotification('Please select Firm')
+            return false;
+        }
+        if (!$('#Year').val()) {
+            alertErrorNotification('Please select Year')
+            return false;
+        }
+        if (!$('#Month').val()) {
+            alertErrorNotification('Please select Month')
+            return false;
+        }
+        var data = { type: 'salary-calculation-details' }
+        data["Year"] = $('#Year').val()
+        data["Month"] = $('#Month').val()
+        data["Firm"] = $('#Firm').val()
+        $('#grid_prog').show();
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        gowithData("../../hr/data/salary", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data);
+                $('#dv_foot').removeClass("d-none")
+            }
+        })
+    })
+    $('#btn-calculate').on('click', function () {
+        var data = { type: "calculate-now" };
+        data["Year"] = $('#Year').val()
+        data["Month"] = $('#Month').val()
+        data["Firm"] = $('#Firm').val()
+        Swal.fire(
+            {
+                title: 'Please wait...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                    gowithData("../../hr/data/salary", 'POST', JSON.stringify({ data: data }), function (resp) {
+                        if (resp.error) {
+                            if (resp.recalculate) {
+                                Swal.fire({
+                                    title: "Salary Already Created",
+                                    icon: 'warning',
+                                    html: resp.message,
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Re-Calculate',
+                                    allowOutsideClick: false
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        recalculate();
+                                    }
+                                })
+                            }
+                            else {
+                                alertError(resp.message)
+                            }
+                        }
+                        else {
+                            alertSuccess(resp.message).then((result) => {
+                                if (result.isConfirmed) {
+
+                                    window.location.href = "../../salay/calculation-details";
+                                }
+                            })
+
+                        }
+                    });
+                },
+
+            })
+        // data = { data: JSON.stringify(data) }
+
+    });
+    function recalculate() {
+        var data = { type: "re-calculate" };
+        data["Year"] = $('#Year').val()
+        data["Month"] = $('#Month').val()
+        data["Firm"] = $('#Firm').val()
+
+        Swal.fire(
+            {
+                title: 'Please wait...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                    gowithData("../../hr/data/salary", 'POST', JSON.stringify({ data: data }), function (resp) {
+                        if (resp.error) {
+
+                            alertError(resp.message)
+                        }
+                        else {
+                            alertSuccess(resp.message).then((result) => {
+                                console.log(result.isConfirmed)
+                                if (result.isConfirmed) {
+
+                                    window.location.href = "../../hr/salay/calculation-details";
+                                }
+                            })
+
+                        }
+                    });
+                },
+
+            })
+
+    }
+    //function bind_table(data) {
+    //    var tableBody = $('#mytable tbody');
+    //    tableBody.empty();
+    //    $('#grid_prog').hide();
+    //    //var tr= '<tr>';
+    //    //for (var key in data[0]) {
+    //    //    tr += '<th>' + key + '</th>';
+    //    //}
+    //    //tr += '</tr>';
+    //    tableBody.append(tr);
+    //    data.forEach(function (item) {
+    //        tr = '<tr>';
+    //        for (var key in item) {
+    //            tr += '<td>' + (item[key] == null ? '' : item[key]) + '</td>';
+    //        }
+    //        tr += '</tr>';
+    //        tableBody.append(tr);
+    //    });
+    //}
+    function bind_table(data) {
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        $('#grid_prog').hide();
+
+        $.each(data, function (index, d) {
+            var tr = $('<tr>');
+            tr.append(
+                $('<td>').text(d.Employee_Name),
+                $('<td>').text(d.Emp_Code),
+                $('<td>').text(d.Firm),
+                $('<td>').text(d.Year),
+                $('<td>').text(d.Month),
+                $('<td>').text(d.Days_in_Month),
+                $('<td>').text(d.Working_Days),
+                $('<td>').text(d.week_off),
+                $('<td>').text(d.Calculated_Week_off),
+                $('<td>').text(d.night_off),
+                $('<td>').text(d.Full_Day_Persent),
+                $('<td>').text(d.Half_Day_Persent),
+                $('<td>').text(d.Late_Comming_Days),
+                $('<td>').text(d.Paid_Leave),
+                $('<td>').text(d.Half_Pay_leave),
+                $('<td>').text(d.UnPaidLeave),
+                $('<td>').text(d.Late_Deduction),
+                $('<td>').text(d.Paid_Days),
+                $('<td>').text(d.Working_Hour)
+            )
+            tableBody.append(tr);
+
+        })
+        $('#div-srch').empty();
+        var table = $('#mytable').DataTable({
+            searching: true, // Disable search feature
+            paging: false,    // Disable paging
+            //fixedHeader: true,
+            // scrollY:  '300px;',
+            buttons: [{
+                extend: 'excel',
+                exportOptions: {
+                    columns: ':visible:not(.no-export)' // Include only visible columns except those with class 'no-export'
+                }
+            }, {
+                extend: 'pdf',
+                exportOptions: {
+                    columns: ':visible:not(.no-export)' // Include only visible columns except those with class 'no-export'
+                }
+            }, {
+                extend: 'print',
+                exportOptions: {
+                    columns: ':visible:not(.no-export)' // Include only visible columns except those with class 'no-export'
+                }
+            }]
+        });
+        table.buttons().container().appendTo('#div-xls');
+        $('#div-srch').append($('#mytable_filter'));
+    }
+
+</script>

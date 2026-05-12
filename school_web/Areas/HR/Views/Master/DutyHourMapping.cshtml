@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewBag.Title = "Duty Hour Mapping";
+}
+<style>
+    .chk_enbled {
+    width : 30px;
+    height : 30px;
+    }
+</style>
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-11 m-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    @Html.LabelEditor("Duty_Hour", "ddl", "Duty Hours", divCssClass: "col-lg-3 col-6")
+                    @Html.LabelEditor("Department", "ddl", "Department", divCssClass: "col-lg-6 col-6")
+                  
+                </div>
+                <div class="row">
+
+                    <div class="col-lg-6 mt-0">
+                        <h4>List of Designation</h4>
+                        <table id="tbl-list" class="table table-striped table-bordered my-2" role="grid">
+                            <thead style="background-color: darkturquoise;">
+                                <tr>
+                                    <th>Designation</th>
+                                    <th>Department</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-6 mt-0">
+
+                        <h4>Mapped Designation List</h4>
+                        <table id="tbl-mapped" class="table table-striped table-bordered my-2" role="grid">
+                            <thead style="background-color: darkturquoise;">
+                                <tr>
+                                    <th>Duty Hour</th>
+                                    <th>Department</th>
+                                    <th>Designation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                     
+
+
+                </div>
+            </div>
+            <div class="card-footer d-flex">
+                <button class="btn btn-primary  me-4" id="btn-submit">Submit</button>
+                <h4 id="msg" ></h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () { 
+        var data = { type: 'duty-department' } 
+        gowithData('../../hr/data/ddl','POST', JSON.stringify({ data: data }), function (resp) {
+            console.log("hello3");
+            if (!resp.error) {
+                var ddl = $('#Duty_Hour');
+                $("#Duty_Hour option:not(:first)").remove();
+                $.each(resp.duty, function (i, item) {
+                    ddl.append($("<option>").text(item.Duty_Hour_Name).val(item.Duty_Hour_id));
+                });
+                ddl = $('#Department');
+                $("#Department option:not(:first)").remove();
+                $.each(resp.department, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.department_id));
+                });
+            }
+        });
+    });
+    $('#Duty_Hour').on('change', function () {
+        $('#Department').val('');
+        $('#Department').change();
+    })
+    $('#Department').on('change', function () {
+        $('#msg').addClass("d-none");
+        var Duty_Hour = $('#Duty_Hour').val();
+        var Department = $('#Department').val();
+        
+        var data = {type: 'duty-designation', Department: Department, Duty_Hour: Duty_Hour }
+        gowithData('../../hr/data/ddl', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                datalist = resp.data;
+                bind_data();
+                bind_mapped_data(resp.mapped);
+            }
+        });
+    });
+    var datalist = [];
+    function bind_mapped_data(data) {
+        var tableBody = $('#tbl-mapped tbody'); 
+        tableBody.empty(); 
+        $.each(data, function (index, d) {
+            
+            //var desc = $('<span>').append(d.name);
+            //desc.append('<br/>').append($('<span style="font-size:12px">').append(d.department));
+            
+            var row = $('<tr>').append( 
+                $('<td>').append(d.Duty_Hour_Name),
+                $('<td>').append(d.department),
+                $('<td>').append(d.name),
+            );
+            tableBody.append(row);
+        });
+    }
+    function bind_data() {
+         var tableBody = $('#tbl-list tbody');
+        tableBody.empty(); 
+        $.each(datalist, function (index, d) {
+            
+            //var desc = $('<span>').append(d.name);
+            //desc.append('<br/>').append($('<span style="font-size:12px">').append(d.department));
+            var checked = false;
+            if (d.DutyHourId) {
+                checked = true;
+            }
+            var row = $('<tr>').append( 
+                $('<td>').append(d.name),
+                $('<td>').append(d.department),
+                $('<td>').append($('<input type="checkbox" class="chk_enbled"   data-did="' + index + '">').prop('checked', checked))
+            );
+            tableBody.append(row);
+        });
+    }
+
+    $('#btn-submit').on('click', function () {
+        var Duty_Hour = $('#Duty_Hour').val();
+        var Department = $('#Department').val();
+
+        var data = { type: 'duty-designation', Department: Department, Duty_Hour: Duty_Hour, data_list: JSON.stringify(datalist) }
+        $('#msg').html("Please wait...");
+        $('#msg').removeClass("d-none").removeClass("text-danger").removeClass("text-success").addClass("text-primary");
+        gowithData('../../hr/save/duty-mapping', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                alertSuccess(resp.message);
+                $('#msg').html(resp.message);
+                $('#msg').removeClass("d-none").removeClass("text-danger").addClass("text-success").removeClass("text-primary");
+            }
+            else {
+                alertError(resp.message);
+                $('#msg').html(resp.message);
+                $('#msg').removeClass("d-none").addClass("text-danger").removeClass("text-success").removeClass("text-primary");
+            }
+        });
+    })
+    $('#tbl-list').on('change', '.chk_enbled', function () {
+
+        var ind = parseInt($(this).data('did'));
+        console.log(ind);
+        datalist[ind].DutyHourId = $(this).prop("checked");  
+    })
+</script>
+
+

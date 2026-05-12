@@ -1,0 +1,278 @@
+﻿
+@font-face {
+    font-family: 'K2D';
+    src: url(../../../../assets/fonts/k2d-cufonfonts/K2D-Bold.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'K2D';
+    src: url(../../../../assets/fonts/k2d-cufonfonts/K2D-Medium.ttf);
+    font-weight: normal;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 0;
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+    .table td, .table th {
+        background-color: #fff;
+    }
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+:after, :before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body, #form1 {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    float: left;
+    font-family: 'K2D';
+    color: #000;
+}
+
+table {
+    width: 100%;
+    border: 1px solid #9b9b9b;
+}
+
+    table tr th {
+        padding: 3px 5px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 600;
+        border: 1px solid #9b9b9b;
+        color: #000;
+    }
+
+    table tr td {
+        padding: 3px 5px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 500;
+        border: 1px solid #9b9b9b;
+    }
+
+.btn i {
+    vertical-align: middle;
+    font-size: inherit;
+    margin-top: -1em;
+    margin-bottom: -1em;
+    margin-right: 5px;
+}
+
+.paid-cat-div-p {
+    font-weight: 600;
+}
+
+tfoot, th, thead {
+    background: #ffffff !important;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+}
+
+tbody, td, tfoot, th, thead, tr {
+    text-align: center;
+}
+
+.title-rp {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 5px 0px;
+    float: left;
+    width: 100%;
+    text-align: center;
+}
+
+.thbg1 {
+    background: #ebebeb !important;
+}
+
+.thbg2 {
+    background: #fff5aa !important;
+}
+
+.thbg3 {
+    background: #9eebf7 !important;
+}
+
+.thbg4 {
+    background: #f2b8fd !important;
+}
+
+.thbg5 {
+    background: #a9f7be !important;
+}
+
+.thbg6 {
+    background: #bacff5 !important;
+}
+
+
+.thbg12 {
+    background: #ffbcbc !important;
+}
+
+.thbg13 {
+    background: #22ddca !important;
+}
+
+.thbg14 {
+    background: #a6ff81 !important;
+}
+
+.thbg15 {
+    background: #ffb860 !important;
+}
+
+
+
+.thbg16 {
+    background: #afff8e !important;
+}
+
+.thbg17 {
+    background: #b9c5ff !important;
+}
+
+.subjth {
+    height: 200px;
+    width: 27px;
+    position: relative;
+}
+
+.rotateTextS {
+    position: absolute;
+    left: 0px;
+    bottom: 15px;
+    width: 30px;
+    margin: 0px;
+    float: left;
+    white-space: nowrap;
+    word-break: keep-all;
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+.nowordbreak {
+    white-space: nowrap;
+    word-break: keep-all;
+}
+
+.thbg1 {
+    background: #ffcca7 !important;
+}
+
+.thbg2 {
+    background: #fff5aa !important;
+}
+
+.thbg3 {
+    background: #9eebf7 !important;
+}
+
+.thbg4 {
+    background: #f2b8fd !important;
+}
+
+.thbg5 {
+    background: #a9f7be !important;
+}
+
+.thbg6 {
+    background: #bacff5 !important;
+}
+
+
+.thbg12 {
+    background: #ffbcbc !important;
+}
+
+.thbg13 {
+    background: #22ddca !important;
+}
+
+.thbg14 {
+    background: #a6ff81 !important;
+}
+
+.thbg15 {
+    background: #ffb860 !important;
+}
+
+
+
+.thbg16 {
+    background: #afff8e !important;
+}
+
+.thbg17 {
+    background: #b9c5ff !important;
+}
+
+.thbg111 {
+    background: #83C8E4 !important;
+}
+
+.thbg112 {
+    background: #e7ce9f !important;
+}
+
+.thbg133 {
+    background: #fff812 !important;
+}
+
+.lft3px {
+    left: 3px;
+}
+
+.thbg433 {
+    background: #b4ff95 !important;
+}
+
+.thbg453 {
+    background: #fdff73 !important;
+}
+
+@media print {
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.assSubjCss {
+    left: 0px;
+}

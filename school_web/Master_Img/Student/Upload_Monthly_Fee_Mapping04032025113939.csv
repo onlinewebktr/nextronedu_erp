@@ -1,0 +1,5 @@
+Admission_no,Student_name,Admission_fee_paid,Monthly_fee_paid,Payment_date,Bill_no,Payment_mode,Transaction_id
+zx12,,2500,3000,03/01/2025,xx01,Online,12552148866
+zx12,,1000,1000,03/03/2025,xx02,Cash,
+Zx45,,1500,100,02/11/2025,xx03,Online,45454121666
+Zx45,,5000,1500,01/10/2025,xx04,Cash,

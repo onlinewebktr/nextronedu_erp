@@ -1,0 +1,197 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="main.master.cs" Inherits="school_web.complain.main" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+
+    <meta name="description" content="Medical Assistant" />
+
+    <title>
+        <asp:ContentPlaceHolder ID="title" runat="server" />
+    </title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet" />
+
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/OverlayScrollbars.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+
+    <script src="js/loader.js"></script>
+
+    <script src="../assets/js/jquery.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
+    <link href="css/custom.css" rel="stylesheet" />
+
+    <style>
+        .ui-widget-content {
+            border: 1px solid #ddd !important;
+            background: #ffffff!important;
+            color: #2d2d2d!important;
+            border-radius: 5px !important;
+            padding: 5px 10px!important;
+            z-index: 999999999!important;
+        }
+    </style>
+
+    <script type="text/javascript" language="javascript">
+        function DisableBackButton() {
+            window.history.forward()
+        }
+        DisableBackButton();
+        window.onload = DisableBackButton;
+        window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+        window.onunload = function () { void (0) }
+    </script>
+    <script type="text/javascript">
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode != 46 && charCode > 31
+              && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+
+
+    </script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div id="root">
+            <div id="nav" class="nav-container d-flex">
+                <div class="nav-content d-flex">
+                    <div class="logo position-relative">
+                        <a href="complain.aspx" style="display: none">
+                            <div class="img"></div>
+                        </a>
+                    </div>
+
+                    <ul class="list-unstyled list-inline text-center menu-icons">
+                        <li class="list-inline-item">
+                            <a href="#" id="colorButton">
+                                <i data-acorn-icon="light-on" class="light" data-acorn-size="18"></i>
+                                <i data-acorn-icon="light-off" class="dark" data-acorn-size="18"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="menu-container flex-grow-1">
+                        <ul id="menu" class="menu">
+                            <li>
+                                <a href="logout.aspx">
+                                    <i data-acorn-icon="home-garage" class="icon" data-acorn-size="18"></i>
+                                    <span class="label">Logout</span>
+                                </a>
+                            </li>
+                            <%-- <li>
+                                <a href="#barcode" data-href="#!">
+                                    <i data-acorn-icon="form-check" class="icon" data-acorn-size="18"></i>
+                                    <span class="label">Barcode</span>
+                                </a>
+                                <ul id="barcode">
+                                    <li>
+                                        <a href="create-barcode.aspx">
+                                            <span class="label">Create Barcode</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="created-barcode.aspx">
+                                            <span class="label">Created Barcode List</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                             
+
+                            <li>
+                                <a href="sale-item.aspx">
+                                    <i data-acorn-icon="calendar" class="icon" data-acorn-size="18"></i>
+                                    <span class="label">Sale</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#reports" data-href="#!">
+                                    <i data-acorn-icon="book" class="icon" data-acorn-size="18"></i>
+                                    <span class="label">Report</span>
+                                </a>
+                                <ul id="reports">
+                                    <li>
+                                        <a href="wiew-sale.aspx">
+                                            <span class="label">Today's Sale Report</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="itemwise-sale-roport.aspx">
+                                            <span class="label">Itemwise Sale Report</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="coupon-discount-report.aspx">
+                                            <span class="label">Coupon Discount Report</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="wallet-adjustment-report.aspx">
+                                            <span class="label">Wallet Adjustment Report</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="tax-summary.aspx">
+                                            <span class="label">Tax Summary Report</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="coupon-list.aspx">
+                                            <span class="label">Coupon List</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>--%>
+                        </ul>
+                    </div>
+                    <div class="mobile-buttons-container">
+                        <a href="#" id="mobileMenuButton" class="menu-button">
+                            <i data-acorn-icon="menu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="nav-shadow"></div>
+            </div>
+
+
+
+
+
+            <main>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+            </main>
+        </div>
+
+        <%--<script src="https://acorn-html-medical-assistant.coloredstrategies.com/js/vendor/jquery-3.5.1.min.js"></script>--%>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/OverlayScrollbars.min.js"></script>
+        <script src="js/autoComplete.min.js"></script>
+        <script src="js/clamp.min.js"></script>
+        <script src="js/acorn-icons.js"></script>
+        <script src="js/acorn-icons-interface.js"></script>
+        <script src="js/acorn-icons-medical.js"></script>
+        <script src="js/helpers.js"></script>
+        <script src="js/globals.js"></script>
+        <script src="js/nav.js"></script>
+        <script src="js/search.js"></script>
+        <script src="js/settings.js"></script>
+        <script src="js/common.js"></script>
+        <script src="js/scripts.js"></script>
+
+    </form>
+</body>
+</html>

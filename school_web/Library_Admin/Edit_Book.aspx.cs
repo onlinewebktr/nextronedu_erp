@@ -1,0 +1,316 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.SqlClient;
+using school_web.AppCode;
+using System.Data;
+using System.Web.Services;
+using System.IO;
+
+namespace school_web.Library_Admin
+{
+    public partial class Edit_Book : System.Web.UI.Page
+    {
+        My mycode = new My();
+        Library ly = new Library();
+        string booktype = "Select top 1 TypeName from Library_Type where TypeId=lbe.Type and Branch_Id=lbe.Branch_id";
+        string BookStatus = "Select top 1 BookStatus from Library_Book_Status where BookStatusId=lbe.BookStatus and Branch_Id=lbe.Branch_id";
+        string Book_Category = "Select top 1 Book_Category from Library_Book_Category where Book_Category_Id=lbe.Book_Category_Id and Branch_Id=lbe.Branch_id";
+
+        string location = "Select top 1 location from lib_location_details where Location_id=lbe.Location and Branch_Id=lbe.Branch_id";
+
+        string Sub_Location = "Select top 1 Sub_Location from lib_sub_location_details where Sub_Location_id=lbe.Sub_Location_id and Branch_Id=lbe.Branch_id";
+
+        
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+            try
+            {
+
+                if (Session["Admin"] == null)
+                {
+                    Session.Abandon();
+                    Session.Clear();
+                    Response.Write("<script language=javascript>var wnd=window.open('','newWin','height=1,width=1,left=900,top=700,status=no,toolbar=no,menubar=no,scrollbars=no,maximize=false,resizable=1');</script>");
+                    Response.Write("<script language=javascript>wnd.close();</script>");
+                    Response.Write("<script language=javascript>window.open('../Default.aspx','_parent',replace=true);</script>");
+                }
+                else
+                {
+                    if (!IsPostBack)
+                    {
+                        Session["back"] = "0";
+                        ViewState["Userid"] = Session["Admin"].ToString();
+                        ViewState["Branch_id"] = mycode.get_branch_id(ViewState["Userid"].ToString());
+                        mycode.bind_all_ddl_with_id_cap_NA(ddl_class_wise, "Select Course_Name,course_id from Add_course_table order by Position");
+
+                        mycode.bind_all_ddl_with_id_cap_All(ddl_book_status, "Select BookStatus,BookStatusId from Library_Book_Status");
+
+                        mycode.bind_all_ddl_with_id(ddl_lcation, "Select location,Location_id from lib_location_details where Branch_id = '" + ViewState["Branch_id"].ToString() + "'");
+                        get_firm_name();
+
+                        Bind_Top_30_book();
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void Bind_Top_30_book()
+        {
+            string query = "Select top 30 *,(" + booktype + ") as booktype,(" + BookStatus + ") as Book_Status,(" + Book_Category + ") as Book_Category,(" + location + ") as location_new,("+ Sub_Location + ") as Sub_Location from Library_Book_Entry_Master_Uniqe lbe where  lbe.Branch_id=" + ViewState["Branch_id"].ToString() + " and lbe.Is_Delete=1 order by lbe.id desc";
+            Bind_Data(query);
+        }
+
+        private void get_firm_name()
+        {
+            DataTable dt = mycode.FillData("select * from Firm_Details ");
+            if (dt.Rows.Count == 0)
+            {
+            }
+            else
+            {
+                imglogo.ImageUrl = dt.Rows[0]["logo"].ToString();
+                lbl_address.Text = dt.Rows[0]["address1"].ToString();
+                lbl_emaiid.Text = dt.Rows[0]["email"].ToString();
+                lbl_website.Text = dt.Rows[0]["website"].ToString();
+                lbl_contact_details.Text = dt.Rows[0]["contact_no"].ToString();
+                lbl_heading.Text = dt.Rows[0]["firm_name"].ToString();
+            }
+        }
+
+        string scrpt;
+        private void Alertme(string msg, string panel)
+        {
+            scrpt = "<script>$( function () { $('.notificationpan').hide().slideDown(1000);  $('.notificationpan').delay(10000).show().slideUp(1000);});</script>";
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", scrpt, false);
+            if (panel == "success")
+            {
+                lbl_success.Text = msg;
+                success.Visible = true;
+                warning.Visible = false;
+            }
+            if (panel == "warning")
+            {
+                lbl_warning.Text = msg;
+                success.Visible = false;
+                warning.Visible = true;
+            }
+        }
+
+        protected void btn_itemcode_Click(object sender, EventArgs e)
+        {
+            if (txt_itemcode.Text == "")
+            {
+                Alertme("Please enter item code", "warning");
+            }
+            else
+            {
+                string query = "Select *,(" + booktype + ") as booktype,(" + BookStatus + ") as Book_Status,(" + Book_Category + ") as Book_Category,(" + location + ") as location_new,(" + Sub_Location + ") as Sub_Location from Library_Book_Entry_Master_Uniqe lbe where lbe.BookId  = ' " + txt_itemcode.Text + "'";
+                Bind_Data(query);
+            }
+        }
+        protected void btn_find_auther_wise_Click(object sender, EventArgs e)
+        {
+            if (txt_AuthorName.Text == "")
+            {
+                Alertme("Please selcte autor name", "warning");
+            }
+            else
+            {
+                string query = "Select *,(" + booktype + ") as booktype,(" + BookStatus + ") as Book_Status,(" + Book_Category + ") as Book_Category,(" + location + ") as location_new,(" + Sub_Location + ") as Sub_Location from Library_Book_Entry_Master_Uniqe lbe where lbe.AuthorName like '%" + txt_AuthorName.Text + "%'";
+                Bind_Data(query);
+            }
+        }
+
+
+
+        protected void ddl_book_status_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddl_book_status.SelectedItem.Text == "Select")
+            {
+                Alertme("Please selcte status", "warning");
+            }
+            else
+            {
+                if (ddl_book_status.SelectedItem.Text == "ALL")
+                {
+                    string query = "Select *,(" + booktype + ") as booktype,(" + BookStatus + ") as Book_Status,(" + Book_Category + ") as Book_Category,(" + location + ") as location_new,(" + Sub_Location + ") as Sub_Location from Library_Book_Entry_Master_Uniqe lbe where  lbe.Branch_id=" + ViewState["Branch_id"].ToString() + " and lbe.Is_Delete=1";
+                    Bind_Data(query);
+                }
+                else
+                {
+                    string query = "Select *,(" + booktype + ") as booktype,(" + BookStatus + ") as Book_Status,(" + Book_Category + ") as Book_Category,(" + location + ") as location_new,(" + Sub_Location + ") as Sub_Location from Library_Book_Entry_Master_Uniqe lbe where lbe.BookStatus='" + ddl_book_status.SelectedValue + "' and lbe.Branch_id=" + ViewState["Branch_id"].ToString() + " and lbe.Is_Delete=1";
+                    Bind_Data(query);
+                }
+
+
+            }
+        }
+
+        protected void ddl_lcation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddl_lcation.SelectedItem.Text == "Select")
+            {
+                Alertme("Please selcte location", "warning");
+            }
+            else
+            {
+                string query = "Select *,(" + booktype + ") as booktype,(" + BookStatus + ") as Book_Status,(" + Book_Category + ") as Book_Category,(" + location + ") as location_new,(" + Sub_Location + ") as Sub_Location from  Library_Book_Entry_Master_Uniqe lbe where lbe.Location='" + ddl_lcation.SelectedValue + "' and lbe.Branch_id=" + ViewState["Branch_id"].ToString() + " and lbe.Is_Delete=1";
+                Bind_Data(query);
+
+            }
+        }
+
+        protected void ddl_class_wise_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddl_class_wise.SelectedItem.Text == "Select")
+            {
+                Alertme("Please selcte class", "warning");
+            }
+            else
+            {
+
+                string query = "Select *,(" + booktype + ") as booktype,(" + BookStatus + ") as Book_Status,(" + Book_Category + ") as Book_Category,(" + location + ") as location_new,(" + Sub_Location + ") as Sub_Location from Library_Book_Entry_Master_Uniqe lbe where lbe.SelectClass='" + ddl_class_wise.SelectedValue + "' and lbe.Branch_id=" + ViewState["Branch_id"].ToString() + " and lbe.Is_Delete=1";
+                Bind_Data(query);
+            }
+
+        }
+
+        private void Bind_Data(string qry)
+        {
+            ViewState["qry"] = qry;
+            DataTable dt = mycode.FillData(qry);
+            if (dt.Rows.Count == 0)
+            {
+                print1.Visible = false;
+                btn_excels.Visible = false;
+                Alertme("Sorry there are no data list exist", "warning");
+                rd_view.DataSource = null;
+                rd_view.DataBind();
+            }
+            else
+            {
+                print1.Visible = true;
+                btn_excels.Visible = true;
+                rd_view.DataSource = dt;
+                rd_view.DataBind();
+            }
+        }
+
+
+        #region WebMethoD
+        [WebMethod]
+        public static List<string> Getbookauthername(string authername)
+        {
+            List<string> MobResult = new List<string>();
+            using (SqlConnection con = new SqlConnection(My.conn))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.CommandText = "select distinct AuthorName from Library_Book_Entry_Master_Uniqe where AuthorName LIKE '%'+@AuthorName+'%'  ";
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@AuthorName", authername);
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        MobResult.Add(dr["AuthorName"].ToString());
+                    }
+                    con.Close();
+                    return MobResult;
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+        #endregion
+
+        protected void btn_excels_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Clear();
+                Response.Buffer = true;
+                Response.AddHeader("content-disposition", "attachment;filename=Export.xls");
+                Response.Charset = "";
+                Response.ContentType = "application/vnd.ms-excel";
+                using (StringWriter sw = new StringWriter())
+                {
+                    HtmlTextWriter hw = new HtmlTextWriter(sw);
+                    Panel2.RenderControl(hw);
+                    Response.Output.Write(sw.ToString());
+                    Response.Flush();
+                    Response.End();
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        public override void VerifyRenderingInServerForm(Control control)
+        {
+            /* Verifies that the control is rendered */
+        }
+
+        protected void lnkDel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                LinkButton lnk = (LinkButton)sender;
+                RepeaterItem row = (RepeaterItem)lnk.NamingContainer;
+                Label lbl_Book_Unique_Identifier = (Label)row.FindControl("lbl_Book_Unique_Identifier");
+                Label lbl_Id = (Label)row.FindControl("lbl_Id");
+                bool chek_avl = ly.get_book_avl(lbl_Book_Unique_Identifier.Text, ViewState["Branch_id"].ToString());
+                if (chek_avl == true)
+                {
+                    mycode.executequery("update Library_Book_Entry_Master_Uniqe set  Is_Delete=0 where Id='" + lbl_Id.Text + "'");
+                    mycode.executequery("update Library_Book_Entry set  Is_Delete=0 where Book_Unique_Identifier='" + lbl_Book_Unique_Identifier.Text + "'");
+                    Alertme("Selected book has been deleted successfully", "success");
+                    Bind_Data(ViewState["qry"].ToString());
+                }
+                else
+                {
+                    Alertme("Sorry you can,t delete this book because this book already taken by user", "success");
+
+                }
+
+            }
+            catch
+            {
+            }
+        }
+
+        protected void rd_view_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            try
+            {
+                if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+                {
+                    string classid = ((Label)e.Item.FindControl("lbl_class_id")).Text;
+
+                    ((Label)e.Item.FindControl("lbl_classname")).Text = ly.get_classname_Name(classid);
+
+                   
+                }
+            }
+            catch { }
+        }
+
+        
+    }
+}

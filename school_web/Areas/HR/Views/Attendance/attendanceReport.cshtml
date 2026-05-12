@@ -1,0 +1,267 @@
+﻿
+@{
+    // ViewBag.Title = "attendanceReport";
+}
+<style>
+    td {
+        padding-right: 10px;
+    }
+
+    th {
+        padding-right: 30px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnPrint").click(function () {
+            var contents = $("#printpnl").html();
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head><title>Print</title>');
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="../../Content/theme/css/bootstrap.min.css" rel="stylesheet" type="text/css" />');
+            frameDoc.document.write(`<style>
+    td {
+        padding-right: 10px;
+    }
+
+    th {
+        padding-right: 30px;
+    }
+</style>`);
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+        });
+    });
+</script>
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="ms-auto">
+        <input type="button" id="btnPrint" value="Print" />
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body p-2" >
+                <div class="row">
+                    @Html.LabelEditor("Grade", "ddl", divCssClass: "col-lg-3 col-md-4")
+                    @Html.LabelEditor("Date", "date", divCssClass: "col-lg-2 col-md-3")
+                    <div class="col-md-2 mt-4 pt-1">
+                        <button id="btn-find" type="button" class="btn btn-primary">Find</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body p-2" id="printpnl">
+                <table id="mytable1">
+                    <tbody>
+                    </tbody>
+                </table>
+                <table class="table table-bordered table-striped  mt-2" id="mytable">
+                    <thead class="fixed-header">
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Grade</th>
+                            <th>Date</th>
+                            <th>Day Status</th>
+                            <th>In Time</th>
+                            <th>Out Time</th>
+                            <th>Attendance</th>
+                            <th>Is Late</th>
+                            <th>Is Early Leave</th>
+                            <th>Total Working Hour</th>
+                            <th>Attendance Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div id="grid_prog" style="margin : 0px auto; width:200px; display:none">
+                    <span class="spinner-border spinner-border-sm me-2"> </span>
+                    Please wait....
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        bindGrade();
+    });
+    function bindGrade() {
+        var data = { type: 'Grade' };
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Grade');
+                $("#Grade option:not(:first)").remove();
+                ddl.append($("<option>").text('All').val('0'));
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.grade_name).val(item.grade_id));
+                });
+            }
+        })
+    }
+    $('#btn-find').on("click", function () {
+        if (!$('#Grade').val()) {
+            alertErrorNotification('Please select Grade')
+            return false;
+        }
+        if (!$('#Date').val()) {
+            alertErrorNotification('Please select Date')
+            return false;
+        }
+        var data = { type: 'daily-attendance-overall' };
+        data["Grade"] = $('#Grade').val()
+        data["Date"] = $('#Date').val()
+        $('#grid_prog').show();
+        $('#mytable1 tbody').empty();
+        var tableBody = $('#mytable tbody');
+        tableBody.empty();
+        gowithData("../../hr/data/attendance", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data);
+                bind_details(resp.details);
+            }
+        })
+    })
+    function bind_details(d) {
+        var tableBody = $('#mytable1 tbody');
+        tableBody.empty();
+
+        tableBody.append($('<tr>').append(
+            $('<td>').text('Date'),
+            $('<th>').text(d.date),
+            $('<td>').text('No of Employee'),
+            $('<th>').text(d.Emp_Total),
+        ));
+
+        tableBody.append($('<tr>').append(
+            $('<td>').text('Total Persent'),
+            $('<th>').text(d.Persent),
+            $('<td>').text('Total Absent'),
+            $('<th>').text(d.Emp_Total - d.Onleave - d.Persent),
+        ));
+        tableBody.append($('<tr>').append(
+            $('<td>').text('On Leave'),
+            $('<th>').text(d.Onleave),
+        ));
+
+
+    }
+    function bind_table(data) {
+        var tableBody = $('#mytable tbody');
+        tableBody.empty();
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var difference = diffTime(d.In_Time, d.Out_Time);
+            console.log(difference);
+            var row = $('<tr>').append(
+                $('<td>').text(d.Employee_Name),
+                $('<td>').text(d.grade_name),
+                $('<td>').text(d.Date),
+                $('<td>').text(d.Day_Status),
+                $('<td>').text(d.In_Time),
+                $('<td>').text(d.Out_Time),
+                $('<td>').text(d.AttendanceStatus),
+                $('<td>').text(d.IsLate ? 'Yes' : ''),
+                $('<td>').text(d.IsEarlyLeave ? 'Yes' : ''),
+                $('<td>').text(difference),
+                $('<td>').text(d.AttendanceSource),
+            );
+            tableBody.append(row);
+        });
+    }
+    function toDate(date, timeString) {
+        const timeParts = timeString.match(/(\d+):(\d+)(?::(\d+))?(?:\s+)?([APMapm]{2})?/);
+
+        if (!timeParts) return null;
+
+        let [, hours, minutes, seconds, period] = timeParts;
+
+        // Convert hours and minutes to integers
+        hours = parseInt(hours, 10);
+        minutes = parseInt(minutes, 10);
+
+        // If seconds are present, convert them to an integer
+        if (seconds) {
+            seconds = parseInt(seconds, 10);
+        } else {
+            seconds = 0;
+        }
+
+        // If a period (AM/PM) is provided, adjust the hours accordingly
+        if (period) {
+            const isPM = ['pm', 'PM'].includes(period);
+            if (hours === 12) {
+                hours = isPM ? 12 : 0;
+            } else {
+                hours = isPM ? hours + 12 : hours;
+            }
+        }
+
+        hours = hours.toString().padStart(2, '0');
+        minutes = minutes.toString().padStart(2, '0');
+        seconds = seconds.toString().padStart(2, '0');
+
+        return new Date(`${date}T${hours}:${minutes}:${seconds}`);
+    }
+    function diffTime(timeString1, timeString2) {
+        // Convert time strings to Date objects
+        if (!timeString2) {
+            timeString2 = timeString1;
+        }
+        const date1 = toDate('2023-01-01', timeString1);
+        var date2 = toDate('2023-01-01', timeString2);
+        if (date1 > date2) {
+            date2 = toDate('2023-01-02', timeString2);
+        }
+        // Calculate the time difference in milliseconds
+        const timeDifferenceInMilliseconds = Math.abs(date1 - date2);
+
+        // Calculate hours and minutes from milliseconds
+        const hours = Math.floor(timeDifferenceInMilliseconds / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDifferenceInMilliseconds % (1000 * 60 * 60)) / (1000 * 60));
+        if (hours == 0) {
+            return `${minutes} Min`;
+        }
+        else if (minutes == 0) {
+            return `${hours} Hr`;
+        }
+        else {
+            return `${hours} Hr ${minutes} Min`;
+        }
+    }
+
+</script>

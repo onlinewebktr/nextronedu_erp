@@ -1,0 +1,268 @@
+﻿@font-face {
+    font-family: certificate;
+    src: url(../../assets/fonts/certificate/Certificate-Bold.ttf);
+}
+
+@font-face {
+    font-family: 'K2D';
+    src: url(../../assets/fonts/k2d-cufonfonts/K2D-Bold.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'K2D';
+    src: url(../../assets/fonts/k2d-cufonfonts/K2D-Medium.ttf);
+    font-weight: normal;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+
+.table {
+    border-collapse: collapse;
+}
+
+    .table th {
+        background-color: #ddd;
+    }
+
+table td {
+    text-align: left;
+    padding: 7px 5px !important;
+    border: 1px solid #ddd;
+}
+
+table th {
+    text-align: left;
+    padding: 7px 5px !important;
+    border: 1px solid #ddd;
+    background-color: #ddd;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+:after, :before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    float: left;
+    font-family: 'K2D';
+    color: #000;
+}
+
+
+.print-btn-sec {
+    margin: 0px;
+    padding: 3px;
+    width: 100%;
+    height: auto;
+    float: left;
+    text-align: center;
+}
+
+.print-btn {
+    margin: 0px;
+    padding: 0px;
+    width: 40px;
+    height: 40px;
+    background: url(print.png) no-repeat;
+    background-size: 100%;
+    background-color: #780a23;
+    border: 5px solid #770821;
+    cursor: pointer;
+    display: inline-block;
+}
+/*=================19/09/2022==========================*/
+
+.print-dv-bx-wprrr {
+    margin: 0px 0px 50px 0px;
+    padding: 0px 0px;
+    width: 100%;
+    float: left;
+}
+
+.print-dv {
+    margin: 0px auto;
+    padding: 0px;
+    width: 1000px;
+    height: auto;
+}
+
+.print-dv-inr {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 10px 0px;
+    width: 100%;
+    height: auto;
+    float: left;
+    box-shadow: 0 4px 4px rgb(87 100 126 / 21%);
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.print-dv-bx-wpr {
+    margin: 0px;
+    padding: 0px 0px;
+    width: 100%;
+    float: left;
+}
+
+.print-dv-bx-wpr-title-h {
+    margin: 15px 0px 0px 0px;
+    padding: 0px 11px 8px 10px;
+    width: 100%;
+    float: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.print-dv-bx-wpr-inr {
+    margin: 5px 0px 0px 0px;
+    padding: 0px 10px;
+    width: 100%;
+    float: left;
+}
+
+.print-dv-bx-wpr-inr-row {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+.print-dv-bx-wpr-inr-row-50 {
+    margin: 0px;
+    padding: 2px 0px;
+    width: 50%;
+    float: left;
+}
+
+.print-dv-bx-wpr-inr-p {
+    margin: 0px;
+    padding: 0px;
+    width: 36%;
+    float: left;
+}
+
+.print-dv-bx-wpr-inr-txt-bx {
+    margin: 0px;
+    padding: 0px;
+    width: 63%;
+    float: left;
+}
+
+.txtalign-right {
+    text-align: right;
+}
+
+.txtbolds {
+    font-weight: 600;
+}
+
+.print-dv-bx-wpr-inr-pss-msg {
+    margin: 10px 0px 20px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    color: #f00;
+    font-size: 16px;
+    text-align: center;
+}
+
+
+.footer-date-dv {
+    margin: 56px 0px 0px 0px;
+    padding: 0px;
+    width: 50%;
+    float: left;
+}
+
+.footer-date-p {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.footer-usr-dv {
+    margin: 50px 0px 0px 0px;
+    padding: 0px;
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+.footer-usr-sig-p {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    font-size: 14px;
+}
+
+.footer-usr-sig-name-p {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.fntblds {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.fntsizes {
+    font-size: 13px;
+}
+
+.sig-left {
+    margin: 0;
+    padding: 0px 5px 0px 0px;
+    width: 25%;
+    float: right;
+}
+
+.rght-sig-img-dv {
+    margin: 0px;
+    width: 100%;
+    float: left;
+    height: 70px;
+    align-items: center;
+    display: flex;
+}
+
+.rght-sig-img {
+    margin: 0px auto;
+    width: auto;
+    height: 45px;
+}
+
+.sig-ps {
+    margin: 0;
+    padding: 3px 0px 0px 0px;
+    width: 100%;
+    float: left;
+    text-align: center;
+    border-top: 1px solid #858585;
+    font-size: 14px;
+    font-weight: 600;
+}

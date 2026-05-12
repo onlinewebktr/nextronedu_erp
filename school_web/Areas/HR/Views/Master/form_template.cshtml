@@ -1,0 +1,301 @@
+﻿
+@{
+    HR_MasterPageConfig mpc = ViewBag.mpc;
+    ViewBag.Title = mpc.pageTitle;
+    if (mpc.OtherData != null)
+    {
+        if (mpc.OtherData.ContainsKey("Page_Layout_Path"))
+        {
+            if (mpc.OtherData["Page_Layout_Path"] != "")
+            {
+                Layout = mpc.OtherData["Page_Layout_Path"];
+            }
+        }
+    }
+}
+<script>
+    var data = JSON.stringify({ data: { pageId: '@mpc.pageId' } });
+    gowithData('../../hr/data/tabledata', 'Post', data, function (data) {
+        if (!data.error) {
+            bind_data(data.data);
+        }
+    })
+</script>
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        @using (Ajax.BeginForm("page", "save", null, new AjaxOptions
+        {
+            OnSuccess = "handleSuccess",
+            OnFailure = "fnfailor",
+            OnBegin = "fnbegin",
+        }, new { @class = "my-form", id = "main-form" }))
+        {
+            // @Html.Hidden("frm-page-Id", @mpc.pageId.ToString())
+            @Html.Hidden("HdId")
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        #start#0#end#
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+
+                            <button id="btn-add" type="submit" class="btn btn-primary">Add</button>
+                            <button id="btn-cancel" type="button" style="display: none;" class="btn btn-dark">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             
+        }
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body px-2 py-1">
+                <table class="table table-bordered table-striped" id="mytable">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            #start#1#end#
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div id="grid_prog" style="margin : 0px auto; width:200px">
+                    <span class="spinner-border spinner-border-sm me-2"> </span>
+                    Please wait....
+                </div>
+            </div>
+            </div>
+            
+        </div>
+    </div>
+
+<script>
+    var actionlist = [];
+    var isEdit = false;
+    var edit_row;
+    $(function () {
+        var data = JSON.stringify({ data: { pageId: '@mpc.pageId' } });
+    gowithData('../../hr/data/tabledata', 'Post', data, function (data) {
+        if (!data.error) {
+            bind_data(data.data);
+        }
+    })
+    emptyForm();
+});
+
+
+function handleSuccess(data) {
+    data = JSON.parse(data);
+    if (data.error) {
+        alertError(data.message);
+        if (isEdit == true) {
+            $('#btn-add').text("Update")
+        }
+        else {
+
+            $('#btn-add').text("Add")
+            $('#btn-cancel').hide();
+        }
+        $('#btn-add').prop("disabled", false);
+    }
+    else {
+        alertSuccess(data.message);
+        emptyForm();
+        if (data.isUpdate) { bind_data(data.data, 2) }
+        else { bind_data(data.data, 1) }
+    }
+}
+function fnfailor(data) {
+    if (isEdit = true) {
+        $('#btn-add').text("Update")
+    }
+    else {
+
+        $('#btn-add').text("Add")
+        $('#btn-cancel').hide();
+    }
+}
+function fnbegin() {
+    var btn = $('#btn-add');
+    if (btn.prop('disabled')) {
+        return false; // Prevent multiple clicks while disabled
+    }
+    btn.prop("disabled", true);
+    var ss = `<div  style="margin : 0px auto; width:150px">
+
+                    <span class="spinner-border spinner-border-sm me-2" > </span>
+                        Please wait....
+                        </div>`;
+    btn.html(ss);
+}
+
+function formatDate(inputDate) {
+    var date = new Date(inputDate);
+    var formattedDate = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+    return formattedDate;
+}
+
+</script>
+<script>
+    $('#btn-cancel').on('click', function () {
+        emptyForm();
+    });
+    function emptyForm() {
+
+        #start#2#end#
+        $('#btn-add').text("Add")
+        $('#btn-add').prop("disabled", false);
+        $('#btn-cancel').hide();
+        $('#HdId').val("")
+        $('#model-form').modal("hide");
+        isEdit = false;
+    }
+</script>
+
+<script>
+
+             function openModel() {
+                 $('#model-form').modal("show");
+             }
+               function bind_data(data, code) {
+                   var showAction = true;
+            var tableBody = $('#mytable tbody');
+            if (code == 2) {
+                edit_row.empty();
+            }
+            else {
+                $('#mytable').DataTable().destroy();
+            }
+
+            if (!code) {
+                tableBody.empty();
+            }
+            $('#grid_prog').hide(); 
+            $.each(data, function (index, d) {
+                var div = $('<div>').addClass("d-flex align-items-center")
+                div.append($('<button>').addClass("edit-button btn").attr("data-id", d.Id).html("<i class='bx bx-edit-alt'></i>"))
+                div.append($('<button>').addClass("delete-button btn").attr("data-id", d.Id).html("<i class='bx bx-trash'></i>"))
+
+        var td = $('<td>').append(div).width("55px");
+                 if (code == 2) {
+                     if (showAction) {
+                         edit_row.append(td);
+                     }
+                     edit_row.append(#start#3#end#);
+                 }
+                 else {
+                     var row = $('<tr>');
+                     if (showAction) {
+                         row.append(td);
+                     }
+                     row.append( #start#3#end# );
+                     if (!code) {
+                         tableBody.append(row);
+                     }
+                     else {
+                         tableBody.prepend(row);
+                     }
+                 }
+
+
+                });
+            if (code != 2) {
+                var table = $('#mytable').DataTable({
+                    lengthChange: false,
+                    scrollX: true, scrollCollapse: true,
+                    buttons: ['excel', 'pdf', 'print']
+                });
+            }
+
+        }
+
+        $('#mytable').edit('../../hr/data/edit', function (data,row) {
+            edit_row = row ;
+            isEdit = true;
+            $('#main-form').parent().removeClass('d-none');
+            $('#btn-add').text("Update")
+            $('#btn-cancel').show();
+            $('#HdId').val(data[0].Id)
+            #start#4#end# 
+        });
+        $('#mytable').delete('../../hr/data/delete', function (data) {
+        });
+
+
+    function apply_filter(filterbtn) {
+            var id = $(filterbtn).attr("data-id");
+
+            var formData = $('#' + id).serializeArray();
+            var serializedData = {};
+
+            $.map(formData, function (input) {
+                serializedData[input.name] = input.value;
+            });
+            $('#' + id).find('select').each(function () {
+                var selectId = $(this).attr('id');
+                var selectedOption = $('#' + selectId + ' option:selected');
+                serializedData[selectId] = selectedOption.text();
+                serializedData[selectId + "_Value"] = selectedOption.val();
+            });
+
+             serializedData['pageId'] = 'mpc.pageId';
+            var data = JSON.stringify({ data: serializedData });
+
+            console.log(data);
+            gowithData("../../hr/filter/" + id, 'POST', data, function (resp) {
+                console.log(resp);
+                bind_data(resp.data);
+            })
+        }
+    function getstatusview(inputString, value) {
+
+        var regex = /\{(.*?)\}/g;
+        var matches = inputString.match(regex);
+        var found = false;
+        var rd = false;
+        if (matches) {
+            var resultList = matches.map(function (match) {
+                return match.replace(/[\{\}]/g, '');
+            });
+            $.each(resultList, function (index, data) {
+                var r = data.split(',');
+                if (r[0] == value) {
+                    found = true;
+                    rd = r;
+                    return false;
+                }
+            })
+        }
+        if (found) {
+
+            if (rd[1].startsWith("bg-")) {
+                return '<span class="badge rounded-pill ' + rd[1] + '"  >' + rd[2] + '  </span>';
+            }
+            else {
+                return '<span class="badge rounded-pill" style="background-color: ' + rd[1] + ';">' + rd[2] + '  </span>';
+            }
+        }
+        else {
+            return '<span class="badge rounded-pill bg-info"  >' + value + '  </span>';
+        }
+    }
+
+
+</script>

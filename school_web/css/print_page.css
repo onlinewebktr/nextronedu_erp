@@ -1,0 +1,185 @@
+﻿body {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+
+.print_pagesec {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.printlogo-sec {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    text-align: center;
+}
+
+.printlogo-sec22 {
+    height: 100px;
+    width: 100px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.patient-textbox {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 10px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.patient-textbox-p {
+    height: auto;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 10px 0px 0px;
+    float: left;
+    font-size: 15px;
+    line-height: 28px;
+    color: #333;
+    font-weight: 400;
+    text-align: right;
+    font-family: 'Poppins', sans-serif;
+}
+
+.patienttextbox-label {
+    height: auto;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 15px;
+    line-height: 28px;
+    color: #333;
+    font-weight: 600;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+}
+
+.patienttextbox-thanks {
+    height: auto;
+    width: 100%;
+    margin: 20px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 15px;
+    line-height: 28px;
+    color: #ff0000;
+    font-weight: 400;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.printlogo-img {
+    margin: 0px auto;
+    padding: 0px 0px 20px 0px;
+}
+
+.printbutton-sec {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.button-print {
+    height: 35px;
+    width: 100px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: right;
+    font-size: 15px;
+    line-height: 32px;
+    color: #fff;
+    background-color: #0094ff;
+    border-style: none;
+    font-weight: 400;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    text-decoration:none;
+}
+
+.button-back {
+    height: 35px;
+    width: 100px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 15px;
+    line-height: 28px;
+    color: #fff;
+    background-color: #ff4d00;
+    border-style: none;
+    font-weight: 400;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.print_pagborder {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 10px;
+    float: left;
+    border: 1px solid #e2e2e2;
+}
+
+.printbox-iwidth {
+    height: auto;
+    width: 45%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+
+
+.printbox-texts33e {
+    height:auto;
+    width: 100%;
+    margin: 20px 0px 0px 0px;
+    padding: 10px;
+    float: left;
+}
+
+.printbox-textse-p {
+    height: auto;
+    width:100%;
+      margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 15px;
+    line-height: 28px;
+    color: #333;
+    font-weight: 400;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+  
+}
+
+.printbox-textse-p2 {
+    height: auto;
+    width:100%;
+      margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    font-size: 15px;
+    line-height: 28px;
+    color:#ff0000;
+    font-weight: 400;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}

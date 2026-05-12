@@ -1,0 +1,361 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site1.master.cs" Inherits="school_web._adminETutorProf.webview.Site1" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>
+        <asp:ContentPlaceHolder ID="title" runat="server" />
+    </title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Language" content="en" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
+    <script src="../../assets/js/jquery-1.10.2.min.js"></script>
+   
+    <script src="../../assets/js/bootstrap.min.js"></script>
+    <link href="../../css/bootstrap.css" rel="stylesheet" />
+    <%-- <script src="../../js/bootstrap.min.js"></script>--%>
+    <%--   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+     <script src="../../assets/js/bootstrap.min.js"></script>--%>
+    <%-- <link href="../../css/bootstrap.css" rel="stylesheet" />--%>
+    <link href="../../font-awesome-4.0.3/css/font-awesome.min.css" rel="stylesheet" />
+    <%--<link href="../../LMS_VC_Admin/css/admin.css" rel="stylesheet" />--%>
+    <%--<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>--%>
+    <%--<script src="../../LMS_VC_Admin/js/Admin.js"></script>
+    --%>
+    <%-- <script src="../../LMS_VC_Admin/js/main.cba69814a806ecc7945a.js"></script>--%>
+
+
+
+
+    <style>
+        .dt-buttons, .dataTables_filter {
+            float: right !important;
+        }
+    </style>
+    <script type="application/x-javascript">
+         addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } 
+    </script>
+    <style type="text/css">
+        .form-group {
+            padding: 0px !important;
+            margin-bottom: 0px !important;
+        }
+
+        .multiselect-container {
+            top: 60px !important;
+            width: 300px;
+        }
+
+        sup {
+            color: red;
+        }
+
+        .table td, .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+            padding: 3px !important;
+        }
+
+        .app-sidebar .app-sidebar__inner {
+            padding: 2px 5px 1.5rem 5px !important;
+        }
+    </style>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <style>
+        .messbox-sec-h2 {
+            height: auto;
+            width: 100%;
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+            float: left;
+            font-size: 18px;
+            line-height: 25px;
+            font-weight: 500;
+            text-align: center;
+            color: #fff;
+            background-color: #109be1;
+        }
+
+        .fullinfo {
+            margin: 0px 0px 0px;
+            padding: 0px;
+            float: left;
+            height: auto;
+            width: 100%;
+        }
+
+        .textcont1 {
+            height: auto;
+            width: 100%;
+            margin: 0px 0px 0px 0px;
+            padding: 3px 0px 3px 0px;
+            float: left;
+            font-size: 13px;
+            line-height: 20px;
+            color: #000;
+            text-align: left;
+        }
+
+        .textcont3 {
+            height: auto;
+            width: 100%;
+            margin: 0px 0px 0px 0px;
+            padding: 3px 0px 3px 0px;
+            float: left;
+            font-size: 12px;
+            line-height: 20px;
+            color: #000;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .ui-datepicker .ui-datepicker-title select {
+            font-size: 1em;
+            margin: 1px 0;
+            COLOR: #000;
+            z-index: 99999 !important;
+        }
+
+        .calender-icon {
+            margin: 0px 0px 0px 0px;
+            position: relative;
+            font-size: 12px;
+            font-weight: normal;
+            width: 100%;
+        }
+
+        .clndr-icon {
+            font-size: 14px !important;
+            color: #ff2956;
+            position: absolute;
+            top: 5px;
+            left: -23px;
+        }
+
+        .texbox-border {
+            margin: 6px 0px 0px 0px;
+            padding: 0px;
+            height: auto;
+            width: 100%;
+            border-bottom: 1px solid #00000038;
+        }
+
+        .btn {
+            padding: 2px 17px 2px 17px !important;
+            margin: 5px 0px 0px 0px;
+        }
+        /******************Notification**********************/
+        .notificationpan {
+            display: none;
+            width: 100%;
+            background-color: rgb(255, 76, 76);
+            position: fixed;
+          top: 169px !important;
+            right: 10px;
+            padding: 10px 10px;
+            width: 290px;
+            height: auto;
+            border: 1px solid rgb(162, 162, 162);
+            box-shadow: 2px 7px 19px -2px rgba(154, 154, 154, 0.8);
+        }
+
+
+        .closenotificationpan {
+            position: absolute;
+            margin: 0px 0px 0px 0px;
+            top: 12px;
+            right: 6px;
+            cursor: pointer;
+            left: auto;
+            width: 16px;
+        }
+
+        #notification {
+            margin: 0px;
+            padding: 0px;
+            position: relative;
+            z-index: 999;
+        }
+
+        table {
+            /*box-shadow: 0 1px 1px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(244 67 54 / 40%);*/
+            /*background: linear-gradient( 60deg,#f7807e,#e53935);*/
+            border-radius: 0px;
+            /*border: 1px dashed #d1c5c5!important;*/
+            background: #fff !important;
+            border-bottom: 0px solid #c8c5c5;
+        }
+
+        .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+            padding: 5px 5px;
+            vertical-align: middle;
+            border-color: #ddd0;
+            font-size: 12px;
+            color: #000;
+            padding: 6px 0px 5px 7px !important;
+            text-align: center;
+        }
+
+        .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > .table-bordered > tbody > tr > .table-bordered > tfoot > tr > th {
+            background: #e1dddd !important;
+        }
+
+        .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+            border: 1px solid #a29b9b;
+            text-align: center;
+            padding: 7px 4px 6px 5px;
+            font-size: 12px;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            height: 25px !important;
+            font-size: 13px !important;
+            padding: 2px 5px;
+            font-weight: 500;
+        }
+
+        .table {
+            margin-bottom: 9px !important;
+        }
+
+        label {
+            display: inline !important;
+            max-width: 100%;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* img {
+            top: 8px;
+            position: absolute;
+            left: 100px;
+        }*/
+
+
+        /*===================================*/
+        .ints-loader-wpr {
+            display: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: auto;
+            float: left;
+            background: #ffffff80;
+            position: fixed;
+            z-index: 9999999999;
+            left: 0;
+            bottom: 0;
+            top: 0;
+        }
+
+        .ints-loader-wpr-inr {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            float: left;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ints-loader {
+            background-color: #fff;
+            padding: 6px 15px;
+            height: auto;
+            -webkit-border-radius: 9px 9px 9px 9px;
+            border-radius: 2px;
+            border: 1px solid #fff;
+            box-shadow: 0 3px 14px 1px rgba(92,91,91,.85);
+        }
+
+        .ints-loader-txt {
+            color: #414141;
+            font-weight: 500;
+            font-size: 16px;
+            z-index: 999999;
+            position: relative;
+            letter-spacing: 1px;
+            text-align: center;
+            margin: 0px;
+            line-height: 33px;
+        }
+
+        .ints-loader-img {
+            width: 30px;
+            margin: 0px 8px 0 0;
+            float: left;
+        }
+    </style>
+
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="sm" runat="server"></asp:ScriptManager>
+        <div style="margin: 0px; padding: 0px; float: left; width: 100%; height: auto;">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+
+        </div>
+        <script src="../../Parents_Profile/js/jquery.dataTables.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('#datatable').DataTable({
+                    "pagingType": "full_numbers",
+                    "lengthMenu": [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, "All"]
+                    ],
+                    responsive: true,
+                    language: {
+                        search: "INPUT",
+                        searchPlaceholder: "Search records",
+                    }
+
+                });
+
+                var table = $('#datatable').DataTable();
+
+                // Edit record
+                table.on('click', '.edit', function () {
+                    $tr = $(this).closest('tr');
+                    if ($($tr).hasClass('child')) {
+                        $tr = $tr.prev('.parent');
+                    }
+
+                    var data = table.row($tr).data();
+                    alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
+                });
+
+                // Delete a record
+                table.on('click', '.remove', function (e) {
+                    $tr = $(this).closest('tr');
+                    if ($($tr).hasClass('child')) {
+                        $tr = $tr.prev('.parent');
+                    }
+                    table.row($tr).remove().draw();
+                    e.preventDefault();
+                });
+
+                //Like record
+                table.on('click', '.like', function () {
+                    alert('You clicked on Like button');
+                });
+            });
+        </script>
+    </form>
+</body>
+</html>

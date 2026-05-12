@@ -1,0 +1,88 @@
+﻿
+@{
+
+    ViewBag.Title = "Excel Upload";
+}
+<div class="row">
+    <div>
+        <input type="file" id="excelFile"   name="excelFile"  accept=".csv"  />
+        <input type="button" id="btn-convert" class="btn btn-primary" value="Convert" />
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-striped" style="width:100%" id="mytable">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <input type="button" id="btn-upload" class="btn btn-primary" value="Upload" />
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+<script>
+var datalist = [];
+    var headers = [];
+        $('#excelFile').on('change',function () {
+            var csvFile = $(this)[0].files[0];
+        if (csvFile) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var csvContent = e.target.result;
+                csvToJson(csvContent);
+
+            };
+            reader.readAsText(csvFile);
+        }
+    });
+
+    function csvToJson(csvContent) {
+        Papa.parse(csvContent, {
+            header: true,
+            skipEmptyLines: true,
+            complete: function (results) {
+                datalist = results.data; 
+                load_datatable();
+            }
+        });
+    }
+    function load_datatable() {
+        var thead = $("#mytable thead");
+        thead.empty();
+        var tbody = $("#mytable tbody");
+        tbody.empty();
+        if (datalist.length > 0) {
+            var d1 = datalist[0];
+            var keys = Object.keys(d1);
+            var tr = $('<tr>')
+            $.each(keys, function (ind, k) {
+                tr.append($('<th>').text(k));
+            })
+            thead.append(tr);
+            //$.each(datalist, function (indx, d) {
+            //    tr = $('<tr>')
+            //    $.each(keys, function (ind, k) {
+            //        tr.append($('<td>').text(d[k]));
+            //    })
+            //    tbody.append(tr);
+            //})
+        }
+
+        }
+        $('#btn-upldoad').on('click', function () {
+            var data = { datalist: JSON.stringify(datalist) };
+            submitdata("../../hr/data/upload", JSON.stringify({data :  data}), function (resp) {
+
+            })
+        })
+        $('#btn-upload').on('click', function () {
+            var data = { datalist: JSON.stringify(datalist) };
+            submitdata("../../hr/data/csv-atnds", JSON.stringify({data :  data}), function (resp) {
+
+            })
+        })
+</script>

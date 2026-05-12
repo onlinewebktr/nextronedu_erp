@@ -1,0 +1,167 @@
+﻿
+@{
+    ViewBag.Title = "Approved Leave";
+    if(ViewBag.isHr==false)
+    {
+        Layout = "~/Area/HR/Views/Shared/_LayoutEmployee.cshtml";
+    }
+} 
+<style>
+    .row {
+        --bs-gutter-x: 0.5rem;
+        --bs-gutter-y: 0;
+    }
+
+    .table.dataTable {
+        margin-top: 0px !important;
+    }
+
+    #mytable {
+        min-height: 300px;
+    }
+
+    .dataTables_scroll {
+        border: 1px solid #ddd !important;
+        margin-top: 0.25rem !important;
+    }
+
+    .filter-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+    .img-employee {
+        height: 50px;
+        width: 50px;
+        margin-right: 5px;
+        float:left;
+    }
+</style>
+
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="card">
+   
+    <div class="card-body px-2 py-1">
+        <table class="table table-bordered table-striped"  style="width:100%"  id="mytable">
+            <thead class="fixed-header">
+                <tr>
+                    <th class="no-export" >Action</th>
+                    <th>Emp Code</th>
+                    <th width="250px">Employee Name</th>
+                    <th>Leave Type</th>
+                    <th>Leave From</th>
+                    <th>Leave Days</th>
+                    <th>Leave To</th>
+                    <th>Leave Reason</th>
+                    <th>Status</th>
+                    <th>Approved By</th> 
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div id="grid_prog" style="margin : 0px auto; width:200px">
+            <span class="spinner-border spinner-border-sm me-2"> </span>
+            Please wait....
+        </div>
+    </div>
+</div>
+<div>
+    
+   
+    @Html.BeginModal("model-reject", "Reject Leave", "modal-md").Content(@<div>
+        @Html.Label("Rejection Remarks")
+        @Html.TextArea("Reject-Remarks", "", 5, 0, new { @class = "form-control" })
+    </div>).Footer(@<button class="btn btn-danger" id="btn-reject">Reject Reqeust</button>).Create()
+</div>
+
+
+<script>
+    var id = '';
+    var tr = '';
+    $(function () {
+        var data = { type: 'approved-leave' };
+
+        gowithData("../../hr/data/getleavereaquest", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data) 
+            }
+        })
+    })
+    
+    
+    function bind_table(data) {
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var div = $('<div>').addClass("d-flex align-items-center")
+            var div_ddl = $('<div>').addClass("dropdown ms-1")
+            div_ddl.append(`<div class="dropdown-toggle dropdown-toggle-nocaret cursor-pointer badge bg-info text-dark" data-bs-toggle="dropdown">	<i class='bx bx-dots-horizontal-rounded font-22'></i></div>`)
+            var ul = $('<ul>').addClass("dropdown-menu")
+            div_ddl.append(ul)
+            ul.append(
+                 
+               
+                $('<li>').append($('<span>').attr("data-id", d.LeaveRequestId).attr("data-action", 'Reject').addClass("dropdown-item action-table text-danger").append("<i class='bx bx-x-circle me-2'></i>").append("Reject")),
+            )
+            div.append(div_ddl)
+            var img = $('<img>').attr('src', d.Employee_image).addClass('img-employee rounded').attr('onerror', 'this.src="../../Content/Images/user-icon.png"');
+            var td = $('<td>').append(div).width("55px");
+            var row = $('<tr>').append(td,
+                $('<td>').text(d.Emp_Code),
+                $('<td>').append(img, $('<label>').append(d.Employee_Name, '</br>', d.name)),
+                $('<td>').text(d.LeaveCode),
+                $('<td>').text(d.LeaveFrom),
+                $('<td>').text(d.LeaveTo),
+                $('<td>').text(d.LeaveDayCount),
+                $('<td>').text(d.LeaveReason),
+                $('<td>').text(d.Status), 
+                $('<td>').text(d.ApprovedBy), 
+            );
+            tableBody.append(row);
+        });
+
+        refreshtable('#mytable');
+    }
+    $('#mytable').on('click', '.action-table', function () {
+        id = $(this).data('id');
+        tr = $(this).closest('tr');
+        var action = $(this).data('action');
+        console.log(action);
+       if (action == 'Reject') {
+            $('#Remarks').val('');
+            $('#model-reject').modal("show");
+        } 
+    });
+   
+    $('#btn-reject').on('click', function () {
+        var remark = $('#Reject-Remarks').val();
+        if (!remark) {
+            alertError("Please Enter Rejection Remarks");
+            return false;
+        }
+        var data = { type: 'reject-approved-leave', mId: id, remarks: remark }
+
+        submitdata("../../hr/data/getleavereaquest", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                $('#model-reject').modal("hide");
+                tr.addClass("bg-light-danger");
+            }
+        })
+    });
+   
+</script>
+ 

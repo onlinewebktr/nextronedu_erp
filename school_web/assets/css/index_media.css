@@ -1,0 +1,134 @@
+﻿
+@media screen and (max-width:900px) {
+    .readhus-h2 {
+        padding: 0px 25px 0px 25px;
+        font-size: 16px;
+        line-height: 45px;
+    }
+
+    .wehave-h2 {
+        font-size: 20px;
+        line-height: 30px;
+        text-align: center;
+    }
+
+    .plogo33 {
+        width: 150px;
+    }
+
+    .plogo {
+        margin: 50px 0px 0px 0px;
+    }
+
+    .readhus {
+        margin: 10px 0px 10px 0px;
+    }
+
+    .headribbonth1 {
+        font-size: 20px;
+    }
+
+    .headribbont-p {
+        font-size: 13px;
+        line-height: 22px;
+    }
+
+    .headribbont {
+        margin: 0px 0px 0px 0px;
+        width: 100%;
+    }
+
+    .index-slider {
+        padding: 30px 0px 50px 0px;
+    }
+
+    .headribbont:before {
+        left: 0px;
+    }
+
+    .headribbont:after {
+        right: 0px;
+    }
+
+    .headribbonthhh {
+        margin: 30px 0px 0px 0px;
+    }
+
+    /*********erp****/
+    .loginerpboxh1 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+    .loginerpboxh3 {
+        font-size: 18px;
+    }
+
+    .loginerp {
+        margin: 40px 0px 40px 0px;
+        padding: 10px 0px 0px 0px;
+    }
+
+    .headingte-h1 {
+        font-size: 18px;
+        line-height: 30px;
+    }
+
+    /***********footer****/
+    .fooimageee {
+        height: 50px;
+    }
+
+    .main-footer-top {
+        margin: 0px 0px 30px 0px;
+    }
+
+    .company-add-p {
+        margin: 20px 0px 0px 0px;
+    }
+
+    .about-footer-sec-h2 {
+        font-size: 18px;
+    }
+
+    .quick-links {
+        margin: 15px 0px 0px 0px;
+    }
+
+    .about-footer-sec {
+        margin: 20px 0px 0px 0px;
+    }
+
+    .footer-social-ul {
+        margin: 0px 0px 0px 0px;
+    }
+    /********footer********/
+    .foottexttpp {
+        text-align: center;
+    }
+
+    .footull {
+        text-align: center;
+        margin: 10px 0px 0px 0px;
+    }
+
+    /***********cont*/
+    .messbox-sec-h2 {
+        margin: 30px 0px 20px 0px;
+        font-size: 20px;
+        line-height: 25px;
+    }
+
+    .cont-loca {
+        height: 300px;
+    }
+
+    .logoheadingp {
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+    .schoollogoimg {
+        width: 150px;
+    }
+}

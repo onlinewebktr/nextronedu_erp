@@ -1,0 +1,487 @@
+﻿
+@{
+    Layout = null;
+    HR_Employee_Master emp = ViewBag.emp;
+}
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Joining Letter</title>
+    <link href="~/Payroll/print/certificate.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+
+    <style>
+        p {
+            margin: 5px 0px 0px 0px;
+        }
+        .page-break {
+            page-break-before: always; /* or 'auto' */
+            /* page-break-after: always; */ /* Use if you want to break after the element */
+            /* page-break-inside: avoid; */ /* Use if you want to avoid breaking inside the element */
+        }
+        table, td {
+            border: 1px solid #929292;
+        }
+
+
+        td {
+            padding-left: 8px;
+        }
+
+        .page-header, .page-footer img {
+            display: none;
+        }
+
+        .page-header-space {
+            height: 100px;
+        }
+
+        .page-footer, .page-footer-space {
+            margin-top: 80px;
+            /*height: 100px;*/
+        }
+
+        .page-footer {
+            position: fixed;
+            bottom: 0px;
+            width: 800px;
+            margin: 10px 0px 0px 0px;
+        }
+
+        .page-header {
+            position: fixed;
+            top: 0mm;
+            /*width: 100%;*/
+            width: 800px;
+        }
+
+        .page {
+            page-break-after: always;
+            counter-increment: page;
+        }
+
+        /*.page:before {
+                display: block;
+                text-align: right;
+                content: counter(page);
+            }*/
+
+        @@page {
+            margin: 10mm;
+        }
+
+        @@media print {
+            /*  thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }*/
+
+            button {
+                display: none;
+            }
+
+            .noPrint {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            .page-header-space {
+                height: 100px;
+            }
+
+            .page-header, .page-footer img {
+                display: block;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        function printit() {
+            if (window.print) {
+                window.print();
+            }
+        }
+    </script>
+    <script>
+        history.pushState(null, null, window.location.href);
+        history.back();
+        window.onpopstate = () => history.forward();
+    </script>
+</head>
+<body>
+    <form id="form1">
+        <div class="invoice-sec">
+
+            <div class="prnt-btn-sec noPrint">
+                <div class="prnt-btn-wpr">
+                    <div class="print-btn-sec">
+                        <div class="noPrint" style="float: left; ">
+                            <a href="../../hr/home" class="back-btn">
+                            </a>
+                        </div>
+                        <div class="noPrint" style="float: right">
+                            <button ID="print1" onclick="printit()" class="print-btn"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tblPrintIQ">
+                <div class="invoice-inr-sec">
+                    <div class="invoice-wpr">
+                        <div class="certificate-wpr">
+                            <div style="font-family: 'Times New Roman'; font-size: 15px; ">
+                                <div class="page-break">
+                                    <p>&nbsp;</p>
+                                    <p>&nbsp;</p>
+                                    <p>&nbsp;</p>
+                                    <p>&nbsp;</p>
+                                    <p>&nbsp;</p>
+                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:85%;font-size:13px;'><strong> <span style='line-height:85%;color:red;'>DPMH/HR-Appt/@emp.Id.ToString("000")&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;@emp.Date_of_Joining </span></strong></p>
+                                    <p style='font-size:13px;margin-left:7.1pt;text-indent:-7.1pt;'><span style="color:gray;font-style:italic;"><strong><span style='color:red;'>@ViewBag.NameTitle @emp.Employee_Name</span></strong></span></p>
+                                    <p style='font-size:13px;margin-left:7.1pt;text-indent:-7.1pt;'><span style="color:gray;font-style:italic;"><strong><span style='color:red;'>Add :  @emp.Address</span></strong></span></p>
+
+
+                                    <p style='font-size:13px;margin-left:7.1pt;text-indent:-7.1pt;'><span style="color:gray;font-style:italic;"><strong><span style='color:red;'>Contact No:&nbsp; @emp.Mobile</span></strong></span></p>
+                                    <p style='font-size:13px;margin-left:7.1pt;text-indent:-7.1pt;'><span style="color:gray;font-style:italic;"><strong><span style='color:red;'>Email: @emp.Email</span></strong></span></p>
+                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;font-size:13px;text-align:center;'><strong><u><span style='line-height:115%;'>Sub: Letter of Appointment</span></u></strong></p>
+                                    <p style='font-size:13px;margin-left:7.1pt;text-indent:-7.1pt;'><span style=''>Dear <span style="color:gray;font-style:italic;"><strong><span style="color:red;">@ViewBag.NameTitle @emp.Employee_Name.</span></strong></span></span></p>
+                                    <h1 style='font-size:18px;text-align:justify;'><span style="font-weight:normal;"><br>&nbsp;</span><span style="font-weight:normal;">We are Pleased to inform you that your employment with&nbsp;</span><span style="">Dr. Prabhat Memorial Hiramati Hospital</span><span style="font-weight:normal;"> shall stand w.e.f.&nbsp; @emp.Date_of_Joining</span><span style="color:red;">&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.</span> <span style="font-weight:normal;"> As stated in the said offer letter no: </span><span style="color:red;">&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;../HR-Off/....&hellip;&hellip;&hellip;&hellip;</span><span style="font-weight:normal;">the detailed appointment letter is issued herewith outlining the terms and conditions governing the said appointment as stated below:&nbsp;</span></h1>
+                                    <p style='font-size:13px;text-align:center;'><strong><u><span style=''><span style="text-decoration:none;">&nbsp;</span></span></u></strong></p>
+                                    <p style='font-size:13px;'><strong><u><span style=''>Terms and conditions of employment:</span></u></strong></p>
+                                    <p style='font-size:13px;'><strong><span style=''>Designation and Department:</span></strong></p>
+                                    <p style='font-size:13px;'><span style=''>As an employee of <strong>Dr. Prabhat Memorial Hiramati Hospital,</strong> you will be designated as  &ldquo;<strong><span style="color:red;">@ViewBag.Designation</span>.&rdquo;</strong>for the department of <strong> &ldquo;<span style="color:red;">@ViewBag.Department</span>&rdquo; </strong><span style="color:red;"></span>.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Compensation and Benefit:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>Your compensation package and benefits has been mentioned in Annexure I &amp; Annexure II.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Reporting:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>You will report to the&nbsp;</span><strong><span style='color:red;'>&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;</span></strong><span style=''>or to any other as may be communicated to you from time to time.&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Continuity of Service:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>You will be extended continuity of service and consequent benefits arising thereof.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Attendance &amp; WorkingHours:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>You are required to record your attendance by signing the Attendance Register and mark your attendance through Biometric devices as may be advised by Human Resource Department from time to time. Your working hours are governed by applicable law. You may be requiredtoworkinshiftsand/orovertimedependinguponthebusinessexigenciesaspermittedbylaw.&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Mobility:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>You shall be initially located at&nbsp;</span><strong><span style=''>Dr. Prabhat Memorial Hiramati Hospital (A unit of Caring Hands Healthcare Pvt. Ltd.),</span></strong><span style=''>&nbsp;at <strong>Patna</strong>. However, <strong>Dr. Prabhat Memorial Hiramati Hospital</strong><span style=''> reserves the right to transfer/ utilize your services at any of its offices, department, section, work sites, associated or affiliated companies in India, oroutsideIndia,on the terms and conditions a sapplicable to you at the time of transfer.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Alternative Employment:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>As a full-time employee of <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>, other than <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>,you are not permitted to undertake any other business, assume any public office, honorary or remunerative, without the written permission of <strong>Dr. Prabhat Memorial Hiramati Hospital, Patna</strong>.&nbsp;</span></p>
+                                </div>
+                                <div class="page-break">
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Probation / TrainingPeriod:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>Your appointment will be on probation for a period of six months from your date of joining. During the period of your probation, your performance will be reviewed periodically. Your association would be automatically confirmed unless otherwise any written so cause /warning / notification served by management prior to the expiry of the subsisting term. In case your Training period is stand against submission of your any relevant Certificate for which you have been associated with <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>. Then your confirmation will be matured only after submission of your respective documents in HR department with the successful completion of the training period.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>NoticePeriod:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>During your employment with <strong>Dr. Prabhat Memorial Hiramati Hospital</strong><strong>,</strong>eitheryou or <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>can terminate the appointment by giving 30 calendar dayswrittennotice.&nbsp;However, during your probation / training period 30 days of written notice period or one-month gross salaryinlieuofthe notice eitheryou or <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>can terminate this appointment by giving 30 calendar days written notice will be applicable for either side. In the event, you fail to give such notice; the Management will be at liberty to recover from you a sum equivalent payment in lieu of shortfall in notice period.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Dr. Prabhat Memorial Hiramati Hospital</span></strong><span style=''>reserves the right, if it is in the interest of the business and current assignment, to ask you to complete your notice period or decide whether your existing earned vacation or basic salary in lieu of notice period may be adjusted against the entireor partial notice period.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Training &amp; Development:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Dr. Prabhat Memorial Hiramati Hospital </span></strong><span style='color:black;'> encourages and promotes training opportunities for all of its employees to ensure&nbsp;</span><span style=''>continuous &amp; effective organizational and individual development</span><span style='color:black;'>&nbsp;for the better patient care will be made on a road to continuous improvement of services. As per the existing policy, you shall undergo a comprehensive orientation/ induction program for service standard delivery, which will be specifically&nbsp;</span><span style=''>skill based &amp; safety oriented for the awareness &amp; familiarization. <span style="color:black;">Department wise specific orientation/ on the job training program/&nbsp;</span>Software training/ Soft skill and communication training/ mock drills and practical training/ other external training program&nbsp;<span style="color:black;">will be conducted to ensure that you perform your job safely and efficiently in your respective work environment</span></span><span style='color:black;'>.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Confidentiality,Data and Intellectual Property Protection:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>As part of the joining formalities, you are required to sign a confidentiality agreement, which aims to protect the intellectual property rights and business information of <strong>Dr. Prabhat Memorial Hiramati Hospital </strong>and its clients. <span style="background:white;">You have to maintain the highest level of confidentiality of the Company.</span></span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>CodeofConduct:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>You are required to sign the <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>Code of Conduct and follow the same in your day to day conductas an employee of <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Performance Appraisal:&nbsp;</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>Your performance and contribution to the company will be an importantconsiderationforsalaryrevisionandpromotions. Your performance will be reviewed by your immediate In-charge, HoD, Concerned Administrative authority periodically, which willbebasedon<strong>Dr. Prabhat Memorial Hiramati Hospital</strong>CompensationandPerformance ReviewPolicy.&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Rules and Regulations of the Company:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>Your appointment will be governed by the policies, rules, regulations, practices, processes and procedures of</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Dr. Prabhat Memorial Hiramati Hospital</span></strong><span style=''>as applicable to you and the changes therein from time to time.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Compliance to all clauses:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>You will be required to fulfill all the terms and conditions mentioned in this letter of appointment. Any failure to fulfill any term and /or condition would entitle <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>in withdrawing this association at its sole discretion.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Retirement:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>You will retire from the services of the Company on reaching your 60th birthday as per the proof of age submitted by you at the time of joining.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+
+                                </div>
+                                <div class="page-break">
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Medical Certificate of Fitness:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>As per the Employee Health Policy, you are required to submit your Medical Certificate of Fitness (in the formatprescribed by <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>), issued by a registered medical practitioner having aminimum qualification of MBBS,in the HR Department.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style='color:black;'>BackgroundCheck:</span></strong></p>
+                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:115%;font-size:13px;text-align:justify;'><span style=''>As part of our joining process, we would be conducting reference checks and credentialing for you with your previous employers and educational institutes.&nbsp;</span><span style=''>Our Company or an agency will check the credentials specified by you in the application form. The process is normally completed within one-month post acceptance of this offer by you. Verification of your last employment will be initiated only post you are released. Your association will be subject to a positive clearance of your background check<span style="color:red;">.&nbsp;</span>If at any stage in future it comes to light that any of the information furnished by you is incorrect or any relevant information has been withheld, then the agreement shall stand null &amp; void without notice.&nbsp;</span></p>
+                                    <p style='font-size:13px;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Submission of Documents:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>For a convenient joining process, the joining documents as mentioned in Annexure &ndash; III should be submitted within 5 days of Offer Acceptance after due verification against originals.&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Data Privacy:</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>Your personal data collected and developed during recruitment process will be processed in accordance with the <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>Data Privacy Policy. The personal data referred therein are details related to contact, family, education, personal identifiers issued by government, social profile, background references, previous employment and experience, medical history, skillset, proficiency and certifications, job profile and your career aspirations.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>It will be processed for various organizational purposes such as recruitment, onboarding, background check, project assignment, performance management, job rotation, career development including at leadership level, diversity and inclusion initiatives, global mobility, wellness program, statutory and legal requirements and specific organizational initiatives in force during your tenure in <strong>Dr. Prabhat Memorial Hiramati Hospital</strong><span style="color:red;">.</span></span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style='color:#00B0F0;'>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>After you join <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>, there would be more sets of Personal Information (PI) attributes processed for various legitimate purposes. All of it will beprocessed with compliance to applicable laws and the <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>Data Privacy Policy. In some scenarios of your PI processing, you will be provided with appropriate notice and/or explicit consent might be obtained from time to time.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>For the purposes mentioned above, your required PI may be shared with specific vendor organizations who provide services to <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>, e.g. background check, health insurance, counselling, travel, transport and payroll services, associate engagement activities, financial and taxation services.</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:normal;font-size:13px;text-align:justify;'><span style=''>Your remuneration and service terms are confidential between you and the organization and you are obliged to comply in maintaining absolute secrecy to the terms and conditions. Payment of all remuneration will be subjected to policies, rules and regulations of the Company, as applicable from time to time.</span></p>
+                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:normal;font-size:13px;text-align:justify;'><span style=''>Kindly sign and return to us the photocopy of this letter and Annexures as your acceptance.</span></p>
+                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:normal;font-size:13px;text-align:justify;'><span style=''>We warmly welcome you to our family.&nbsp;</span></p>
+                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;font-size:13px;text-align:justify;'><span style='line-height:115%;'>Wishing you all the best,</span></p>
+                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;font-size:13px;text-align:justify;'><span style='line-height:115%;'>Yours sincerely,</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>For Dr. Prabhat Memorial Hiramati Hospital</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                    <p style='font-size:14px;'><strong><span style='color:red;'>&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;(Name)&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;(Name) &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;(Designation)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;(Designation)&nbsp; &nbsp; &nbsp;</span></strong><strong><span style=''>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></strong></p>
+                                </div>
+
+                                <div class="page-break">
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+                                    <p> &nbsp; </p>
+
+                                    <p style='font-size:13px;text-align:center;'><strong><span style=''>Annexure I</span></strong></p>
+                                    <p style='font-size:13px;text-align:center;'><strong><u><span style='color:#004A82;'>COMPENSATION</span></u></strong></p>
+                                    <h1 style='font-size:18px;'><span style="color:#004A82;">&nbsp;</span></h1>
+                                    <h1 style='font-size:18px;'><span style="color:gray;font-style:italic;"><span style="color:windowtext;">Name:&nbsp; @ViewBag.NameTitle @emp.Employee_Name</span></span></h1>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Designation: @ViewBag.Designation</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Department:&nbsp; @ViewBag.Department</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>w.e.f :</span></strong></p>
+
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Compensation Details:</span></strong></p>
+
+                                    <table id="tbl_sal" style="border: none;width:322.45pt;margin-left:86.25pt;border-collapse:collapse;">
+                                        <thead>
+                                            <tr>
+                                                <td style="width: 214.55pt;border: 1pt solid windowtext;padding: 0cm 5.4pt;height: 13.1pt;vertical-align: top;">
+                                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:normal;font-size:13px;text-align:center;'><strong><span style='color:black;'>Components</span></strong></p>
+                                                </td>
+                                                <td style="width: 107.9pt;border-top: 1pt solid windowtext;border-right: 1pt solid windowtext;border-bottom: 1pt solid windowtext;border-image: initial;border-left: none;padding: 0cm 5.4pt;height: 13.1pt;vertical-align: top;">
+                                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:normal;font-size:13px;text-align:center;'><strong><span style='color:black;'>Monthly (Rs.)</span></strong></p>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                    <script>
+                                   var tempDiv = document.createElement('div');
+                                   tempDiv.innerHTML = '@emp.income_heads';
+                                    var income_heads = JSON.parse(tempDiv.textContent)
+                                       var tempDiv2 = document.createElement('div');
+                                   tempDiv2.innerHTML = '@emp.deduction_heads';
+                                   var deduction_heads = JSON.parse(tempDiv2.textContent)
+                                    var t = $('#tbl_sal tbody');
+                                    t.empty();
+
+                                    var gross = 0;
+                                    var lst = [];
+                                    $.each(income_heads, function (index, v) {
+                                        lst.push({ head: v.IncomeHead, value: v.inc, bold: false });
+                                        gross += v.inc
+                                    });
+                                    lst.push({ head: 'Gross', value: gross, bold: true });
+                                    lst.push({ head: '', value: '', bold: false });
+
+                                    lst.push({ head: 'Employer’s Contribution', value: '', bold: true });
+                                    var empr = 0;
+                                    $.each(deduction_heads, function (index, v) {
+                                        if (v.deduct_emp > 0 || v.DeductionType=='PF') {
+                                            lst.push({ head: v.DeductionDesc, value: v.deduct_emp, bold: false });
+                                            empr += v.deduct_emp
+                                        }
+
+                                    });
+                                    lst.push({ head: 'Total Employer’s Contribution', value: empr, bold: true });
+                                    lst.push({ head: '*TI', value: '', bold: true });
+                                    lst.push({ head: '', value: '', bold: false });
+                                    lst.push({ head: 'Deduction', value: '', bold: true });
+                                    var deduct = 0;
+                                    $.each(deduction_heads, function (index, v) {
+
+                                            lst.push({ head: v.DeductionDesc, value: v.deduct, bold: false });
+                                            deduct += v.deduct
+
+
+                                    });
+                                    lst.push({ head: 'Total Deduction', value: deduct, bold: true });
+                                    lst.push({ head: 'Net in hand', value: gross-deduct, bold: true });
+                                    $.each(lst, function (index, v) {
+
+                                        if (v.bold) {
+                                            t.append(` <tr>
+                                            <td style="width: 214.55pt;border-right: 1pt solid windowtext;border-bottom: 1pt solid windowtext;border-left: 1pt solid windowtext;border-image: initial;border-top: none;padding: 0cm 5.4pt;height: 13.1pt;vertical-align: top;">
+                                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:  normal;font-size:13px;'><strong><span style='color:black;'>${v.head}</span></strong></p>
+                                            </td>
+                                            <td style="width: 107.9pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;height: 13.1pt;vertical-align: top;">
+                                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:normal;font-size:13px;text-align:right;'><strong><span style='color:black;'>&nbsp; ${v.value}</span></strong></p>
+                                            </td>
+                                        </tr>`);
+                                        }
+                                        else {
+                                            t.append(` <tr>
+                                            <td style="width: 214.55pt;border-right: 1pt solid windowtext;border-bottom: 1pt solid windowtext;border-left: 1pt solid windowtext;border-image: initial;border-top: none;padding: 0cm 5.4pt;height: 13.1pt;vertical-align: top;">
+                                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:  normal;font-size:13px;'><span style='color:black;'>${v.head}</span></p>
+                                            </td>
+                                            <td style="width: 107.9pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;height: 13.1pt;vertical-align: top;">
+                                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:.0001pt;margin-left:0cm;line-height:normal;font-size:13px;text-align:right;'><span style='color:black;'>&nbsp; ${v.value}</span></p>
+                                            </td>
+                                        </tr>`);
+                                        }
+                                   });
+
+
+                                    </script>
+                                    <p style='font-size:13px;margin-left:36.0pt;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>* TI (Total Investment): Rupees &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip; only per month for full month of working.</span></strong></p>
+                                    <p style='font-size:13px;margin-left:36.0pt;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>Note:</span></strong></p>
+                                    <ul style="list-style-type: disc;margin-left:25.450000000000003px;">
+                                        <li><span style='color:black;'>PT, TDS and such other statutory deductions would be deducted as per applicable norms.</span></li>
+                                        <li><span style=''>PF &amp; ESI will be applicable as per the applicable norms. Once the Company will get the EPF &amp; ESIC registration under <span style="background:white;">Employees&apos; Provident Funds &amp; Miscellaneous Provision <em>Act</em>, 1952 and Employees State Insurance <em>Act</em>, 1948, t</span>he contribution against EPF, EPS &amp; ESI will be adjusted with your TI as mentioned above.</span></li>
+                                        <li><span style='color:black;'>In addition to the above mentioned&nbsp;</span><span style=''>professional fee</span><span style='font-size:10.0pt;color:black;'>, you shall also be providing a shared accommodation facility at company&rsquo;s guest house.</span></li>
+                                        <li><span style=''>In case you are required to travel for hospital&rsquo;s work, the company will make appropriate arrangements, or you will be reimbursed expenses as permissible under the rules of the company.</span></li>
+                                    </ul>
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+
+                                    <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                    <p style='font-size:14px;'><strong><span style='color:red;'>&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;(Name)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;(Name) &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;(Designation)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;(Designation)&nbsp; &nbsp; &nbsp;</span></strong><strong><span style=''>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></strong></p>
+                                    <p style='font-size:13px;'><strong><span style=''>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></strong></p>
+                                    <p style='font-size:13px;text-align:justify;'><strong><span style='font-size:12px;'>Note:&nbsp;</span></strong><span style='font-size:12px;'>The above details are confidential and the same should not be disclosed / discussed. The Organization follows a fair and equitable policy for&nbsp;salary details;&nbsp;however a variation may exist due to varied educational qualifications, skill sets, time spent with the Organization, performance, etc., and the same is not open to negotiation.</span></p>
+
+
+                                </div>
+
+                                <p> &nbsp; </p>
+                                <p> &nbsp; </p>
+                                <p> &nbsp; </p>
+                                <p> &nbsp; </p>
+                                <p> &nbsp; </p>
+                                <p> &nbsp; </p>
+
+
+                                <p style='font-size:13px;text-align:center;'><strong><span style=''>Annexure II</span></strong></p>
+                                <p style='font-size:13px;text-align:center;'><strong><u><span style='color:#0070C0;'>OTHERBENEFITS</span></u></strong></p>
+                                <p style='font-size:13px;text-align:center;'><strong><span style=''>(For Nursing, Paramedics &amp; Support Staff)</span></strong></p>
+                                <p style='font-size:13px;text-align:justify;'><strong><em><span style=''>&nbsp;</span></em></strong></p>
+                                <p style='font-size:13px;text-align:justify;'><strong><span style=''>Employees&rsquo; Health BenefitScheme:</span></strong></p>
+                                <ul style="list-style-type: disc;margin-left:26px;">
+                                    <li><span style=''>Being an employee of <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>you will be eligible for Employees&rsquo; Health BenefitScheme.&nbsp;</span></li>
+                                    <li><span style=''>All staff members &amp; their dependents (parents, spouse and dependent children) are eligible for confessional treatment at <strong>Dr. Prabhat Memorial Hiramati Hospital</strong>.</span></li>
+                                </ul>
+                                <p style='font-size:13px;margin-left:36.0pt;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                <p style='font-size:13px;text-align:justify;'><strong><span style=''>ProvidentFund:</span></strong></p>
+                                <ul style="list-style-type: disc;margin-left:26px;">
+                                    <li><span style=''>You will be a member of the Provident Fund as per the provisions under &ldquo;TheEmployees Provident Fund (EPF) and Miscellaneous Provisions Act, 1952&rdquo;, andthecontribute&nbsp;details towards EPF has been mentioned on your Compensation details.&nbsp;</span></li>
+                                    <li><span style='font-size:10.0pt;'>Tax exception can be claimed for PF amount deposited u/s &ndash; 80C. &nbsp;</span></li>
+                                    <li><span style=''>You are required to submit your Universal Account Number (UAN), if any, issued by your previous employer on the Declaration Form (Form 9) so as to link your UAN with DRL PF / Pension account.</span></li>
+                                </ul>
+                                <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                <p style='font-size:13px;text-align:justify;'><strong><span style=''>Employees&apos;PensionScheme:</span></strong></p>
+                                <div style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;font-size:13px;'>
+                                    <ul style="margin-bottom:0cm;list-style-type: disc;margin-left:26px;">
+                                        <li style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;font-size:13px;'><span style=''>Your enrolment under the Employees&rsquo; Pension Scheme (EPS) will based on thedetails you provide under the Declaration Form (Form 9) at the time ofjoiningDRL Multispecialty Hospital.</span></li>
+                                    </ul>
+                                </div>
+                                <p style='font-size:13px;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                <p style='font-size:13px;text-align:justify;'><strong><span style=''>ESIC </span></strong></p>
+                                <ul style="list-style-type: disc;margin-left:26px;">
+                                    <li><span style=''>As per the Employees&rsquo; State Insurance (ESIC) Act, all employees whose Gross is less than &amp; equal to Rs.21000/- per month come under the preview of the act andthecontribute&nbsp;details towards ESI has been mentioned on your Compensation details.&nbsp;</span></li>
+                                    <li><span style='font-size:10.0pt;'>Eligible employee may avail Medical Benefit, Sickness Benefit, Maternity Benefit, Disablement Benefit, Un-employment Allowances &amp; Dependents&rsquo; Benefit under ESIC.</span></li>
+                                </ul>
+                                <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+                                <p style='font-size:13px;text-align:justify;'><strong><span style=''>Gratuity&nbsp;</span></strong></p>
+                                <div style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;font-size:13px;'>
+                                    <ul style="margin-bottom:0cm;list-style-type: disc;margin-left:26px;">
+                                        <li style='margin-top:0cm;margin-right:0cm;margin-bottom:10.0pt;margin-left:0cm;line-height:115%;font-size:13px;'><span style=''>You will be entitled to gratuity as per the provisions of the Gratuity Act 1972. Staff members who complete a continuous service of five years or more would are eligible for gratuity as per the Payment of Gratuity Act.</span></li>
+                                    </ul>
+                                </div>
+                                <p style='font-size:13px;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                <p style='font-size:13px;text-align:justify;'><strong><span style=''>Holidays</span></strong></p>
+                                <ul style="list-style-type: disc;margin-left:26px;">
+                                    <li><span style='font-size:10.0pt;'>PH &amp; RH would be applicable&nbsp;</span><span style=''>for all regular employee, which will be released in every calendar year.&nbsp;</span></li>
+                                    <li><span style=''>RH can be availed only after completion of three months from your date of joining.&nbsp;</span></li>
+                                </ul>
+                                <p style='font-size:13px;margin-left:36.0pt;text-align:justify;'><strong><span style=''>&nbsp;</span></strong></p>
+                                <p style='font-size:13px;text-align:justify;'><strong><span style=''>Leave</span></strong></p>
+                                <ul class="decimal_type" style="list-style-type: disc;margin-left:26px;">
+                                    <li><span style='font-size:10.0pt;color:red;'>You are eligible for leave benefit under&nbsp;</span><strong><span style=''>Dr. Prabhat Memorial Hiramati Hospital</span></strong><span style="font-size:10.0pt;color:red;">&nbsp;leave policy. &nbsp;Leave is a privilege which can be availed only post necessary approval. Total 21 PL, 12 CL &amp; 9 SL&nbsp;</span><span style='font-size:10.0pt;color:red;'>to be credited in a FY on pro rata basis</span><span style='color:red;'>.&nbsp;</span></li>
+                                    <li><span style='font-size:10.0pt;color:red;'>3 CL can be availed at a stretch post completion of three months from joining. Un-availed CL will be lapsed at the end of every FY.</span></li>
+                                    <li><span style='font-size:10.0pt;color:red;'>Min. 4 PL &amp; maximum 21 PL can be availed at a stretch post completion of six months from joining. Upto 42 unvailed PL can be en-cashable at the time of full and final settlement. However, it will be applicable for the regular employees&rsquo; (other than Clinicians) only post completion of one year of service.</span></li>
+                                    <li><span style='font-size:10.0pt;color:red;'>Upto 18 SL can be accumulated at a stretch. However, Medical certificate &amp; Fitness Certificate is mandatory to regularize more than 3 SL.&nbsp;</span></li>
+                                    <li><span style='font-size:10.0pt;color:red;'>Women employees are eligible to avail maternity leave (ML) of twenty-six weeks as per the Maternity Benefit Act,1961 &amp; Maternity Benefit (Amendment) Act. For more details on the benefits and eligibility, please refer to DRL Leave Policy</span></li>
+                                </ul>
+                                <p style='font-size:13px;text-align:justify;'><strong><span style=''>Attendance&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></strong></p>
+                                <ul style="list-style-type: disc;margin-left:26px;">
+                                    <li><span style=''>You are required to record your attendance in the biometric machine / signing in the attendance register provided or as advised from time to time by HR Dept.</span></li>
+                                    <li><span style=''>Absence needs to be informed to the HOD, and prior permission sought from him/her, preferably in advance.&nbsp;</span></li>
+                                </ul>
+                                <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                <p style='font-size:13px;text-align:justify;'><span style=''>&nbsp;</span></p>
+                                <p> &nbsp; </p>
+                                <p> &nbsp; </p>
+                                <p> &nbsp; </p>
+                                <p style='font-size:13px;text-align:center;'><strong><span style=''>Annexure III</span></strong></p>
+                                <p style='font-size:13px;text-align:center;'><strong><u><span style='color:#0070C0;'>ListofJoiningDocuments</span></u></strong></p>
+                                <p style='font-size:13px;text-align:center;'><span style=''>&nbsp;</span></p>
+                                <ol style="list-style-type: decimal;margin-left:22.35px;">
+                                    <li><strong><span style=''>Address Proof&nbsp;</span></strong><span style='color:black;font-size:10.0pt;color:black;'>(Ration card/ Landline / Telephonebill/ Electricitybill/ HouseLeaseAgreement).</span></li>
+                                </ol>
+                                <ul style="list-style-type: disc;margin-left:58.349999999999994px;">
+                                    <li><span style='font-size:10.0pt;color:black;'>Present and Permanent Address Proof to be attached (If different then provide separate proof).</span></li>
+                                    <li><span style='font-size:10.0pt;color:black;'>Mobile phone bill not acceptable as Address Proof.</span></li>
+                                </ul>
+                                <ol style="list-style-type: undefined;margin-left:22.35px;">
+                                    <li><strong><span style="font-size:10.0pt;">IdentifyProof</span></strong><span style=''>(Passport/ Voter&rsquo;sID/ PANcard/Driving License)</span></li>
+                                    <li><strong><span style="font-size:10.0pt;">KYC documents&nbsp;</span></strong><span style=''>(Aadhar<strong>,&nbsp;</strong>PANcard, Bank Passbook)</span></li>
+                                    <li>
+                                        <strong><span style=''>PreviousEmploymentProof:</span></strong>
+                                        <ul style="list-style-type: disc;">
+                                            <li><span style=''>Experience Certificate and Relieving Letter from all previous employer(s).&nbsp;</span></li>
+                                            <li><span style=''>(It is mandatory that you submit the relieving and experience certificates from your current employer within 30 days of your joining).</span></li>
+                                            <li><span style=''>Resignation acceptance letter from current employer.&nbsp;</span></li>
+                                            <li><span style=''>Last3 months&rsquo; Salaryslips.</span></li>
+                                            <li><span style=''>Last 3 months&rsquo; bank statement</span></li>
+                                        </ul>
+                                    </li>
+                                    <li><strong><span style="font-size:10.0pt;">Educational Certificates</span></strong><span style=''>:&nbsp;</span></li>
+                                </ol>
+                                <ul style="list-style-type: disc;margin-left:62px;">
+                                    <li><span style=''>All educational Certificates/ Provisional Degree Certificate &amp;</span></li>
+                                    <li><span style=''>Highest Degree Mark sheets for all semesters.</span></li>
+                                    <li><span style=''>Additional Certification course or Training / Fellowship certificate (If any)</span></li>
+                                </ul>
+                                <ol style="list-style-type: undefined;margin-left:22.35px;">
+                                    <li><strong><span style="font-size:10.0pt;">Registration/ License:&nbsp;</span></strong><span style=''>Updated Registration certificate (As applicable for Doctors, Nurses &amp; Technicians / Updated License (As applicable for Pharmacists)</span></li>
+                                    <li><strong><span style="font-size:10.0pt;">BirthCertificate&nbsp;</span></strong></li>
+                                    <li><strong><span style="font-size:10.0pt;">Professional Indemnity&nbsp;</span></strong></li>
+                                    <li><strong><span style="font-size:10.0pt;">Four passport size&nbsp;coloured&nbsp;photographs</span></strong></li>
+                                </ol>
+                               
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+

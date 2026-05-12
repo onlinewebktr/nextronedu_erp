@@ -1,0 +1,39 @@
+﻿ @font-face
+{
+	font-family: Rupee Foradian;
+	src: url(Rupee_Foradian.ttf);
+}
+.font-rupee
+{
+	font-family: Rupee Foradian;
+}
+
+
+@font-face
+{
+	font-family: GreatVibes;
+	src: url('GreatVibes-Regular.ttf');
+    
+}
+.font-GreatVibes
+{
+	font-family: GreatVibes;
+	
+}
+
+
+
+  @font-face {
+            font-family: 'Kruti_Dev_010';
+            src: url('Kruti_Dev_010.ttf');
+        }
+        
+
+        .font_hindi {
+            font-family: Kruti_Dev_010;
+             
+        }
+         .font_hindi_normal {
+            font-family: Kruti_Dev_010;
+            height:22px;
+        }

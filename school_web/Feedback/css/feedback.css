@@ -1,0 +1,732 @@
+﻿
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+input[type=radio] {
+    background: #000;
+    border-style: none;
+    position: relative;
+    top: 8.6px;
+    left: 0px;
+    margin: -16px 8px 0px 0px;
+    z-index: 9999;
+    width: 30px;
+}
+
+.d-grid {
+    display: grid;
+}
+
+.d-flex {
+    display: flex;
+    display: -webkit-flex;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/*button,
+input,
+select {
+    -webkit-appearance: none;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+}*/
+
+button,
+.btn,
+select {
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    color: #666;
+    font-size: 18px;
+    line-height: 25px;
+}
+
+.p-relative {
+    position: relative;
+}
+
+.p-absolute {
+    position: absolute;
+}
+
+.p-fixed {
+    position: fixed;
+}
+
+.p-sticky {
+    position: sticky;
+}
+
+.input1 {
+    border: 2px solid #e3e3e3 !important;
+    color: #777 !important;
+    background: #fff !important;
+    font-size: 17px !important;
+    line-height: 32px !important;
+    padding: 4px 10px !important;
+    margin-bottom: 10px !important;
+    border-radius: 11px !important;
+    outline: none !important;
+    width: 100% !important;
+}
+
+
+
+.btn,
+button,
+.actionbg,
+input {
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 4px;
+    -ms-border-radius: 4px;
+}
+
+    .btn:hover,
+    button:hover {
+        transition: 0.5s ease;
+        -webkit-transition: 0.5s ease;
+        -o-transition: 0.5s ease;
+        -ms-transition: 0.5s ease;
+        -moz-transition: 0.5s ease;
+    }
+
+/*-- wrapper start --*/
+.wrapper {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/*---rogin radio/*/
+.loginull {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 10px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    text-align: center;
+}
+
+.loginull_li {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    list-style-type: none;
+    display: inline-block;
+}
+
+.loginull_radio {
+    height: auto !important;
+    width: 150px;
+    margin: 0px 0px 0px 0px !important;
+    padding: 0px 0px 0px 0px !important;
+    display: inline-flex;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: left;
+    float: left;
+}
+
+
+
+@media (min-width: 576px) {
+    .wrapper {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .wrapper {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .wrapper {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .wrapper {
+        max-width: 1140px;
+    }
+}
+
+.wrapper-full {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/*-- //wrapper start --*/
+
+/*-- form styling --*/
+.intslogin-form .logo {
+    text-align: center;
+}
+
+    .intslogin-form .logo a.brand-logo {
+        display: inline-block;
+        text-align: center;
+        font-size: 35px;
+        line-height: 1.1em;
+        font-weight: 700;
+        color: #fff;
+        text-transform: capitalize;
+    }
+
+.intslogin-form h1 {
+    font-size: 50px;
+    line-height: 1.1em;
+    font-weight: 700;
+    color: #3f3a64;
+}
+
+.intslogin-form {
+    position: relative;
+    z-index: 0;
+    padding: 30px 0px;
+    display: grid;
+    align-items: center;
+    min-height: 100vh;
+    background: url('../images/banner1.jpg') no-repeat center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    -ms-background-size: cover;
+}
+
+    .intslogin-form:before {
+        content: "";
+        background: #0000003b;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: -1;
+    }
+
+    .intslogin-form .pos-relative {
+        position: relative;
+    }
+
+    .intslogin-form p.copy-footer-29 {
+        color: #eee;
+    }
+
+        .intslogin-form p.copy-footer-29 a {
+            color: #fff;
+        }
+
+            .intslogin-form p.copy-footer-29 a:hover {
+                color: #fbbb92;
+            }
+
+    .intslogin-form h2 {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+.workinghny-block-grid {
+    border-radius: 5px;
+    box-shadow: 2px 9px 49px -17px rgb(0 0 0 / 10%);
+    height: auto;
+    max-width: 956px;
+    width: 100%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 40px 35px 60px 35px;
+}
+
+.intslogin-form .login-form-content {
+    padding-top: 2em;
+}
+
+.intslogin-form input {
+    border: 2px solid #e3e3e3;
+    color: #777;
+    background: #fff;
+    font-size: 17px;
+    line-height: 28px;
+    padding: 12px 26px;
+    margin-bottom: 4px;
+    border-radius: 35px;
+    outline: none;
+}
+
+    .intslogin-form input:focus {
+        border: 2px solid #f1c6aa;
+        box-shadow: none;
+    }
+
+.intslogin-form .btn-style {
+    font-size: 18px;
+    color: #fff;
+    width: 100%;
+    background: #ff9e60;
+    border: none;
+    padding: 15px 20px;
+    font-weight: 700;
+    border-radius: 35px;
+    transition: .3s ease;
+    -webkit-transition: .3s ease;
+    -moz-transition: .3s ease;
+    -ms-transition: .3s ease;
+    -o-transition: .3s ease;
+    margin: 8px 0px 11px 0px;
+}
+
+    .intslogin-form .btn-style:hover {
+        background: #fdb485;
+        transform: translateY(-3px);
+    }
+
+.intslogin-form p.already,
+.intslogin-form p.already a {
+    font-size: 17px;
+    line-height: 25px;
+    color: #495057;
+    margin: 25px 0 0;
+    text-align: center;
+}
+
+.intslogin-form p.remember {
+    color: #495057;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 20px;
+}
+
+.intslogin-form p.already a {
+    color: #495057;
+    font-weight: 700;
+}
+
+    .intslogin-form p.already a:hover {
+        color: #fbbb92;
+    }
+
+.intslogin-form .check-remaind input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.intslogin-form .check-remaind {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+    .intslogin-form .check-remaind input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+        padding: 0;
+        margin: 0;
+    }
+
+.intslogin-form .checkmark {
+    position: absolute;
+    top: 0px;
+    left: 13px;
+    height: 18px;
+    width: 17px;
+    background-color: #ff9e60;
+    border-radius: 4px;
+}
+
+.intslogin-form .check-remaind:hover input ~ .checkmark {
+    background-color: #fbbb92;
+}
+
+.intslogin-form .check-remaind input:checked ~ .checkmark {
+    background-color: #fbbb92;
+}
+
+.intslogin-form .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.intslogin-form .check-remaind input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.intslogin-form .check-remaind .checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* -- placeholder --*/
+::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
+    color: #777;
+}
+
+::-moz-placeholder {
+    /* Firefox 19+ */
+    color: #777;
+}
+
+:-ms-input-placeholder {
+    /* IE 10+ */
+    color: #777;
+}
+
+:-moz-placeholder {
+    /* Firefox 18- */
+    color: #777;
+}
+/* -- placeholder --*/
+
+
+.copyright text-center {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.copy-footer-29 {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    color: #eee;
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.forgotpass {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    text-align: center;
+}
+
+    .forgotpass li {
+        margin: 0px 0px 0px 0px;
+        padding: 0px 5px 0px 5px;
+        list-style-type: none;
+        display: inline-block;
+    }
+
+        .forgotpass li a {
+            height: auto;
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+            float: left;
+            color: #333;
+            font-size: 13px;
+            line-height: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            transform: translateY(0px);
+        }
+
+            .forgotpass li a:hover {
+                color: #f00;
+            }
+
+.logoschool {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 30px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    text-align: center;
+}
+
+.mainlogo {
+    height: 120px;
+    width: 130px;
+    margin: 0px auto;
+    background: #fff;
+}
+
+.schoolnamenn {
+    height: auto;
+    width: 100%;
+    margin: 9px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    text-align: center !important;
+    font-size: 20px !important;
+    line-height: 25px !important;
+    font-weight: 700 !important;
+    color: #000000 !important;
+}
+
+.checkboxx {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+}
+
+.loginull {
+    height: auto;
+    width: 100%;
+    margin: 0px 0px 10px 0px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    text-align: center;
+}
+
+    .loginull li {
+        margin: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 0px;
+        list-style-type: none;
+        display: inline-block;
+    }
+
+
+
+.otp-time-remaining-dv {
+    margin: 0;
+    padding: 0px;
+    width: 70%;
+    float: left;
+}
+
+.otp-time-remaining-dv-p {
+    margin: 0;
+    padding: 0px;
+    width: 100%;
+    float: left;
+    font-size: 15px;
+    color: #838181;
+}
+
+    .otp-time-remaining-dv-p span {
+        margin: 0;
+        padding: 0px;
+    }
+
+.otp-resnd-btn-dv {
+    margin: 0;
+    padding: 0px;
+    width: 30%;
+    float: left;
+}
+
+.resend-otp-btn {
+    margin: 7px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    font-size: 15px;
+    float: right;
+    font-weight: 500;
+    line-height: 12px;
+    background: #ffffff;
+    color: #a77b00;
+    border-bottom: 1px solid #a77b00;
+    transition: .3s ease;
+    -webkit-transition: .3s ease;
+    -moz-transition: .3s ease;
+    -ms-transition: .3s ease;
+    -o-transition: .3s ease;
+}
+
+/*.resend-otp-btn:hover {
+        background: #088e95;
+        color: #fff;
+        transform: translateY(-2px);
+    }*/
+
+.desabledClass {
+    background: #ffffff;
+    color: #afafaf;
+    border-bottom: 1px solid #b3b3b3;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.enabledClass {
+    background: #ffffff;
+    color: #a77b00;
+    border-bottom: 1px solid #a77b00;
+}
+/*-- responsive design --*/
+@media (max-width: 992px) {
+    .intslogin-form .workinghny-block-grid {
+        grid-template-columns: 1fr;
+        grid-gap: 10px;
+        width: 100%;
+    }
+
+    .loginull_radio {
+        width: 80px !important;
+    }
+
+    .intslogin-form .login-form-content {
+        padding: 0em 0em 2em 0;
+    }
+
+    .workinghny-left-img {
+        order: 2;
+    }
+
+    .intslogin-form .logo a.brand-logo {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+
+    .intslogin-form {
+        height: auto;
+    }
+
+    .workinghny-block-grid {
+        padding: 40px 15px 60px 15px !important;
+    }
+
+    .intslogin-form p.remember {
+        font-size: 12px !important;
+    }
+}
+
+@media (max-width: 667px) {
+    .intslogin-form .align-end {
+        padding: 0em;
+    }
+}
+
+@media (max-width: 480px) {
+    .intslogin-form .logo a.brand-logo {
+        font-size: 35px;
+    }
+
+    .intslogin-form h2 {
+        font-size: 22px;
+    }
+
+    .copy-footer-29 {
+        font-size: 13px !important;
+    }
+}
+
+@media (max-width: 415px) {
+    .intslogin-form .copyright {
+        margin-top: 30px;
+    }
+}
+
+.notificationpan {
+    display: none;
+    top: auto;
+    width: 100%;
+    background-color: #ff2323;
+    position: fixed;
+    bottom: 200px;
+    right: 10px;
+    padding: 6px 7px;
+    width: 375px;
+    height: auto;
+    -webkit-border-radius: 9px 9px 9px 9px;
+    border-radius: 2px;
+    border: 1px solid #000;
+    box-shadow: 0px 3px 14px 1px rgb(87 87 87 / 48%);
+}
+
+.closenotificationpan {
+    position: absolute;
+    margin: 0px 0px 0px 0px;
+    top: 6px;
+    right: 6px;
+    cursor: pointer;
+}
+
+#notification {
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+    z-index: 999999;
+}

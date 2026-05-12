@@ -1,0 +1,267 @@
+﻿
+@{
+    Layout = null;
+    HR_Employee_Master emp = ViewBag.emp;
+}
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Experience Certificate</title>
+    <link href="~/Payroll/print/certificate.css" rel="stylesheet" />
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+
+    <style>
+
+
+        .page-header, .page-footer img {
+            display: none;
+        }
+
+        .page-header-space {
+            height: 100px;
+        }
+
+        .page-footer, .page-footer-space {
+            margin-top: 80px;
+            /*height: 100px;*/
+        }
+
+        .page-footer {
+            position: fixed;
+            bottom: 0px;
+            width: 800px;
+            margin: 10px 0px 0px 0px;
+        }
+
+        .page-header {
+            position: fixed;
+            top: 0mm;
+            /*width: 100%;*/
+            width: 800px;
+        }
+
+        .page {
+            page-break-after: always;
+            counter-increment: page;
+        }
+
+        /*.page:before {
+                display: block;
+                text-align: right;
+                content: counter(page);
+            }*/
+
+        @@page {
+            margin: 10mm;
+        }
+
+        @@media print {
+            /*  thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }*/
+
+            button {
+                display: none;
+            }
+
+            .noPrint {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            .page-header-space {
+                height: 100px;
+            }
+
+            .page-header, .page-footer img {
+                display: block;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        function printit() {
+            if (window.print) {
+                window.print();
+            }
+        }
+    </script>
+    <script>
+        history.pushState(null, null, window.location.href);
+        history.back();
+        window.onpopstate = () => history.forward();
+    </script>
+</head>
+<body>
+    <form id="form1">
+        <div class="invoice-sec">
+
+            <div class="prnt-btn-sec noPrint">
+                <div class="prnt-btn-wpr">
+                    <div class="print-btn-sec">
+                        <div class="noPrint" style="float: left; ">
+                            <a href="../../hr/home" class="back-btn">
+                            </a>
+                        </div>
+                        <div class="noPrint" style="float: right">
+                            <button ID="print1" onclick="printit()" class="print-btn"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tblPrintIQ">
+                <div class="invoice-inr-sec">
+                    <div class="invoice-wpr">
+                        <div class="certificate-wpr">
+                            <div style="font-family: 'Times New Roman'; font-size: 15px; ">
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                @{
+                                                var firm_id = emp.firm_id;
+                                                if (My.getFirmDetails(firm_id).firm_name.ToUpper() == "DR PRABHAT MEMORIAL HIRAMATI HOSPITAL")
+                                                {
+                                    <table class="data-Table">
+                                        
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="page" style="float: left; margin: 0px; padding: 0px; width: 100%;">
+
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-4">
+
+                                                            <table style="width:100%">
+
+                                                                <tr>
+
+                                                                    <td style="text-align:start">
+                                                                        <span style="font-weight: bold; font-size: 16px">DPMH/HR-Off/@emp.Id.ToString("0000") </span>
+
+                                                                    </td>
+                                                                    <td style="text-align:end">
+                                                                        <span style="font-weight: bold; font-size: 16px"> Date: @My.date </span>
+
+                                                                    </td>
+
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+
+                                                        <br />
+                                                        <br />
+
+                                                        <span class="myhead">Experience Letter</span>
+                                                        <br />
+                                                        <br />
+                                                        <span class="myhead1">TO WHOM IT MAY CONCERN</span>
+
+                                                        <br />
+                                                        <br />
+                                                        <p><strong>Dr. Prabhat Memorial Hiramati Hospital </strong>(A unit of Caring Hands Healthcare Pvt. Ltd.) is Multi Specialty Medical centre provides advanced services in the field of Emergency Medicine, Cardiac Sciences, Orthopedic and Vascular Surgery. Equipped with state of the art Specialties with ventilator facility with N.I.C.U, dialysis unit, major & minor OT, 24X7 advanced ICU, pharmacy, laboratory and radio diagnosis along with other medical specialties.</p>
+
+
+                                                        <p>To evolve as a benchmark in quality healthcare services for the people of our country and also to demonstrate our commitment, we integrate certain fundamental values into our daily practices.</p>
+
+                                                        <p>This is to certify that <strong>@ViewBag.NameTitle @emp.Employee_Name</strong> was associated with this hospital as <strong>“@ViewBag.Designation”</strong> of the department of <strong>“@ViewBag.department”</strong> from <strong>@emp.Date_of_Joining</strong> to <strong>@My.date</strong>. </p>
+
+                                                        <p>We wish her well in all her future endeavors.</p>
+                                                        <br />
+                                                        <br />
+
+                                                        <p><strong>Authorized Signatory </strong></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td style="padding-top: 0px; padding-bottom: 0px; padding-left: 5px;">
+                                                    <!--place holder for the fixed-position footer-->
+                                                    <div id="page_footer_space" class="page-footer-space"></div>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                    }
+                                    else if (My.isHospital)
+                                    {
+                                        var his = emp.Gender.ToLower() == "male" ? "his" : "her";
+                                        var he = emp.Gender.ToLower() == "male" ? "He" : "She"; 
+                                    <h2 style="text-align:center;"><u>To whom it may concern</u></h2>
+                                    <p>
+                                        This is to certify that <strong> @ViewBag.NameTitle @emp.Employee_Name</strong> was employed with <strong> @ViewBag.firmName</strong>
+
+                                        @if (ViewBag.firmName == "DAKSH HOSPITAL")
+                                        {
+                                    <strong>, Lakhisarai, a 100-bedded multi-specialty hospital,</strong> 
+                                                                        } as <strong> @ViewBag.Designation</strong>. @he joined our esteemed organization on <strong> @emp.Date_of_Joining</strong> and contributed significantly during @his tenure.
+                                                                    </p>
+                                    <p>During @his time with <strong> @ViewBag.firmName</strong>, <strong> @ViewBag.NameTitle @emp.Employee_Name</strong> exhibited commendable dedication, professionalism, and diligence in @his responsibilities. </p>
+                                    <p>The management appreciates <strong> @ViewBag.NameTitle @emp.Employee_Name</strong> commitment to providing high-quality healthcare services and contributing to the success of our institution. @his last working day with @ViewBag.firmName was on <strong> @My.date</strong>.</p>
+                                    <br />
+                                    <br />
+                                    <p>We wish <strong> @ViewBag.NameTitle @emp.Employee_Name</strong> the best in @his future endeavours and sincerely thank him for @his valuable contributions to <strong> @ViewBag.firmName</strong>.</p>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+
+                                    <p>
+                                        HR Manager<br><br> <br> <br>
+                                        @ViewBag.firmName<br>
+                                    </p>
+                                    }
+                                    else
+                                    {
+                                    <div>
+
+                                        <p>Date: @My.date</p>
+
+                                        <h4>To whom it may concern,</h4>
+
+                                        <h3>Experience Certificate for @ViewBag.NameTitle @emp.Employee_Name </h3>
+
+                                        <p>This is to certify that @ViewBag.NameTitle @emp.Employee_Name, having served as <strong>@ViewBag.Designation</strong> in the <strong>@ViewBag.Department</strong> of <strong>@ViewBag.firmName</strong>, has been an esteemed member of our organization from @emp.Date_of_Joining, to @My.date .</p>
+
+                                        <p>During his tenure with us, @ViewBag.NameTitle @emp.Employee_Name demonstrated exceptional dedication, professionalism, and expertise in his field. He consistently showcased a commendable work ethic, contributing significantly to the company's growth and success. His innovative approaches, leadership qualities, and collaborative spirit have left an indelible mark on our projects and team dynamics.</p>
+
+                                        <p>@ViewBag.NameTitle @emp.Employee_Name has effectively undertaken various responsibilities, executed numerous projects, and has been instrumental in achieving several milestones for our organization. His commitment to excellence, coupled with his ability to adapt to changing environments and challenges, has been truly commendable.</p>
+
+                                        <p>Throughout his tenure, @ViewBag.NameTitle @emp.Employee_Name has been a valuable asset to <strong>@ViewBag.firmName</strong>, embodying our core values and contributing positively to our organizational culture. His contributions, insights, and leadership have not only benefited his department but have also enriched the broader organizational landscape.</p>
+
+                                        <p>We express our heartfelt gratitude to @ViewBag.NameTitle @emp.Employee_Name for his unwavering dedication, exceptional service, and significant contributions during his tenure with <strong>@ViewBag.firmName</strong>. As he embarks on new endeavors, we extend our best wishes for his continued success and professional growth.</p>
+
+                                        <p>We hereby acknowledge the services and achievements of @ViewBag.NameTitle @emp.Employee_Name and wish him all the very best in his future endeavors.</p>
+
+                                        <p>Warm regards,</p>
+
+                                        <p>
+                                            HR Manager<br><br> <br> <br>
+                                            @ViewBag.firmName<br>
+                                        </p>
+                                    </div>
+                                        }
+                                    } </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+

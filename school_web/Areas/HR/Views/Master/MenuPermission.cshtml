@@ -1,0 +1,223 @@
+﻿
+@{
+    ViewBag.Title = "Duty Hour Mapping";
+}
+<style>
+    .chk_enbled {
+    width : 25px;
+    height : 25px;
+    }
+</style>
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<style>
+    ul, #ul-menu {
+        list-style-type: none;
+    }
+
+    #ul-menu {
+        margin: 0;
+        padding: 0;
+    }
+
+    .box {
+        cursor: pointer;
+        -webkit-user-select: none; /* Safari 3.1+ */
+        -moz-user-select: none; /* Firefox 2+ */
+        -ms-user-select: none; /* IE 10+ */
+        user-select: none;
+    }
+
+        .box::before {
+            content: "\2610";
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+    .check-box::before {
+        content: "\2611";
+        color: dodgerblue;
+    }
+
+    .nested {
+        display: none;
+    }
+
+    .active {
+        display: block;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-11 m-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    @Html.LabelEditor("Employee", "ddl", "Employee Name", divCssClass: "col-xl-3 col-sm-6")  
+
+                </div>
+                <div class="row"> 
+                    <div class="col-lg-12 mt-0">
+                        <h4>List of Menu</h4>
+                        <div id="pnlContent">
+                            <ul id="ul-menu">
+                                 
+                            </ul>
+                        </div> 
+                    </div>  
+                </div>
+            </div>
+            <div class="card-footer d-flex">
+                <button class="btn btn-primary  me-4" id="btn-submit">Submit</button>
+                <h4 id="msg" ></h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () { 
+        var data = { type: 'get-employee' } 
+        gowithData('../../hr/data/ddl','POST', JSON.stringify({ data: data }), function (resp) {
+           
+            if (!resp.error) {
+                var ddl = $('#Employee');
+                $("#Employee option:not(:first)").remove();
+                $.each(resp.employee, function (i, item) {
+                    ddl.append($("<option>").text(item.Name).val(item.Employee_id));
+                }); 
+            }
+        });
+    });
+     
+    $('#Employee').on('change', function () {
+        
+        var Employee_Id = $('#Employee').val();
+        
+        var data = { type: 'get-menu-list', Employee_Id: Employee_Id   }
+        gowithData('../../hr/data/menu-permission', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                datalist = resp.data;
+                bind_data(); 
+            }
+        });
+    });
+    var datalist = [];
+
+    var ul = $('<ul>');
+    var h = "";
+    function bind_data() {
+        var mul = $('#ul-menu');
+        mul.empty();
+       
+        $.each(datalist, function (index, d) {
+            load_dl(d)
+        });
+       
+    }
+    function load_dl(d) {
+        if (h != d.P_name) {
+            h = d.P_name;
+            var l = $('<li>')
+            $('#ul-menu').append(l);
+            var p_chk = $('<input type="checkbox" class="chk_enbled"    id="pch_' + d.Parent_id + '">');
+            p_chk.prop('checked', false);
+            p_chk.attr('checked', d.Parent_id);
+            p_chk.on('change', function () {
+                if (p_chk.prop('checked')) {
+                    $.each(datalist, function (ind, p) {
+                        if (p.Parent_id == d.Parent_id) {
+                            $(`#ch_${p.Menu_Id}`).prop("checked", true);
+                            p.hasPermission = true;
+                        }
+                    })
+                }
+                else {
+                    $.each(datalist, function (ind, p) {
+                        if (p.Parent_id == d.Parent_id) {
+                            $(`#ch_${p.Menu_Id}`).prop("checked", false);
+                            p.hasPermission = false;
+                        }
+                    })
+                }
+            })
+            var p_lbl = $(`<span style="padding: 5px 16px;">${d.P_name}</span>`);
+            ul = $('<ul>').addClass(`nested`).attr('id', `pi_${d.Parent_id}`)
+            p_lbl.click(function () {
+                $(`#pi_${d.Parent_id}`).toggleClass("active");
+            });
+            l.append($('<div>').append(p_chk, p_lbl).css('display', 'inline-flex'), ul);
+        }
+        {
+            var checked = false;
+            if (d.hasPermission) {
+                checked = true;
+                $(`#pch_${d.Parent_id}`).prop("checked", true);
+            }
+            var li = $('<li>')
+            var chk = $('<input type="checkbox" class="chk_enbled"   id="ch_' + d.Menu_Id + '">');
+            chk.prop('checked', checked);
+            chk.on('change', function () {
+                if (chk.prop('checked')) {
+                    d.hasPermission = true;
+                    $(`#pch_${d.Parent_id}`).prop("checked", true);
+                }
+                else {
+                    d.hasPermission = false;
+                    var p_checked = false;
+                    $.each(datalist, function (ind, p) {
+                        if (p.Parent_id == d.Parent_id) {
+                            if (p.hasPermission) {
+                                p_checked = true;
+                                return false;
+                            }
+                        }
+                    })
+                    $(`#pch_${d.Parent_id}`).prop("checked", p_checked);
+                }
+
+            })
+            li.append($('<label>').append(chk, `<span style="padding: 5px 16px;">${d.Header}</span>`).css('display', 'inline-flex'));
+            ul.append(li);
+        }
+    }
+
+    $('#btn-submit').on('click', function () {
+        var Employee_Id = $('#Employee').val();
+
+        var data = { type: 'set-menupermission', Employee_Id: Employee_Id, items: JSON.stringify(datalist) }
+        $('#msg').html("Please wait...");
+        $('#msg').removeClass("d-none").removeClass("text-danger").removeClass("text-success").addClass("text-primary");
+        gowithData('../../hr/data/menu-permission', 'POST', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                alertSuccess(resp.message);
+                $('#msg').html(resp.message);
+                $('#msg').removeClass("d-none").removeClass("text-danger").addClass("text-success").removeClass("text-primary");
+            }
+            else {
+                alertError(resp.message);
+                $('#msg').html(resp.message);
+                $('#msg').removeClass("d-none").addClass("text-danger").removeClass("text-success").removeClass("text-primary");
+            }
+        });
+    })
+    //$('#tbl-list').on('change', '.chk_enbled', function () {
+
+    //    var ind = parseInt($(this).data('did'));
+    //    console.log(ind);
+    //    datalist[ind].DutyHourId = $(this).prop("checked");  
+    //})
+</script>
+
+

@@ -1,0 +1,211 @@
+﻿
+@{
+    ViewBag.Title = "attendanceDevice";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <button id="btn-ping" type="button" class="btn btn-primary me-4">Ping</button> 
+        <button id="btn-connect" type="button" class="btn btn-primary me-4">Connect</button>  
+        <button id="btn-upload" type="button" class="btn btn-primary me-4">Upload Employee Details</button>
+        <button id="btn-get-users" type="button" class="btn btn-primary me-4">Get Employee Details</button>
+        <button id="btn-get-fng" type="button" class="btn btn-primary me-4">Download Fingerprint Data Details</button>
+        <button id="btn-add-users" type="button" class="btn btn-primary me-4">Add New Admin</button> 
+        <button id="btn-del-users" type="button" class="btn btn-danger me-4">Delete Users</button>
+        <button id="btn-fetch-attendance" type="button" class="btn btn-danger me-4">Fetch Attendance</button>
+    </div>
+    <div class="col-lg-12">
+        <span id="dev_status"></span>
+    </div>
+
+    <div class="col-lg-12">
+        <span id="dev_sd"></span>
+    </div>
+    <div class="col-lg-12" id="div_data">
+         
+    </div>
+
+</div>
+
+<script>
+    $('#btn-ping').on('click', function () {
+        var data = { type: 'ping' };
+        console.log(data);
+        
+        gowithData("../../hr/data/device", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                $('#dev_status').html(resp.message);
+                alertSuccess(resp.message);
+            }
+            else {
+                alertError(resp.message);
+            }
+        });
+    });
+    $('#btn-connect').on('click', function () {
+        var data = { type: 'connect' };
+        console.log(data);
+        gowithData("../../hr/data/device", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                $('#dev_status').html(resp.message); 
+                alertSuccess(resp.message);
+            }
+            else {
+                alertError(resp.message);
+            }
+        });
+    });
+    $('#btn-add-users').on('click', function () {
+        var data = { type: 'add-admin' };
+        console.log(data);
+        gowithData("../../hr/data/device", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                $('#dev_status').html(resp.message); 
+                alertSuccess(resp.message);
+            }
+            else {
+                alertError(resp.message);
+            }
+        });
+    });
+    $('#btn-upload').on('click', function () {
+        var data = { type: 'upload-user' };
+        console.log(data);
+        Swal.fire(
+            {
+                title: 'Please wait...',
+                text: 'Uploading Employee Details to Device.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                    gowithData("../../hr/data/device", "POST", JSON.stringify({ data: data }), function (resp) {
+                        if (!resp.error) {
+                            $('#dev_status').html(resp.message);
+                            alertSuccess(resp.message);
+                        }
+                        else {
+                            alertError(resp.message);
+                        }
+                    });
+                },
+
+            })
+       
+        
+    });
+    $('#btn-fetch-attendance').on('click', function () {
+        var data = { type: 'fetch-attendance' };
+        console.log(data);
+        Swal.fire(
+            {
+                title: 'Please wait...',
+                text: 'Fetching Attendance from Device.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                    gowithData("../../hr/data/device", "POST", JSON.stringify({ data: data }), function (resp) {
+                        if (!resp.error) {
+                            $('#dev_status').html(resp.message);
+                            alertSuccess(resp.message);
+                        }
+                        else {
+                            alertError(resp.message);
+                        }
+                    });
+                },
+
+            })
+       
+        
+    });
+    $('#btn-get-users').on('click', function () {
+        var data = { type: 'get-user' };
+        console.log(data);
+        Swal.fire(
+            {
+                title: 'Please wait...',
+                text: 'Donloading Employee Details from Device.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                    gowithData("../../hr/data/device", "POST", JSON.stringify({ data: data }), function (resp) {
+                        if (!resp.error) {
+                            load_data(resp.data);
+                            $('#dev_status').html(resp.message);
+                            console.log(resp.data);
+                           
+                            alertSuccess(resp.message);
+                        }
+                        else {
+                            alertError(resp.message);
+                        }
+                    });
+                },
+
+            })
+       
+    });
+    $('#btn-get-fng').on('click', function () {
+        var data = { type: 'get-user-fngp' };
+        console.log(data);
+        Swal.fire(
+            {
+                title: 'Please wait...',
+                text: 'Donloading Employee Details with finger print.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                    gowithData("../../hr/data/device", "POST", JSON.stringify({ data: data }), function (resp) {
+                        if (!resp.error) {
+                            load_data(resp.data);
+                            $('#dev_status').html(resp.message);
+                            console.log(resp.data);
+                           
+                            alertSuccess(resp.message);
+                        }
+                        else {
+                            alertError(resp.message);
+                        }
+                    });
+                },
+
+            })
+       
+    });
+    $('#btn-del-users').on('click', function () {
+        var data = { type: 'delete-user' };
+        console.log(data);
+        gowithData("../../hr/data/device", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                $('#dev_status').html(resp.message);
+            }
+        });
+    });
+    function load_data(data) {
+        $('#div_data').empty();
+        if (data.length > 0) {
+            var table = $('<table>');
+            table.addClass("table table-bordered table-striped");
+            table.css("width", "100%");
+            var thead = $('<thead>');
+            var tbody = $('<tbody>');
+            table.append(thead);
+            table.append(tbody);
+            var d1 = data[0];
+            var keys = Object.keys(d1);
+            var tr = $('<tr>')
+            $.each(keys, function (ind, k) {
+                tr.append($('<th>').text(k));
+            })
+            thead.append(tr);
+            $.each(data, function (indx, d) {
+                tr = $('<tr>')
+                $.each(keys, function (ind, k) {
+                    tr.append($('<td>').text(d[k]));
+                })
+                tbody.append(tr);
+            })
+            $('#div_data').append(table);
+        }
+    }
+</script>

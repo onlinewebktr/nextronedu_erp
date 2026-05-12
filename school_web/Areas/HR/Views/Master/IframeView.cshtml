@@ -1,0 +1,18 @@
+﻿
+@{
+   // ViewBag.Title = "IframeView";
+} 
+<style>
+    .mframe {
+        width: 100%;
+        height : calc(100vh - 97px);
+    }
+</style>
+<iframe id="myframe"  class="mframe"  src="~/@ViewBag.Title">
+
+</iframe>
+<script>
+    $('#myframe').parent().removeClass("p-2");
+    $('#myframe').parent().addClass("p-0");
+</script>
+

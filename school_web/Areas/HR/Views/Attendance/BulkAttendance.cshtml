@@ -1,0 +1,362 @@
+﻿
+@{
+    ViewBag.Title = "Bulk Attendance";
+}
+<style>
+    .fixed-header {
+        position: sticky;
+        top: 0;
+        background-color: #f0f0f0;
+        z-index: 1;
+    }
+    .table-container {
+        max-height: calc(100vh - 270px); /* Adjust the maximum height as needed */
+        overflow-y: scroll;
+    }
+    .cld { 
+        border: 2px solid wheat;
+        border-radius: 5px;
+        width: 50px;
+        text-align: center;
+        display: inline-block;
+        font-size: 20px;
+        margin: 5px 8px;
+        cursor: pointer;
+    }
+</style>
+ 
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div> 
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card my-1">
+            <div class="card-body p-2">
+                <div class="row d-flex">
+                    @Html.LabelEditor("Firm", "ddl", divCssClass: "col-sm-3",flex:2)
+                    @Html.LabelEditor("Year", "ddl", divCssClass: "col-sm-2", flex: 1)
+                    @Html.LabelEditor("Month", "ddl", divCssClass: "col-sm-2", flex: 1)
+                    @Html.LabelEditor("Grade", "ddl", divCssClass: "col-sm-2", flex: 1)
+                    @Html.LabelEditor("Employee", "ddl", divCssClass: "col-sm-2", flex: 2)
+                    <div class="col-sm-2 mt-4 pt-1" style="flex:1">
+                        <button id="btn-find" type="button" class="btn btn-primary">Find</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.BeginModal("mdl-calender", "Select Days", "modal-md").Content(@<div id="cln-container"></div>).Footer(@<div><button type="button" id="btn-ok" class="btn btn-primary btn-primary-sm" >Ok</button></div>).Create();
+    <script>
+        $(function () {
+            $('#Employee').select2();
+            var data = { type: 'grade' }; 
+            gowithData("../../hr/data/manual-attendance", "POST", JSON.stringify({ data: data }), function (resp) {
+                if (!resp.error) {
+                    var ddl = $('#Grade');
+                    ddl.empty();
+                    ddl.append($("<option>").text('All').val(''));
+                    $.each(resp.data, function (i, item) {
+                        ddl.append($("<option>").text(item.grade_name).val(item.grade_id));
+                    });
+                    bind_employee_ddl();
+                }
+            })
+           
+        })
+        $('#btn-ok').on('click', function () {
+            $('#mdl-calender').modal("hide")
+        });
+        $('#Grade').on('change', function () {
+            bind_employee_ddl();
+        });
+        function bind_employee_ddl() {
+            var data = { type: 'employee-ddl' };
+            data.Grade = $('#Grade').val()
+            gowithData("../../hr/data/manual-attendance", "POST", JSON.stringify({ data: data }), function (resp) {
+                if (!resp.error) {
+                    var ddl = $('#Employee');
+                    ddl.empty();
+                    ddl.append($("<option>").text('All').val(''));
+                    $.each(resp.data, function (i, item) {
+                        ddl.append($("<option>").text(item.Employee_Name + ' (' + item.Emp_Code + ')').val(item.Employee_id));
+                    });
+                }
+            })
+        }
+        $('#btn-find').on("click", function () {
+            if (!$('#Year').val()) {
+                alertErrorNotification('Please select Year')
+                return false;
+            }
+            if (!$('#Month').val()) {
+                alertErrorNotification('Please select Month')
+                return false;
+            }
+            if (!$('#Firm').val()) {
+                alertErrorNotification('Please select Firm')
+                return false;
+            }
+            $('#grid_prog').show();
+           
+            var data = { type: 'employee-list' };
+            data["Year"] = $('#Year').val()
+            data["Month"] = $('#Month').val() 
+            data["Firm"] = $('#Firm').val()
+            data["Grade"] = $('#Grade').val()
+            data["Employee"] = $('#Employee').val()
+            gowithData("../../hr/data/manual-attendance", "POST", JSON.stringify({ data: data }), function (resp) {
+                if (!resp.error) { 
+                    bind_data(resp.data)
+                }
+            })
+ 
+        })
+    </script>
+    <div class="col-lg-12">
+        <div class="card my-1">
+            <div class="card-body p-2">
+                <div id="printpnl"  >
+
+                    <div id="grid_prog" style="margin : 0px auto; width:200px; display:none">
+                        <span class="spinner-border spinner-border-sm me-2"> </span>
+                        Please wait....
+                    </div>
+                    <div id="data_list" style="width: 100%; max-height: calc(100vh - 315px); overflow: auto ">
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    @Html.LabelEditor("In_Time", "time", "In Time", "09:30:00", divCssClass: "col-sm-2")
+                    @Html.LabelEditor("Out_Time", "time", "Out Time", "17:30:00", divCssClass: "col-sm-2")
+                    @Html.LabelEditor("allowRandom", "ddl", "Random In/Out Time", "", ddl_optionlabel: "N/A", divCssClass: "col-sm-2", ddl_comma_seperated: "5 Min,10 Min,15 Min,30 Min,60 Min")
+                    <div class="col-sm-2 mt-4 pt-1">
+                        <button class="btn btn-primary" id="btn-make-attendance">Make Attendance</button>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            <script>
+                $('#btn-make-attendance').on("click", function () {
+                    if (data_lst.length!=0) {
+                        $('#grid_prog').show();
+                        $.each(data_lst, function (ind,d) {
+                            d.days = d.days.join(',');
+                        })
+                        var data = { type: 'make-attendance' };
+                        data["Firm"] = $('#Firm').val()
+                        data["In_Time"] = $('#In_Time').val()
+                        data["Out_Time"] = $('#Out_Time').val()
+                        data["allowRandom"] = $('#allowRandom').val()
+                        data["data_list"] = JSON.stringify(data_lst);
+
+                        data["Grade"] = $('#Grade').val()
+                        data["Employee"] = $('#Employee').val()
+                        submitdata("../../hr/data/manual-attendance", JSON.stringify({ data: data }), function (resp) {
+                            if (!resp.error) {
+                                bind_data(resp.data)
+                            }
+                        })
+                    } else {
+                        alertErrorNotification("Please Find Employee")
+                    }
+                    
+                })
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        $("#Year").empty();
+        for (var year = 2023; year <= currentYear; year++) {
+            $('#Year').append($("<option>").text(year).val(year));
+        }
+        $("#Month").empty();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        for (let i = 0; i < monthNames.length; i++) {
+            const monthNumber = (i + 1).toString().padStart(2, '0');
+            $('#Month').append($("<option>").text(monthNames[i]).val(monthNumber));
+        }
+         $('#Year').val('@My.Now.Year') 
+        $('#Month').val('@My.Now.ToString("MM")') 
+        var data = { type: 'firm-list' }
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Firm');
+                $("#Firm option:not(:first)").remove();
+                var firm = '1';
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.firm_name).val(item.firm_id));
+                });
+                ddl.val(firm);
+            }
+        })
+    });
+    var data_lst = [];
+    function bind_data(data) {
+        $('#data_list').empty();
+        data_lst = data;
+        var lst = $('#data_list');
+        var table = $('<table>');
+        var tbody = $('<tbody>');
+        var thead = $('<thead>').addClass("fixed-header");
+        table.append(thead)
+        table.append(tbody)
+        table.addClass("table  table-striped  table-bordered my-2");
+        thead.append($('<tr>').append(
+            $('<th>').css("min-width", "270px").text('Employee Name'),
+            $('<th>').text('Emp Code'),
+            $('<th>').text('Month'),
+            $('<th>').text("Days In Months"),
+            $('<th>').text("Working Days"),
+            $('<th>').text("Prev Attendance"),
+            $('<th>').text("New Attendance"),
+            $('<th>').text("Dates"),
+            $('<th>').text("#"),
+        ));
+        $.each(data, function (indx, d) {
+            if (d.atnd_days) {
+                d.days = d.atnd_days.split(',');
+            } else {
+                d.days = [];
+            }
+            d.new_atten = d.pre_atten;
+            var row = $('<tr>').append(
+                $('<td>').text(d.Employee_Name),
+                $('<td>').text(d.Emp_Code),
+                $('<td>').text(d.Month),
+                $('<td>').text(d.Days_in_Month),
+                $('<td>').text(d.working_days),
+                $('<td>').text(d.pre_atten),
+                $('<td>').append($('<input type="number" class="form-control form-control-sm nwantds" >').val(d.pre_atten).attr("data-working_days", d.working_days).attr("data-indx", indx).attr('id', `at_nos_${indx}`)),
+                $('<td>').css("width", "200px").css("display", "block").append($('<span>').text(d.atnd_days).attr('id', `at_days_${indx}`)),
+                $('<td>').addClass('py-0').append($('<label>').addClass('mdl').css('font-size','30px').append("<i class='bx bx-calendar'></i>").attr("data-working_days", d.working_days).attr("data-indx", indx)),
+            );
+            tbody.append(row);
+        });
+        lst.append(table);
+        $('#grid_prog').hide();
+        $('.nwantds').on('input', function () {
+            // Get the input value
+            var inputValue = $(this).val();
+            var max = parseInt($(this).data("working_days"), 10);
+            var indx = parseInt($(this).data("indx"), 10);
+            // Parse the input value as an integer
+            var intValue = parseInt(inputValue, 10);
+
+            // Check if the value is within the desired range
+            if (!intValue) {
+                // If the input is not a number or less than 1, set it to 1
+                $(this).val("");
+                intValue = 0;
+
+            } else if (intValue > max) {
+                // If the input is greater than 30, set it to 30
+                $(this).val(max);
+                intValue = max;
+            }
+            data_lst[indx].new_atten = intValue;
+
+            var year = $('#Year').val();
+            var month = $('#Month').val();
+            var date = new Date(year, month, 0);
+            var days = date.getDate();
+            console.log(days);
+            var matnds = inputValue;
+            var ditm = data_lst[indx];
+            ditm.days = [];
+            const options = { weekday: 'short' };
+            for (var i = 1; i <= days; i++) {
+                var d = i.toString().padStart(2, '0');
+                const dayOfWeek = (new Date(year, month-1, i)).toLocaleDateString('en-US', options);
+                if (matnds > 0) {
+                    if (!ditm.week_days.includes(dayOfWeek)) {
+                        console.log(dayOfWeek);
+                        ditm.days.push(d)
+                        matnds--;
+                    }
+                }
+            }
+            $(`#at_days_${indx}`).text(ditm.days)
+            // Log the final value to the console
+            console.log($(this).val());
+        });
+        var chk_count = 0;
+        $('.mdl').on('click', function () {
+            // Get the input value
+            //var inputValue = $(this).val();
+            var indx = parseInt($(this).data("indx"), 10);
+            var data = data_lst[indx];
+            console.log(data);
+            console.log(data.atnd_days);
+            if (!data.days) {
+                if (data.atnd_days) {
+                    data.days = data.atnd_days.split(',');
+                } else {
+                    data.days = [];
+                }
+            }
+            $('#mdl-calender').modal("show");
+            //cln-container
+            var year = $('#Year').val();
+            var month = $('#Month').val();
+            var date = new Date(year, month, 0);
+            var days = date.getDate();
+            $('#cln-container').empty();
+            for (var i = 1; i <= days; i++) {
+                var d = i.toString().padStart(2, '0');
+                console.log(d)
+                if (data.days.includes(d)) {
+                    $('#cln-container').append($('<span>').addClass('cld').css('background', 'wheat').data('chk','1').text(d));
+                }
+                else {
+                    $('#cln-container').append($('<span>').addClass('cld').text(d));
+                }
+
+            }
+
+            $('.cld').on('click', function () {
+                console.log($(this).css('background'));
+                if ($(this).data('chk') =='1') {
+                    $(this).css('background', '');
+                    $(this).data('chk', '0');
+                    data.days = data.days.filter(str => str !== $(this).text());
+                }
+                else {
+                    $(this).css('background', 'wheat');
+                    $(this).data('chk', '1');
+                    data.days.push($(this).text())
+                }
+                $(`#at_days_${indx}`).text(data.days)
+                $(`#at_nos_${indx}`).val(data.days.length)
+                data.new_atten = data.days.length;
+            });
+        });
+    }
+
+
+
+</script>
+

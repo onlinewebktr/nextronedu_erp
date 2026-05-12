@@ -1,0 +1,693 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script src="../assets/js/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter',sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            padding: 18px;
+            display: flex;
+            justify-content: center;
+            color: #0f172a;
+        }
+
+        .mobile {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* TOP FILTER */
+        .top-filter {
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(15,23,42,.05);
+        }
+
+        /* HEADER */
+
+        .filter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+            .filter-header h3 {
+                font-size: 24px;
+                font-weight: 800;
+                color: #0f172a;
+                margin-bottom: 4px;
+            }
+
+            .filter-header p {
+                font-size: 13px;
+                color: #64748b;
+            }
+
+        .filter-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 18px;
+            background: linear-gradient( 135deg, #2563eb, #1d4ed8 );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            box-shadow: 0 10px 20px rgba(37,99,235,.25);
+        }
+
+        /* FILTER BOX */
+
+        .filter-box {
+            display: flex;
+            gap: 14px;
+            align-items: end;
+        }
+
+        /* INPUT */
+
+        .input-box {
+            flex: 1;
+        }
+
+            .input-box label {
+                display: block;
+                margin-bottom: 10px;
+                font-size: 13px;
+                font-weight: 700;
+                color: #475569;
+            }
+
+        /* SELECT */
+
+        .select-wrapper {
+            height: 45px;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: .2s;
+        }
+
+            .select-wrapper:focus-within {
+                border-color: #2563eb;
+                background: #fff;
+                box-shadow: 0 0 0 4px rgba(37,99,235,.08);
+            }
+
+            .select-wrapper i {
+                color: #2563eb;
+                font-size: 18px;
+            }
+
+        .select {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            cursor: pointer;
+            padding: 11px 0px;
+        }
+
+        /* BUTTON */
+
+        .btn {
+            height: 45px;
+            border: none;
+            border-radius: 10px;
+            padding: 0 22px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, .22);
+            transition: .2s;
+        }
+
+            .btn:hover {
+                transform: translateY(-2px);
+            }
+
+
+
+        /* ATTENDANCE OVERVIEW */
+
+        .overview {
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 22px;
+            box-shadow: 0 10px 28px rgba(15,23,42,.06);
+            margin-bottom: 18px;
+        }
+
+        .overview-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .overview-title h2 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .overview-title p {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        /* PERCENT CIRCLE */
+
+        .percent-circle {
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            background: conic-gradient( #22c55e 0% 82%, #e2e8f0 82% 100% );
+            position: relative;
+        }
+
+            .percent-circle::before {
+                content: "";
+                position: absolute;
+                inset: 8px;
+                background: #fff;
+                border-radius: 50%;
+            }
+
+            .percent-circle::after {
+                content: "82%";
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                font-weight: 800;
+                color: #0f172a;
+            }
+
+        /* PROGRESS */
+
+        .progress {
+            margin-bottom: 24px;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 82%;
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient( 90deg, #22c55e, #16a34a );
+        }
+
+        .labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+
+            .labels span {
+                font-size: 12px;
+                color: #64748b;
+                font-weight: 600;
+            }
+
+        /* STATUS GRID */
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .stat {
+            border-radius: 22px;
+            padding: 18px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .stat::before {
+                content: "";
+                position: absolute;
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                right: -45px;
+                top: -45px;
+                background: rgba(255,255,255,.08);
+            }
+
+            .stat i {
+                font-size: 27px;
+                margin-bottom: 18px;
+                position: absolute;
+                right: 8px;
+                top: 11px;
+                width: 50px;
+                line-height: 50px;
+                height: 50px;
+                text-align: center;
+            }
+
+            .stat h5 {
+                font-size: 14px;
+                font-weight: 500;
+                margin-bottom: 6px;
+            }
+
+            .stat h2 {
+                font-size: 23px;
+                font-weight: 800;
+            }
+
+        .green {
+            background: linear-gradient(135deg,#22c55e,#16a34a);
+        }
+
+        .red {
+            background: linear-gradient(135deg,#ef4444,#dc2626);
+        }
+
+        .orange {
+            background: linear-gradient(135deg,#f59e0b,#d97706);
+        }
+
+        .purple {
+            background: linear-gradient(135deg,#8b5cf6,#7c3aed);
+        }
+
+        /* DAILY ATTENDANCE */
+
+        .daily {
+            margin-top: 18px;
+        }
+
+        .daily-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+            .daily-top h3 {
+                font-size: 22px;
+                font-weight: 800;
+            }
+
+            .daily-top button {
+                border: none;
+                background: #dbeafe;
+                color: #2563eb;
+                padding: 9px 14px;
+                border-radius: 12px;
+                font-size: 13px;
+                font-weight: 700;
+            }
+
+        .attendance-card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 18px;
+            box-shadow: 0 10px 28px rgba(15,23,42,.05);
+        }
+
+        /* ATTENDANCE ROW */
+
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+            .row:last-child {
+                border: none;
+                padding-bottom: 0;
+            }
+
+        .date {
+            width: 72px;
+            min-width: 72px;
+            text-align: center;
+        }
+
+            .date h4 {
+                font-size: 21px;
+                font-weight: 800;
+            }
+
+            .date span {
+                font-size: 11px;
+                font-weight: 700;
+                color: #64748b;
+            }
+
+        .status-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .present {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .absent {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .leave {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .pending {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        .text {
+            flex: 1;
+        }
+
+            .text h5 {
+                font-size: 15px;
+                font-weight: 700;
+                margin-bottom: 4px;
+            }
+
+            .text p {
+                font-size: 13px;
+                color: #64748b;
+                line-height: 1.5;
+            }
+
+        /* MOBILE */
+
+        @media(max-width:480px) {
+            .filter-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile">
+
+        <!-- FILTER -->
+
+        <div class="top-filter">
+            <div class="filter-box">
+
+                <!-- MONTH -->
+
+                <div class="input-box">
+
+                    <label>Select Month</label>
+
+                    <div class="select-wrapper">
+
+                        <i class="fa-solid fa-calendar-days"></i>
+
+                        <select class="select">
+
+                            <option>May 2025</option>
+                            <option>April 2025</option>
+                            <option>March 2025</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- BUTTON -->
+
+                <button class="btn">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    View
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- OVERVIEW -->
+
+        <div class="overview">
+
+            <div class="overview-top">
+
+                <div class="overview-title">
+
+                    <h2>Attendance</h2>
+
+                    <p>Monthly attendance overview</p>
+
+                </div>
+
+                <div class="percent-circle"></div>
+
+            </div>
+
+            <!-- PROGRESS -->
+
+            <div class="progress">
+
+                <div class="progress-bar">
+
+                    <div class="progress-fill"></div>
+
+                </div>
+
+                <div class="labels">
+
+                    <span>0%</span>
+
+                    <span>50%</span>
+
+                    <span>100%</span>
+
+                </div>
+
+            </div>
+
+            <!-- STATUS -->
+
+            <div class="stats">
+
+                <div class="stat green">
+
+                    <i class="fa-solid fa-check"></i>
+
+                    <h5>Present</h5>
+
+                    <h2>22</h2>
+
+                </div>
+
+                <div class="stat red">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                    <h5>Absent</h5>
+
+                    <h2>4</h2>
+
+                </div>
+
+                <div class="stat orange">
+
+                    <i class="fa-solid fa-umbrella"></i>
+
+                    <h5>Leave</h5>
+
+                    <h2>2</h2>
+
+                </div>
+
+                <div class="stat purple">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                    <h5>Not Marked</h5>
+
+                    <h2>3</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- DAILY -->
+
+        <div class="daily">
+
+            <div class="daily-top">
+
+                <h3>Daily Attendance</h3>
+
+                <button>May 2025</button>
+
+            </div>
+
+            <div class="attendance-card">
+
+                <!-- PRESENT -->
+
+                <div class="row">
+
+                    <div class="date">
+                        <h4>01</h4>
+                        <span>MAY THU</span>
+                    </div>
+
+                    <div class="status-icon present">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+
+                    <div class="text">
+
+                        <h5>Present</h5>
+
+                        <p>Student was present in school.</p>
+
+                    </div>
+
+                </div>
+
+                <!-- ABSENT -->
+
+                <div class="row">
+
+                    <div class="date">
+                        <h4>02</h4>
+                        <span>MAY FRI</span>
+                    </div>
+
+                    <div class="status-icon absent">
+                        <i class="fa-solid fa-xmark"></i>
+                    </div>
+
+                    <div class="text">
+
+                        <h5>Absent</h5>
+
+                        <p>Student was absent today.</p>
+
+                    </div>
+
+                </div>
+
+                <!-- LEAVE -->
+
+                <div class="row">
+
+                    <div class="date">
+                        <h4>03</h4>
+                        <span>MAY SAT</span>
+                    </div>
+
+                    <div class="status-icon leave">
+                        <i class="fa-solid fa-umbrella"></i>
+                    </div>
+
+                    <div class="text">
+
+                        <h5>Leave</h5>
+
+                        <p>Leave approved by school.</p>
+
+                    </div>
+
+                </div>
+
+                <!-- NOT MARKED -->
+
+                <div class="row"> 
+                    <div class="date">
+                        <h4>04</h4>
+                        <span>MAY SUN</span>
+                    </div> 
+                    <div class="status-icon pending">
+                        <i class="fa-solid fa-clock"></i>
+                    </div> 
+                    <div class="text"> 
+                        <h5>Not Marked</h5> 
+                        <p>Attendance not marked by teacher.</p> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </div>
+
+    <script>
+        function getStudentId() {
+            let params = new URLSearchParams(window.location.search);
+            return params.get("regid");
+        }
+        window.student_id = getStudentId();
+
+
+
+        if (!student_id) {
+            Swal.fire({
+                icon: "error",
+                title: "",
+                text: "Student ID missing in URL"
+            });
+            //return;
+        }
+    </script>
+</body>
+</html>

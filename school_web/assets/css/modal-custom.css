@@ -1,0 +1,38 @@
+﻿.modal {
+    background: rgb(0 0 0 / 50%);
+    padding-right: 0px !important;
+    padding: 50px 0px 0px 0px;
+}
+
+.mdl-frm-row {
+    margin: 0px 0px 10px 0px;
+    padding: 0px;
+    width: 100%;
+    float: left;
+}
+
+.mdl-close-btn {
+    margin: 0px;
+    padding: 0px 5px 0px 5px;
+    border: 0px;
+    background: #ed0000;
+    font-size: 18px;
+    color: #fff;
+    line-height: 25px;
+    border-radius: 2px;
+}
+
+.modal-header {
+    padding: 7px 15px;
+}
+
+.md-width {
+    max-width: 500px;
+}
+
+
+@media only screen and (max-width:800px) {
+    .md-width {
+        width: 100%;
+    }
+}

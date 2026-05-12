@@ -1,0 +1,28 @@
+﻿td {
+    padding: 2px !important;
+}
+
+th {
+    padding: 2px !important;
+}
+
+.img-employee {
+    height: 30px;
+    width: 30px;
+    margin-right: 5px;
+    float: left;
+}
+
+.tbl-data {
+    padding: 0px;
+    font-size: 11px;
+    margin-left: -1px;
+    width: calc(100% + 2px);
+}
+
+    .tbl-data th, td {
+        padding: 2px !important;
+        font-size: 11px;
+        border: #bdbdbd solid 1px;
+        text-align: center;
+    }

@@ -1,0 +1,175 @@
+﻿body, form1 {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    position: absolute;
+    font-family: sans-serif;
+    font-size: 13px;
+}
+
+.main {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+.main_auto {
+    margin: 0px auto;
+    padding: 0px;
+    height: auto;
+    width: 1000px;
+}
+
+.main_auto_main {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 998px;
+    float: left;
+    border: 1px solid #fff;
+}
+
+.top {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+.topcell_left {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 50%;
+    float: left;
+    text-align: left;
+}
+
+.topcell_right {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 50%;
+    float: left;
+    text-align: right;
+}
+
+.heading {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+.leftlogoheading {
+    margin: 0px;
+    padding: 0px;
+    height: 110px;
+    width: 13%;
+    float: left;
+}
+
+.righttextheading {
+    margin: 0px;
+    padding: 0px;
+    height: 110px;
+    width: 80%;
+    float: left;
+}
+
+.slipno {
+    margin: 0px;
+    padding: 0px 0px 4px 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+    border-bottom: 2px solid #000;
+}
+
+.slipno_left {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 30%;
+    float: left;
+    text-align: left;
+}
+
+.slipno_middle {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+.slipno_right {
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    width: 20%;
+    float: left;
+    text-align: right;
+}
+
+.studentdetails {
+    margin: 4px 0px 0px 0px;
+    padding: 0px;
+    height: auto;
+    width: 100%;
+    float: left;
+}
+
+.online_frm_grp {
+    margin: 0px;
+    padding: 0px 5px 0px 5px;
+    width: 32%;
+    float: left;
+}
+
+.online_frm-grp-h {
+    height: auto;
+    width: 100%;
+    margin: 8px 0px 0px 7px;
+    padding: 0px 0px 0px 0px;
+    float: left;
+    color: #000;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 33px;
+    text-align: left;
+    font-family: sans-serif;
+}
+
+.form_control {
+    width: 100%;
+    margin: 0px 5px 0px 6px;
+    padding: 0px;
+    float: left;
+    border: 1px solid rgb(18 18 19);
+    font-size: 14px;
+    color: #000;
+    height: 35px;
+    text-align: left;
+    border-radius: 4px;
+    font-family: sans-serif;
+}
+
+.online_frm-h {
+    height: auto;
+    width: 100%;
+    margin: 7px 0px 9px 0px;
+    padding: 0px 0px 0px 9px;
+    float: left;
+    font-size: 20px;
+    line-height: 32px;
+    background: #000;
+    color: #fff;
+    font-family: sans-serif;
+}

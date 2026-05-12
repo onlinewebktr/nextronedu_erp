@@ -1,0 +1,299 @@
+﻿
+@{
+    // ViewBag.Title = "attendanceReport";
+}
+<style>
+    td {
+        padding-right: 10px;
+        border: none;
+    }
+
+    th {
+        padding-right: 30px;
+    }
+
+    .img-employee {
+        height: 50px;
+        width: 50px;
+        margin-right: 5px;
+        float: left;
+    }
+
+    .tbl-data {
+        padding: 0px;
+        font-size: 10px;
+        margin-left: -1px;
+        width: calc(100% + 2px);
+    }
+
+        .tbl-data th, td {
+            padding: 0px 2px;
+            font-size: 10px;
+            border: #bdbdbd solid 1px;
+            text-align: center;
+        }
+</style>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnPrint").click(function () {
+            var contents = $("#printpnl").html();
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head><title>Print</title>');
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="../../Content/theme/css/bootstrap.min.css" rel="stylesheet" type="text/css" />');
+            frameDoc.document.write(`<style>
+    td {
+        padding-right: 10px;
+    }
+
+    th {
+        padding-right: 30px;
+    }
+</style>`);
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+        });
+    });
+</script>
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="ms-auto">
+        <input type="button" id="btnPrint" value="Print" />
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body p-2">
+                <div class="row">
+                    @Html.LabelEditor("Year", "ddl", divCssClass: "col-lg-2")
+                    @Html.LabelEditor("Month", "ddl", divCssClass: "col-lg-2 col-md-3")
+                    @Html.LabelEditor("Grade", "ddl", divCssClass: "col-lg-2 col-md-3")
+                    @if (ViewBag.IsEmployee == 1)
+                    {
+
+                        @Html.LabelEditor("Employee", "ddl", divCssClass: "col-lg-2 col-md-3")
+
+
+                    }
+                    @* @Html.LabelEditor("Grade", "ddl", divCssClass: "col-lg-3 col-md-4")*@
+                    <div class="col-md-2 mt-4 pt-1">
+                        <button id="btn-find" type="button" class="btn btn-primary">Find</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card m-0 d-none" id="crd">
+            <div class="card-body p-2" id="printpnl">
+                <table id="mytable1">
+                    <tbody>
+                    </tbody>
+                </table>
+                <div style="overflow: auto; height: calc(100vh - 265px);">
+                    <table class="table table-bordered table-striped  mt-2" id="mytable">
+
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="grid_prog" style="margin : 0px auto; width:200px; display:none">
+                    <span class="spinner-border spinner-border-sm me-2"> </span>
+                    Please wait....
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        bindGrade();
+        @if (ViewBag.IsEmployee == 1)
+            {
+            @: bindEmployeeList();
+            }
+
+    });
+    function bindEmployeeList() {
+        var data = { type: 'employees' };
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Employee');
+                $("#Employee option:not(:first)").remove();
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.Employee_Name + ' (' + item.Emp_Code + ')').val(item.Employee_id));
+                });
+            }
+        })
+    }
+    function bindGrade()
+    {
+        var data = { type: 'Grade' };
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Grade');
+                $("#Grade").empty();
+                ddl.append($("<option>").text('All').val('0'));
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.grade_name).val(item.grade_id));
+                });
+            }
+        })
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        $("#Year option:not(:first)").remove();
+        for (var year = 2020; year <= currentYear+1; year++) {
+            $('#Year').append($("<option>").text(year).val(year));
+        }
+        $("#Month option:not(:first)").remove();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        for (let i = 0; i < monthNames.length; i++) {
+            const monthNumber = (i + 1).toString().padStart(2, '0');
+            $('#Month').append($("<option>").text(monthNames[i]).val(monthNumber));
+        }
+    }
+    $('#btn-find').on("click", function () {
+
+        if (!$('#Year').val()) {
+            alertErrorNotification('Please select Year')
+            return false;
+        }
+        if (!$('#Month').val()) {
+            alertErrorNotification('Please select Month')
+            return false;
+        }
+
+         @if (ViewBag.IsEmployee == 0) {
+             @:var data = { type: 'monthly-status-overall' };
+        }
+         else
+         {
+            @: if (!$('#Employee').val()) { alertErrorNotification('Please select Employee');             return false;             }
+               @:var data = { type: 'employee-monthly-status-overall' };
+        }
+        $('#crd').removeClass('d-none');
+        data["Year"] = $('#Year').val()
+        data["Month"] = $('#Month').val()
+        data["Grade"] = $('#Grade').val()
+        @if (ViewBag.IsEmployee == 1) {
+             @:data["Employee"] = $('#Employee').val()
+        }
+        $('#grid_prog').show();
+        $('#mytable1 tbody').empty();
+        var tableBody = $('#mytable tbody');
+        tableBody.empty();
+        gowithData("../../hr/data/attendance", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data);
+            }
+        })
+    })
+
+    function bind_table(data) {
+        var tableBody = $('#mytable tbody');
+        tableBody.empty();
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var img = $('<img>').attr('src', d.Emoloyee_Image).addClass('img-employee rounded').attr('onerror', "this.src='../../Content/Images/user-icon.png'");
+
+            tableBody.append($('<tr>').append(
+                $('<td style="text-align: left; font-size : 13px" >').append(img, $('<label>').append(d.Emoloyee_Name, '</br>', d.Emoloyee_Code)),
+            ));
+            var dt = jsonToTable(d.details);
+            tableBody.append($('<tr>').append(
+                $('<td>').addClass('p-0').append(dt),
+            ));
+        });
+    }
+    function jsonToTable(jsonArray) {
+        var table = '<table border="1" class="tbl-data">';
+        table += '<tr>';
+        for (var key in jsonArray[0]) {
+            table += '<th>' + key + '</th>';
+        }
+        table += '</tr>';
+
+        jsonArray.forEach(function (item) {
+            table += '<tr>';
+            var i = 0;
+            console.log(item);
+   //         if (item['Days'] == 'Status') {
+   //             for (var key in item) {
+   //                 if (i == 0) {
+   //                     table += '<th style="width:70px; text-align: :left;">' + item[key] + '</th>';
+   //                 }
+   //                 else {
+   ////                      <i class='bx bx-check-circle text-success'></i>
+   ////<i class='bx bx-x-circle text-danger' ></i>
+   ////<i class='bx bxs-star-half text-warning' ></i>
+   ////<i class='bx bx-message-alt-x text-info' ></i>
+   //                     var p = '<i class="bx bx-check-circle text-success"></i>'
+   //                     if (item[key] == "A") {
+   //                         p = '<i class="bx bx-x-circle text-danger"></i>'
+   //                     }
+   //                     else if (item[key] == "WO") {
+   //                         p = '<i class="bx bx-message-alt-x text-info"></i>'
+   //                     }
+   //                     else if (item[key] == "WOP") {
+   //                         p = '<i class="bx bx-check-circle text-success"></i><i class="bx bx-message-alt-x text-info"></i>'
+   //                     }
+   //                     table += '<td>' + p+ '</td>';
+   //                 }
+   //                 i++;
+   //             }
+   //         }
+   //         else
+           // {
+                for (var key in item) {
+                    if (i == 0) {
+                        table += '<th style="width:70px; text-align: left;">' + item[key] + '</th>';
+                    }
+                    else {
+                        table += '<td>' + (item[key] == null ? '' : item[key]) + '</td>';
+                    }
+                    i++;
+                }
+          //  }
+
+            table += '</tr>';
+        });
+
+        table += '</table>';
+        return table;
+    }
+
+</script>

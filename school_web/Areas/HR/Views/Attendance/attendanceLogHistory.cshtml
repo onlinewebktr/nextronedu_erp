@@ -1,0 +1,191 @@
+﻿
+@{
+    // ViewBag.Title = "Monthly Attendance Report Individual";
+}
+ 
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnPrint").click(function () {
+            var contents = $("#printpnl").html();
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head><title>Print</title>');
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="../../Content/theme/css/bootstrap.min.css" rel="stylesheet" type="text/css" />');
+            frameDoc.document.write(`<style>
+    td {
+        padding: 3px 10px 3px 10px !important;
+    }
+
+    th {
+        padding: 3px 10px 3px 10px !important;
+    }
+</style>`);
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+        });
+    });
+</script>
+<div class="page-breadcrumb d-flex align-items-center mb-2">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="ms-auto">
+        <input type="button" id="btnPrint" value="Print" />
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body p-2">
+                <div class="row">
+                    @Html.LabelEditor("Year", "ddl", divCssClass: "col-lg-2")
+                    @Html.LabelEditor("Month", "ddl", divCssClass: "col-lg-2 col-md-3")
+                    @Html.LabelEditor("Employee", "ddl", divCssClass: "col-lg-3 col-md-4")
+                    <div class="col-md-2 mt-4 pt-1">
+                        <button id="btn-find" type="button" class="btn btn-primary">Find</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body p-2" >
+                <div id="printpnl" style="max-height:calc(100vh - 200px); overflow:scroll">
+
+                    <div id="grid_prog" style="margin : 0px auto; width:200px; display:none">
+                        <span class="spinner-border spinner-border-sm me-2"> </span>
+                        Please wait....
+                    </div>
+                    <div id="data_list" style="width:100%;">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        bindEmployeeList();
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        $("#Year option:not(:first)").remove();
+        for (var year = 2023; year <= currentYear; year++) {
+            $('#Year').append($("<option>").text(year).val(year));
+        }
+        $("#Month option:not(:first)").remove();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        for (let i = 0; i < monthNames.length; i++) {
+            const monthNumber = (i + 1).toString().padStart(2, '0');
+            $('#Month').append($("<option>").text(monthNames[i]).val(monthNumber));
+        }
+    });
+    function bindEmployeeList() {
+        var data = { type: 'employees' };
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Employee');
+                $("#Employee option:not(:first)").remove();
+                ddl.append($("<option>").text( 'All').val('0'));
+                $.each(resp.data, function (i, item) {
+                    ddl.append($("<option>").text(item.Employee_Name + ' (' + item.Emp_Code + ')').val(item.Employee_id));
+                });
+            }
+        })
+    }
+    $('#btn-find').on("click", function () {
+        if (!$('#Year').val()) {
+            alertErrorNotification('Please select Year')
+            return false;
+        }
+        if (!$('#Month').val()) {
+            alertErrorNotification('Please select Month')
+            return false;
+        }
+        if (!$('#Employee').val()) {
+            alertErrorNotification('Please select Employee')
+            return false;
+        }
+        var data = { type: 'attendance-log' };
+        data["EmployeeId"] = $('#Employee').val()
+        data["Year"] = $('#Year').val()
+        data["Month"] = $('#Month').val() 
+        $('#data_list').empty();
+        $('#grid_prog').show();
+        $('#mytable1 tbody').empty();
+        var tableBody = $('#mytable tbody');
+        tableBody.empty();
+       
+        gowithData("../../hr/data/attendance", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_data(resp.data); 
+            }
+        })
+    })
+    function bind_data(data) {
+        var lst = $('#data_list');
+
+        $.each(data, function (index, d) {
+            var table = $('<table>');
+            var tbody = $('<tbody>');
+            var thead = $('<thead>');
+            table.append(thead)
+            table.append(tbody) 
+            table.addClass("table  table-striped  table-bordered my-2");
+            thead.append($('<tr>').append(
+                $('<th style="max-width: 120px; min-width: 120px;">').text('Name'),
+                $('<td colspan="2" >').append($('<span class="me-4">').text(d.Employee_Name), ' (', $('<span>').text(d.Emp_Code),')'), 
+            ));
+            thead.append($('<tr>').append(
+                $('<th >').text('Date'),
+                $('<th >').text('Day'),
+                $('<th>').text('Attendance'), 
+            )); 
+            $.each(d.data, function (indx, d1) {
+                var row = $('<tr>').append(
+                    $('<td>').text(d1.Date),
+                    $('<td>').text(d1.Day),
+                    $('<td>').text(d1.atn_log),
+                );
+                tbody.append(row);
+            });
+            lst.append(table);
+        });
+         
+        $('#grid_prog').hide();
+    }
+    
+    
+</script>

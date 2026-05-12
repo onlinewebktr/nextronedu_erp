@@ -1,0 +1,240 @@
+﻿
+@{
+    ViewBag.Title = "Salary Structure";
+}
+
+
+<style>
+    .row {
+        --bs-gutter-x: 0.5rem;
+        --bs-gutter-y: 0;
+    }
+
+    .table.dataTable {
+        margin-top: 0px !important;
+    }
+
+
+
+    .dataTables_scroll {
+        border: 1px solid #ddd !important;
+        margin-top: 0.25rem !important;
+    }
+
+    .filter-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+</style>
+
+<div class="page-breadcrumb d-flex align-items-center mb-2 eeewe">
+    <div class="ps-3 d-none d-sm-flex">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header pb-0">
+        <div class="d-flex mb-2 w-auto">
+            <div class="form-group me-2">
+                @Html.Label("Department", new { @class = "form-group-text" })
+                @Html.DropDownList("Department", "All", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="form-group me-2">
+                @Html.Label("Grade", new { @class = "form-group-text", })
+                @Html.DropDownList("Grade", "All", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="form-group me-2">
+                @Html.Label("Designation", new { @class = "form-group-text" })
+                @Html.DropDownList("Designation", "All", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="form-group me-2">
+                @Html.Label("Employee Name", new { @class = "form-group-text" })
+                @Html.DropDownList("Employee", "Select", new { @class = "form-select", style = "max-width : 180px;" })
+            </div>
+            <div class="filter-btn">
+                <button class="btn btn-primary" type="button" onclick="apply_filter(this)" style="width: auto; ">Find</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body px-2 py-1">
+        <table class="table table-bordered table-striped" id="mytable">
+            <thead class="fixed-header">
+                <tr>
+                    <th>Action</th>
+                    <th>Employee Code</th>
+                    <th>Designation</th>
+                    <th>Employee Name</th>
+                    <th>Grade</th>
+                    <th>Department</th>
+                    <th>Date of Joining</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div id="grid_prog" style="margin : 0px auto; width:200px">
+            <span class="spinner-border spinner-border-sm me-2"> </span>
+            Please wait....
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+
+            <div class="col-md-5 mt-0">
+                <table id="tbl-income" class="table table-striped table-bordered dataTable" role="grid">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Income Head</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-7 mt-0">
+                <table id="tbl-deduct" class="table table-striped table-bordered dataTable" role="grid">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Deduction Head</th>
+                            <th>Amount</th>
+                            <th>Employer's Contribution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <hr />
+            @Html.LabelEditor("Gross", "text", "Gross Salary", divCssClass: "col-md-3 mt-0", editorHtmlAttributes: new { @readonly = "true" })
+            @Html.LabelEditor("Deduction", "text", "Total Deduction", divCssClass: "col-md-3 mt-0", editorHtmlAttributes: new { @readonly = "true" })
+            @Html.LabelEditor("Net_Salary", "text", "Net Salary", divCssClass: "col-md-3 mt-0", editorHtmlAttributes: new { @readonly = "true" })
+            @Html.LabelEditor("Employeer_Contribution", "text", "Employer Contribution", divCssClass: "col-md-3 mt-0", editorHtmlAttributes: new { @readonly = "true" })
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var id = '';
+    var tr = '';
+    $(function () {
+        $('#grid_prog').hide();
+        var data = { type: 'salaray_structure' };
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                //  bind_table(resp.data)
+                var ddl = $('#Department');
+                $("#Department option:not(:first)").remove();
+                $.each(resp.department, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.department_id));
+                });
+                ddl = $('#Grade');
+                $("#Grade option:not(:first)").remove();
+                $.each(resp.grade, function (i, item) {
+                    ddl.append($("<option>").text(item.grade_name).val(item.grade_id));
+                });
+                ddl = $('#Designation');
+                $("#Designation option:not(:first)").remove();
+                $.each(resp.designation, function (i, item) {
+                    ddl.append($("<option>").text(item.name).val(item.Designation_id));
+                });
+                ddl = $('#Employee');
+                $("#Employee option:not(:first)").remove();
+                $.each(resp.employee, function (i, item) {
+                    ddl.append($("<option>").text(item.Name).val(item.Employee_id));
+                });
+            }
+        })
+    })
+    function get_employee() {
+        var data = { type: 'get-employee' };
+        data["Department"] = $('#Department').val()
+        data["Grade"] = $('#Grade').val()
+        data["Designation"] = $('#Designation').val()
+        gowithData("../../hr/data/ddl", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                var ddl = $('#Employee');
+                $("#Employee option:not(:first)").remove();
+                $.each(resp.employee, function (i, item) {
+                    ddl.append($("<option>").text(item.Name).val(item.Employee_id));
+                });
+                ddl.val("");
+                var tableBody = $('#mytable tbody');
+                $('#mytable').DataTable().destroy();
+                tableBody.empty();
+            }
+        })
+    }
+    $('#Department').change(function () {
+        get_employee();
+    })
+    $('#Grade').change(function () {
+        get_employee();
+    })
+    $('#Designation').change(function () {
+        get_employee();
+    })
+    function apply_filter() {
+        var data = { Employee_id: $('#Employee').val() };
+        $('#grid_prog').show();
+        var tableBody = $('#mytable tbody');
+        tableBody.empty();
+        gowithData("../../hr/data/salaray_structure", "POST", JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                bind_table(resp.data);
+            }
+        })
+    }
+    function bind_table(data) {
+        var tableBody = $('#mytable tbody');
+        $('#mytable').DataTable().destroy();
+        tableBody.empty();
+        $('#grid_prog').hide();
+        $.each(data, function (index, d) {
+            var div = $('<div>').addClass("d-flex align-items-center")
+            var div_ddl = $('<div>').addClass("dropdown ms-1")
+            div_ddl.append(`<div class="dropdown-toggle dropdown-toggle-nocaret cursor-pointer badge bg-info text-dark" data-bs-toggle="dropdown">	<i class='bx bx-dots-horizontal-rounded font-22'></i></div>`)
+            var ul = $('<ul>').addClass("dropdown-menu")
+            div_ddl.append(ul)
+            ul.append(
+
+                //<a class="dropdown-item text-bold" href="print/Employee_Form_Apply.aspx?regiDs=EMP202304200645102" target="_blank"><span>View Details</span> </a>
+                $('<li>').append($('<a class="dropdown-item text-bold" href="../../Payroll/Employee_Form_Apply.aspx?empcode=' + d.Employee_id + '" target="_blank"><span> <i class="bx bx-detail me-2"></i>View Employee Details</span> </a>')),
+
+
+            )
+            div.append(div_ddl)
+            var td = $('<td>').append(div).width("55px");
+            var row = $('<tr>').append(td,
+                $('<td>').text(d.Emp_Code),
+                $('<td>').text(d.Designation),
+                $('<td>').text(d.Employee_Name),
+                $('<td>').text(d.grade_name),
+                $('<td>').text(d.Department),
+                $('<td>').text(d.Date_of_Joining),
+            );
+            tableBody.append(row);
+        });
+
+        $('#mytable').DataTable({
+            lengthChange: false,
+            scrollX: true, scrollCollapse: true,
+            buttons: ['excel', 'pdf', 'print']
+        });
+    }
+
+</script>

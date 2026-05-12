@@ -1,0 +1,2541 @@
+﻿@{
+    MasterPageConfig mpc = ViewBag.mpc;
+    ViewBag.Title = mpc.pageTitle;
+    var formOnly = ViewBag.FormOnly ?? false;
+    var formclass = "col-lg-12";
+    var dataclass = "col-lg-12";
+    var modaltype = "modal-lg";
+    var first_element = "";
+    var area = ViewBag.sector as String;
+    var sector = ViewBag.sector;
+    var allowExcelUplad = false;
+    var filterId = 1;
+    var showBreadCrumb = true;
+    if (mpc.OtherData != null)
+    {
+        if (!formOnly && mpc.OtherData.ContainsKey("Page_Layout_Path"))
+        {
+            if (mpc.OtherData["Page_Layout_Path"] != "")
+            {
+                Layout = mpc.OtherData["Page_Layout_Path"];
+            }
+            else
+            {
+                Layout = MPC.getLauout(sector);
+            }
+
+        }
+        else
+        {
+            Layout = MPC.getLauout(sector);
+        }
+
+        if (mpc.OtherData.ContainsKey("allowCSVUpload"))
+        {
+            if (mpc.OtherData["allowCSVUpload"] == "Yes")
+            {
+                allowExcelUplad = true;
+            }
+        }
+        if (mpc.OtherData.ContainsKey("showBreadCrumb"))
+        {
+            if (mpc.OtherData["showBreadCrumb"] == "Hide")
+            {
+                showBreadCrumb = false;
+            }
+        }
+        if (ViewBag.MainLayout != null)
+        {
+            Layout = ViewBag.MainLayout;
+        }
+
+    }
+    if (mpc.formType == "LeftRight")
+    {
+        if (!mpc.action.isAddNewAllow)
+        {
+            formclass = "col-lg-12";
+            dataclass = "col-lg-12";
+            mpc.formType = "PopUp";
+            modaltype = "modal-md";
+        }
+        else
+        {
+            formclass = "col-lg-4";
+            dataclass = "col-lg-8";
+        }
+    }
+
+    //if (!mpc.OtherData.ContainsKey("data_grouping"))
+    //{
+    //    mpc.OtherData["data_grouping"] = "";
+    //}
+    var requiredFields = "";
+    var col_count = 1;
+    foreach (var p in mpc.pcd)
+    {
+        if (p.isField)
+        {
+            if (p.isRequired)
+            {
+                requiredFields += p.columnName + ",";
+            }
+            if (first_element == "")
+            {
+                first_element = p.columnName;
+            }
+        }
+    }
+    requiredFields = requiredFields.TrimEnd(',');
+
+    var display_website = "";
+    var display_email = "";
+    var display_contact_no = "";
+    var address2 = "";
+    if (ViewBag.website == "")
+    {
+        display_website = "; display:none;";
+    }
+    if (ViewBag.Email == "")
+    {
+        display_email = "; display:none;";
+    }
+    if (ViewBag.address2 == null || ViewBag.address2 == "")
+    {
+        address2 = "; display:none;";
+    }
+    if (ViewBag.contact_no == "")
+    {
+        display_contact_no = "; display:none;";
+    }
+}
+
+<script>
+
+    const sector = '@ViewBag.sector'
+    var requiredFields = '@requiredFields'.split(",");;
+    var reportSubTitle = "";
+
+    function DisplayDate(dateString) {
+        let date = new Date(dateString);
+
+        if (isNaN(date)) {
+            return "Invalid Date"; // Handle invalid date input
+        }
+
+        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-GB', options).replace(',', '');
+    }
+</script>
+
+<link href="~/Areas/mpc/assets/css/colors.css" rel="stylesheet" />
+
+<link href="~/Areas/mpc/assets/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Areas/mpc/assets/css/select2.min.css" rel="stylesheet" />
+<link href="~/Areas/mpc/assets/css/icons.css" rel="stylesheet" />
+<link href="~/Areas/mpc/assets/css/prism.css" rel="stylesheet" />
+<link href="~/Areas/mpc/assets/css/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/Areas/mpc/assets/js/jquery.min.js"></script>
+
+<script src="~/Areas/mpc/assets/js/bootstrap.bundle.min.js"></script>
+<script src="~/Areas/mpc/assets/js/select2.min.js"></script>
+<script src="~/Areas/mpc/assets/js/jquery-ui.min.js"></script>
+<script src="~/Areas/mpc/assets/js/jquery.unobtrusive-ajax.js"></script>
+<script src="~/Areas/mpc/assets/js/sweetalert2@11.min.js"></script>
+<script src="~/Areas/mpc/assets/js/mpc.js"></script>
+<script src="~/Areas/mpc/assets/js/papaparse5.3.0.min.js"></script>
+<script src="~/Areas/mpc/assets/js/prism.js"></script>
+
+<link href="~/Areas/mpc/assets/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<script src="~/Areas/mpc/assets/js/jquery.dataTables.min.js"></script>
+
+@*image croper*@
+<link href="~/Areas/mpc/assets/js/cropper.min.css" rel="stylesheet" />
+<script src="~/Areas/mpc/assets/js/cropper.js"></script>
+<script src="~/Areas/mpc/assets/plugin/moment/moment.min.js"></script>
+<link href="~/Areas/mpc/assets/plugin/daterangepicker/daterangepicker.css" rel="stylesheet" />
+<script src="~/Areas/mpc/assets/plugin/daterangepicker/daterangepicker.js"></script>
+<script src="~/Areas/mpc/assets/plugin/notifications/js/lobibox.min.js"></script>
+<link href="~/Areas/mpc/assets/plugin/notifications/css/lobibox.min.css" rel="stylesheet" />
+<script>
+        function mpc_autocomplete(acb, field_id,filterId,area)
+        {
+
+            $(acb).autocomplete({
+                source: function (request, response) {
+                    var data = { search: request.term, filterId: filterId, pageId: '@mpc.pageId' }
+                    gowithData(`../../../${area}/mpc-data/acb`, "POST", JSON.stringify({ data: data }), function (resp) {
+                        if (!resp.error) {
+                            //response(resp.data);
+                            response($.map(resp.data, function (d) {
+                                const keys = Object.keys(d);
+                                if (keys.length == 1) {
+                                    return {
+                                        label: d[keys[0]],
+                                        value: d[keys[0]],
+                                    };
+                                }
+                                else {
+                                    return {
+                                        label: d[keys[0]],
+                                        value: d[keys[1]],
+                                    };
+                                }
+
+                            }))
+                        }
+                    })
+                },
+                select: function (event, ui) {
+                    this.value = ui.item.label; // Set the input value to the selected item's value
+                    $("#"+field_id).val(ui.item.value);
+                    return false; // Prevent the default behavior
+                },
+                minLength: 2
+            }).data("ui-autocomplete")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+        function getCurrentDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(today.getDate()).padStart(2, '0');
+
+            return `${year}-${month}-${day}`;
+        }
+
+</script>
+<style>
+    .breadcrumb i {
+        color: #3f6ad8 !important;
+    }
+
+    .form-label {
+        margin-bottom: .05rem;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    #mdl-add-more .modal-header {
+        background-color: orange;
+        padding: 7px 15px;
+    }
+
+    #mdl-add-more .modal-dialog {
+        margin-top: 70px;
+    }
+
+    .btn-more {
+        font-weight: bold;
+        background-color: purple;
+        border-radius: 3px;
+        padding: 0px 4px;
+        margin-top: 2px;
+        margin-left: 6px;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+        height: 20px;
+        position: absolute;
+    }
+
+    .dropdown-button {
+        background-color: #09998f;
+        color: #ffffff;
+        /* padding: 3px 20px; */
+        border: none;
+        /* border-radius: 5px; */
+        cursor: pointer;
+        position: relative;
+    }
+
+        .dropdown-button:hover {
+            background-color: #3e8e41;
+        }
+
+    .dropdown-menu {
+        position: absolute;
+        display: none;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        padding: 0px;
+        z-index: 1;
+        top: 100%; /* Add this line */
+        left: 0; /* Add this line */
+    }
+
+        .dropdown-menu li {
+            list-style: none;
+            margin-bottom: 1px;
+        }
+
+
+            .dropdown-menu li a {
+                color: #333;
+                text-decoration: none;
+            }
+
+                .dropdown-menu li a:hover {
+                    background-color: #ffc107;
+                }
+
+            .dropdown-menu li span:hover {
+                background-color: #ffc107;
+            }
+</style>
+@if (!formOnly)
+{
+
+    <script>
+
+
+    var prntFirm =`<tr><td colspan="99">
+                                            <div style="width:100%; display:flex">
+                                                <div style="width:25%; text-align:center; display:none">
+                                                    <img src="../../../../../../../Areas/mpc/assets/images/logo.png" />
+                                                </div>
+                                                <div style="width:100%; text-align:center">
+                                                    <h3 style="margin:0">@ViewBag.firm_name</h3>
+                                                    <p style="margin:0">@ViewBag.address1/p>
+                                                    <p style="margin:0">@ViewBag.address2</p>
+                                                    <p style="margin:0 @display_website" >Website :  @ViewBag.website</p>
+                                                    <p style="margin:0 @display_email">Email :  @ViewBag.Email</p>
+                                                    <p style="margin:0 @display_contact_no">Contact No :  @ViewBag.contact_no</p>
+                                                    <p style="margin:10px 0 0 0; text-decoration:underline; font-weight: bold" >@ViewBag.Title</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>`
+    </script>
+}
+
+
+<style>
+
+    tfoot th {
+        background-color: #ccd5f0 !important;
+    }
+
+    .font-22 {
+        font-size: 21px !important;
+    }
+    /* Style for the suggestion box */
+    .autocomplete-suggestions {
+        border: 1px solid #d4d4d4;
+        background-color: #fff;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+        .autocomplete-suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+            .autocomplete-suggestions div:hover {
+                background-color: #e9e9e9;
+            }
+</style>
+<style>
+
+
+    .cropper-point {
+        background-color: #39f;
+        height: 12px;
+        opacity: .75;
+        width: 12px;
+    }
+
+    .row {
+        --bs-gutter-x: 0.5rem;
+        --bs-gutter-y: 0;
+    }
+
+    .table.dataTable {
+        margin-top: 0px !important;
+    }
+
+    #mytable {
+        min-height: calc( 100vh - 388px );
+        display: block;
+        width: 100%
+    }
+
+    .dataTables_scroll {
+        border: 1px solid #ddd !important;
+        margin-top: 0.25rem !important;
+    }
+
+    .filter-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    .edit-button {
+        margin-right: .25rem !important;
+        color: #000;
+        background-color: #ffc107;
+        border-color: #ffc107;
+        font-size: .875rem;
+        border-radius: .2rem;
+    }
+
+    .delete-button {
+        color: #fff;
+        background-color: #f41127;
+        border-color: #f41127;
+        font-size: .875rem;
+        border-radius: .2rem;
+    }
+
+    .edit-button, .delete-button {
+        padding: .2rem
+    }
+</style>
+@if (ViewBag.IsHome)
+{
+    Html.RenderPartial("home");
+}
+else if (ViewBag.pageNotFound)
+{
+    //Request.Url
+    Html.RenderPartial("page-not-found");
+}
+
+else
+{
+    if (!mpc.OtherData.ContainsKey("data_grouping"))
+    {
+        mpc.OtherData["data_grouping"] = "";
+    }
+    var allowaction = false;
+    if (mpc.pageType == "Form")
+    {
+        if (mpc.action.isEditAllow)
+        {
+            allowaction = true;
+        }
+        if (mpc.action.isDeleteAllow)
+        {
+            allowaction = true;
+        }
+    }
+    if (!allowaction)
+    {
+        if (mpc.action.actionList != null)
+        {
+            if (mpc.action.actionList.Length > 0)
+            {
+                allowaction = true;
+            }
+        }
+    }
+    if (mpc.pageType == "Single Data Form Only")
+    {
+        formclass = "col-lg-10 mx-auto";
+    }
+    if (formOnly)
+    {
+        formclass = "col-lg-10 mx-auto";
+    }
+    <div>
+        @if (!formOnly)
+        {
+            <div class="page-breadcrumb d-flex align-items-center">
+                @if (showBreadCrumb)
+                {
+                    <div class="ps-3 d-none d-md-flex  my-1">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0 p-0">
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">@mpc.pageTitle</li>
+                            </ol>
+                        </nav>
+                    </div>
+                }
+                @if (mpc.pageType == "Form")
+                {
+                    if (mpc.formType == "PopUp")
+                    {
+                        if (mpc.action.isAddNewAllow)
+                        {
+                            <div class="ms-auto">
+                                <button type="button" onclick="openModel()" id="btn_new" class="btn btn-success btn-sm mb-2"><i class="bx bx-plus-circle"></i> Add New</button>
+                                @if (allowExcelUplad)
+                                {
+                                    <button type="button" onclick="openUploadCSVModel()" class="btn btn-outline-secondary btn-sm mb-2"><i class="bx bx-upload"></i> &nbsp;  Upload CSV</button>
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        if (mpc.action.isAddNewAllow)
+                        {
+                            <div class="ms-auto">
+                                @if (allowExcelUplad)
+                                {
+                                    <button type="button" onclick="openUploadCSVModel()" class="btn btn-outline-secondary btn-sm mb-2"><i class="bx bx-upload"></i>Upload CSV</button>
+                                }
+                            </div>
+                        }
+                    }
+
+                }
+
+            </div>
+        }
+        <div class="row">
+            @if (mpc.pageType == "Form" || mpc.pageType == "Single Data Form Only")
+            {
+                if (mpc.formType == "PopUp" && mpc.pageType != "Single Data Form Only")
+                {
+                    <div class="modal fade" id="model-form" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                        <div class="modal-dialog @modaltype">
+                            <form class="my-form" id="main-form">
+                                @Html.Hidden("frm-page-Id", @mpc.pageId.ToString())
+                                @Html.Hidden("HdId")
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">@mpc.pageTitle</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="row">
+                                            @foreach (var p in mpc.pcd)
+                                            {
+                                                if (!p.isField)
+                                                {
+                                                    continue;
+                                                }
+                                                else if (p.fieldType == "MultiLine")
+                                                {
+                                                    @Html.MasterField(p, "col-md-12", area: area)
+                                                }
+                                                else
+                                                {
+                                                    @Html.MasterField(p, "col-md-6", area: area)
+                                                }
+
+
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer p-2 d-block">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+
+                                                <button id="btn-add" type="button" class="btn btn-primary">Add</button>
+                                                <button id="btn-cancel" type="button" style="display: none;" class="btn btn-dark">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="@formclass ">
+                        <form class="my-form" id="main-form">
+                            @Html.Hidden("frm-page-Id", @mpc.pageId.ToString())
+                            @Html.Hidden("HdId")
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        @foreach (var p in mpc.pcd)
+                                        {
+                                            if (!p.isField)
+                                            {
+
+                                            }
+                                            else if (p.fieldType == "MultiLine")
+                                            {
+                                                @Html.MasterField(p, "col-md-12", area: area)
+                                            }
+                                            else
+                                            {
+                                                @Html.MasterField(p, "col-md-6", area: area)
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+
+                                            <button id="btn-add" type="button" class="btn btn-primary">Add</button>
+                                            <button id="btn-cancel" type="button" style="display: none;" class="btn btn-dark">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="mobData" class="d-block d-md-none">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                             <span>Name : <strong>Test</strong></span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+
+                                                <div class="d-flex align-items-center"><button type="button" class="edit-button btn btn-sm" data-id="1"><i class="bx bx-edit-alt"></i></button><button type="button" class="delete-button btn btn-sm" data-id="1"><i class="bx bx-trash"></i></button></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+
+
+
+                }
+            }
+            else
+            {
+                @Html.Hidden("frm-page-Id", @mpc.pageId.ToString())
+                @Html.Hidden("HdId")
+            }
+            @if (!formOnly)
+            {
+                if (mpc.pageType != "Single Data Form Only")
+                {
+                    <div class="@dataclass  d-none d-md-block">
+                        <div class="card">
+                            @if (mpc.filters.Count > 0)
+                            {
+                                <div class="card-header pb-0">
+                                    <div class="row">
+                                        @foreach (var f in mpc.filters)
+                                        {
+                                            string rptTitle = f.rptTitle;
+                                            string rt1 = "";
+                                            if (rptTitle == null)
+                                            {
+                                                rptTitle = "";
+                                            }
+                                        <form id="@f.uniqueId" class="d-flex mb-2 w-auto">
+
+                                            @foreach (var fi in f.filteritems)
+                                            {
+                                                if(rt1!="")
+                                                {
+                                                    rt1 += " and ";
+                                                }
+                                                @Html.MasterField(fi, "input-group me-2", area)
+                                                if(fi.type=="DatePicker")
+                                                {
+                                                    rt1 += fi.name + " : " + "${DisplayDate($('#flt-" + fi.name.Replace(" ", "_") + "').val())}";
+                                                }
+                                                else if (fi.type == "Auto CompleteBox")
+                                                { 
+                                                    rt1 += fi.name + " : " + "${$('#acb_flt-" + fi.name.Replace(" ", "_") + "').val()}";
+                                                }
+                                                else if (fi.type == "DDL")
+                                                {
+                                                    rt1 += fi.name + " : " + "${$('#flt-" + fi.name.Replace(" ", "_") + "').ddlText()}";
+                                                }
+                                                else
+                                                {
+                                                    rt1 += fi.name + " : " + "${$('#flt-" + fi.name.Replace(" ", "_") + "').val()}";
+                                                }
+
+                                            }
+                                          
+                                            @if (rptTitle == null || rptTitle=="")
+                                            {
+                                                rptTitle = rt1;
+                                            }
+                                            else
+                                            {
+                                                rptTitle = rptTitle.Replace("{", "${$('#flt-").Replace("}", "').val()}");
+                                            }
+                                            <div class="filter-btn">
+                                                <button class="btn btn-primary" id='btnfilterAction-@filterId' type="button" data-id="@f.uniqueId" style="width: auto; ">@f.btnName</button>
+                                            </div>
+                                        </form>
+                                            <script>
+
+                                                $('#btnfilterAction-@filterId').on('click', function () {
+
+                                                    //var subTitle = `@rptTitle.Replace("&quot;", "\"").Replace("&#39;", "'")`;
+                                                    var subTitle =`@Html.Raw(rptTitle) ` ;
+                                                    //var subTitle = `Between ${$('#flt-Start_Date').val()} to ${$('#flt-End_Date').val()} ` ;
+                                                    //var subTitle = `Start Date : ${$(#flt-Start_Date).val()} End Date : ${$(#flt-End_Date).val()}` ;
+                                                    apply_filter("@f.uniqueId", subTitle);
+                                                })
+                                            </script>
+
+                                            filterId++;
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            <div class="card-body px-2 py-1">
+
+                                <table class="table table-sm table-bordered table-striped  d-none d-md-table" id="mytable" style="width:100%">
+                                    <thead>
+
+                                        <tr>
+                                            @* <th class="no-export">r_grouping</th>*@
+                                            @if (allowaction)
+                                            {
+                                                <th class="no-export">Action</th>
+                                            }
+
+                                            @foreach (var p in mpc.gcd)
+                                            {
+                                                if (p.isShowOnGrid)
+                                                {
+                                                    <th>@p.displayText</th>
+                                                }
+                                            }
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <tfoot>
+                                    </tfoot>
+                                </table>
+                                <div id="grid_prog" style="margin : 0px auto; width:200px">
+                                    <span class="spinner-border spinner-border-sm me-2"> </span>
+                                    Please wait....
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    @Html.Hidden("HdId")
+        <div id="act-modals12">
+
+
+            @if (mpc.action.actionList != null)
+            {
+                foreach (ActionList al in mpc.action.actionList)
+                {
+                    var fileds = "";
+                    if (al.type == "Url")
+                    {
+                        <script>
+    var fields_@al.uniqueId = '';
+                        </script>
+                        continue;
+                    }
+                    if (al.type == "Api")
+                    {
+                        <script>
+    var fields_@al.uniqueId = '';
+                        </script>
+                        continue;
+                    }
+                    if (al.type == "ConfirmDialog")
+                    {
+                        <script>
+    var fields_@al.uniqueId = '';
+                        </script>
+                        continue;
+                    }
+                    <div class="modal fade" id="model-@al.uniqueId" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                        <div class="modal-dialog modal-lg">
+
+                            @Html.Hidden("act-cust-Id", al.action_id)
+                            @Html.Hidden("HdId")
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">@al.name</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+
+                                    </div>
+                                    <div class="row">
+                                        @if (al.type == "Form")
+                                        {
+                                            foreach (var p in mpc.pcd)
+                                            {
+                                                if (!al.col_list.Contains(p.columnName))
+                                                {
+                                                    continue;
+                                                }
+                                                if (!p.isField)
+                                                {
+
+                                                }
+                                                else if (p.fieldType == "MultiLine")
+                                                {
+                                                    fileds += p.columnName + ",";
+                                                    var col = p.columnName;
+                                                    p.columnName = al.uniqueId + col;
+                                                    @Html.MasterField(p, "col-lg-12", area: area)
+                                                    p.columnName = col;
+                                                }
+                                                else
+                                                {
+                                                    fileds += p.columnName + ",";
+                                                    var col = p.columnName;
+                                                    p.columnName = al.uniqueId + col;
+                                                    @Html.MasterField(p, "col-xxl-6 col-xl-6  col-lg-12  col-md-4 col-sm-6", area: area)
+                                                    p.columnName = col;
+                                                }
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            foreach (var p in al.act_pcd)
+                                            {
+
+                                                if (p.fieldType == "MultiLine")
+                                                {
+                                                    fileds += p.columnName + ",";
+                                                    @Html.MasterField(p, "col-lg-12", area: area)
+                                                }
+                                                else
+                                                {
+                                                    fileds += p.columnName + ",";
+                                                    @Html.MasterField(p, "col-xxl-6 col-xl-6  col-lg-12  col-md-4 col-sm-6", area: area)
+                                                }
+                                            }
+                                        }
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer p-2 d-block">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+
+                                            <button id="btn-add-@al.uniqueId" type="submit" class="btn btn-primary">@al.btn_text</button>
+                                            <button type="button" data-bs-dismiss="modal" class="btn btn-dark ms-3">Cancel</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    fileds = fileds.TrimEnd(',');
+                    <script>
+                    var fields_@al.uniqueId = '@fileds';
+                    $(`#btn-add-@al.uniqueId`).on("click", function () {
+                        var uniqueId='@al.uniqueId';
+
+                            var ss = fields_@al.uniqueId .split(',');
+                            var data = { pageId: '@mpc.pageId', action_id: '@al.action_id', ID: acn_d.Id }
+                            $.each(ss, function (indx, d) {
+                                data[d] = $(`#${uniqueId}${d}`).val();
+                            })
+                            data.acn_d = JSON.stringify(acn_d);
+                        data.uniqueId = '@al.uniqueId';
+                        gowithData("../../../../../../../@sector/mpc-save/action_form", 'POST', JSON.stringify({ data: data }), function (resp) {
+
+                            if (!resp.error) {
+
+                                alertSuccess(resp.message).then((result) => {
+                                    $('#@first_element').focus();
+                                });
+                                //console.log(resp.data_action);
+                                if (resp.data_action == "remove") {
+
+                                    var table = $('#mytable').DataTable();
+                                    var rowIndex = table.row(select_tr).index();
+                                    table.row(rowIndex).remove().draw();
+                                    select_tr.remove();
+                                }
+                                else if (resp.data_action == "status") {
+                                    console.log("dolr");
+                                    select_tr.addClass("bg-light-primary");
+                                }
+                                else if (resp.data) {
+                                    bind_data(resp.data);
+                                }
+                                $('#model-@al.uniqueId').modal("hide");
+                                $.each(ss, function (indx, d) {
+                                    $(`#${d}`).val('');
+                                })
+                            }
+                            else {
+                                  alertError(resp.message).then((result) => {
+                             $('#@first_element').focus();
+                        });
+                            }
+    },true)
+                        });
+                    </script>
+                }
+            }
+        </div>
+                }
+            }
+        </div>
+
+        @if (!formOnly)
+        {
+            @Html.BeginModal("mdl-upxl", "Upload using CSV file").Content(@<div>
+                @Html.LabelEditor("csv_file", "file-csv", "Browse CSV File", isRequired: true, area: area)
+                <div class="row mt-2" id="div2" style="max-height: calc(100vh - 300px); overflow: auto;">
+                    <table class="table table-bordered table-striped m-0 " style="width:100%" id="csv_data">
+                        <thead style="position: sticky; top: -1px; background-color:whitesmoke; ">
+
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>).Footer(@<div>
+            <button type="button" id="btn_upload_csv" class="btn btn-success btn-sm d-none"><i class="bx bx-upload"></i>Upload</button>
+            <button type="button" id="btn_sample" class="btn btn-outline-info btn-sm"><i class="bx bx-cloud-download"></i>Download Sample</button>
+
+        </div>).Create()
+
+
+            @Html.BeginModal("mdl-iframe", "", "modal-xl").Content(@<div id="ifrm">
+                <iframe id="myframe" style="width: 100%; height: calc(100vh - 220px);" frameborder="0"></iframe>
+            </div>).Create()
+        }
+
+        @Html.BeginModal("mdl-add-more", "Add More", "modal-md").Content(@<div>
+            <iframe id="moreframe" style="width: 100%; " frameborder="0"></iframe>
+        </div>).Footer(@<div></div>).Create()
+
+        @Html.BeginModal("mdl-crop", "Crop Image").Content(@<div id="tht" style="max-height: calc(100vh - 250px); overflow:auto">
+            <img id="croppedImage" class="img-fluid">
+        </div>).Footer(@<div><button type="button" id="mdl-btn-crop" class="btn btn-primary">Crop Image</button></div>).Create()
+
+        @if (!formOnly)
+        {
+
+            <script>
+            $(function () {
+                $('#file_csv_file').removeAttr("onchange");
+            })
+
+            $(`#btn_sample`).on("click", function () {
+                window.open("../../../../../../mpc-sample/@mpc.pageId","_blanck");
+            })
+            function openUploadCSVModel() {
+                $('#file_csv_file').val(null);
+                var thead = $("#csv_data thead");
+                thead.empty();
+                var tbody = $("#csv_data tbody");
+                tbody.empty();
+                $('#btn_sample').removeClass("d-none");
+                $('#btn_upload_csv').addClass("d-none");
+                $("#mdl-upxl").modal("show")
+            }
+
+            $('#file_csv_file').on('change', function () {
+                console.log("file select")
+                var csvFile = $(this)[0].files[0];
+                if (csvFile) {
+                    //empty_form();
+
+                    var fileExtension = csvFile.name.split('.').pop().toLowerCase();
+                    if (fileExtension != "csv") {
+                        alertError("Please Select Valid CSV File Only")
+                        $('#csv_file').val('');
+                        return false;
+                    }
+                    //fileupload($('#file_csv_file')[0])
+                    console.log("file select2")
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        console.log("file loaded")
+                        var csvContent = e.target.result;
+                        csvToJson(csvContent);
+                        $('#btn_sample').addClass("d-none");
+                        $('#btn_upload_csv').removeClass("d-none");
+                    };
+                    reader.readAsText(csvFile, 'UTF-8');
+
+                }
+            });
+            var datalist = [];
+            var file_loaded = false;
+            function csvToJson(csvContent) {
+                Papa.parse(csvContent, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function (results) {
+                        file_loaded = true;
+                        datalist = results.data;
+                        load_csv_datatable();
+                    }
+                });
+
+                //Papa.parse(csvContent, {
+                //    header: true,
+                //    skipEmptyLines: true,
+                //    complete: function (results) {
+                //        file_loaded = true;
+                //        datalist = results.data;
+                //        load_csv_datatable();
+                //    },
+                //    encoding: 'UTF-8', // Specify UTF-8 encoding
+                //    dynamicTyping: true, // Optional: Automatically convert types
+                //    transformHeader: function (header) {
+                //        // Optional: Normalize header names if needed
+                //        return header.trim().toLowerCase().replace(/\s+/g, '_');
+                //    }
+                //});
+            }
+            function load_csv_datatable() {
+                var thead = $("#csv_data thead");
+                thead.empty();
+                var tbody = $("#csv_data tbody");
+                tbody.empty();
+                if (datalist.length > 0) {
+                    var d1 = datalist[0];
+                    var keys = Object.keys(d1);
+                    var tr = $('<tr>')
+                    $.each(keys, function (ind, k) {
+                        tr.append($('<th>').text(k));
+                    })
+                    thead.append(tr);
+                    $.each(datalist, function (indx, d) {
+                        tr = $('<tr>')
+                        $.each(keys, function (ind, k) {
+                            tr.append($('<td>').text(d[k]));
+                        })
+                        tbody.append(tr);
+                    })
+                }
+
+            }
+
+            $("#btn_upload_csv").click(function () {
+                var data = { pageId: '@mpc.pageId' };
+                data.datalist = JSON.stringify(datalist)
+                skip_invalid_data = $('#skip_invalid_data').prop("checked");
+                gowithData("../../../../../../@sector/mpc-data/uploadcsv",'POST', JSON.stringify({ data: data }), function (resp) {
+                    if (resp.error) {
+                        alertError(resp.message).then((result) => {
+                             $('#@first_element').focus();
+                        });
+                        if (resp.needVerify) {
+                            load_verified_datatable(resp.skiped_data)
+                        }
+                    }
+                    else if (resp.skip) {
+                        alertSuccess(resp.message).then((result) => {
+                             $('#@first_element').focus();
+                        });
+                        console.log(resp.skiped_data);
+                        load_verified_datatable(resp.skiped_data)
+                        bind_data(resp.data);
+                    }
+                    else {
+                        alertSuccess(resp.message).then((result) => {
+                             $('#@first_element').focus();
+                        });
+                        bind_data(resp.data);
+                        $("#mdl-upxl").modal("hide")
+                    }
+
+                },true);
+            });
+            function load_verified_datatable(data) {
+                var thead = $("#csv_data thead");
+                thead.empty();
+                var tbody = $("#csv_data tbody");
+                tbody.empty();
+                if (data.length > 0) {
+                    var d1 = data[0];
+                    var keys = Object.keys(d1);
+                    var tr = $('<tr>')
+                    $.each(keys, function (ind, k) {
+                        if (k == "error" || k == "message") {
+
+                        }
+                        else {
+
+                            tr.append($('<th>').text(k));
+                        }
+
+                    })
+                    tr.append($('<th>').text("Message"));
+                    thead.append(tr);
+                    $.each(data, function (indx, d) {
+
+                        if (d.error) {
+                            tr = $('<tr>')
+
+                            $.each(keys, function (ind, k) {
+                                if (k == "error" || k == "message") {
+
+                                }
+                                else {
+
+                                    tr.append($('<td>').text(d[k]));
+                                }
+                            })
+                            tr.append($('<td>').text(d.message));
+                            tr.addClass("bg-danger");
+                            tbody.append(tr);
+                        }
+                    })
+
+                    $.each(data, function (indx, d) {
+
+                        if (!d.error) {
+                            tr = $('<tr>')
+
+                            $.each(keys, function (ind, k) {
+                                if (k == "error" || k == "message") {
+
+                                }
+                                else {
+
+                                    tr.append($('<td>').text(d[k]));
+                                }
+                            })
+                            tr.append($('<td>').text(""));
+                            tbody.append(tr);
+                        }
+
+                    })
+                }
+
+            }
+
+            </script>
+
+            <script>
+             @if (mpc.action.actionList != null)
+             {
+                 foreach (ActionList al in mpc.action.actionList)
+                 {
+                    @: function submit_@al.uniqueId () {
+                    @: var data = {};
+                     foreach (var p in al.act_pcd)
+                     {
+
+                           @: data['@p.displayText'] = $('#@p.columnName').val();
+                       }
+                     // @: submitdata('../../save/data', JSON.stringify({ data: data }), function (data) { console.log(data); })
+                    @:console.log(data);
+                    @:}
+                 }
+             }
+
+
+                $(function () {
+
+
+                    var data = { pageId: '@mpc.pageId' };
+                    data["my-query-string-data"] = window.location.search;
+                    gowithData('../../../../@sector/mpc-data/tabledata', 'Post', JSON.stringify({ data: data }), function (data) {
+                        if (!data.error) {
+                        @if (mpc.pageType == "Single Data Form Only")
+                        {
+                            @: bind_form(data.data);
+                        }
+                        else
+                        {
+                            @: bind_data(data.data);
+                        }
+                        }
+                    })
+
+
+        });
+            </script>
+
+        }
+
+
+        <script>
+
+    function toFloat(value) {
+        let parsedValue = parseFloat(value);
+        return isNaN(parsedValue) ? 0 : parsedValue;
+    }
+        function enableDisabledFields() {
+            // Enable disabled fields before form submission
+            $("#action_form input:disabled").prop("disabled", false);
+            $("#action_form select:disabled").prop("disabled", false);
+            return true; // Continue with form submission
+        }
+        $(function () {
+               @if (mpc.pageType == "Form")
+               {
+                @: emptyForm();
+                @: $('#@first_element').focus();
+               }
+
+        });
+
+    function formatDate(inputDate) {
+        var date = new Date(inputDate);
+        var formattedDate = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+        return formattedDate;
+    }
+        </script>
+
+
+        <script>
+        var actionlist = [];
+        var isEdit = false;
+        var edit_row;
+            $('#btn-add').on('click', function () { save_data(); });
+            function save_data() {
+                var isFalse = 0;
+                if (!requiredFields) {
+                    $.each(requiredFields, function (a, d) {
+                        if (!$(`#${d}`).val()) {
+                            $(`#${d}`).focus()
+                            alertErrorNotification(`${$(`label[for="${d}"]`).text()} is Required`)
+                            isFalse = 1;
+                            return false;
+                        }
+                    })
+                }
+                if (isFalse) {
+                    return false;
+                }
+                var btn = $('#btn-add');
+                if (btn.prop('disabled')) {
+                    return false; // Prevent multiple clicks while disabled
+                }
+                btn.prop("disabled", true);
+                //$("#main-form input:disabled").prop("disabled", false);
+                btn.html(`<div  style="margin : 0px auto; width:150px"> <span class="spinner-border spinner-border-sm me-2" > </span>
+                            Please wait....
+                            </div>`);
+                var data = {};
+                //var formData = $("#main-form").serialize(); // Serialize form data
+                var formArray = $("#main-form").serializeArray();
+                var _data = {};
+                $.each(formArray, function () {
+                    _data[this.name] = this.value || '';
+                });
+
+                $("#main-form :input:not(:checkbox)").each(function () {
+                    if ($(this).prop("disabled")) {
+                        if ($(this).val()) {
+                            _data[$(this).attr("name")] = $(this).val();
+                        }
+                    }
+                });
+
+                $("#main-form :checkbox").each(function () {
+                    _data[$(this).attr("id")] = $(this).prop("checked");
+                });
+
+                _data["my-query-string-data"] = window.location.search;
+                var formData = $.param(_data);
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "../../../../../../../../@sector/mpc-save/page",
+                    data: formData,
+                    success: function (resp) {
+                        resp = JSON.parse(resp);
+                        if (resp.error) {
+                             alertError(resp.message).then((result) => {
+                             $('#@first_element').focus();
+                        });
+                            if (isEdit == true) {
+                                $('#btn-add').text("Update")
+                            }
+                            else {
+
+                                $('#btn-add').text("Add")
+                                $('#btn-cancel').hide();
+                            }
+                            $('#btn-add').prop("disabled", false);
+                        }
+                       else {
+                              alertSuccess(resp.message).then((result) => {
+                             $('#@first_element').focus();
+                        });
+                           @if (mpc.pageType == "Single Data Form Only")
+                           {
+                                @:$('#btn-add').text("Update")
+                                @:$('#btn-add').prop("disabled", false);
+                                @: bind_form(resp.data);
+                            }
+                           else
+                           {
+                               if (formOnly)
+                               {
+ @: emptyForm();
+                    }
+                               else
+                               {
+  @: emptyForm();
+                                @: if (resp.isUpdate) { bind_data(resp.data, 2)}
+                                @: else if (resp.isReset) { bind_data(resp.data)}
+                                @: else { bind_data(resp.data,1)}
+                    }
+
+                           }
+                        }
+                    },
+                    error: function (error) {
+                        alertError(error);
+                        if (isEdit == true) {
+                            $('#btn-add').text("Update")
+                        }
+                        else {
+
+                            $('#btn-add').text("Add")
+                            $('#btn-cancel').hide();
+                        }
+                        $('#btn-add').prop("disabled", false);
+                    }
+                });
+
+
+            }
+
+            var select_tr;
+        function processGroupingText(d) {
+            var format = '@mpc.OtherData["data_grouping"]';
+            const pattern = /{([^}]*)}/g;
+            const matches = format.match(pattern);
+            if (matches) {
+                matches.forEach(match => {
+
+                    const vrbl = match.match(/{([^}]*)}/)[1];
+                    format = format.replace(match, d[g_cols[vrbl]]);
+                });
+            }
+            return format;
+        }
+        function processGroupingText2(d) {
+            var format = '@mpc.OtherData["data_grouping"]';
+            const pattern = /{([^}]*)}/g;
+            const matches = format.match(pattern);
+            if (matches) {
+                matches.forEach(match => {
+
+                    const vrbl = match.match(/{([^}]*)}/)[1];
+                    format = format.replace(match, d[vrbl]);
+                });
+            }
+            return format;
+        }
+        var groupCols = [];
+        var groupColsIndx = [];
+        function getGroupCols(d) {
+            var format = '@mpc.OtherData["data_grouping"]';
+            const pattern = /{([^}]*)}/g;
+            const matches = format.match(pattern);
+            if (matches) {
+                matches.forEach(match => {
+                    const vrbl = match.match(/{([^}]*)}/)[1];
+                    groupCols.push(vrbl);
+                });
+            }
+            $.each(groupCols, function (i, a) {
+                groupColsIndx.push(g_cols[a]);
+            })
+        }
+
+        </script>
+        @if (mpc.pageType == "Form")
+        {
+            <script>
+            $('#btn-cancel').on('click', function () {
+                emptyForm();
+                $('#@first_element').focus();
+
+                $('#mytable').trigger("OnCancel");
+            });
+            function emptyForm() {
+                    @foreach (var p in mpc.pcd)
+                    {
+
+                        @:  $('#@p.columnName').val("@p.defaultValue");
+
+                        if (p.onChanged)
+                        {
+                        @:  $('#@p.onChangedField').removeAttr('data-@p.columnName');
+                    @:$('#@p.onChangedField').change();
+                    }
+                        if (p.fieldType.Contains("File"))
+                        {
+                @:  $('#file_@p.columnName').val("");
+                @:  $('#img_@p.columnName').hide();
+            }
+                        if (p.fieldType.Contains("CheckBox-List"))
+                        {
+                             @: $("input[name='@p.columnName']").prop("checked", false);
+                        }
+                        if (p.fieldType.Contains("CheckBox"))
+                        {
+                            if ((new String[] { "1", "true" }).Contains(p.defaultValue.ToLower()))
+                            {
+                                 @: $("input[name='@p.columnName']").prop("checked",true);
+                            }
+                            else
+                            {
+                                 @: $("input[name='@p.columnName']").prop("checked", false);
+                            }
+
+
+                        }
+                        else if (p.fieldType.Contains("RadioButton"))
+                        {
+                             @: $("input[name='@p.columnName']").prop("checked", false);
+                    }
+
+                    }
+                 $('#btn-add').text("Add")
+                 $('#btn-add').prop("disabled", false);
+                    $('#btn-cancel').hide();
+                    $('#HdId').val("")
+                    $('#model-form').modal("hide");
+                isEdit = false;
+                $('#mytable').trigger("OnEmptyForm");
+            }
+            </script>
+        }
+
+
+        @if (mpc.pageType == "Single Data Form Only")
+        {
+            <script>
+              function bind_form(data) {
+                if (data.length == 0) {}
+                else {
+                    $('#btn-add').text("Update")
+                    if (data[0].Id) {
+                        $('#HdId').val(data[0].Id)
+                    }
+                    else if (data[0].id) {
+                        $('#HdId').val(data[0].id)
+                    }
+
+                    @foreach (var p in mpc.pcd)
+                    {
+                        if (p.isField)
+                        {
+
+                            if (p.fieldType.Contains("File"))
+                            {
+                                    @: $('#@p.columnName').val(data[0].@p.columnName)
+                                    @: $('#img_@p.columnName').attr("src", data[0].@p.columnName)
+                                    @: $('#img_@p.columnName').show()
+                                }
+                            else if (p.fieldType.Contains("TimePicker"))
+                            {
+                                    @: $('#@p.columnName').val(convertTo24Hour(data[0].@p.columnName))
+                                }
+                            else if (p.fieldType.Contains("DatePicker"))
+                            {
+                                    @: $('#@p.columnName').val(formatDate(data[0].@p.columnName));
+                                }
+                            else if (p.fieldType.Contains("CheckBox"))
+                            {
+                            @: $("input[name='@p.columnName']").prop("checked", data[0].@p.columnName);
+                    }
+                            else if (p.fieldType.Contains("CheckBox-List"))
+                            {
+                                    @: $("input[name='@p.columnName']").prop("checked", false);
+                                    @: muticheck('@p.columnName', data[0].@p.columnName)
+                                }
+                            else if (p.fieldType.Contains("RadioButton"))
+                            {
+                                    @: muticheck('@p.columnName', data[0].@p.columnName)
+                                    @: $('input[name="@p.columnName"]').change();
+                                }
+                            else
+                            {
+                                    @: $('#@p.columnName').val(data[0].@p.columnName)
+                                }
+                            if (p.onChanged)
+                            {
+                                    @: $('#@p.onChangedField').attr('data-@p.columnName', data[0].@p.columnName);
+                                    @: $('#@p.onChangedField').change();
+                                }
+
+                        }
+                    }
+                    }
+            }
+
+            </script>
+        }
+        @if (!formOnly && mpc.pageType != "Single Data Form Only")
+        {
+    <script>
+
+
+             function openModel() {
+                 $('#model-form').modal("show");
+                 setTimeout(function () {
+                    $('#@first_element').focus();
+                 },1000)
+        }
+        var acn_d;
+        function processUrl(_url, d) {
+            const pattern = /{([^}]*)}/g;
+            const matches = _url.match(pattern);
+            if (matches) {
+                matches.forEach(match => {
+                    const vrbl = match.match(/{([^}]*)}/)[1];
+                    _url = _url.replace(match, d[vrbl]);
+                });
+            }
+            return _url;
+        }
+
+         var isActionAllow = true;
+        function actionClick(elmnt,title,fileds, actId, d, row, type, pageurl, pagetype) {
+            acn_d = d;
+            isActionAllow = true;
+            $('#mytable').trigger("BeforeAction", [ title, d]);
+            if (!isActionAllow) {
+                return false;
+            }
+            if (type == "Url") {
+                var url = processUrl(pageurl.replaceAll('&amp;', '&').replaceAll('&#39;', "'"), d);
+                if (url.startsWith("javascript")) {
+                    window.location.href = url;
+                }
+                else if (pagetype === "Same Page") {
+                    window.location.href = "../../../../../../../" +url;
+                }
+                else if (pagetype === "New Tab") {
+                    window.open("../../../../../../../" +url);
+                }
+                else {
+                    $('#myframe').attr('src', "../../../../../../../" +url);
+                    $('#mdl-iframe .modal-title').html(title)
+                    $('#mdl-iframe .modal-footer').remove();
+                    $('#mdl-iframe').modal("show");
+                }
+            }
+            if (type == "Api") {
+                var url = processUrl(pageurl.replaceAll('&amp;', '&').replaceAll('&#39;', "'"), d);
+                gowithData(url, "post", {}, function (resp) {
+                    if (resp.error) {
+                        alertError(resp.message);
+                    }
+                    else {
+                        alertSuccesNotification(resp.message);
+                        setTimeout(function () {
+                            window.location.reload();
+                        },1000)
+                    }
+                },true)
+
+            }
+            else {
+                var ss = fileds.split(',');
+                $.each(ss, function (indx, n) {
+
+                    $(`#${actId}${n}`).val(d[n]);
+                })
+                select_tr = row;
+                // $('#act-modals12').find('.modal-body input, .modal-body textarea, .modal-body select').val('');
+                $('#model-' + actId).modal("show");
+            }
+
+
+        }
+    var showAction = false;
+        var g_cols = {};
+        var tableData = [];
+                function bind_data(data, code) {
+
+                    if (!code) {
+                        tableData = data;
+                    }
+                    else if (code == 1) {
+                        //prepend
+                        $.each(data, function (indx, d) {
+                            tableData.unshift(d);
+                        })
+                       //tableData = tableData.concat(data);
+                    }
+                    else if (code == 2) {
+                        //update if Id Matched
+                        $.each(data, function (indx, d) {
+                            $.each(tableData, function (i, td) {
+                                if (td.Id == d.Id) {
+                                    tableData[i] = d;
+                                }
+                            })
+                        })
+                    }
+
+                    $('#mobData').empty();
+                    data = tableData;
+                    code = null;
+
+                          showAction = false;
+                 @if (allowaction)
+                 {
+                                   @:  showAction = true;
+                                }
+
+                        var tableBody = $('#mytable tbody');
+
+                        if (code == 2) {
+                            edit_row.empty();
+                        }
+                        else {
+                            $('#mytable').DataTable().destroy();
+                        }
+                        //$('#mytable').DataTable().destroy();
+                        if (!code) {
+                            tableBody.empty();
+                        }
+                        $('#grid_prog').hide();
+
+                    var type = '@mpc.pageType';
+
+
+                    $.each(data, function (index, d) {
+
+
+                            var row = $('<tr>');
+                            var cardFooter = $('<div class="card-footer">');
+                            var card = $('<div class="card-body">');
+                            var div = $('<div>').addClass("d-flex align-items-center")
+                            var btn_delete = '';
+                            var btn_edit = '';
+                            @if (mpc.pageType == "Form")
+                            {
+                                if (mpc.action.isEditAllow)
+                                {
+                                    @: btn_edit = $('<button>').attr("type", "button").addClass("edit-button btn btn-sm").attr("data-id", d.Id).html("<i class='bx bx-edit-alt'></i>");
+                                   @:   div.append(btn_edit) 
+                                   @: cardFooter.append($('<button>').attr("type", "button").attr("action", "edit").addClass("edit-button btn btn-sm").attr("data-id", d.Id).html("<i class='bx bx-edit-alt'></i>"))
+                                }
+                                if (mpc.action.isDeleteAllow)
+                                {
+                                    @: btn_delete = $('<button>').attr("type", "button").addClass("delete-button btn btn-sm").attr("data-id", d.Id).html("<i class='bx bx-trash'></i>");
+                                   @:   div.append(btn_delete)
+                                    @: cardFooter.append($('<button>').attr("type", "button").attr("action", "delete").addClass("delete-button btn btn-sm").attr("data-id", d.Id).html("<i class='bx bx-trash'></i>"))
+                                }
+                            }
+
+                            var div_ddl = $('<div>').addClass("dropdown-button btn btn-sm ms-1")
+                            div_ddl.append(` <i class='bx bx-dots-horizontal-rounded font-22'></i>`)
+                            var ul = $('<ul>').addClass("dropdown-menu")
+                            div_ddl.on("click", function () {
+                                $('.dropdown-menu').hide();
+                                ul.toggle();
+                            });
+
+                            div_ddl.append(ul)
+                            $.each(actionlist, function (index, act) {
+                                table.append(actionrow(act));
+                            });
+                            var ulshow = false;
+
+                             @if (mpc.action.actionList != null)
+                             {
+                                 var i = 1;
+                                 foreach (ActionList al in mpc.action.actionList)
+                                 {
+
+
+                                     if (al.btn_type == "Button")
+                                     {
+
+                                         //aqua,burlywood,cadetblue,deepskyblue,
+                                @: var btn_@al.uniqueId = $('<button>').attr("type", "button").addClass("btn-@i ms-2 btn btn-sm").html(`@Html.Raw(al.action_text)`);
+                                @: btn_@al.uniqueId .on('click', function () { actionClick(this,"@al.name",fields_@al.uniqueId, "@al.uniqueId", d, row, '@al.type', '@al.pageurl', '@al.pagetype'); })
+                                @: div.append(btn_@al.uniqueId)
+
+                                     }
+                                     else
+                                     {
+                               @: ulshow = true;
+                                if (al.type == "ConfirmDialog")
+                                         {
+
+                                      @: var li_@al.uniqueId = $('<li>').append($('<span>').attr("data-id", d.Id).addClass("nav-@i").attr("data-message", "@al.confirmMessage").attr("data-action", "@al.name").attr("data-uid", '@al.uniqueId').addClass("dropdown-item action-button").append("<i class='@al.icon'></i>").append(`@Html.Raw(al.action_text)`));
+                                      @: ul.append(li_@al.uniqueId);
+                                     // @: li_@al.uniqueId .on('click', function () { actionClick("@al.uniqueId",d); })
+                                         }
+                                         else
+                                         {
+                                             //custom_action_click
+                                      @: var li_@al.uniqueId = $('<li>').append($('<span>').addClass("nav-@i").addClass("dropdown-item").html(`@Html.Raw(al.action_text)`));
+                                      @: ul.append(li_@al.uniqueId);
+                                      @: li_@al.uniqueId .on('click', function () { actionClick(this,"@al.name",fields_@al.uniqueId, "@al.uniqueId", d, row, '@al.type', '@al.pageurl', '@al.pagetype'); })
+                                }
+
+                                     }
+
+                                     i++;
+
+
+
+                                 }
+                             }
+
+                            @if (mpc.action.actionList != null && mpc.action.actionList.Length > 0)
+                            {
+                                @: if (ulshow) { div.append(div_ddl)}
+                             }
+
+
+                            var td = $('<td>').append(div).width("55px");
+
+
+                            if (code == 2) {
+                                if (showAction) {
+                                    row = edit_row;
+                                    edit_row.append(td);
+                                }
+                                edit_row.append(
+                       @foreach (var g in mpc.gcd)
+                       {
+                           if (g.isShowOnGrid)
+                           {
+
+                               if (g.dataType == "Image")
+                               {
+                                     @: $('<td>').html(`<a href="${d.@g.columnName}" target="_blank"><img src="${d.@g.columnName}" class="img-thumbnail" style="height: 50px;" ></a>`),
+                                }
+                               else if (g.dataType == "Other File")
+                               {
+                                     @: $('<td>').html('<a href="' + d.@g.columnName+ '" target="_blank" download ><i class="bx bxs-download" style="font-size: 2rem;"></i></a>'),
+                                }
+                               else if (g.dataType == "Status")
+                               {
+                                     @: $('<td>').html(getstatusview('@g.requiredData', d.@g.columnName)),
+                                }
+                               else if (g.dataType == "HTML")
+                               {
+                                     @: $('<td>').html(decodeHTMLEntities(d.@g.columnName)),
+                                }
+                               else if (g.dataType == "Action")
+                               {
+                                     @: $('<td>').html(d.@g.columnName),
+                                }
+                               else
+                               {
+ @: $('<td>').text(d.@g.columnName),
+                        }
+                           }
+                       }
+                                );
+                            }
+                            else {
+                                row = $('<tr>');
+                                if (showAction) {
+                                    row.append(td);
+                            }
+
+
+                            row.append(
+                                    @foreach (var g in mpc.gcd)
+                                    {
+                                        if (g.isShowOnGrid)
+                                        {
+                                            if (g.dataType == "Image")
+                                            {
+                                                @:image_td(d.@g.columnName),
+
+                                            }
+                                            else if (g.dataType == "Other File")
+                                            {
+                                                 @: $('<td>').html('<a href="' + d.@g.columnName+ '" target="_blank" download ><i class="bx bxs-download" style="font-size: 2rem;"></i></a>'),
+                                            }
+                                            else if (g.dataType == "Status")
+                                            {
+                                                 @: $('<td>').html(getstatusview('@g.requiredData', d.@g.columnName)),
+                                            }
+                                           else if (g.dataType == "HTML")
+                                           {
+                                                 @: $('<td>').html(decodeHTMLEntities(d.@g.columnName)),
+                                            }
+                                            else if (g.dataType == "Action")
+                                            {
+                                                 @: $('<td>').html(d.@g.columnName),
+                                            }
+                                            else
+                                            {
+                                                @: $('<td>').text(d.@g.columnName),
+                                            }
+                                        }
+                                    }
+                                );
+                                 
+                                 card.append(
+                                 @foreach (var g in mpc.gcd)
+                                    {
+                                        if (g.isShowOnGrid)
+                                        {
+                                            if (g.dataType == "Image")
+                                            {
+                                               // @:image_td(d.@g.columnName),
+
+                                            }
+                                            else if (g.dataType == "Other File")
+                                            {
+                                               //  @: $('<td>').html('<a href="' + d.@g.columnName+ '" target="_blank" download ><i class="bx bxs-download" style="font-size: 2rem;"></i></a>'),
+                                            }
+                                            else if (g.dataType == "Status")
+                                            {
+                                                 @: $('<span>').append($('<strong>').text('@g.displayText : '), getstatusview('@g.requiredData', d.@g.columnName), $('<br>')),
+                                            }
+                                           else if (g.dataType == "HTML")
+                                           {
+                                                 @: $('<span>').append($('<strong>').text('@g.displayText : '), decodeHTMLEntities(d.@g.columnName), $('<br>')),
+                                            }
+                                            else if (g.dataType == "Action")
+                                            {
+                                                 @: $('<span>').append($('<strong>').text('@g.displayText : '), d.@g.columnName, $('<br>')),
+                                            }
+                                            else
+                                            {
+                                                @: $('<span>').append($('<strong>').text('@g.displayText : '), d.@g.columnName, $('<br>')),
+                                            }
+                                        }
+                                    });
+                                $('#mobData').append($('<div class="card">').append(card, cardFooter));
+                                cardFooter.find("button").on('click', function () {
+                                    var action = $(this).attr("action");
+                                    if (action == "edit") {
+                                        btn_edit.click();
+                                    }
+                                    else if (action == "delete") {
+                                        btn_delete.click();
+                                    }
+
+                                })
+
+                                if (!code) {
+                                    tableBody.append(row);
+                                }
+                                else {
+                                    tableBody.prepend(row);
+                                }
+                            }
+
+
+                            if (btn_delete) {
+                                btn_delete.on('click', function () {
+                                    allowDelete = true;
+                                    $('#mytable').trigger("DataDelete", d);
+                                    if (!allowDelete) {
+                                        return false;
+                                    }
+
+                                    var id = d.Id;
+                                    var table = $('#mytable').DataTable();
+                                    var rowIndex = table.row(row).index();
+                                    var pageId = $('#frm-page-Id').val();
+                                    var data = { id: id, pageId: pageId };
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "You won't be able to revert this!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, delete it!',
+                                        allowOutsideClick: false
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            Swal.fire(
+                                                {
+                                                    title: 'Deleteing Please wait...',
+                                                    allowOutsideClick: false,
+                                                    didOpen: () => {
+                                                        Swal.showLoading()
+                                                        $.ajax({
+                                                            url: '../../../../../@sector/mpc-data/delete',
+                                                            type: 'POST',
+                                                            data: JSON.stringify({ data: data }),
+                                                            contentType: 'application/json; charset=utf-8',
+                                                            dataType: 'json',
+                                                            success: function (data) {
+                                                                //console.log(data);
+                                                                data = JSON.parse(data);
+                                                                if (!data.error) {
+                                                                    Swal.fire(
+                                                                        'Success!!',
+                                                                        'Data Deleted Successfully',
+                                                                        'success'
+                                                                    )
+                                                                    $.each(tableData, function (i, td) {
+                                                                        if (td.Id == d.Id) {
+                                                                            tableData.splice(i, 1);
+                                                                        }
+                                                                    })
+                                                                    bind_data(tableData,3)
+                                                                    //table.row(rowIndex).remove().draw();
+                                                                    //row.remove();
+                                                                    //$('#mytable').DataTable().destroy();
+                                                                    //calculateFooter();
+                                                                    //refresh_dt("#mytable")
+                                                                }
+                                                                else {
+                                                                    Swal.fire(
+                                                                        'Error!!',
+                                                                        data.message,
+                                                                        'error'
+                                                                    )
+                                                                }
+                                                                //calback(data);
+
+                                                            }
+                                                        });
+                                                    },
+
+                                                })
+                                        }
+                                    })
+                                });
+                            }
+                        });
+                        calculateFooter();
+                    $('#mytable').trigger('Lodaed');
+                        if (code != 2) {
+                            $('#mytable').DataTable().destroy();
+                            refresh_dt("#mytable")
+                        }
+
+
+
+                }
+
+        function image_td(url) {
+            debugger
+            if (url) {
+                if (url.includes('.')) {
+                    return $('<td>').html(`<a href="${url}" target="_blank"><img src="${url}" class="img-thumbnail" style="height: 50px;" ></a>`);
+                }
+                else {
+                    return $('<td>').text('');
+                }
+            }
+            else {
+                return $('<td>').text('');
+            }
+
+        }
+        function decodeHTMLEntities(text) {
+            var textArea = document.createElement('textarea');
+            textArea.innerHTML = text;
+            return textArea.value;
+        }
+        function isImgUrl(url) {
+            const img = new Image();
+            img.src = url;
+            return new Promise((resolve) => {
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+            });
+        }
+    function refresh_dt(tableId) {
+        var table = $(tableId).DataTable({
+            lengthChange: false,
+            scrollX: true, scrollCollapse: true,
+            buttons: [{
+                extend: 'excel',
+                exportOptions: {
+                    columns: ':visible:not(.no-export)' // Include only visible columns except those with class 'no-export'
+                }
+            }
+                //, {
+                //extend: 'pdf',
+                //exportOptions: {
+                //    columns: ':visible:not(.no-export)' // Include only visible columns except those with class 'no-export'
+                //}
+                //}
+
+                , {
+                extend: 'print', footer: true,
+                customize: function (win) {
+                    $(win.document.body).css('font-size', '10pt');
+
+                    //   $(win.document.body).find('#reportTitle').html("Firm Name");
+                    $(win.document.body).find('#reportTitle').css('display', 'none');
+                    $(win.document.body).find('table')
+                        .addClass('compact')
+                        .css('font-size', 'inherit').css('border', '1px solid #000')
+                        .css('border-collapse', 'collapse'); // Ensure border-collapse is set
+
+                    $(win.document.body).find('th, td')
+                        .css('border-bottom', '1px solid #000')
+                        .css('border-right', '1px solid #000')
+                        .css('padding', '5px');
+                    $(win.document.body).find('th')
+                        .css('margin-top', '-1px')
+                        .css('border-top', '1px solid #000');
+
+                    // Ensure no double borders
+                    //$(win.document.body).find('th, td').each(function () {
+                    //    $(this).css('border-bottom', '1px solid #000');
+                    //    $(this).css('border-right', '1px solid #000');
+                    //});
+                    $(win.document.body).find('thead').prepend(`<tr><td colspan="99">
+                                            <div style="width:100%; display:flex">
+                                                <div style="width:25%; text-align:center; display:none">
+                                                    <img src="../../../../../../../Areas/mpc/assets/images/logo.png" />
+                                                </div>
+                                                <div style="width:100%; text-align:center">
+                                                    <h3 style="margin:0">@ViewBag.firm_name</h3>
+                                                    <p style="margin:0">@ViewBag.address1/p>
+                                                    <p style="margin:0 @address2" >@ViewBag.address2</p>
+                                                    <p style="margin:0 @display_website" >Website :  @ViewBag.website</p>
+                                                    <p style="margin:0 @display_email">Email :  @ViewBag.Email</p>
+                                                    <p style="margin:0 @display_contact_no">Contact No :  @ViewBag.contact_no</p>
+                                                    <p style="margin:10px 0 0 0; text-decoration:underline; font-weight: bold" >@ViewBag.Title</p>
+                                                    <p style="margin:10px 0 0 0; text-decoration:underline; font-weight: bold" >${reportSubTitle}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>`);
+                },
+                exportOptions: {
+                    columns: ':visible:not(.no-export)' // Include only visible columns except those with class 'no-export'
+                }
+            }]
+        });
+        table.buttons().container().appendTo(`${tableId}_wrapper .col-md-6:eq(0)`);
+    }
+        function refresh_dt_group(tableId) {
+            var table = $(tableId).DataTable({
+                lengthChange: false,
+               // deferRender: true,
+                scrollX: true, scrollCollapse: true,
+                columnDefs: [
+                    { targets: [0], visible: false } // Hide columns 1, 2, and 3
+                ],
+                //rowGroup: {
+                //    dataSrc: [0],
+                //    startRender: function (rows, group) {
+
+                //        return group;
+                //    }
+                //},
+                buttons: [{
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: ':visible:not(.no-export)' // Include only visible columns except those with class 'no-export'
+                    }
+                }, {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: ':visible:not(.no-export)' // Include only visible columns except those with class 'no-export'
+                    }
+                }, {
+                    extend: 'print', footer: true, text: 'Print',
+                    autoPrint: false,
+                    customize: function (win) {
+                        $(win.document.body).css('font-size', '10pt');
+
+                        $(win.document.body).find('#reportTitle').css('display', 'none');
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit').css('border', '1px solid #000')
+                            .css('border-collapse', 'collapse'); // Ensure border-collapse is set
+
+                        $(win.document.body).find('th, td')
+                            .css('border-bottom', '1px solid #000')
+                            .css('border-right', '1px solid #000')
+                            .css('padding', '5px');
+                        $(win.document.body).find('th')
+                            .css('margin-top', '-1px')
+                            .css('border-top', '1px solid #000');
+                        $(win.document.body).find('thead').prepend(prntFirm);
+                    },
+                    exportOptions: {
+                        columns: ':visible:not(.no-export)',
+                        modifier: {
+                            selected: null
+                        },
+                        grouped_array_index: 2
+                    }
+                   },
+        //            {
+        //                text: 'Reload',
+        //                action: function (e, dt, node, config) {
+        //                    const pageTitle = 'Print Member Info';
+        //                    const stylesheet = '/css/app.css';
+        //                 //   const win = window.open('#', pageTitle, 'width=800,height=1300');
+        //                    const win = window.open('#', pageTitle );
+        //                    const content = $('#mytable')[0].outerHTML;
+
+        //                    win.document.write(`
+        //    <html>
+        //        <head>
+        //            <title>${pageTitle}</title>
+        //            <link rel="stylesheet" href="${stylesheet}">
+        //        </head>
+        //        <body>
+        //            ${content}
+        //        </body>
+        //    </html>
+        //`);
+        //                    win.document.close();
+
+        //                    win.onload = function () {
+        //                        this.print();
+        //                    };
+        //                }
+                    //            }
+              ]
+            });
+            table.buttons().container().appendTo(`${tableId}_wrapper .col-md-6:eq(0)`);
+        }
+        function calculateFooter() {
+               var  fvs = {};
+                @foreach (var g in mpc.gcd)
+                {
+                    if (g.isShowOnGrid)
+                    {
+                        if (g.showFooter == "Total(Text)")
+                        {
+                        @:fvs.@g.columnName = "Total";
+                    }
+                        else if (g.showFooter == "Sum")
+                        {
+                         @:fvs.@g.columnName = 0;
+                    }
+                        else if (g.showFooter == "Count")
+                        {
+                           @:fvs.@g.columnName = 0;
+                    }
+                    }
+                }
+
+            if (Object.keys(fvs).length) {
+
+                $('#mytable tbody tr').each(function () {
+                @{
+                    int g_indx = 0;
+                    if (allowaction)
+                    {
+                        g_indx = 1;
+                    }
+                    foreach (var g in mpc.gcd)
+                    {
+                        if (g.isShowOnGrid)
+                        {
+                            if (g.showFooter == "Sum")
+                            {
+                            @:fvs.@g.columnName = fvs.@g.columnName + toFloat($(this).find('td:eq(@g_indx)').text());
+                            }
+                            else if (g.showFooter == "Count")
+                            {
+                            @:fvs.@g.columnName = fvs.@g.columnName + 1;
+                            }
+                            g_indx += 1;
+                        }
+                    }
+                }
+                });
+                var tfoot = $('#mytable tfoot');
+                tfoot.empty();
+                var fr = $('<tr>');
+                if (showAction) {
+                    fr.append($('<th>'));
+                }
+                fr.append(
+                @foreach (var g in mpc.gcd)
+                {
+                    if (g.isShowOnGrid)
+                    {
+
+                       @: $('<th>').text(fvs.@g.columnName),
+                    }
+                }
+                );
+                tfoot.append(fr);
+            }
+        }
+        var allowEdit = true;
+        var allowDelete = true;
+        $('#mytable').edit(`../../../../../@sector/mpc-data/edit`, function (data, row) {
+            allowEdit = true;
+
+            $('#mytable').trigger("Edit",data);
+            if (!allowEdit) {
+                return false;
+            }
+            edit_row = row ;
+            isEdit = true;
+            $('#main-form').parent().removeClass('d-none');
+            $('#btn-add').text("Update")
+            $('#btn-cancel').show();
+            $('#HdId').val(data[0].Id)
+            @foreach (var p in mpc.pcd)
+            {
+                if (p.isField)
+                {
+
+                    if (p.fieldType.Contains("File"))
+                    {
+                        @:  $('#@p.columnName').val(data[0].@p.columnName)
+                        @: $('#img_@p.columnName').attr("src", data[0].@p.columnName)
+                        @: $('#img_@p.columnName').show()
+                    }
+                    else if (p.fieldType.Contains("AutoCompleteBox"))
+                    {
+                        @:  $('#@p.columnName').val(data[0].@p.columnName)
+                        @:  $('#acb_@p.columnName').val(data[0].@p.columnName)
+                    }
+                    else if (p.fieldType.Contains("TimePicker"))
+                    {
+
+                        @:  $('#@p.columnName').val(convertTo24Hour(data[0].@p.columnName))
+
+                    }
+                    else if (p.fieldType.Contains("DatePicker"))
+                    {
+                        @:  $('#@p.columnName').val(formatDate(data[0].@p.columnName));
+                    }
+                    else if (p.fieldType.Contains("CheckBox-List"))
+                    {
+                            @: $("input[name='@p.columnName']").prop("checked", false);
+                            @: muticheck('@p.columnName',data[0].@p.columnName)
+                    }
+                    else if (p.fieldType.Contains("CheckBox"))
+                    {
+                            @: $("input[name='@p.columnName']").prop("checked", data[0].@p.columnName);
+                    }
+                    else if (p.fieldType.Contains("RadioButton"))
+                    {
+                            @: muticheck('@p.columnName', data[0].@p.columnName)
+                            @: $('input[name="@p.columnName"]').change();
+                    }
+                    else
+                    {
+                        @:  $('#@p.columnName').val(data[0].@p.columnName)
+                    }
+                    if (p.onChanged)
+                    {
+                        @:  $('#@p.onChangedField').attr('data-@p.columnName',data[0].@p.columnName);
+                        @:  $('#@p.onChangedField').change();
+                    }
+                    if (mpc.events != null)
+                    {
+                        foreach (var ev in mpc.events)
+                        {
+                            if (ev.fieldName == p.columnName)
+                            {
+                                @:$('#@p.columnName').change();
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            @if (mpc.formType == "PopUp")
+            {
+            @: openModel();
+            }
+
+            $('#@first_element').focus();
+            $('#mytable').trigger("EditLoaded", data);
+        });
+
+
+        $('#mytable').onConfirmAction('../../../../../@sector/mpc-data/confirmaction', function (resp,row) {
+            edit_row = row;
+            if (!resp.error) {
+                if (resp.isUpdate) { bind_data(resp.data, 2) }
+                else if (resp.isReset) { bind_data(resp.data) }
+            }
+        });
+
+
+        function apply_filter(id, rptTitle) {
+            //var id = $(filterbtn).attr("data-id");
+            reportSubTitle = rptTitle;
+            var formData = $('#' + id).serializeArray();
+            var serializedData = {};
+
+            $.map(formData, function (input) {
+                serializedData[input.name] = input.value;
+            });
+            $('#' + id).find('select').each(function () {
+                var selectId = $(this).attr('id');
+                var selectedOption = $('#' + selectId + ' option:selected');
+                serializedData[selectId] = selectedOption.text();
+                serializedData[selectId + "_Value"] = selectedOption.val();
+            });
+
+             serializedData['pageId'] = '@mpc.pageId';
+
+             serializedData["my-query-string-data"] = window.location.search;
+            var data = JSON.stringify({ data: serializedData });
+
+        console.log(data);
+        gowithData("../../../../../@sector/mpc-filter/" + id, 'POST', data, function (resp) {
+                console.log(resp);
+                bind_data(resp.data,null);
+            },1)
+        }
+
+
+    function getstatusview(inputString, value) {
+        if (!value) {
+            if (value!=0) {
+                value = 'null'
+            }
+        }
+        var regex = /\{(.*?)\}/g;
+        var matches = inputString.match(regex);
+        var found = false;
+        var rd = false;
+
+        if (matches) {
+            var resultList = matches.map(function (match) {
+                return match.replace(/[\{\}]/g, '');
+            });
+            $.each(resultList, function (index, data) {
+                var r = data.split(',');
+
+                if (r[0] == String(value)) {
+                    found = true;
+                    rd = r;
+                    return false;
+                }
+
+            })
+        }
+        if (found) {
+
+            if (rd[1].startsWith("bg-")) {
+                return '<span class="badge rounded-pill ' + rd[1] + '"  >' + rd[2] + '  </span>';
+            }
+            else {
+                return '<span class="badge rounded-pill" style="background-color: ' + rd[1] + ';">' + rd[2] + '  </span>';
+            }
+        }
+        else {
+            return '<span class="badge rounded-pill bg-info"  >' + value + '  </span>';
+        }
+    }
+
+
+    </script>
+
+        }
+
+
+        @Html.pageEvents(mpc.events)
+        <script>
+        $(function () {
+
+            @{
+                if (mpc.OtherData.ContainsKey("addNewPopup"))
+                {
+                    var adpup = mpc.OtherData["addNewPopup"];
+                    foreach (var p in adpup)
+                    {
+                        if (p["url"] != "")
+                        {
+                             @:applyAddMore('@p["displayText"]','@p["fieldName"]','@p["url"]');
+                        }
+                    }
+                }
+            }
+            $('#mdl-add-more').on('hidden.bs.modal', function () {
+                reBindddl(select_add_more_field)
+            });
+
+            $('#mdl-add-more .modal-footer').remove();
+            $('#mdl-add-more .modal-body').css('padding','0');
+
+            $('#moreframe').on('load',function () {
+                $(this).height($(this).contents().find('body').height());
+            });
+
+        })
+        var select_add_more_field = "";
+        function applyAddMore(displayText,fieldName,url)
+        {
+
+            var btn = $(`<span class="btn-more"><i class="bx bx-plus"></i></span>`);
+
+            $(`label[for="${fieldName}"]`).first().append(btn);
+            btn.on('click', function () {
+                select_add_more_field = fieldName;
+                $('#mdl-add-more .modal-title').html(displayText);
+                $('#mdl-add-more').modal("show");
+                $('#moreframe').attr('src', url);
+
+            });
+    }
+
+    function reBindddl(amf_field_name )
+    {
+        var pageId = $('#frm-page-Id').val();
+        var data = { frm_pageId: pageId, frm_targetId: amf_field_name };
+        var formData = $('#main-form').serializeArray();
+        $.map(formData, function (input) {
+            data[input.name] = input.value;
+        });
+        data['amf_field_name'] = amf_field_name;
+        gowithData('../../../../@sector/mpc-data/rebind-ddl', 'Post', JSON.stringify({ data: data }), function (resp) {
+            if (!resp.error) {
+                $('#' + amf_field_name).html(resp.data)
+                if (isEdit) {
+                    $('#address1').val($('#firm_name').attr('data-address1'));
+                    $('#address1').change();
+                }
+            }
+        })
+    }
+
+
+        </script>
+
+        @if (formOnly)
+        {
+            <script>
+                $('.navbar').remove();
+                $('header').remove();
+                $('footer').remove();
+                $('.sidebar-wrapper').remove();
+                $('.page-wrapper').css('margin', '0');
+                $('body').css('background', '#ffffff');
+                $(function () {
+                    $('header').remove();
+                    $('footer').remove();
+                    $('.sidebar-wrapper').remove();
+                    $('.page-wrapper').css('margin', '0');
+                    $('body').css('background', '#ffffff');
+                })
+            </script>
+        }
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+            apply_enter_event('#main-form')
+
+            //$(document).keydown(function (event) {
+            //    if (event.ctrlKey || event.metaKey) {
+            //        if (event.key === 'c' || event.key === 'v' || event.key === 'p' || event.key === 'a' || event.key === 'x') {
+            //            return; // Allow default behavior for Ctrl+C, Ctrl+V, Ctrl+P
+            //        }
+            //        event.preventDefault(); // Prevent browser from handling Ctrl+* or Meta+* shortcuts
+            //    }
+            //});
+
+            $(document).keydown(function (event) {
+                // Check for the desired key or key combination
+                if (event.ctrlKey) {
+                    if (event.key) {
+                        //if (event.key === 's' || event.key === 'S') {
+                        //    $('#btn-save:enabled').trigger('click');
+                        //}
+                        // Execute the desired action
+                        //console.log('Ctrl+' + event.key + ' pressed!');
+                        // Prevent browser from handling Ctrl+S
+                    }
+                }
+                if (event.key === 'Enter') {
+                    if (Swal.isVisible()) {
+                        Swal.close();
+                        $('#@first_element').focus();
+                        return false;
+                    }
+                }
+            });
+
+            $('#@first_element').focus();
+
+        });
+
+        function apply_enter_event(formId) {
+            $(`${formId} input:not([type="button"]), ${formId} select, ${formId} textarea`).on('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Prevent form submission on Enter
+                    moveFocus(this, formId)
+                }
+            });
+        }
+        function moveFocus(elmt, formId) {
+            var fields = $(formId).find('input, select, textarea, button');
+            var index = fields.index(elmt);
+            if (index > -1) {
+                // Find the next visible element
+                var nextIndex = index + 1;
+
+                //if (formId == "#tbl_grd_view") {
+                //    if (nextIndex == fields.length) {
+                //        $('#btn-save').focus();
+                //        return;
+                //    }
+                //}
+
+                while (nextIndex < fields.length) {
+                    // Check if the next field is visible and enabled
+                    if ($(fields[nextIndex]).is(':visible') && $(fields[nextIndex]).is(':enabled')) {
+                        fields.eq(nextIndex).focus();
+                        break; // Exit the loop once focused
+                    }
+                    nextIndex++;
+                }
+            }
+        }
+
+        function select2Suggestion(elmnt) {
+            // Initialize Select2
+            $(elmnt).select2({
+                openOnEnter: false
+            });
+            $(elmnt).on('focus', function () {
+                $(this).select2('open');
+            });
+            // Reset the flag when the dropdown is closed
+            $(elmnt).select2().on('select2:close', function () {
+
+
+                setTimeout(function () {
+                    //if ($(elmnt).attr('id') == 'ddl_bill_services' && $(elmnt).val() == '0') {
+                    //    $('#btn-save').focus();
+                    //}
+                    //else if ($(elmnt).attr('id') == 'ddl_bill_services' && $(elmnt).val() == '1' && formname == 'OPD') {
+                    //    $('#btn-save').focus();
+                    //}
+                    //else {
+                    //    moveFocus(elmnt, '#myForm');
+                    //}
+                    moveFocus(elmnt, '#main-form');
+
+                }, 50);
+            });
+        }
+
+
+        window.onclick = function(event) {
+            if (!$(event.target).closest('.dropdown-button').length) {
+                $('.dropdown-menu').hide();
+            }
+        }
+    </script>
+
+
+}

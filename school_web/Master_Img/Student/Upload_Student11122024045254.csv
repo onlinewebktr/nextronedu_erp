@@ -1,0 +1,4 @@
+Student_type,Hostel_taken,Transport_taken,Admission_date,Admission_no,Student_name,Class,Section,Roll_no,Date_of_birth,Aadhar_no,Gender,Religion,Father_name,Mother_name,Mobile_no,WhatsApp_no,Monther_mobile_no,Address
+New,Yes,No,10/11/2023,zx12,Md Wahab,CLASS-II,A,50,10/04/2018,",123654789654",Male,Islam,F Name1,M Name1,7250408680,8745126598,7250408680,Katihar
+Old,No,Yes,10/10/2023,zx24,Ravi Kumar,CLASS-II,A,51,05/04/2018,",568956235689",Female,Hindu,F Name2,M Name2,8956235689,2547986532,8956235689,Purnea
+New,No,No,10/01/2023,zx33,Anand Kumar,CLASS-II,A,52,06/07/2020,",124578895623",Male,Hindu,F Name3,M Name3,7854213256,1459653248,7854213256,Bhagalpur
