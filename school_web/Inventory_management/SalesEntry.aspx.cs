@@ -2819,7 +2819,7 @@ VALUES
                     txt_adress.Text = "";
                     Alertme("Cutomer information has been saved successfully", "success");
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "CloseModal", "$('#myModal4').modal('hide');", true);
-
+                    hdn_new_customer.Value = "0";
                 }
                 /*}
                 else
@@ -2847,7 +2847,7 @@ VALUES
             }
 
 
-            hdn_new_customer.Value = "0";
+           
 
         }
 

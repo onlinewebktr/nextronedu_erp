@@ -1454,7 +1454,7 @@
                 }
                 if ($('#<%= ddl_paymentmode.ClientID %> option:selected').val() == "Creditcard") {
                     $("#pnl_mode_t_nS").show();
-                    $("#<%=lbl_payment_type.ClientID%>").text("Creditcard");
+                    $("#<%=lbl_payment_type.ClientID%>").text("Creditcard"); btn_Add_studnt
                     $("#<%=lbl_mode_trns_no.ClientID%>").text("Transaction No.");
                     $("#bank_dt").hide();
                 }
