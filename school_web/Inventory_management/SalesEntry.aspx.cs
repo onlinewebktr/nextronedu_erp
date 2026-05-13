@@ -2880,8 +2880,8 @@ SELECT
 (
     party_name
     + ' | FATHER NAME - ' + ISNULL(Care_of,'')
-    + ' | MOBILE - ' + ISNULL(mobile,'')
-    + ' | ID - ' + ISNULL(party_id,'')
+    + ' |' + ISNULL(mobile,'')
+    + ' |' + ISNULL(party_id,'')
 ) AS party_name
 
 FROM party_details
@@ -2951,7 +2951,7 @@ ORDER BY party_name
                 string party_id = arrs[3];
                 DataTable dt1 = mycode.FillData("Select * from party_details where party_id='" + party_id + "' and Registration_Type='Customer'");
                 if (dt1.Rows.Count == 0)
-                {
+                {  
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "open_add_student();", true);
                 }
                 else
@@ -3008,7 +3008,7 @@ setTimeout(function () {
         if (result.isConfirmed) {
 
             Swal.close();
-
+document.getElementById('txt_Mobile_no').value = '" + mobile + @"';
         } 
         // Add New
         else if (result.dismiss === Swal.DismissReason.cancel) {
