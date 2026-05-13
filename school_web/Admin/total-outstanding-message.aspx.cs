@@ -271,17 +271,62 @@ namespace school_web.Admin
             if (ddlclass.SelectedItem.Text == "ALL")
             {
                 lbl_class22.Text = "Dues List Up To " + ddl_month.SelectedItem.Text;
-                qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.Father_whatsApp_no,t1.gcm_id,t1.studentname,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where Session_id='" + ddlsession.SelectedValue + "' and Status=1 order by t2.Position,t1.Section,t1.rollnumber asc";
+                if (ddl_std_type.SelectedValue == "1")  // onFoot
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.Father_whatsApp_no,t1.gcm_id,t1.studentname,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where Session_id='" + ddlsession.SelectedValue + "' and Status=1 and t1.transportationtaken in ('No', 'NO') and t1.hosteltaken in ('No', 'NO') order by t2.Position,t1.Section,t1.rollnumber asc";
+                }
+                else if (ddl_std_type.SelectedValue == "2")  // Transport
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.Father_whatsApp_no,t1.gcm_id,t1.studentname,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where Session_id='" + ddlsession.SelectedValue + "' and Status=1 and t1.transportationtaken='Yes' order by t2.Position,t1.Section,t1.rollnumber asc";
+                }
+                else if (ddl_std_type.SelectedValue == "3")  // Hostel
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.Father_whatsApp_no,t1.gcm_id,t1.studentname,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where Session_id='" + ddlsession.SelectedValue + "' and Status=1 and t1.hosteltaken='Yes' order by t2.Position,t1.Section,t1.rollnumber asc";
+                }
+                else
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.Father_whatsApp_no,t1.gcm_id,t1.studentname,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where Session_id='" + ddlsession.SelectedValue + "' and Status=1 order by t2.Position,t1.Section,t1.rollnumber asc";
+                }
             }
             else if (ddlclass.SelectedItem.Text != "ALL" && ddl_section.SelectedItem.Text == "ALL")
             {
                 lbl_class22.Text = "Dues List for Class " + ddlclass.SelectedItem.Text + " Up To " + ddl_month.SelectedItem.Text;
-                qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.studentname,t1.Father_whatsApp_no,t1.gcm_id,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where  Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Status=1 order by t2.Position,t1.Section,t1.rollnumber asc";
+                if (ddl_std_type.SelectedValue == "1")  // onFoot
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.studentname,t1.Father_whatsApp_no,t1.gcm_id,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where  Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Status=1 and t1.transportationtaken in ('No', 'NO') and t1.hosteltaken in ('No', 'NO') order by t2.Position,t1.Section,t1.rollnumber asc";
+                }
+                else if (ddl_std_type.SelectedValue == "2")  // Transport
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.studentname,t1.Father_whatsApp_no,t1.gcm_id,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where  Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Status=1 and t1.transportationtaken='Yes' order by t2.Position,t1.Section,t1.rollnumber asc";
+                }
+                else if (ddl_std_type.SelectedValue == "3")  // Hostel
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.studentname,t1.Father_whatsApp_no,t1.gcm_id,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where  Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Status=1 and t1.hosteltaken='Yes' order by t2.Position,t1.Section,t1.rollnumber asc";
+                }
+                else
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.studentname,t1.Father_whatsApp_no,t1.gcm_id,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where  Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Status=1 order by t2.Position,t1.Section,t1.rollnumber asc";
+                }
             }
             else
             {
                 lbl_class22.Text = "Dues List for Class " + ddlclass.SelectedItem.Text + " Section " + ddl_section.Text + " Up To " + ddl_month.SelectedItem.Text;
-                qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.studentname,t1.Father_whatsApp_no,t1.gcm_id,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where  Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Section='" + ddl_section.Text + "' and Status=1 order by t2.Position,t1.Section,t1.rollnumber asc";
+                if (ddl_std_type.SelectedValue == "1")  // onFoot
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.studentname,t1.Father_whatsApp_no,t1.gcm_id,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where  Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Section='" + ddl_section.Text + "' and Status=1 and t1.transportationtaken in ('No', 'NO') and t1.hosteltaken in ('No', 'NO') order by t2.Position,t1.Section,t1.rollnumber asc";
+                }
+                else if (ddl_std_type.SelectedValue == "2")  // Transport
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.studentname,t1.Father_whatsApp_no,t1.gcm_id,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where  Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Section='" + ddl_section.Text + "' and Status=1 and t1.transportationtaken='Yes' order by t2.Position,t1.Section,t1.rollnumber asc";
+                }
+                else if (ddl_std_type.SelectedValue == "3")  // Hostel
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.studentname,t1.Father_whatsApp_no,t1.gcm_id,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where  Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Section='" + ddl_section.Text + "' and Status=1  and t1.hosteltaken='Yes' order by t2.Position,t1.Section,t1.rollnumber asc";
+                }
+                else
+                {
+                    qry = "select CASE WHEN hosteltaken = 'Yes' THEN 'Hostel' WHEN transportationtaken = 'Yes' THEN 'Bus' ELSE 'Days' END AS Type,t1.mobilenumber,t1.class,t1.admissionserialnumber,t1.rollnumber,t1.Section,t1.session,t1.studentname,t1.Father_whatsApp_no,t1.gcm_id,t1.fathername,t1.Hostel_roll_no,convert(float, (select sum(convert(float, Dues_amt)) from Student_wise_dues_amount where Session_id=t1.Session_id and Class_id=t1.Class_id and Admission_no=t1.admissionserialnumber and Month_position<=" + monthPosition + ")) as Total_dues from admission_registor t1 join Add_course_table t2 on t1.Class_id=t2.course_id where  Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Section='" + ddl_section.Text + "' and Status=1 order by t2.Position,t1.Section,t1.rollnumber asc";
+                } 
             }
 
             DataTable dt = mycode.FillData(qry);
@@ -364,15 +409,62 @@ namespace school_web.Admin
                     string qry = "";
                     if (ddlclass.SelectedItem.Text == "ALL")
                     {
-                        qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Status=1";
+                        if (ddl_std_type.SelectedValue == "1")  // onFoot
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Status=1 and transportationtaken in ('No', 'NO') and hosteltaken in ('No', 'NO')";
+                        }
+                        else if (ddl_std_type.SelectedValue == "2")  // Transport
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Status=1 and transportationtaken='Yes'";
+                        }
+                        else if (ddl_std_type.SelectedValue == "3")  // Hostel
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Status=1 and hosteltaken='Yes'";
+                        }
+                        else
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Status=1";
+                        }
                     }
                     else if (ddlclass.SelectedItem.Text != "ALL" && ddl_section.SelectedItem.Text == "ALL")
                     {
-                        qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Status=1";
+                        if (ddl_std_type.SelectedValue == "1")  // onFoot
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Status=1 and transportationtaken in ('No', 'NO') and hosteltaken in ('No', 'NO')";
+                        }
+                        else if (ddl_std_type.SelectedValue == "2")  // Transport
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Status=1 and transportationtaken='Yes'";
+                        }
+                        else if (ddl_std_type.SelectedValue == "3")  // Hostel
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Status=1 and hosteltaken='Yes'";
+                        }
+                        else
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Status=1";
+                        }
+                        //qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Status=1";
                     }
                     else
                     {
-                        qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Section='" + ddl_section.Text + "' and Status=1";
+                        if (ddl_std_type.SelectedValue == "1")  // onFoot
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Section='" + ddl_section.Text + "' and Status=1 and transportationtaken in ('No', 'NO') and hosteltaken in ('No', 'NO')";
+                        }
+                        else if (ddl_std_type.SelectedValue == "2")  // Transport
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Section='" + ddl_section.Text + "' and Status=1 and transportationtaken='Yes'";
+                        }
+                        else if (ddl_std_type.SelectedValue == "3")  // Hostel
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Section='" + ddl_section.Text + "' and Status=1 and hosteltaken='Yes'";
+                        }
+                        else
+                        {
+                            qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Section='" + ddl_section.Text + "' and Status=1";
+                        }
+                        // qry = "select Session_id,admissionserialnumber,Class_id from admission_registor where Session_id='" + ddlsession.SelectedValue + "' and Class_id='" + ddlclass.SelectedValue + "' and Section='" + ddl_section.Text + "' and Status=1";
                     }
                     DataTable dt = payments.dataTable(qry, con);
                     if (dt.Rows.Count > 0)
@@ -436,7 +528,7 @@ namespace school_web.Admin
 
                     lst[5] = txt_5.Text;
                 }
-               
+
                 txt_message.Text = String.Format(ViewState["SMS_Tempate"].ToString(), lst);
                 //if (ViewState["firm_idS"].ToString() == "DEEP-1")
                 //{
@@ -685,7 +777,7 @@ namespace school_web.Admin
                     }
                     else if (rd_whatassp.Checked == true)
                     {
-                        
+
 
                         var query = new Dictionary<string, string>()
     {

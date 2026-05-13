@@ -189,6 +189,15 @@
                                             <asp:DropDownList ID="ddl_section" runat="server" class="form-control txtbx-ddl-style"></asp:DropDownList>
                                         </div>
                                         <div class="col-sm-2">
+                                            <label for="validationCustom01" class="find-dv-lbl">Type</label>
+                                            <asp:DropDownList ID="ddl_std_type" runat="server" class="form-control txtbx-ddl-style">
+                                                <asp:ListItem Value="0">ALL</asp:ListItem>
+                                                <asp:ListItem Value="1">On-Foot</asp:ListItem>
+                                                <asp:ListItem Value="2">Transport</asp:ListItem>
+                                                <asp:ListItem Value="3">Hostel</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                        <div class="col-sm-2">
                                             <label for="validationCustom01" class="find-dv-lbl">Month</label>
                                             <asp:DropDownList ID="ddl_month" runat="server" class="form-control txtbx-ddl-style"></asp:DropDownList>
                                         </div>
