@@ -1027,10 +1027,6 @@
     <Content Include="Admin\webServices\transport.asmx" />
     <Content Include="Admin\webServices\whatsApp-message.asmx" />
     <Content Include="Admin\Whatsapp_API_Setting.aspx" />
-    <Content Include="App_Data\Deep.mdf" />
-    <Content Include="App_Data\Deep_log.ldf">
-      <DependentUpon>Deep.mdf</DependentUpon>
-    </Content>
     <Content Include="Areas\Chat\assets\Bg_image.png" />
     <Content Include="Areas\Chat\assets\css\app.css" />
     <Content Include="Areas\Chat\assets\css\bundle.css" />
