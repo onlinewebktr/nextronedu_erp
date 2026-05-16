@@ -251,516 +251,7 @@ AndroidVersion varchar (500));");
                         list.Add(@"ALTER TABLE Subject_Master ADD Is_optional bit;");
                         list.Add(@"ALTER TABLE Transfer_certificate ADD TC_cancellation_remarks nvarchar (MAX);");
                         list.Add(@"update App_Setting set Max_Device_Count ='3' ");
-                        list.Add(@"Alter PROCEDURE  [sp_student_class_activity]
-    @AdmissionNo NVARCHAR(50)=null,
-    @ClassId INT=null,
-    @SessionId INT =null,
-    @Section NVARCHAR(50)=null,
-    @SubjectId NVARCHAR(50)=null, 
-    @StartDate NVARCHAR(50)=null,
-    @EndDate NVARCHAR(50)=null,
-    @day NVARCHAR(50)=null,
-     @teacherid NVARCHAR(50)=null,
-    @Id INT=null,
-    @currentYear varchar(50)=null,
-    @month varchar(50)=null,
-     @empid varchar(50)=null,
-    @sp_status varchar(50)=null
-AS
-BEGIN
-    
-     if @sp_status='ddl_all_class'
-   
-   begin
-       SELECT 
-        sm.Course_Name,
-        sm.course_id,
-        sm.Position
-    FROM 
-        Add_course_table sm
-        
-        
-    ORDER BY 
-        sm.Position;
-   End
-    
-    if @sp_status='ddl_all_section'
-   
-   begin
-       select  distinct Section  from admission_registor  order by Section
-   End
-    
-    
-   if @sp_status='ddl'
-   
-   begin
-    
-       select @ClassId=Class_id , @SessionId=Session_id from dbo.[admission_registor] where admissionserialnumber=@AdmissionNo  and   Transfer_Status in ('New','NT') and  StudentStatus='AV' order by id desc   
-
-    SELECT 
-        sm.Subject_name,
-        sm.Subject_id,
-        sm.Subject_position
-    FROM 
-        Subject_Master sm
-    INNER JOIN  
-        Subject_Mapping_New smn 
-        ON sm.course_id = smn.Class_id 
-        AND sm.Subject_id = smn.Sub_id
-    WHERE 
-        smn.Admission_no = @AdmissionNo
-        AND smn.Class_id = @ClassId
-        AND smn.Session_id = @SessionId
-    ORDER BY 
-        sm.Subject_position;
-    End
-  
-        if(@sp_status='find_class_log_student')
-begin
-
-    select
-        @ClassId = Class_id,
-        @SessionId = Session_id,
-        @Section = Section
-    from dbo.[admission_registor]
-    where admissionserialnumber = @AdmissionNo
-    and Transfer_Status in ('New','NT')
-    and StudentStatus='AV'
-    order by id desc;
-
-
-    SELECT 
-        acd.*,
-
-        (SELECT TOP 1 Course_Name
-         FROM Add_course_table
-         WHERE course_id = acd.Class_id) AS Course_Name 
-         
-
-    FROM TEACHER_LOG_BOOK acd
-
-    WHERE  
-        acd.idate >= @StartDate
-        and acd.idate <= @EndDate
-
-        AND acd.Session_id = @SessionId
-
-        AND acd.Class_id = @ClassId
-
-        
-
-        AND acd.Section = @Section
-
-    ORDER BY acd.idate ASC;
-
-end
-   
-    if(@sp_status='find_class_activity')
-begin
-
-    select
-        @ClassId = Class_id,
-        @SessionId = Session_id,
-        @Section = Section
-    from dbo.[admission_registor]
-    where admissionserialnumber = @AdmissionNo
-    and Transfer_Status in ('New','NT')
-    and StudentStatus='AV'
-    order by id desc;
-
-
-    SELECT 
-        acd.*,
-
-        (SELECT TOP 1 Course_Name
-         FROM Add_course_table
-         WHERE course_id = acd.Class_id) AS Course_Name,
-
-        (SELECT TOP 1 Subject_name
-         FROM Subject_Master
-         WHERE course_id = acd.Class_id
-         AND Subject_id = acd.Subject_id) AS Subject_name
-
-    FROM Activity_Class_Details acd
-
-    WHERE  
-        acd.idate >= @StartDate
-        and acd.idate <= @EndDate
-
-        AND acd.Session_id = @SessionId
-
-        AND acd.Class_id = @ClassId
-
-        AND (
-                ISNULL(@SubjectId,'0') = '0'
-                OR acd.Subject_id = @SubjectId
-            )
-
-        AND acd.Section_data = @Section
-
-    ORDER BY acd.idate ASC;
-
-End
-     if(@sp_status='find_class_Routine')
-     begin
-         
-         select @ClassId=Class_id , @SessionId=Session_id,@Section=Section from dbo.[admission_registor] where admissionserialnumber=@AdmissionNo  and   Transfer_Status in ('New','NT') and  StudentStatus='AV' order by id desc  
-         
-         
-         SELECT DISTINCT
-    (
-        SELECT TOP 1 name 
-        FROM user_details ud 
-        JOIN TeacherCourseSubjectMaping tcm 
-            ON tcm.UserID = ud.user_id 
-        WHERE 
-            tcm.AssignCourseID = t4.Subject_id
-            AND tcm.CategoryID = t4.Class_id
-            AND tcm.Session_id = t4.Session_id
-            AND tcm.Section = t4.Section
-    ) AS Teacher_name,
-    
-    t1.Period_Name,
-    t1.Period,
-    t1.Period_type,
-    t1.Period_no,
-    FORMAT(t2.Start_Time, 'hh:mm tt') AS time1,
-    FORMAT(t2.End_time, 'hh:mm tt') AS time2,
-    t2.Timespan,
-
-    (
-        SELECT TOP 1 Subject_name 
-        FROM Subject_Master 
-        WHERE course_id = t4.Class_id 
-        AND Subject_id = t4.Subject_id
-    ) AS Subject_name
-
-FROM 
-    Class_Routine_period_Master t1
-JOIN 
-    Class_Routine_period t2 
-    ON t1.Session_id = t2.Session_id 
-    AND t1.Class_id = t2.course_id 
-    AND t1.Period = t2.Period
-JOIN 
-    Class_Routine_Master t3 
-    ON t3.Session_id = t2.Session_id 
-    AND t3.Class_id = t2.course_id
-LEFT JOIN 
-    Class_routine_period_subject_mapping t4
-    ON t3.Session_id = t4.Session_id 
-    AND t3.Class_id = t4.Class_id
-    AND t3.Section = t4.Section
-    AND t1.Period = t4.Class_period
-    AND t3.Day = t4.Day
-
-WHERE 
-    t1.Class_id = @ClassId
-    AND t1.Session_id =  @SessionId
-    AND t3.Section = @Section
-    AND t3.Day = @day
-
-ORDER BY 
-    t1.Period_no ASC;
-
-     End
-
-
-if(@sp_status='find_class_Routine_teacher')
-     begin
-         
-         select @SessionId=session_id from dbo.[session_details] where Use_mode='1' order by id desc  
-       SELECT ( SELECT TOP 1 name 
-        FROM user_details  where user_id=tcm.UserID ) as Teacher_name ,crpsm.Day,(SELECT TOP 1 Subject_name FROM Subject_Master WHERE course_id = crpsm.Class_id  AND Subject_id=crpsm.Subject_id) AS Subject_name, crpsm.Section,(SELECT TOP 1 Course_Name  FROM Add_course_table  WHERE course_id = crpsm.Class_id) AS classname,rp.Period_Name,(select top 1 Course_Name from Add_course_table where course_id=course_id) as classname,FORMAT(rp.Start_Time, 'hh:mm tt') AS time1, FORMAT(rp.End_time, 'hh:mm tt') AS time2, rp.Timespan FROM  Class_routine_period_subject_mapping crpsm join Class_Routine_period rp on rp.Period=crpsm.Class_period join TeacherCourseSubjectMaping tcm on  tcm.AssignCourseID = crpsm.Subject_id
-            AND tcm.CategoryID = crpsm.Class_id
-            AND tcm.Session_id = crpsm.Session_id
-            AND tcm.Section = crpsm.Section where crpsm.Session_id=@SessionId and Day=@day and tcm.UserID=@teacherid   order by rp.Period_Name,crpsm.Section
-          
-         
-     End
-
-
-
-if(@sp_status='student_notice')
-begin
-     select @ClassId=Class_id , @SessionId=Session_id,@Section=Section from dbo.[admission_registor] where admissionserialnumber=@AdmissionNo  and   Transfer_Status in ('New','NT') and  StudentStatus='AV' order by id desc   
-     
-   SELECT  
-    CASE  WHEN LEN(Notice) > 100 THEN LEFT(Notice, 100) + '...'ELSE Notice 
- END AS shortnotice, *, 
-    FORMAT(Date_Main, 'dd-MMM-yyyy') AS Date1,
-    FORMAT(Date_Main, 'dd') AS day,
-    FORMAT(Date_Main, 'MMM') AS month,
-    FORMAT(Date_Main, 'yyyy') AS year  
-FROM Notice_Board_Details 
-WHERE 
-    (
-        (Class IN ('ALL', @ClassId) AND Section IN ('ALL', @Section) AND Session_Id = @SessionId)
-        OR Admission_no = @AdmissionNo
-    )
-    AND Session_Id = @SessionId
-    AND  Posted_Idate >= @StartDate AND Posted_Idate <= @EndDate  
-    
-    
-ORDER BY Posted_Idate DESC;
-    
-End
-
-if(@sp_status='student_notice_Details')
-begin
-     select  *,format(Date_Main, 'dd-MMM-yyyy') as Date1,format(Date_Main, 'dd') as day,format(Date_Main, 'MMM') as month,format(Date_Main, 'yyyy') as year  from Notice_Board_Details where Id=@Id  order by  Posted_Idate Desc
-    
-End
- 
- 
- if(@sp_status='student_events')
-begin
-     select @ClassId=Class_id , @SessionId=Session_id,@Section=Section from dbo.[admission_registor] where admissionserialnumber=@AdmissionNo  and   Transfer_Status in ('New','NT') and  StudentStatus='AV' order by id desc   
-     
-  SELECT  
-    CASE  WHEN LEN(Details) > 100 THEN LEFT(Details, 100) + '...'ELSE Details 
- END AS shortnotice, *, 
-    FORMAT(Date_Main, 'dd-MMM-yyyy') AS Date1,
-    FORMAT(Date_Main, 'dd') AS day,
-    FORMAT(Date_Main, 'MMM') AS month,
-    FORMAT(Date_Main, 'yyyy') AS year,Attachments as Attachment  
-FROM News_Events_Details 
-WHERE 
-    (
-        (Class IN ('ALL', @ClassId) AND Section IN ('ALL', @Section) AND Session_Id = @SessionId)
-        OR Admission_no = @AdmissionNo
-    )
-    AND Session_id = @SessionId
-    AND  Posted_Idate >= @StartDate AND Posted_Idate <= @EndDate
-ORDER BY Posted_Idate DESC;
-    
-End
-
-if(@sp_status='student_event_Details')
-begin
-     select  *,format(Date_Main, 'dd-MMM-yyyy') as Date1,format(Date_Main, 'dd') as day,format(Date_Main, 'MMM') as month,format(Date_Main, 'yyyy') as year  from News_Events_Details where Id=@Id  order by  Posted_Idate Desc
-    
-End
- 
- 
-  if(@sp_status='student_mesage')
-begin
-     select @ClassId=Class_id , @SessionId=Session_id,@Section=Section from dbo.[admission_registor] where admissionserialnumber=@AdmissionNo  and   Transfer_Status in ('New','NT') and  StudentStatus='AV' order by id desc   
-     
-  SELECT  
-    CASE  WHEN LEN(Details) > 100 THEN LEFT(Details, 100) + '...'ELSE Details 
- END AS shortnotice, *, 
-     CONVERT(varchar(11), CONVERT(date, Date, 103), 106) AS Date1, -- 05 May 2026
-    RIGHT('0' + CAST(DAY(CONVERT(date, Date, 103)) AS varchar), 2) AS day,
-    DATENAME(MONTH, CONVERT(date, Date, 103)) AS month,
-    YEAR(CONVERT(date, Date, 103)) AS year,Attachments as Attachment  
-FROM Private_Messages 
-WHERE 
-    (
-        (Class_Id IN ('ALL', @ClassId) AND Section_Id IN ('ALL', @Section) AND Session_id = @SessionId)
-        OR Admission_no = @AdmissionNo
-    )
-    AND Session_id = @SessionId
-    AND  Idate >= @StartDate AND Idate <= @EndDate
-ORDER BY Idate DESC;
-    
-End
-
-
- 
- 
- 
- 
- 
- 
- if(@sp_status='teacher_attendance')
-begin
-     select @empid=Employee_id  from dbo.[HR_Employee_Master] where Emp_Code=@teacherid  
-      DECLARE @date VARCHAR(50) = @month + '-' + CAST(@currentYear AS VARCHAR);
-
-SELECT 
-    Date, 
-    In_Time, 
-    Out_Time, 
-    AttendanceStatus 
-FROM 
-    HR_Daily_Attendance_Record 
-WHERE 
-    Employee_id = @empid 
-    AND date LIKE '%' + @date + '%' 
-    AND (In_Time IS NOT NULL AND In_Time != '' and In_Time!='00:00:00 AM') 
-ORDER BY 
-    Idate;
-    
-End
-
-if(@sp_status='teacher_notice')
-begin
-    
-     
-   SELECT  
-    CASE  WHEN LEN(Notice) > 100 THEN LEFT(Notice, 100) + '...'ELSE Notice 
- END AS shortnotice, *, 
-    FORMAT(Date_Main, 'dd-MMM-yyyy') AS Date1,
-    FORMAT(Date_Main, 'dd') AS day,
-    FORMAT(Date_Main, 'MMM') AS month,
-    FORMAT(Date_Main, 'yyyy') AS year  
-FROM Notice_Board_Details_Teacher 
-WHERE 
-    (
-        (Teacher_Id IN ('ALL', @teacherid) )
-      
-    )
-    
-    AND  Posted_Idate >= @StartDate AND Posted_Idate <= @EndDate  
-    
-    
-ORDER BY Posted_Idate DESC;
-    
-End
-
-if(@sp_status='teacher_notice_Details')
-begin
-     select  *,format(Date_Main, 'dd-MMM-yyyy') as Date1,format(Date_Main, 'dd') as day,format(Date_Main, 'MMM') as month,format(Date_Main, 'yyyy') as year  from Notice_Board_Details_Teacher where Id=@Id  order by  Posted_Idate Desc
-    
-End
-
-
- if(@sp_status='teacher_message')
-begin
-    
-     
-   SELECT  
-    CASE  WHEN LEN(Details) > 100 THEN LEFT(Details, 100) + '...'ELSE Details 
- END AS shortnotice, *, 
-    FORMAT(Date_Main, 'dd-MMM-yyyy') AS Date1,Attachments as Attachment,Details as Notice,
-    FORMAT(Date_Main, 'dd') AS day,
-    FORMAT(Date_Main, 'MMM') AS month,
-    FORMAT(Date_Main, 'yyyy') AS year  
-FROM Private_Messages_For_Teacher 
-WHERE 
-    (
-        (Teacher_Id IN ('ALL', @teacherid) )
-      
-    )
-    
-    AND  Idate >= @StartDate AND Idate <= @EndDate  
-    
-    
-ORDER BY Idate DESC;
-    
-End
-
-if(@sp_status='teacher_message_details')
-begin
-    select  *,  format(Date_Main, 'dd-MMM-yyyy') as Date1,format(Date_Main, 'dd') as day,format(Date_Main, 'MMM') as month,format(Date_Main, 'yyyy') as year,Attachments as Attachment  from Private_Messages_For_Teacher where Id=@Id  order by  Idate Desc
-    
-End
-
-
- if(@sp_status='teacher_events')
-begin
-    
-     
-   SELECT  
-    CASE  WHEN LEN(Details) > 100 THEN LEFT(Details, 100) + '...'ELSE Details 
- END AS shortnotice, *, Details as Notice,
-    FORMAT(Date_Main, 'dd-MMM-yyyy') AS Date1,Heading as Subject,
-    FORMAT(Date_Main, 'dd') AS day,
-    FORMAT(Date_Main, 'MMM') AS month,
-    FORMAT(Date_Main, 'yyyy') AS year  
-FROM News_Events_Details_Teacher 
-WHERE 
-    (
-        (Teacher_Id IN ('ALL', @teacherid) )
-      
-    )
-    
-    AND  Posted_Idate >= @StartDate AND Posted_Idate <= @EndDate  
-    
-    
-ORDER BY Posted_Idate DESC;
-    
-End
-
-if(@sp_status='teacher_events_details')
-begin
-    select  *,  format(Date_Main, 'dd-MMM-yyyy') as Date1,format(Date_Main, 'dd') as day,format(Date_Main, 'MMM') as month,format(Date_Main, 'yyyy') as year,Attachment   from News_Events_Details_Teacher where Id=@Id  order by  Posted_Idate Desc
-    
-End
-
-
-
-
-if(@sp_status='find_class_Routine_p')
-     begin
-         
-         select top 1 @ClassId=Class_id , @SessionId=Session_id,@Section=Section from dbo.[admission_registor] where Class_id=@classid  and   Transfer_Status in ('New','NT') and  StudentStatus='AV' order by id desc  
-         
-         
-         SELECT DISTINCT
-    (
-        SELECT TOP 1 name 
-        FROM user_details ud 
-        JOIN TeacherCourseSubjectMaping tcm 
-            ON tcm.UserID = ud.user_id 
-        WHERE 
-            tcm.AssignCourseID = t4.Subject_id
-            AND tcm.CategoryID = t4.Class_id
-            AND tcm.Session_id = t4.Session_id
-            AND tcm.Section = t4.Section
-    ) AS Teacher_name,
-    
-    t1.Period_Name,
-    t1.Period,
-    t1.Period_type,
-    t1.Period_no,
-    FORMAT(t2.Start_Time, 'hh:mm tt') AS time1,
-    FORMAT(t2.End_time, 'hh:mm tt') AS time2,
-    t2.Timespan,
-
-    (
-        SELECT TOP 1 Subject_name 
-        FROM Subject_Master 
-        WHERE course_id = t4.Class_id 
-        AND Subject_id = t4.Subject_id
-    ) AS Subject_name
-
-FROM 
-    Class_Routine_period_Master t1
-JOIN 
-    Class_Routine_period t2 
-    ON t1.Session_id = t2.Session_id 
-    AND t1.Class_id = t2.course_id 
-    AND t1.Period = t2.Period
-JOIN 
-    Class_Routine_Master t3 
-    ON t3.Session_id = t2.Session_id 
-    AND t3.Class_id = t2.course_id
-LEFT JOIN 
-    Class_routine_period_subject_mapping t4
-    ON t3.Session_id = t4.Session_id 
-    AND t3.Class_id = t4.Class_id
-    AND t3.Section = t4.Section
-    AND t1.Period = t4.Class_period
-    AND t3.Day = t4.Day
-
-WHERE 
-    t1.Class_id = @ClassId
-    AND t1.Session_id =  @SessionId
-    AND t3.Section = @Section
-    AND t3.Day = @day
-
-ORDER BY 
-    t1.Period_no ASC;
-
-     End
-
-
-
-
- 
-END;");
+                       
                         list.Add(@"delete from  App_Dashboard_Setting");
 
                         list.Add(@"Insert into [App_Dashboard_Setting] (UserType,Title,Image,Icon,Icon_Bg,Action,Secquence,Status,MenuType,Is_Restricted,Header_Image,Parent_Menu_Id,Menu_Id,isHostel) values 
@@ -1130,7 +621,589 @@ Insert into [PrincipalAppDashboard] (Name,Icon,Menu_Id,Parent_Menu_Id,Action,Seq
 (N'Homework Submission Status',N'report_card.png',N'218',N'55',N'/_adminTutorProf/Report_Home_Work_Note_Send.aspx?regid=#uid#',3,N'homework_image.png',null,1,null);
 
 ");
-                        list.Add(@"");
+                        list.Add(@"Alter PROCEDURE  [sp_student_class_activity]
+    @AdmissionNo NVARCHAR(50)=null,
+    @ClassId VARCHAR=null,
+    @SessionId INT =null,
+    @Section NVARCHAR(50)=null,
+    @SubjectId NVARCHAR(50)=null, 
+    @StartDate NVARCHAR(50)=null,
+    @EndDate NVARCHAR(50)=null,
+    @day NVARCHAR(50)=null,
+     @teacherid NVARCHAR(50)=null,
+    @Id INT=null,
+    @currentYear varchar(50)=null,
+    @month varchar(50)=null,
+     @empid varchar(50)=null,
+    @sp_status varchar(50)=null
+AS
+BEGIN
+    
+     if @sp_status='ddl_all_class'
+   
+   begin
+       SELECT 
+        sm.Course_Name,
+        sm.course_id,
+        sm.Position
+    FROM 
+        Add_course_table sm
+        
+        
+    ORDER BY 
+        sm.Position;
+   End
+    
+    if @sp_status='ddl_all_section'
+   
+   begin
+       select  distinct Section  from admission_registor  order by Section
+   End
+    
+    
+   if @sp_status='ddl'
+   
+   begin
+    
+       select @ClassId=Class_id , @SessionId=Session_id from dbo.[admission_registor] where admissionserialnumber=@AdmissionNo  and   Transfer_Status in ('New','NT') and  StudentStatus='AV' order by id desc   
+
+    SELECT 
+        sm.Subject_name,
+        sm.Subject_id,
+        sm.Subject_position
+    FROM 
+        Subject_Master sm
+    INNER JOIN  
+        Subject_Mapping_New smn 
+        ON sm.course_id = smn.Class_id 
+        AND sm.Subject_id = smn.Sub_id
+    WHERE 
+        smn.Admission_no = @AdmissionNo
+        AND smn.Class_id = @ClassId
+        AND smn.Session_id = @SessionId
+    ORDER BY 
+        sm.Subject_position;
+    End
+  
+        if(@sp_status='find_class_log_student')
+begin
+
+    select
+        @ClassId = Class_id,
+        @SessionId = Session_id,
+        @Section = Section
+    from dbo.[admission_registor]
+    where admissionserialnumber = @AdmissionNo
+    and Transfer_Status in ('New','NT')
+    and StudentStatus='AV'
+    order by id desc;
+
+
+    SELECT 
+        acd.*,
+
+        (SELECT TOP 1 Course_Name
+         FROM Add_course_table
+         WHERE course_id = acd.Class_id) AS Course_Name 
+         
+
+    FROM TEACHER_LOG_BOOK acd
+
+    WHERE  
+        acd.idate >= @StartDate
+        and acd.idate <= @EndDate
+
+        AND acd.Session_id = @SessionId
+
+        AND acd.Class_id = @ClassId
+
+        
+
+        AND acd.Section = @Section
+
+    ORDER BY acd.idate ASC;
+
+end
+   
+    if(@sp_status='find_class_activity')
+begin
+
+    select
+        @ClassId = Class_id,
+        @SessionId = Session_id,
+        @Section = Section
+    from dbo.[admission_registor]
+    where admissionserialnumber = @AdmissionNo
+    and Transfer_Status in ('New','NT')
+    and StudentStatus='AV'
+    order by id desc;
+
+
+    SELECT 
+        acd.*,
+
+        (SELECT TOP 1 Course_Name
+         FROM Add_course_table
+         WHERE course_id = acd.Class_id) AS Course_Name,
+
+        (SELECT TOP 1 Subject_name
+         FROM Subject_Master
+         WHERE course_id = acd.Class_id
+         AND Subject_id = acd.Subject_id) AS Subject_name
+
+    FROM Activity_Class_Details acd
+
+    WHERE  
+        acd.idate >= @StartDate
+        and acd.idate <= @EndDate
+
+        AND acd.Session_id = @SessionId
+
+        AND acd.Class_id = @ClassId
+
+        AND (
+                ISNULL(@SubjectId,'0') = '0'
+                OR acd.Subject_id = @SubjectId
+            )
+
+        AND acd.Section_data = @Section
+
+    ORDER BY acd.idate ASC;
+
+End
+     if(@sp_status='find_class_Routine')
+     begin
+         
+         select @ClassId=Class_id , @SessionId=Session_id,@Section=Section from dbo.[admission_registor] where admissionserialnumber=@AdmissionNo  and   Transfer_Status in ('New','NT') and  StudentStatus='AV' order by id desc  
+         
+         
+         SELECT DISTINCT
+    (
+        SELECT TOP 1 name 
+        FROM user_details ud 
+        JOIN TeacherCourseSubjectMaping tcm 
+            ON tcm.UserID = ud.user_id 
+        WHERE 
+            tcm.AssignCourseID = t4.Subject_id
+            AND tcm.CategoryID = t4.Class_id
+            AND tcm.Session_id = t4.Session_id
+            AND tcm.Section = t4.Section
+    ) AS Teacher_name,
+    
+    t1.Period_Name,
+    t1.Period,
+    t1.Period_type,
+    t1.Period_no,
+    FORMAT(t2.Start_Time, 'hh:mm tt') AS time1,
+    FORMAT(t2.End_time, 'hh:mm tt') AS time2,
+    t2.Timespan,
+
+    (
+        SELECT TOP 1 Subject_name 
+        FROM Subject_Master 
+        WHERE course_id = t4.Class_id 
+        AND Subject_id = t4.Subject_id
+    ) AS Subject_name
+
+FROM 
+    Class_Routine_period_Master t1
+JOIN 
+    Class_Routine_period t2 
+    ON t1.Session_id = t2.Session_id 
+    AND t1.Class_id = t2.course_id 
+    AND t1.Period = t2.Period
+JOIN 
+    Class_Routine_Master t3 
+    ON t3.Session_id = t2.Session_id 
+    AND t3.Class_id = t2.course_id
+LEFT JOIN 
+    Class_routine_period_subject_mapping t4
+    ON t3.Session_id = t4.Session_id 
+    AND t3.Class_id = t4.Class_id
+    AND t3.Section = t4.Section
+    AND t1.Period = t4.Class_period
+    AND t3.Day = t4.Day
+
+WHERE 
+    t1.Class_id = @ClassId
+    AND t1.Session_id =  @SessionId
+    AND t3.Section = @Section
+    AND t3.Day = @day
+
+ORDER BY 
+    t1.Period_no ASC;
+
+     End
+
+
+if(@sp_status='find_class_Routine_teacher')
+     begin
+         
+         select @SessionId=session_id from dbo.[session_details] where Use_mode='1' order by id desc  
+       SELECT ( SELECT TOP 1 name 
+        FROM user_details  where user_id=tcm.UserID ) as Teacher_name ,crpsm.Day,(SELECT TOP 1 Subject_name FROM Subject_Master WHERE course_id = crpsm.Class_id  AND Subject_id=crpsm.Subject_id) AS Subject_name, crpsm.Section,(SELECT TOP 1 Course_Name  FROM Add_course_table  WHERE course_id = crpsm.Class_id) AS classname,rp.Period_Name,(select top 1 Course_Name from Add_course_table where course_id=course_id) as classname,FORMAT(rp.Start_Time, 'hh:mm tt') AS time1, FORMAT(rp.End_time, 'hh:mm tt') AS time2, rp.Timespan FROM  Class_routine_period_subject_mapping crpsm join Class_Routine_period rp on rp.Period=crpsm.Class_period join TeacherCourseSubjectMaping tcm on  tcm.AssignCourseID = crpsm.Subject_id
+            AND tcm.CategoryID = crpsm.Class_id
+            AND tcm.Session_id = crpsm.Session_id
+            AND tcm.Section = crpsm.Section where crpsm.Session_id=@SessionId and Day=@day and tcm.UserID=@teacherid   order by rp.Period_Name,crpsm.Section
+          
+         
+     End
+
+
+
+if(@sp_status='student_notice')
+begin
+     select @ClassId=Class_id , @SessionId=Session_id,@Section=Section from dbo.[admission_registor] where admissionserialnumber=@AdmissionNo  and   Transfer_Status in ('New','NT') and  StudentStatus='AV' order by id desc   
+     
+   SELECT  
+    CASE  WHEN LEN(Notice) > 100 THEN LEFT(Notice, 100) + '...'ELSE Notice 
+ END AS shortnotice, *, 
+    FORMAT(Date_Main, 'dd-MMM-yyyy') AS Date1,
+    FORMAT(Date_Main, 'dd') AS day,
+    FORMAT(Date_Main, 'MMM') AS month,
+    FORMAT(Date_Main, 'yyyy') AS year  
+FROM Notice_Board_Details 
+WHERE 
+    (
+        (Class IN ('ALL', @ClassId) AND Section IN ('ALL', @Section) AND Session_Id = @SessionId)
+        OR Admission_no = @AdmissionNo
+    )
+    AND Session_Id = @SessionId
+    AND  Posted_Idate >= @StartDate AND Posted_Idate <= @EndDate  
+    
+    
+ORDER BY Posted_Idate DESC;
+    
+End
+
+if(@sp_status='student_notice_Details')
+begin
+     select  *,format(Date_Main, 'dd-MMM-yyyy') as Date1,format(Date_Main, 'dd') as day,format(Date_Main, 'MMM') as month,format(Date_Main, 'yyyy') as year  from Notice_Board_Details where Id=@Id  order by  Posted_Idate Desc
+    
+End
+ 
+ 
+ if(@sp_status='student_events')
+begin
+    SELECT TOP 1
+    @ClassId = CAST(Class_id AS VARCHAR(20)),
+    @SessionId = Session_id,
+    @Section = Section
+FROM dbo.admission_registor
+WHERE admissionserialnumber = @AdmissionNo
+AND Transfer_Status IN ('New','NT')
+AND StudentStatus = 'AV'
+ORDER BY id DESC;
+
+
+SELECT
+    CASE
+        WHEN LEN(Details) > 100
+        THEN LEFT(Details, 100) + '...'
+        ELSE Details
+    END AS shortnotice,
+
+    *,
+
+    FORMAT(Date_Main, 'dd-MMM-yyyy') AS Date1,
+    FORMAT(Date_Main, 'dd') AS day,
+    FORMAT(Date_Main, 'MMM') AS month,
+    FORMAT(Date_Main, 'yyyy') AS year,
+
+    Attachments AS Attachment
+
+FROM News_Events_Details
+
+WHERE
+(
+    (
+        CAST(Class AS VARCHAR(20)) IN ('ALL', @ClassId)
+        AND Section IN ('ALL', @Section)
+        AND Session_Id = @SessionId
+    )
+
+    OR Admission_no = @AdmissionNo
+)
+
+AND Session_Id = @SessionId
+AND Posted_Idate BETWEEN @StartDate AND @EndDate
+
+ORDER BY Posted_Idate DESC;
+    
+End
+
+if(@sp_status='student_event_Details')
+begin
+     select  *,format(Date_Main, 'dd-MMM-yyyy') as Date1,format(Date_Main, 'dd') as day,format(Date_Main, 'MMM') as month,format(Date_Main, 'yyyy') as year  from News_Events_Details where Id=@Id  order by  Posted_Idate Desc
+    
+End
+ 
+ 
+  if(@sp_status='student_mesage')
+begin
+     select @ClassId=Class_id , @SessionId=Session_id,@Section=Section from dbo.[admission_registor] where admissionserialnumber=@AdmissionNo  and   Transfer_Status in ('New','NT') and  StudentStatus='AV' order by id desc   
+     
+  SELECT  
+    CASE  WHEN LEN(Details) > 100 THEN LEFT(Details, 100) + '...'ELSE Details 
+ END AS shortnotice, *, 
+     CONVERT(varchar(11), CONVERT(date, Date, 103), 106) AS Date1, -- 05 May 2026
+    RIGHT('0' + CAST(DAY(CONVERT(date, Date, 103)) AS varchar), 2) AS day,
+    DATENAME(MONTH, CONVERT(date, Date, 103)) AS month,
+    YEAR(CONVERT(date, Date, 103)) AS year,Attachments as Attachment  
+FROM Private_Messages 
+WHERE 
+    (
+        (Class_Id IN ('ALL', @ClassId) AND Section_Id IN ('ALL', @Section) AND Session_id = @SessionId)
+        OR Admission_no = @AdmissionNo
+    )
+    AND Session_id = @SessionId
+    AND  Idate >= @StartDate AND Idate <= @EndDate
+ORDER BY Idate DESC;
+    
+End
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ if(@sp_status='teacher_attendance')
+begin
+     select @empid=Employee_id  from dbo.[HR_Employee_Master] where Emp_Code=@teacherid  
+      DECLARE @date VARCHAR(50) = @month + '-' + CAST(@currentYear AS VARCHAR);
+
+SELECT 
+    Date, 
+    In_Time, 
+    Out_Time, 
+    AttendanceStatus 
+FROM 
+    HR_Daily_Attendance_Record 
+WHERE 
+    Employee_id = @empid 
+    AND date LIKE '%' + @date + '%' 
+    AND (In_Time IS NOT NULL AND In_Time != '' and In_Time!='00:00:00 AM') 
+ORDER BY 
+    Idate;
+    
+End
+
+if(@sp_status='teacher_notice')
+begin
+    
+     
+   SELECT  
+    CASE  WHEN LEN(Notice) > 100 THEN LEFT(Notice, 100) + '...'ELSE Notice 
+ END AS shortnotice, *, 
+    FORMAT(Date_Main, 'dd-MMM-yyyy') AS Date1,
+    FORMAT(Date_Main, 'dd') AS day,
+    FORMAT(Date_Main, 'MMM') AS month,
+    FORMAT(Date_Main, 'yyyy') AS year  
+FROM Notice_Board_Details_Teacher 
+WHERE 
+    (
+        (Teacher_Id IN ('ALL', @teacherid) )
+      
+    )
+    
+    AND  Posted_Idate >= @StartDate AND Posted_Idate <= @EndDate  
+    
+    
+ORDER BY Posted_Idate DESC;
+    
+End
+
+if(@sp_status='teacher_notice_Details')
+begin
+     select  *,format(Date_Main, 'dd-MMM-yyyy') as Date1,format(Date_Main, 'dd') as day,format(Date_Main, 'MMM') as month,format(Date_Main, 'yyyy') as year  from Notice_Board_Details_Teacher where Id=@Id  order by  Posted_Idate Desc
+    
+End
+
+
+ if(@sp_status='teacher_message')
+begin
+    
+     
+   SELECT  
+    CASE  WHEN LEN(Details) > 100 THEN LEFT(Details, 100) + '...'ELSE Details 
+ END AS shortnotice, *, 
+    FORMAT(Date_Main, 'dd-MMM-yyyy') AS Date1,Attachments as Attachment,Details as Notice,
+    FORMAT(Date_Main, 'dd') AS day,
+    FORMAT(Date_Main, 'MMM') AS month,
+    FORMAT(Date_Main, 'yyyy') AS year  
+FROM Private_Messages_For_Teacher 
+WHERE 
+    (
+        (Teacher_Id IN ('ALL', @teacherid) )
+      
+    )
+    
+    AND  Idate >= @StartDate AND Idate <= @EndDate  
+    
+    
+ORDER BY Idate DESC;
+    
+End
+
+if(@sp_status='teacher_message_details')
+begin
+    select  *,  format(Date_Main, 'dd-MMM-yyyy') as Date1,format(Date_Main, 'dd') as day,format(Date_Main, 'MMM') as month,format(Date_Main, 'yyyy') as year,Attachments as Attachment  from Private_Messages_For_Teacher where Id=@Id  order by  Idate Desc
+    
+End
+
+
+ if(@sp_status='teacher_events')
+begin
+    
+     
+   SELECT  
+    CASE  WHEN LEN(Details) > 100 THEN LEFT(Details, 100) + '...'ELSE Details 
+ END AS shortnotice, *, Details as Notice,
+    FORMAT(Date_Main, 'dd-MMM-yyyy') AS Date1,Heading as Subject,
+    FORMAT(Date_Main, 'dd') AS day,
+    FORMAT(Date_Main, 'MMM') AS month,
+    FORMAT(Date_Main, 'yyyy') AS year  
+FROM News_Events_Details_Teacher 
+WHERE 
+    (
+        (Teacher_Id IN ('ALL', @teacherid) )
+      
+    )
+    
+    AND  Posted_Idate >= @StartDate AND Posted_Idate <= @EndDate  
+    
+    
+ORDER BY Posted_Idate DESC;
+    
+End
+
+if(@sp_status='teacher_events_details')
+begin
+    select  *,  format(Date_Main, 'dd-MMM-yyyy') as Date1,format(Date_Main, 'dd') as day,format(Date_Main, 'MMM') as month,format(Date_Main, 'yyyy') as year,Attachment   from News_Events_Details_Teacher where Id=@Id  order by  Posted_Idate Desc
+    
+End
+
+
+
+
+if(@sp_status='find_class_Routine_p')
+     begin
+         
+         select top 1 @ClassId=Class_id , @SessionId=Session_id,@Section=Section from dbo.[admission_registor] where Class_id=@classid  and   Transfer_Status in ('New','NT') and  StudentStatus='AV' order by id desc  
+         
+         
+         SELECT DISTINCT
+    (
+        SELECT TOP 1 name 
+        FROM user_details ud 
+        JOIN TeacherCourseSubjectMaping tcm 
+            ON tcm.UserID = ud.user_id 
+        WHERE 
+            tcm.AssignCourseID = t4.Subject_id
+            AND tcm.CategoryID = t4.Class_id
+            AND tcm.Session_id = t4.Session_id
+            AND tcm.Section = t4.Section
+    ) AS Teacher_name,
+    
+    t1.Period_Name,
+    t1.Period,
+    t1.Period_type,
+    t1.Period_no,
+    FORMAT(t2.Start_Time, 'hh:mm tt') AS time1,
+    FORMAT(t2.End_time, 'hh:mm tt') AS time2,
+    t2.Timespan,
+
+    (
+        SELECT TOP 1 Subject_name 
+        FROM Subject_Master 
+        WHERE course_id = t4.Class_id 
+        AND Subject_id = t4.Subject_id
+    ) AS Subject_name
+
+FROM 
+    Class_Routine_period_Master t1
+JOIN 
+    Class_Routine_period t2 
+    ON t1.Session_id = t2.Session_id 
+    AND t1.Class_id = t2.course_id 
+    AND t1.Period = t2.Period
+JOIN 
+    Class_Routine_Master t3 
+    ON t3.Session_id = t2.Session_id 
+    AND t3.Class_id = t2.course_id
+LEFT JOIN 
+    Class_routine_period_subject_mapping t4
+    ON t3.Session_id = t4.Session_id 
+    AND t3.Class_id = t4.Class_id
+    AND t3.Section = t4.Section
+    AND t1.Period = t4.Class_period
+    AND t3.Day = t4.Day
+
+WHERE 
+    t1.Class_id = @ClassId
+    AND t1.Session_id =  @SessionId
+    AND t3.Section = @Section
+    AND t3.Day = @day
+
+ORDER BY 
+    t1.Period_no ASC;
+
+     End
+
+
+if(@sp_status='find_myprofile_student')
+begin
+     
+     DECLARE @school_name VARCHAR(100),
+        @school_logo VARCHAR(200),
+        @school_email VARCHAR(100),
+        @school_mobile VARCHAR(20)
+
+SELECT 
+    @school_name = firm_name,
+    @school_logo = logo,
+    @school_email = email,
+    @school_mobile = contact_no
+FROM Firm_Details
+
+SELECT TOP 1
+    class AS classname,
+    rollnumber,
+    Section,
+    session,
+    dateofadmission,
+    studentname,
+    gender,
+    dob,
+    fathername,
+    mothername,
+    careof_permanent,careof,
+    father_mob,
+    admissionserialnumber,mother_mob,
+
+    CASE 
+        WHEN (studentimagepath IS NULL OR studentimagepath = '') 
+        THEN '/images_second/blank.png'
+        ELSE studentimagepath
+    END AS Student_img,
+
+    @school_name AS school_name,
+    @school_logo AS school_logo,
+    @school_email AS school_email,
+    @school_mobile AS school_mobile
+
+FROM admission_registor
+
+WHERE admissionserialnumber = @AdmissionNo
+AND Transfer_Status IN ('NT','New')
+
+ORDER BY id DESC
+End
+
+ 
+END;");
                         break;
                     }
                     #endregion 
