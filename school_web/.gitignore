@@ -364,3 +364,9 @@ FodyWeavers.xsd
 *.dll
 **/Web.config
 .vs/
+
+ 
+bin/
+obj/
+*.dll
+**/Web.config

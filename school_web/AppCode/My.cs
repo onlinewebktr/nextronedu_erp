@@ -4580,6 +4580,8 @@ namespace school_web.AppCode
             return dc;
 
         }
+
+        
         internal static void submitexception(string ex)
         {
             SqlCommand cmd;
@@ -7542,94 +7544,6 @@ namespace school_web.AppCode
                 lst.Add(i.ToString());
             }
             return lst;
-        }
-
-
-        public static bool isDeviceConnected = false;
-        public static DataTable dv_dt;
-        public static ZkemClient objZkeeper;
-        internal static bool connect_device(string ip, string device_name)
-        {
-            try
-            {
-                string ipAddress = ip;// My.session("DeviceIP").Trim();
-                string port = "4370";// My.session("Port").Trim();
-                if (ipAddress == string.Empty || port == string.Empty)
-                    throw new Exception("The Device IP Address and Port is mandatory !!");
-                if (!UniversalStatic.PingTheDevice(ipAddress))
-                {
-                    //MessageBox.Show("Device ip not pinging");
-                    return false;
-                }
-                int portNumber = 4370;
-                if (!int.TryParse(port, out portNumber))
-                    throw new Exception("Not a valid port number");
-
-                bool isValidIpA = UniversalStatic.ValidateIP(ipAddress);
-                if (!isValidIpA)
-                    throw new Exception("The Device IP is invalid !!");
-                isValidIpA = UniversalStatic.PingTheDevice(ipAddress);
-
-                if (!isValidIpA)
-                    throw new Exception("The device at " + ipAddress + ":" + port + " did not respond!!");
-
-                My.objZkeeper = new ZkemClient(RaiseDeviceEvent);
-                IsDeviceConnected = My.objZkeeper.Connect_Net(ipAddress, portNumber);
-                if (IsDeviceConnected)
-                {
-                    manipulator = new DeviceManipulator();
-                }
-                return isDeviceConnected;
-
-
-            }
-            catch (Exception ex)
-            {
-                //MessageBox.Show(ex.Message);
-            }
-            // win.Cursor = Cursors.Arrow;
-            return false;
-        }
-
-
-        public static bool IsDeviceConnected
-        {
-            get { return My.isDeviceConnected; }
-            set
-            {
-                My.isDeviceConnected = value;
-                if (My.isDeviceConnected)
-                {
-                    // ShowStatusBar("The device is connected !!", true);
-                    // btnConnect.Content = "Disconnect";
-                    // ToggleControls(true);
-                }
-                else
-                {
-                    //  ShowStatusBar("The device is diconnected !!", true);
-                    My.objZkeeper.Disconnect();
-                    //   btnConnect.Content = "Connect";
-                    //ToggleControls(false);
-                }
-            }
-        }
-        internal static DeviceManipulator manipulator;
-        public static void RaiseDeviceEvent(object sender, string actionType)
-        {
-            switch (actionType)
-            {
-                case UniversalStatic.acx_Disconnect:
-                    {
-                        //ShowStatusBar("The device is switched off", true);
-                        //  DisplayEmpty();
-                        //   btnConnect.Content = "Connect";
-                        //   ToggleControls(false);
-                        break;
-                    }
-
-                default:
-                    break;
-            }
         }
 
         internal static string ddl_value(object selecteditem, string column_name)
