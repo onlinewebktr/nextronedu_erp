@@ -361,10 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-[Bb]in/
-[Oo]bj/
-.vs/
-*.suo
 *.dll
-*.dll.config
 **/Web.config
+.vs/
