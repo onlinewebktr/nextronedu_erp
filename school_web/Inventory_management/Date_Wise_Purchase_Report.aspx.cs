@@ -47,7 +47,7 @@ namespace school_web.Inventory_management
                 ViewState["Userid"] = Session["Admin"].ToString();
                 if (!IsPostBack)
                 {
-                    Dictionary<string, object> dc1 = mycode.Firm_details();
+                    Dictionary<string, object> dc1 = Sale_Purchase.Firm_details_sale_purchase();
                     lbl_hospital_name.Text = (String)dc1["firm_name"];
                     lbl_address1.Text = (String)dc1["address"];
                     lbl_address2.Text = "";
